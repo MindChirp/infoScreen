@@ -12,7 +12,60 @@ html {
 
 
 #app-bar {
-    height: 2.5vh;
+    height: 26px;
     width: 100%;
     background-color: #222F3B;
+    display: inline-grid;
+    grid-template-columns: auto 150px;
+}
+
+#app-bar #drag-region {
+    width: 100%;
+    position: relative;
+    height: 100%;
+    -webkit-app-region: drag;
+    display: inline-block;
+    z-index: -1;
+}
+
+#middle-layer-container {
+    height: fit-content;
+    width: 100%;
+    display: inline-grid;
+    transform: translateY(-4px);
+    grid-template-columns: auto 43%;
+}
+
+#middle-layer-container #effects {
+    height: 500px;
+    width: 100%;
+    margin: 0;
+    background-color: transparent;
+    display: inline-block;
+}
+
+#middle-layer-container #effects #ribbon-menu {
+    height: 4vh;
+    width: 100%;
+    background-color: #1B2630;
+}
+
+#middle-layer-container #player {
+    height: fit-content;
+    width: 100%;
+    margin: 0;
+    display: inline-block;
+    display: inline-grid;
+    grid-template-rows: auto 20px;
+}
+
+#middle-layer-container #player #viewport {
+    height: 100%;
+    background-color: black;
+    height: 450px;
+}
+
+#middle-layer-container #player #controls {
+    height: 100%;
+    background-color: #1B2630;
 }
