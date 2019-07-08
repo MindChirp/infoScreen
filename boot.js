@@ -14,7 +14,7 @@ function boot() {
   )
   //Laste inn html koden til vinduet
   win.loadURL(url.format({
-    pathname: 'index.html',
+    pathname: 'home.html',
     slashes: true
   }))
 }
