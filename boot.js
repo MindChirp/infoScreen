@@ -6,6 +6,9 @@ let bootWin = null;
 function boot() {
   //lage et nytt vindu
     win = new BrowserWindow({
+      webPreferences: {
+        nodeIntegration: true
+      },
     backgroundColor: "#171F26",
     width: 1920,
     height: 1080,
