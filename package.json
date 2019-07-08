@@ -1,0 +1,23 @@
+{
+  "name": "infoscreen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "boot.js",
+  "dependencies": {
+    "electron": "^5.0.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MindChirp/infoScreen.git"
+  },
+  "author": "Frikk O. Larsen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MindChirp/infoScreen/issues"
+  },
+  "homepage": "https://github.com/MindChirp/infoScreen#readme"
+}
