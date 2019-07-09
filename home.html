@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 
 <html class="no-js">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <link rel="stylesheet" href="main.css">
-    </head>
-    <body>
-        <!--Application bar-->
-        <div id="app-bar">
-<div id="drag-region"></div>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+    <!--Application bar-->
+    <div id="app-bar">
+        <div id="drag-region"></div>
+    </div>
+
+    <div id="middle-layer-container">
+        <div id="effects">
+            <div id="ribbon-menu">
+                <!--Ribbon menu options-->
+                <div id="ribbon-menu-options">
+                    <div class="menu-option" id="file-explorer"><i class="material-icons">insert_drive_file</i>
+                        <p>Files</p>
+                    </div>
+                    <div class="menu-option" id="file-explorer"><i class="material-icons">create</i>
+                        <p>Edit</p>
+                    </div>
+                    <div class="menu-option" id="file-explorer"><i class="material-icons">widgets</i>
+                        <p>Widgets</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content">
+
+
+                </div>
         </div>
 
-        <div id="middle-layer-container">
-<div id="effects">
-<div id="ribbon-menu">
+        <div id="player">
+            <div id="viewport">
 
 
-</div>
-</div>
-
-<div id="player">
-<div id="viewport">
+            </div>
+            <div id="controls">
 
 
-</div>
-<div id="controls">
-
-    
-</div>
-</div>
-
+            </div>
         </div>
-        
-        <script src="/javascripts/menus.js" async defer></script>
-        <script src="/javascripts/app-bar.js" async defer></script>
-        <script src="/javascripts/background-scripts.js" async defer></script>
-    </body>
+
+    </div>
+
+    <script src="/javascripts/menus.js" async defer></script>
+    <script src="/javascripts/app-bar.js" async defer></script>
+    <script src="/javascripts/background-scripts.js" async defer></script>
+    <script src="/javascripts/notrification-handler.js" async defer></script>
+</body>
+
 </html>

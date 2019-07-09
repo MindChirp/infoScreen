@@ -3,6 +3,11 @@ body {
     width: 100%;
     margin: 0; 
     padding: 0;
+    min-width: 700px;
+    min-height: 700px;
+    cursor: default;
+    font-family: bahnschrift;
+    user-select: none;
 }
 
 html {
@@ -41,11 +46,12 @@ html {
     width: 100%;
     margin: 0;
     background-color: transparent;
-    display: inline-block;
+    display: inline-grid;
+    grid-auto-rows: 45px auto;
 }
 
 #middle-layer-container #effects #ribbon-menu {
-    height: 4vh;
+    height: 100%;
     width: 100%;
     background-color: #1B2630;
 }
@@ -56,7 +62,7 @@ html {
     margin: 0;
     display: inline-block;
     display: inline-grid;
-    grid-template-rows: auto 20px;
+    grid-template-rows: auto 25px;
 }
 
 #middle-layer-container #player #viewport {
@@ -68,4 +74,48 @@ html {
 #middle-layer-container #player #controls {
     height: 100%;
     background-color: #1B2630;
+    border-bottom-left-radius: 3px;
+}
+
+#ribbon-menu #ribbon-menu-options {
+    display: inline-grid;
+    width: 50%;
+    height: 45px;
+    margin-left: 50%;
+    transform: translateX(-50%) translateY(-1px);
+    grid-template-columns: auto auto auto;
+    color: white;
+}
+
+#ribbon-menu #ribbon-menu-options .menu-option {
+    text-align: center;
+    transition: all 50ms ease-in-out;
+    background-color: transparent;
+    border-style: none;
+    outline: none;
+    color: white;
+}
+
+#ribbon-menu #ribbon-menu-options .menu-option:focus {
+    background-color: rgba(0,0,0,0.5);
+}
+
+#ribbon-menu #ribbon-menu-options .menu-option:hover {
+    background-color: rgba(0,0,0,0.3);
+}
+
+#ribbon-menu #ribbon-menu-options .menu-option i {
+    font-size: 30px;
+}
+
+#ribbon-menu #ribbon-menu-options .menu-option p {
+    margin: 0;
+    font-size: 10px;
+    transform: translateY(-3px);
+}
+
+#middle-layer-container #effects #content {
+    height: 100%;
+    width: 100%;
+    background-color: #0F1419;
 }
