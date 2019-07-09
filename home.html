@@ -14,6 +14,15 @@
     <!--Application bar-->
     <div id="app-bar">
         <div id="drag-region"></div>
+        <div id="important-buttons">
+            <button class="button" onclick="toggleNotificationMenu()" id="notification-button"><i
+                    class="material-icons">notifications_none</i></button>
+            <button class="button" id="menu-button"><i class="material-icons">menu</i></button>
+            <div id="notification-pane">
+
+
+            </div>
+        </div>
     </div>
 
     <div id="middle-layer-container">
@@ -21,22 +30,25 @@
             <div id="ribbon-menu">
                 <!--Ribbon menu options-->
                 <div id="ribbon-menu-options">
-                    <div class="menu-option" id="file-explorer"><i class="material-icons">insert_drive_file</i>
+                    <div class="menu-option" onclick="effectsWindow.files()" id="file-explorer"><i
+                            class="material-icons">insert_drive_file</i>
                         <p>Files</p>
                     </div>
-                    <div class="menu-option" id="file-explorer"><i class="material-icons">create</i>
+                    <div class="menu-option" onclick="effectsWindow.edit()" id="file-explorer"><i
+                            class="material-icons">create</i>
                         <p>Edit</p>
                     </div>
-                    <div class="menu-option" id="file-explorer"><i class="material-icons">widgets</i>
+                    <div class="menu-option" onclick="effectsWindow.widgets()" id="file-explorer"><i
+                            class="material-icons">widgets</i>
                         <p>Widgets</p>
                     </div>
                 </div>
             </div>
 
             <div id="content">
+                <div id="container" style=` height: 100%; width: 100%; background-color: red; `></div>
 
-
-                </div>
+            </div>
         </div>
 
         <div id="player">
@@ -45,17 +57,38 @@
 
             </div>
             <div id="controls">
+                <div id="control-container">
+                    <div id="prev" class="control"><i class="material-icons">skip_previous</i></div>
+                    <div id="play" class="control"><i class="material-icons">play_arrow</i></div>
+                    <div id="next" class="control"><i class="material-icons">skip_next</i></div>
 
+                </div>
 
             </div>
         </div>
 
     </div>
 
-    <script src="/javascripts/menus.js" async defer></script>
+    <script src="/javascripts/menus.js"></script>
     <script src="/javascripts/app-bar.js" async defer></script>
     <script src="/javascripts/background-scripts.js" async defer></script>
     <script src="/javascripts/notrification-handler.js" async defer></script>
+    <script>
+        const effectsWindow = new effects();
+        window.onload = function () {
+            //Start off with showing the file explorer
+            //this can be changed to something smarter in the future
+
+            effectsWindow.files();
+
+
+
+            //Hide the notifications menu
+            var pane = document.getElementById("notification-pane");
+            pane.style.display = "none";
+        }
+
+    </script>
 </body>
 
 </html>
