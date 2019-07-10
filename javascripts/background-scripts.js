@@ -8,6 +8,11 @@ function bkgScript() {
     var width = parseInt(style.width.split("px")[0]);
     document.getElementById("player").querySelector("#viewport").style.height = width / (16/9) + "px";
 
+    document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
+    document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
+    document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
+    document.getElementById("content").style.height = width / (16/9) - 20 + "px";
+    
     setTimeout(bkgScript, 10);
 }
 

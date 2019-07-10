@@ -64,10 +64,10 @@ html {
     display: inline-grid;
     transform: translateY(-4px);
     grid-template-columns: auto 43%;
+    overflow: hidden;
 }
 
 #middle-layer-container #effects {
-    height: 100%;
     width: 100%;
     margin: 0;
     background-color: transparent;
@@ -139,9 +139,17 @@ html {
 }
 
 #middle-layer-container #effects #content {
-    height: 100%;
+    height: auto;
     width: 100%;
     background-color: #0F1419;
+    
+}
+
+#middle-layer-container #effects #content #container {
+    overflow-y: scroll;
+
+    height: 100%;
+    position: relative;
 }
 
 #player #controls #control-container {
@@ -158,4 +166,25 @@ html {
     height: 100%;
     text-align: center;
     color: white;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+    height: 13px;
+    border-radius: 0px;
+    background-color: #AAA;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #171F26;
+    height: 60%;
 }
