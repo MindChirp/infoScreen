@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    background-color: transparent;
     width: 100%;
 }
 
@@ -11,6 +12,7 @@ body {
     font-family: bahnschrift;
     overflow: hidden;
     user-select: none;
+    background-color: transparent;
 }
 
 body p, h1, h2, h3, input, textarea {

@@ -3,6 +3,12 @@ const url = require('url');
 let win = null;
 let bootWin = null;
 
+
+try {
+  require('electron-reloader')(module);
+} catch (_) {}
+
+
 function boot() {
   //lage et nytt vindu
   launcherWin = new BrowserWindow({

@@ -8,7 +8,9 @@
     "electron": "^5.0.6",
     "fs": "0.0.1-security"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron-reloader": "^1.0.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
