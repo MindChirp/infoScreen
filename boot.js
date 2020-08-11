@@ -5,7 +5,22 @@ let bootWin = null;
 
 function boot() {
   //lage et nytt vindu
-    win = new BrowserWindow({
+  launcherWin = new BrowserWindow({
+      webPreferences: {
+        nodeIntegration: true
+      },
+    backgroundColor: "#171F26",
+    width: 850,
+    height: 650,
+    frame: false
+  })
+
+  launcherWin.loadURL(url.format({
+    pathname: 'launcher.html',
+    slashes: true
+  }))
+
+    /*win = new BrowserWindow({
       webPreferences: {
         nodeIntegration: true
       },
@@ -19,7 +34,7 @@ function boot() {
   win.loadURL(url.format({
     pathname: 'home.html',
     slashes: true
-  }))
+  }))*/
 }
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', boot);
