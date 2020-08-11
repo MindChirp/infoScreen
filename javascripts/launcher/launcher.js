@@ -98,12 +98,12 @@ window.onload = function() {
 
 
     //Trigger code on window load
-    var canv = document.getElementById("user-canvas");
+    /*var canv = document.getElementById("user-canvas");
     var ctx = canv.getContext("2d");
     ctx.beginPath();
     ctx.arc(28,28,28,0.35*Math.PI,2.1*Math.PI);
     ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.stroke();*/
 
 
     var el = document.getElementById("pfp");
@@ -535,7 +535,7 @@ function userScreen(info, header, signIn) {
     var size = pos[2];
     img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
 
-    var canv = document.createElement("canvas");
+    /*var canv = document.createElement("canvas");
     canv.setAttribute("height", "81px");
     canv.setAttribute("width", "81px");
     canv.setAttribute("style", `
@@ -550,7 +550,7 @@ function userScreen(info, header, signIn) {
 
     pfp.appendChild(canv);
     canv.style.animation = "full-rotate 30s linear infinite"
-
+*/
     var h1 = h1El();
     if(signedIn == "false") {
         h1.innerHTML = "You're not signed in";
@@ -682,7 +682,7 @@ function changeState() {
     var signedIn = localStorage.getItem("signedIn");
 
     if(signedIn == true) {
-        
+
     }
 
 }

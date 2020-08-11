@@ -1,0 +1,4 @@
+***A full and comprehensive list of all the dumb stuff that can be dumb (that needs to be fixed)***
+
+>>NOT FIXED
+    *Tabbing to button behind the user settings pane (launcher)

@@ -6,13 +6,17 @@ let bootWin = null;
 function boot() {
   //lage et nytt vindu
   launcherWin = new BrowserWindow({
-      webPreferences: {
-        nodeIntegration: true
-      },
-    backgroundColor: "#171F26",
+    webPreferences: {
+      nodeIntegration: true
+    },
     width: 850,
+    maxWidth: 850,
+    minWidth: 850,
     height: 650,
-    frame: false
+    maxHeight:650,
+    minHeight:650,
+    frame: false,
+    transparent: true
   })
 
   launcherWin.loadURL(url.format({
