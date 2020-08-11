@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/stylesheets/launcher.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+    <body>
+        <div id="content">
+            <div id="drag-bar"></div>
+            <div id="user-container">
+                <button id="pfp" class="smooth-shadow" onclick="userSettings()">
+                    <img src="./data/programData/profilePics/default.png" id="profile-photo-image">
+                    <canvas id="user-canvas" height="56px" width="56px">
+
+                    </canvas>
+                </button>
+
+            </div>
+            <h1 id="main-title"></h1> <!--Insert user name here-->
+            <div id="actions-container">
+                <button id="new-project" class="smooth-shadow"><i class="material-icons">add</i> <p>Create</p></button>
+                <button id="open-project" class="smooth-shadow"><i class="material-icons">folder_open</i> <p>Open</p></button>
+                <button id="open-server" class="smooth-shadow"><i class="material-icons">dns</i> <p>From server</p></button>
+                <button id="live-edit" class="smooth-shadow"><i class="material-icons">brush</i> <p>Live edit</p></button>
+                <button id="developer-start" class="smooth-shadow" onclick="launchProgram()"><i class="material-icons">flag</i> <p>Developer start</p></button>
+
+            </div>
+
+            <h1 class="title" style="margin: 3rem 0 0.5rem;">Recent Projects</h1>
+            <div id="list">
+                No recent projects
+            </div>
+        </div>
+        <p style="position: absolute; bottom: 0px; left: 10px; opacity: 0.05; font-weight: lighter;">This software is not finished. It is not intended to be published yet.</p>
+        <script src="/javascripts/launcher/userInfo.js" async defer></script>
+        <script src="/javascripts/launcher/pfp.js" async defer></script>
+        <script src="/javascripts/launcher/menus.js" async defer></script>
+        <script src="/javascripts/launcher/feedback.js" async defer></script>
+        <script src="/javascripts/launcher/about.js" async defer></script>
+        <script src="/javascripts/launcher/launcher.js" async defer></script>
+    </body>
+</html>

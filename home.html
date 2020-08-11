@@ -7,27 +7,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="/stylesheets/cfg.css">
+    <link rel="stylesheet" href="/stylesheets/file-explorer.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 </head>
 
 <body>
     <!--Application bar-->
     <div id="app-bar">
         <div id="drag-region"></div>
+        <!--<div id="app-bar-dropdown-menus">
+            <div class="options" style="margin-left: 1rem;"><h1>File</h1></div>
+            <div class="options"><h1>Help</h1></div>
+            <div class="options"><h1>Contact</h1></div>
+        </div>
+    -->
         <div id="important-buttons">
             <button class="button" onclick="toggleNotificationMenu()" id="notification-button"><i
                     class="material-icons">notifications_none</i></button>
             <button class="button" id="menu-button"><i class="material-icons">menu</i></button>
-            <div id="notification-pane">
-
-
-            </div>
+            <div id="notification-pane"></div>
         </div>
     </div>
-
+<div id="main-container">
     <div id="middle-layer-container">
-        <div id="effects">
-            <div id="ribbon-menu">
+        <div id="effects" class="smooth-shadow">
+            <div id="ribbon-menu" class="smooth-shadow">
                 <!--Ribbon menu options-->
                 <div id="ribbon-menu-options">
                     <div class="menu-option" onclick="effectsWindow.files()" id="file-explorer"><i
@@ -52,11 +58,12 @@
         </div>
 
         <div id="player">
-            <div id="viewport">
+            <div id="viewport" style="position: relative;">
 
+                <div style="color: white; position: absolute; left: 50%; top: 50%; transform: translateX(-50%) translateY(-50%);"></div>
 
             </div>
-            <div id="controls">
+            <div id="controls" class="smooth-shadow">
                 <div id="control-container">
                     <div id="prev" class="control"><i class="material-icons">skip_previous</i></div>
                     <div id="play" class="control"><i class="material-icons">play_arrow</i></div>
@@ -69,15 +76,48 @@
 
     </div>
 
-    <script src="/javascripts/menus.js"></script>
-    <script src="/javascripts/app-bar.js" async defer></script>
-    <script src="/javascripts/background-scripts.js" async defer></script>
-    <script src="/javascripts/notrification-handler.js" async defer></script>
+    <div id="bottom-layer-container">
+        <div id="scrubber">
+        <div id="top-bar" class="smooth-shadow">
+            <div></div>
+            <div id="marker-container">
+                <div id="marker">
+                    <i class="material-icons" style="transform: rotate(90deg); color: #0F1419;">play_arrow</i>
+                </div>
+            </div>
+
+        </div>
+        <div id="container">
+            <div id="stripe-container">
+                <div id="left-bar">
+                    <div id="bkg-layer"><p>Background</p></div>
+
+                </div>
+            </div>
+
+        </div>
+        </div>    
+        
+    </div>
+</div>
+<script>
+
+</script>
+<script src="/javascripts/menus.js"></script>
+<script src="/javascripts/main.js"></script>
+<script src="/javascripts/app-bar.js" async defer></script>
+<script src="/javascripts/background-scripts.js" async defer></script>
+<script src="/javascripts/notrification-handler.js" async defer></script>
+<script src="/javascripts/drag-handler.js" async defer></script>
+<script src="/javascripts/version-control.js"></script>
+
     <script>
+                
         const effectsWindow = new effects();
         window.onload = function () {
             //Start off with showing the file explorer
             //this can be changed to something smarter in the future
+            programLoaded();
 
             effectsWindow.files();
 
@@ -86,6 +126,17 @@
             //Hide the notifications menu
             var pane = document.getElementById("notification-pane");
             pane.style.display = "none";
+        
+        
+            var searchFilesField = document.getElementById("files-search-field");
+searchFilesField.addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+//Search for files
+
+
+    }
+});
+        
         }
 
     </script>

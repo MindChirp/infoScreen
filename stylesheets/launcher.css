@@ -1,0 +1,515 @@
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: bahnschrift;
+    overflow: hidden;
+    user-select: none;
+}
+
+body p, h1, h2, h3, input, textarea {
+  font-family: bahnschrift;
+  color: white;
+  font-weight: lighter;
+}
+
+
+
+.info-circle {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 100%;
+  background-color: white;
+  color: rgb(100,100,100);
+  display: inline-block;
+  margin-left: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.settings-content {
+  padding: 1rem;
+  overflow: hidden;
+  height: fit-content;
+  width: 100%;
+}
+
+.fd-button {
+    height: 3rem;
+    width: 3rem;
+    white-space: nowrap;
+    background-color: #1B2630;
+    border: none;
+    border-radius: 1.75rem;
+    outline: none;
+    cursor: pointer;
+    padding: 0 1rem;
+    margin-right: 0rem;
+}
+
+.fd-settings-button {
+  height: 2.5rem;
+  letter-spacing: 0.10em;
+  width: fit-content;
+  white-space: nowrap;
+  background-color: #1B2630;
+  border: none;
+  border-radius: 1.75rem;
+  outline: none;
+  cursor: pointer;
+  padding: 0 1.5rem;
+  margin-right: 0rem;
+  font-family: bahnschrift;
+  font-weight: lighter;
+  color: white;
+  line-height: 2.5rem;
+}
+
+
+#content {
+    border-radius: 0.5rem;
+    height: 100%;
+    overflow: hidden;
+    width: 97%;
+    padding-left: 1.5rem;
+    background-color: #171F26;
+}
+
+#content #drag-bar {
+    -webkit-app-region: drag;
+    height: 3rem;
+    width: 100%;
+    background-color: transparent;
+}
+
+.smooth-shadow {
+    box-shadow: 0 -1px 2px rgba(0,0,0,0.12), 
+              0 2px 2px rgba(0,0,0,0.12), 
+              0 4px 4px rgba(0,0,0,0.12), 
+              0 8px 8px rgba(0,0,0,0.12),
+              0 16px 16px rgba(0,0,0,0.12);
+  }
+
+#main-title {
+    color: white;
+    font-weight: lighter;
+}
+
+#actions-container {
+    height: fit-content;
+    width: fit-content;
+
+}
+
+
+#actions-container button {
+    height: 3rem;
+    width: fit-content;
+    padding: 0 1rem;
+    white-space: nowrap;
+    background-color: #1B2630;
+    border: none;
+    border-radius: 1.5rem;
+    outline: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 0.7rem;
+}
+
+#actions-container button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+#actions-container button i, p {
+    display: inline-block;
+    line-height: 3rem;
+    color: white;
+    vertical-align: top;
+    margin: 0;
+}
+
+.title {
+    color: white;
+    font-weight: lighter;
+}
+
+#list {
+    height: fit-content;
+    min-height: 2rem;
+    border-radius: 0.5rem;
+    width: 50%;
+    background-color: rgb(15, 20, 25);
+    line-height: 2rem;
+    color: rgb(150,150,150);
+    padding-left: 1rem;
+    font-weight: lighter;
+}
+
+
+
+#settings-wrapper {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  transform: translateX(-2%);
+  height: fit-content; 
+  width: 89%;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fade-in 300ms ease-in-out 0.2s;
+  animation-fill-mode: backwards;
+  font-weight: lighter;
+}
+
+#settings-wrapper input:not([type="range"]) {
+  background-color: transparent;
+  border: solid white;
+  border-width: 0 0 1px 0;
+  outline: none;
+  color: white;
+  padding-left: 0.5rem;
+  font-family: bahnschrift;
+  font-weight: lighter;
+}
+
+
+#user-container {
+    height: 3.5rem;
+    width: 3.5rem;
+    transform: translateY(20%);
+}
+
+#user-container #pfp #profile-photo-image {
+    height: 3.5rem;
+    width: auto;
+    margin-left: 50%;
+    transform: translateX(-50%); 
+    position: absolute;
+    z-index: 0;
+}
+
+#user-container #pfp canvas {
+  position: relative;
+    z-index: 4;
+    animation: rotate 300ms ease-in-out;
+    transition: all 400ms ease-in-out;
+}
+
+
+#pfp {
+    position: relative;
+    height: 3.5rem;
+    width: 3.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0;
+    background-color: #1B2630;
+    border: none;
+    border-radius: 1.75rem;
+    outline: none;
+    cursor: pointer;
+    margin-right: 0rem;
+}
+
+#user-container #pfp:hover canvas {
+    transform: rotate(360deg);
+}
+
+
+.menu {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: pop-in 300ms ease-in-out;
+    background-color: #171F26;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.menu .header {
+    height: 10rem;
+    width: 100%;
+    background-color: rgb(15, 20, 25);
+}
+
+
+.menu #login-container form input {
+    height: 2rem;
+    width: 19rem;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    font-size: 1.2rem;
+    color: white;
+    font-weight: lighter;
+    display: block;
+    border-radius: 0.5rem;
+    background-color: rgb(15, 20, 25);
+    outline: none;
+    border: none;
+}
+
+#controls {
+  margin-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+#controls p {
+  display: block;
+  height: 0.5rem;
+  line-height:0.5rem;
+  margin-top: 0.8rem;
+}
+
+#controls input {
+  background-color: transparent;
+}
+
+.user-header-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.login-button:disabled {
+    cursor: default; 
+    opacity: 1;
+}
+
+button:disabled {
+  cursor: default; 
+  opacity: 1;
+}
+
+@keyframes rotate {
+    0% {transform: rotate(-90deg)}
+    100% {transform: rotate(0deg)}
+}
+
+@keyframes full-rotate {
+  0%{transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}
+
+@keyframes slide-right {
+    0% {transform: translateX(-2rem); opacity: 0;}
+    50% {opacity: 0;}
+    100% {transform: translateX(0); opacity: 1;}
+}
+
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+@keyframes pop-in {
+    0% {opacity: 0; transform: scale(0.93);}
+    50%{opacity: 100%;}
+    100% {transform: scale(1);}
+}
+
+@keyframes slide-out {
+  0%{opacity: 1; transform: none;}
+  50%{opacity:1;}
+  100%{opacity: 0; transform: translateY(20%)}
+}
+
+@keyframes slide-in {
+  0%{opacity: 0; transform: translateY(-1rem)}
+  50%{opacity:1;}
+  100%{opacity: 1; transform: none;}
+}
+
+@keyframes wrong-shake {
+  0%{transform: translateX(0)}
+  50% {transform: translateX(-5%)}
+  100% {transform: translateX(5%)}
+}
+
+
+
+
+.lds-roller {
+
+    display: inline-block;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    animation: fade-in 300ms ease-in-out;
+  }
+  .lds-roller div {
+    animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    transform-origin: 40px 40px;
+  }
+  .lds-roller div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgb(100,100,100);
+    margin: -4px 0 0 -4px;
+  }
+  .lds-roller div:nth-child(1) {
+    animation-delay: -0.036s;   
+  }
+  .lds-roller div:nth-child(1):after {
+    top: 63px;
+    left: 63px;
+  }
+  .lds-roller div:nth-child(2) {
+    animation-delay: -0.072s;
+  }
+  .lds-roller div:nth-child(2):after {
+    top: 68px;
+    left: 56px;
+  }
+  .lds-roller div:nth-child(3) {
+    animation-delay: -0.108s;
+  }
+  .lds-roller div:nth-child(3):after {
+    top: 71px;
+    left: 48px;
+  }
+  .lds-roller div:nth-child(4) {
+    animation-delay: -0.144s;
+  }
+  .lds-roller div:nth-child(4):after {
+    top: 72px;
+    left: 40px;
+  }
+  .lds-roller div:nth-child(5) {
+    animation-delay: -0.18s;
+  }
+  .lds-roller div:nth-child(5):after {
+    top: 71px;
+    left: 32px;
+  }
+  .lds-roller div:nth-child(6) {
+    animation-delay: -0.216s;
+  }
+  .lds-roller div:nth-child(6):after {
+    top: 68px;
+    left: 24px;
+  }
+  .lds-roller div:nth-child(7) {
+    animation-delay: -0.252s;
+  }
+  .lds-roller div:nth-child(7):after {
+    top: 63px;
+    left: 17px;
+  }
+  .lds-roller div:nth-child(8) {
+    animation-delay: -0.288s;
+  }
+  .lds-roller div:nth-child(8):after {
+    top: 56px;
+    left: 12px;
+  }
+  @keyframes lds-roller {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    margin: 10px 0;
+    width: 100%;
+    background-color: none;
+  }
+  input[type=range]:focus {
+    background-color: none;
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 7px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #0075ff;
+    border-radius: 19px;
+    border: 0px solid #000000;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    box-shadow: 1px 1px 1px #000000;
+    border: 1px solid #ffffff;
+    height: 10px;
+    width: 10px;
+    border-radius: 20px;
+    background: #0075ff;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -2px;
+  }
+  input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #0075ff;
+  }
+  input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 7px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #0075ff;
+    border-radius: 19px;
+    border: 0px solid #000000;
+  }
+  input[type=range]::-moz-range-thumb {
+    box-shadow: 1px 1px 1px #000000;
+    border: 1px solid #ffffff;
+    height: 10px;
+    width: 10px;
+    border-radius: 20px;
+    background: #0075ff;
+    cursor: pointer;
+  }
+  input[type=range]::-ms-track {
+    width: 100%;
+    height: 7px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  input[type=range]::-ms-fill-lower {
+    background: #0075ff;
+    border: 0px solid #000000;
+    border-radius: 38px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-fill-upper {
+    background: #0075ff;
+    border: 0px solid #000000;
+    border-radius: 38px;
+    box-shadow: 0px 0px 0px #000000;
+  }
+  input[type=range]::-ms-thumb {
+    box-shadow: 1px 1px 1px #000000;
+    border: 1px solid #ffffff;
+    height: 10px;
+    width: 10px;
+    border-radius: 20px;
+    background: #0075ff;
+    cursor: pointer;
+  }
+  input[type=range]:focus::-ms-fill-lower {
+    background: #0075ff;
+  }
+  input[type=range]:focus::-ms-fill-upper {
+    background: #0075ff;
+  }
