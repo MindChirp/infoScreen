@@ -126,6 +126,7 @@ function profilePhoto(parent) {
             if(err) throw err;
             var dat = JSON.parse(data);
             Xpos = dat.positioning[0];
+            console.log(Xpos);
             Ypos = dat.positioning[1];
             size = dat.positioning[2];
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
@@ -177,7 +178,7 @@ function profilePhoto(parent) {
             scale.type = "range";
             scale.min = -40;
             scale.max = 40;
-            scale.value = Xpos;
+            scale.value = Xpos+50;
             scale.style.width = "15rem";
 
             cont.appendChild(scale);

@@ -48,7 +48,12 @@ function feedback(parent) {
         height: 2rem;
         font-size: 1.3rem;
         `);
-    var email = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+        var email;
+        if(developerMode) {
+            email = "developer@infoScreen.com";
+        } else {
+            email = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+        }
     Femail.setAttribute("type", "email");
     Femail.placeholder = "Your email";
     Femail.value = email;

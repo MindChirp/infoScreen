@@ -2,13 +2,17 @@ const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const env = process.env.NODE_ENV || 'development';
-
+const developerMode = true;
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
     devButton.parentNode.removeChild(devButton);
 }
 
+
+if(developerMode) {
+    console.log("%cDeveloper Mode", "color: red; font-weight: bold; font-size: 3rem;");
+}
 
 const ipc = require("electron").ipcRenderer
 function launchProgram() {
@@ -92,8 +96,12 @@ window.onload = function() {
         }
 
     } else if(signedIn == "true") {
-        var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
-        title.innerHTML = title.innerHTML + ", " + name;
+        if(developerMode) {
+            title.innerHTML = title.innerHTML + ", " + "Developer";
+        } else {
+            var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
+            title.innerHTML = title.innerHTML + ", " + name;
+        }
     }
 
 
@@ -413,7 +421,10 @@ function userSettings() {
             
 
             //Make server request
-
+            if(developerMode) {
+                userScreen(null,header,true);
+                return;
+            }
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "http://localhost:3000/auth");
 
@@ -447,7 +458,11 @@ function userSettings() {
                                 loginCont.parentNode.removeChild(loginCont);
                                 localStorage.setItem("signedIn", "true");
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
-                                userScreen(dat, header, true);
+                                if(!developerMode) {
+                                    userScreen(dat, header, true);
+                                } else {
+                                    userScreen(null, header, true);
+                                }
 
                             }, 300)
 
@@ -555,8 +570,14 @@ function userScreen(info, header, signIn) {
     if(signedIn == "false") {
         h1.innerHTML = "You're not signed in";
     } else {
-        if(info) {
-            h1.innerHTML = info[1][0].name
+        if(!developerMode) {
+            if(info) {
+                
+                h1.innerHTML = info[1][0].name  
+            }
+        } else {
+            //Keep me logged in all the time if developer mode is enabled!
+            h1.innerHTML = "Frikk Ormestad Larsen";
         }
     }
     h1.setAttribute("style", `

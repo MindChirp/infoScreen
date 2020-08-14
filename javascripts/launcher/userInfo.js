@@ -18,7 +18,13 @@ function userInfo(parent) {
     var wrapper = document.createElement("div");
     wrapper.setAttribute("id", "settings-wrapper");
     wrapper.setAttribute("name", "user-information");
+    parent.appendChild(wrapper);
 
+    if(developerMode) {
+        var el = textCont("Developer Mode", "This information is currently not available");
+        wrapper.appendChild(el);
+        return;
+    }
     var userData = JSON.parse(localStorage.getItem("userInfo"))[1][0];
     var el = textCont("Name", userData.name);
     wrapper.appendChild(el)
@@ -41,7 +47,6 @@ function userInfo(parent) {
     var el = textCont("Password", hidden);
     wrapper.appendChild(el)
 
-    parent.appendChild(wrapper);
 
 
 
