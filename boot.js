@@ -31,7 +31,12 @@ function boot() {
     slashes: true
   }))
 
-    /*win = new BrowserWindow({
+ipcMain.on("load-program", function(event) {
+  loadMainProgram();
+})
+
+function loadMainProgram() {
+    win = new BrowserWindow({
       webPreferences: {
         nodeIntegration: true
       },
@@ -45,7 +50,9 @@ function boot() {
   win.loadURL(url.format({
     pathname: 'home.html',
     slashes: true
-  }))*/
+  }))
+
+}
 }
 
 ipcMain.on("open-pfp-selector", function(event) {

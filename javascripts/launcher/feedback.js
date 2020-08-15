@@ -36,7 +36,6 @@ function feedback(parent) {
         background-color: #1B2630;
         border-radius: 0.5rem;
         padding: 0.5rem;
-
     `);
     left.setAttribute("class", "smooth-shadow");
 
@@ -70,7 +69,6 @@ function feedback(parent) {
         background-color: #1B2630;
         border-radius: 0.5rem;
         padding: 0.5rem;
-
     `);
     right.setAttribute("class", "smooth-shadow");
 
@@ -151,5 +149,3 @@ function feedback(parent) {
 
 
 }
-
-

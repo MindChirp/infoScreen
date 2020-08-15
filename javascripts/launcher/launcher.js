@@ -2,7 +2,15 @@ const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const env = process.env.NODE_ENV || 'development';
+const ipc = require("electron").ipcRenderer
+
+
+
+//--\\ DEVELOPER MODE //--\\
 const developerMode = true;
+
+//--\\ -------------- //--\\
+
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -14,7 +22,6 @@ if(developerMode) {
     console.log("%cDeveloper Mode", "color: red; font-weight: bold; font-size: 3rem;");
 }
 
-const ipc = require("electron").ipcRenderer
 function launchProgram() {
     ipc.send("load-program");
 }
