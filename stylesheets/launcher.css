@@ -219,6 +219,11 @@ body p, h1, h2, h3, input, textarea {
     outline: none;
     cursor: pointer;
     margin-right: 0rem;
+    transition: all 100ms ease-in-out;
+}
+
+#pfp:hover {
+  transform: scale(1.05);
 }
 
 #user-container #pfp:hover canvas {
@@ -335,6 +340,12 @@ button:disabled {
   0%{transform: translateX(0)}
   50% {transform: translateX(-5%)}
   100% {transform: translateX(5%)}
+}
+
+@keyframes pfp-slide-in {
+  0%{opacity: 0; transform: translateY(-60%)}
+  50%{opacity:1;}
+  100%{opacity: 1; transform: -50%;}
 }
 
 

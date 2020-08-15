@@ -422,8 +422,33 @@ function userSettings() {
 
             //Make server request
             if(developerMode) {
-                userScreen(null,header,true);
-                return;
+
+                                setTimeout(function() {
+                                    //Transition everything
+                                    var subheader = document.getElementsByClassName("user-header-wrapper")[0];
+                                    var loginForm = document.getElementsByClassName("login-form")[0];
+                                    subheader.style.animation = "slide-out 300ms ease-in-out";
+                                    header.style.animationFillMode = "forwards";
+                                    loginForm.style.animation = "slide-out 300ms ease-in-out";
+                                    loginForm.style.animationFillMode = "forwards";
+                                    setTimeout(function() {
+                                        subheader.parentNode.removeChild(subheader);
+                                        loginForm.parentNode.removeChild(loginForm);
+                                        var loginCont = document.getElementById("login-container");
+                                        loginCont.parentNode.removeChild(loginCont);
+                                        localStorage.setItem("signedIn", "true");
+                                        localStorage.setItem("userInfo", JSON.stringify(null));
+
+                                            userScreen(null, header, true);
+
+                                    }, 300)
+
+                                }, 500);
+                    
+
+
+
+                
             }
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "http://localhost:3000/auth");
@@ -513,7 +538,8 @@ function userScreen(info, header, signIn) {
         top: 50%;
         transform: translateY(-50%);
         left: 1rem;
-        animation-fill-mode: forwards;
+        animation: pfp-slide-in 300ms ease-in-out 0.2s;
+        animation-fill-mode: backwards;
     `);
 
     var pfp = document.createElement("div");
