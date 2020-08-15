@@ -567,32 +567,58 @@ function userScreen(info, header, signIn) {
     canv.style.animation = "full-rotate 30s linear infinite"
 */
     var h1 = h1El();
+    var mail = document.createElement("p");
+
+    var nameCont = document.createElement("div");
+    nameCont.setAttribute("style", `
+        height: fit-content;
+        width: 100rem;
+        display: inline-block;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-left: 1rem;
+        position: absolute;
+    `)
     if(signedIn == "false") {
         h1.innerHTML = "You're not signed in";
     } else {
         if(!developerMode) {
             if(info) {
-                
-                h1.innerHTML = info[1][0].name  
+                h1.innerHTML = info[1][0].name;  
+                mail.innerHTML = info[1][0].email;
             }
         } else {
             //Keep me logged in all the time if developer mode is enabled!
             h1.innerHTML = "Frikk Ormestad Larsen";
+            mail.innerHTML = "developer@infoScreen.com"
         }
     }
     h1.setAttribute("style", `
         display: inline-block;
-        line-height: 5rem;
+        line-height: 2rem;
         color: white;
         vertical-align: top;
         margin: 0;
         font-weight: lighter;
-        margin-left: 1rem;
         opacity: 0;
         animation: slide-right 700ms ease-in-out 0.2s;
         animation-fill-mode: forwards;
     `);
-    user.appendChild(h1);
+
+    mail.setAttribute("style", `
+        color: rgb(150,150,150);
+        display: block;
+        height: 1rem;
+        line-height: 1rem;
+        font-size: 1.2em;
+        animation: slide-right 700ms ease-in-out 0.3s;
+        animation-fill-mode: backwards;
+    `)
+    user.appendChild(nameCont);
+
+    nameCont.appendChild(h1);
+    nameCont.appendChild(mail)
+
     userWrapper.appendChild(user)
     header.appendChild(userWrapper);
     userWrapper.style.animation = "slide-in 300ms ease-in-out";

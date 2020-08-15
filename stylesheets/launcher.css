@@ -279,6 +279,7 @@ body p, h1, h2, h3, input, textarea {
 .user-header-wrapper {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 .login-button:disabled {

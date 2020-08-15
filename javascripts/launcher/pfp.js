@@ -79,7 +79,6 @@ function profilePhoto(parent) {
 
         var extension = path.split("\\")[path.split("\\").length-1].split(".")[path.split("\\")[path.split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
-        console.log(localStorage.getItem("pfpExtension"));
         var directory = "./data/programData/profilePics/"
         fs.readdir(directory, (err, files) => {
             if(err) throw err;
@@ -94,8 +93,11 @@ function profilePhoto(parent) {
             }
         })
         setTimeout(function() {
-            fs.createReadStream(path).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
+            fs.createReadStream(path).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err, event) => {
                 if(err) throw err;
+                event.on("finish", function() {
+                    alert("yEWs")
+                })
             });
             if(document.getElementById("img-positioner-image")) {
                 var img = document.getElementById("img-positioner-image");
@@ -114,15 +116,21 @@ function profilePhoto(parent) {
                     img.style.transform = "translateX(-50%)";
                     imgCont.appendChild(img);
                 }, 100)
-        }, 100);
+        }, 500);
         });
         
 
         //Hoist
-        var size = 1;
-        var Xpos = -50;
-        var Ypos = 0;
+        var pos = JSON.parse(localStorage.getItem("pfpPos"));
+        
+        var Xpos = pos[0];
+        var Ypos = pos[1];
+        var size = pos[2];
 
+        img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
+
+
+        /*      
         fs.readFile("./data/programData/profilePics/profilePicDat.json", (err, data) => {
             if(err) throw err;
             var dat = JSON.parse(data);
@@ -132,7 +140,7 @@ function profilePhoto(parent) {
             size = dat.positioning[2];
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
         });
-        
+*/
 
 
     div.appendChild(selImg);
