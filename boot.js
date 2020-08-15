@@ -1,8 +1,7 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, dialog, ipcMain} = require('electron');
 const url = require('url');
 let win = null;
 let bootWin = null;
-
 
 try {
   require('electron-reloader')(module);
@@ -46,5 +45,17 @@ function boot() {
     slashes: true
   }))*/
 }
+
+ipc.on("open-pfp-selector", function(event) {
+  dialog.showOpenDialog({
+    properties: ["openFile"]
+  }).then(result => {
+    event.reply("selected-image", result);
+  }).catch(err => {
+    console.log(err);
+  })
+})
+
+
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', boot);
