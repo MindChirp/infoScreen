@@ -72,11 +72,12 @@ function profilePhoto(parent) {
     var letters = ["A","B","C","D","E","F","G","H","I","J"];
 
     ipc.on("selected-image", function(event, path) {
-        console.log(path[0])
+        var path = JSON.parse(path).filePaths[0];
+        console.log(path)
 
 
 
-        var extension = path[0].split("\\")[path[0].split("\\").length-1].split(".")[path[0].split("\\")[path[0].split("\\").length-1].split(".").length-1];
+        var extension = path.split("\\")[path.split("\\").length-1].split(".")[path.split("\\")[path.split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
         console.log(localStorage.getItem("pfpExtension"));
         var directory = "./data/programData/profilePics/"
@@ -93,7 +94,7 @@ function profilePhoto(parent) {
             }
         })
         setTimeout(function() {
-            fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
+            fs.createReadStream(path).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
                 if(err) throw err;
             });
             if(document.getElementById("img-positioner-image")) {

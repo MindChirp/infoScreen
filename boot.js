@@ -4,7 +4,9 @@ let win = null;
 let bootWin = null;
 
 try {
-  require('electron-reloader')(module);
+  require('electron-reloader')(module, {
+    ignore: ["data"]
+  });
 } catch (_) {}
 
 
@@ -46,11 +48,12 @@ function boot() {
   }))*/
 }
 
-ipc.on("open-pfp-selector", function(event) {
+ipcMain.on("open-pfp-selector", function(event) {
   dialog.showOpenDialog({
     properties: ["openFile"]
   }).then(result => {
-    event.reply("selected-image", result);
+    console.log(result)
+    event.reply("selected-image", JSON.stringify(result));
   }).catch(err => {
     console.log(err);
   })
