@@ -7,6 +7,7 @@ const ipc = require("electron").ipcRenderer
 
 
 //--\\ DEVELOPER MODE //--\\
+
 const developerMode = true;
 
 //--\\ -------------- //--\\
