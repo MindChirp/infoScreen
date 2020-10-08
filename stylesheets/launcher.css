@@ -152,9 +152,33 @@ body p, h1, h2, h3, input, textarea {
     background-color: rgb(15, 20, 25);
     line-height: 2rem;
     color: rgb(150,150,150);
-    padding-left: 1rem;
     font-weight: lighter;
 }
+
+
+#list .project-item {
+  height: 1.7rem;
+  width: 100%;
+  display: block;
+  background-color: transparent;
+  transition: all 0ms ease-in-out;
+  vertical-align: top;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+#list .project-item:hover {
+  background-color: #0a0d10;
+}
+
+#list .project-item p {
+  height: 1.7rem;
+  margin: 0;
+  font-size: 1.2em;
+  line-height: 1.7rem;
+  margin-left: 1rem;
+}
+
 
 
 
@@ -174,7 +198,7 @@ body p, h1, h2, h3, input, textarea {
 #settings-wrapper input:not([type="range"]) {
   background-color: transparent;
   border: solid white;
-  border-width: 0 0 1px 0;
+  border-width: 0;
   outline: none;
   color: white;
   padding-left: 0.5rem;
@@ -290,6 +314,20 @@ button:disabled {
   cursor: default; 
   opacity: 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @keyframes rotate {
     0% {transform: rotate(-90deg)}

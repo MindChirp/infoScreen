@@ -1,11 +1,12 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const ipc = require
 const url = require('url');
 let win = null;
 let bootWin = null;
 
 
 try {
-  require('electron-reloader')(module);
+  require('electron-reloader')(module, {ignore: ['./data/programData']});
 } catch (_) {}
 
 
@@ -46,5 +47,25 @@ function boot() {
     slashes: true
   }))*/
 }
+ipcMain.on("open-pfp-selector", (event) => {
+  var file = dialog.showOpenDialog(launcherWin,
+    {
+      filters: [
+        {name: 'Images', extensions: ["jpg", "png", "gif"]}
+      ],
+      properties: ['openFile']
+    })
+      if(file != undefined) {
+        console.log("yes")
+        console.log(file)
+        event.returnValue = file;
+      } else {
+        //The dialog was canceled
+        event.returnValue = "cancelled";
+        console.log(event.returnValue);
+      }
+})
+
+
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', boot);

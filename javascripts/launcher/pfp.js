@@ -1,6 +1,8 @@
 const { fstat, fdatasync } = require("fs");
 const fs = require("fs");
+const { ipcRenderer } = require("electron");    
 const { settings } = require("cluster");
+const { isFunction } = require("util");
 function profilePhoto(parent) {
 
     if(document.getElementById("settings-wrapper")) {
@@ -66,14 +68,13 @@ function profilePhoto(parent) {
     selImg.style.display = "block";
 
     selImg.addEventListener("click", function() {
-        ipc.send("open-pfp-selector");
-    })
+        var path = ipcRenderer.sendSync("open-pfp-selector");
+        console.log(path)
+        if(path != "cancelled") {
+
 
     var letters = ["A","B","C","D","E","F","G","H","I","J"];
-
-    ipc.on("selected-image", function(event, path) {
-        console.log(path[0])
-
+        console.log(path)
 
 
         var extension = path[0].split("\\")[path[0].split("\\").length-1].split(".")[path[0].split("\\")[path[0].split("\\").length-1].split(".").length-1];
@@ -83,37 +84,43 @@ function profilePhoto(parent) {
         fs.readdir(directory, (err, files) => {
             if(err) throw err;
             for(const file of files) {
-                if(file == "default.png") {
+                if(file == "default.png" || file == "profilePicDat.json") {
                     
                 } else {
                     fs.unlink("./data/programData/profilePics/" + file, (err) => {
                         if(err) throw err;
-                    })
+                    });
                 }
             }
         })
         setTimeout(function() {
-            fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
+            /*fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
                 if(err) throw err;
-            });
+            });*/
+
+            fs.copyFileSync(path[0], "./data/programData/profilePics/user" + localStorage.getItem("pfpExtension"));
             if(document.getElementById("img-positioner-image")) {
                 var img = document.getElementById("img-positioner-image");
                 img.parentNode.removeChild(img);
             }
-                setTimeout(function() {
 
                     var img = document.createElement("img");
                     img.setAttribute("id", "img-positioner-image")
+
+//----------------------------asdasddas
+
+
                     var ext = localStorage.getItem("pfpExtension");
                     console.log(ext);
                     img.src = "../data/programData/profilePics/user" + ext;
+                    changeState();
                     img.style.height = "100%";
                     img.style.width = "auto";
                     img.style.marginLeft = "50%";   
                     img.style.transform = "translateX(-50%)";
                     imgCont.appendChild(img);
-                }, 100)
         }, 100);
+    }
         });
         
 
@@ -121,15 +128,26 @@ function profilePhoto(parent) {
         var size = 1;
         var Xpos = -50;
         var Ypos = 0;
-
-        fs.readFile("./data/programData/profilePics/profilePicDat.json", (err, data) => {
-            if(err) throw err;
-            var dat = JSON.parse(data);
+        var data = fs.readFileSync("./data/programData/profilePics/profilePicDat.json");
+        var dat;
+        try{
+            dat = JSON.parse(data);
             Xpos = dat.positioning[0];
             Ypos = dat.positioning[1];
             size = dat.positioning[2];
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-        });
+        } catch(err){
+            
+            //The JSON file must have been corrupted, repair it.
+            var dat = `{
+                "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
+            }`;
+            fs.writeFileSync("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
+                if(err) throw err;
+            })
+        }
+            console.log(dat);
+
         
 
 
@@ -167,7 +185,7 @@ function profilePhoto(parent) {
             scale.addEventListener("change", function(event) {
                 var start = 1;
                 console.log(parseInt(start) + parseInt(event.target.value)*2)
-                img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + event.target.value + ")";
+                document.getElementById("img-positioner-image").style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + event.target.value + ")";
                 size = event.target.value;
             });
             var p = document.createElement("p");
@@ -177,7 +195,7 @@ function profilePhoto(parent) {
             scale.type = "range";
             scale.min = -40;
             scale.max = 40;
-            scale.value = Xpos;
+            scale.value = Xpos+50;
             scale.style.width = "15rem";
 
             cont.appendChild(scale);
@@ -186,7 +204,7 @@ function profilePhoto(parent) {
             scale.addEventListener("change", function(event) {
                 var start = -50;
                 console.log(parseInt(start) + parseInt(event.target.value)*2)
-                img.style.transform = "translateX(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) translateY(" + Ypos + "%) scale(" + size + ")";
+                document.getElementById("img-positioner-image").style.transform = "translateX(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) translateY(" + Ypos + "%) scale(" + size + ")";
                 Xpos = parseInt(start) + parseInt(event.target.value)*2;
             });
 
@@ -207,7 +225,7 @@ function profilePhoto(parent) {
             scale.addEventListener("change", function(event) {
                 var start = 0;
                 console.log(parseInt(start) + parseInt(event.target.value)*2)
-                img.style.transform = "translateX(" + Xpos + "%) translateY(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) scale(" + size + ")";
+                document.getElementById("img-positioner-image").style.transform = "translateX(" + Xpos + "%) translateY(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) scale(" + size + ")";
                 Ypos = parseInt(start) + parseInt(event.target.value)*2;
             });
 
@@ -226,9 +244,11 @@ function profilePhoto(parent) {
                     "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
                 }`;
             localStorage.setItem("pfpPos", JSON.stringify([Xpos,Ypos,size]));
-                fs.writeFile("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
+                fs.writeFileSync("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
                     if(err) throw err;
+                    console.log("Success")
                 })
+                changeState();
             })
 
 
@@ -243,3 +263,16 @@ function profilePhoto(parent) {
 
 
 }
+
+
+
+var zip = new require("node-zip")();
+zip.file("test.txt", "hello there");
+var data = zip.generate({base64:false,compression:'DEFLATE'});
+fs.writeFileSync('./data/programData/projects/test.proj', data, 'binary');
+
+
+var zip = new require("node-zip")();
+zip.file("test.txt", "no there");
+var data = zip.generate({base64:false,compression:'DEFLATE'});
+fs.writeFileSync('./data/programData/projects/test1.proj', data, 'binary');

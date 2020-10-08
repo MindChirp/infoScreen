@@ -1,0 +1,49 @@
+./project_name.proj/meta.json:
+
+{
+    "meta":  {
+        "slides": 10,
+        "creator": ["Frikk O. Larsen", "Ola Nordmann"],
+        "created": "10/08/2020:10:00:PM",
+        "edited": "10/08/2020:11:00:PM",
+    },
+
+    "times": {
+        [[3],[2],[6],[10],[1],[5],[10],[10],[10],[10]],
+        [],
+        [],
+        []
+        //Etc etc, continue for each file
+    }
+    "files:": {
+        [
+            //Defines at which time of day the slideshow files (folders) should be displayed
+            {"title": "1", "time": "12:01PM-07:00PM"},
+            {"title": "2", "time": "07:01PM-12:00AM"},
+            {"title": "3", "time": "12:01AM-12:00PM"}
+
+        ]
+    }
+}
+
+OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+****************************************************************
+
+./project_name.proj/slides/
+
+./1/
+--> index.html
+    widgets.css
+    cfg.js
+    widgets.js
+    etc..
+
+./2/
+--> index.html
+    widgets.css
+    cfg.js
+    widgets.js
+    etc..
+
+etc..
+

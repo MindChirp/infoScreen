@@ -2,7 +2,7 @@ const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const env = process.env.NODE_ENV || 'development';
-
+const projectFilePath = "./data/programData/projects";
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -31,14 +31,17 @@ function loaderWheel() {
 
 
 
-var signedIn = null;
+var signedIn = false;
 var firstTime = null;
 
 window.onload = function() {
+    //load all the projects to the plrojects list
+    initializeProjectList()
 
+    
     //Set the correct profile photo path
     if(localStorage.getItem("signedIn")) {
-        var signedIn = JSON.parse(localStorage.getItem("signedIn"));
+        signedIn = JSON.parse(localStorage.getItem("signedIn"));
     }
         if(signedIn == true) {
             var ext = localStorage.getItem("pfpExtension");
@@ -432,6 +435,7 @@ function userSettings() {
 
                     var dat = JSON.parse(this.responseText);
                     if(dat[0] == "OK") {
+                        console.log("SIGNING IN")
                         setTimeout(function() {
                             //Transition everything
                             var subheader = document.getElementsByClassName("user-header-wrapper")[0];
@@ -446,12 +450,21 @@ function userSettings() {
                                 var loginCont = document.getElementById("login-container");
                                 loginCont.parentNode.removeChild(loginCont);
                                 localStorage.setItem("signedIn", "true");
+                                localStorage.setItem("pfpPos", JSON.stringify([-50,0,1]));
+                                
+
+                                //Update the main launcher screen to reflect the localStorage values
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
+                                console.log(dat);
                                 userScreen(dat, header, true);
+                                changeState();
 
                             }, 300)
 
                         }, 500);
+                    } else {
+                        var loginForm = document.getElementsByClassName("login-form")[0];
+                        loginForm.style.animation = "wrong-shake 100ms 3";
                     }
 
                 }
@@ -530,6 +543,7 @@ function userScreen(info, header, signIn) {
     `);
 
     var pos = JSON.parse(localStorage.getItem("pfpPos"));
+    
     var Xpos = pos[0];
     var Ypos = pos[1];
     var size = pos[2];
@@ -591,6 +605,7 @@ function userScreen(info, header, signIn) {
     signOut.innerHTML = "Sign out";
     signOut.addEventListener("click", function() {
         localStorage.setItem("signedIn", "false");
+        changeState();
         location.reload();
     });
     infoOnHover(signOut, "Signs you out");
@@ -678,10 +693,76 @@ function divider() {
 //Update the main screen of the launcher to reflect the state of the localStorage values
 
 function changeState() {
+    //Update the project list if signed in
+    initializeProjectList();
 
     var signedIn = localStorage.getItem("signedIn");
 
-    if(signedIn == true) {
+    if(signedIn == "true") {
+
+
+    firstTime = localStorage.getItem("firstTime");
+
+
+    var title = document.getElementById("main-title");
+    if(firstTime == "true") {
+        title.innerHTML = "Welcome!";
+    } else if(firstTime == "false") {
+        title.innerHTML = "Welcome back";
+    }
+    
+
+    var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
+    title.innerHTML = title.innerHTML + ", " + name;
+
+
+        var ext = localStorage.getItem("pfpExtension");
+
+        var img = document.getElementById("profile-photo-image");
+
+        var pos = JSON.parse(localStorage.getItem("pfpPos"));
+        console.log(pos);
+        var Xpos = pos[0];
+        var Ypos = pos[1];
+        var size = pos[2];
+        img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
+        img.setAttribute("src", "../data/programData/profilePics/user"+ ext);
+
+        //Enable all buttons
+        var butts = document.getElementById("actions-container").childNodes;
+        for(let i = 0; i < butts.length; i++) {
+            if(i%2 != 0) {
+                if(butts[i].childNodes[2].innerHTML != "Developer start") {
+                    butts[i].disabled = false;
+                }
+            }
+        }
+
+
+    } else {
+        var title = document.getElementById("main-title");
+
+        if(firstTime == "true") {
+            title.innerHTML = "Welcome! You're not signed in.";
+        } else if(firstTime != "true") {
+            title.innerHTML = "Welcome back. You're not signed in.";
+        }
+    
+
+        var img = document.getElementById("profile-photo-image");
+        img.style.transform = "translateX(-50%) translateY(0) scale(1)";
+        img.setAttribute("src", "../data/programData/profilePics/default.png");
+
+        //Disable all buttons
+        var butts = document.getElementById("actions-container").childNodes;
+        for(let i = 0; i < butts.length; i++) {
+            if(i%2 != 0) {
+                if(butts[i].childNodes[2].innerHTML != "Developer start") {
+                    butts[i].disabled = true;
+                }
+            }
+        }
+
 
     }
 

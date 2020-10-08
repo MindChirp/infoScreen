@@ -142,7 +142,7 @@ function feedback(parent) {
             send.disabled = true;
 
         }
-    })
+    });
 
 
 }
