@@ -38,10 +38,25 @@ window.onload = function() {
     //load all the projects to the plrojects list
     initializeProjectList()
 
-    
+    const htmlEl = document.getElementsByTagName('html')[0];
+
+    /*const toggleTheme = (theme) => {
+        htmlEl.dataset.theme = theme;
+    }*/
     //Set the correct profile photo path
     if(localStorage.getItem("signedIn")) {
         signedIn = JSON.parse(localStorage.getItem("signedIn"));
+
+        //Also, set the correct color theme, since we now know what preferences
+        //The user has
+
+        if(localStorage.getItem("theme") == "light") {
+            setTheme(0);
+        } else if(localStorage.getItem("theme") == "dark") {
+            setTheme(1);
+        } else {
+            setTheme(2);
+        }
     }
         if(signedIn == true) {
             var ext = localStorage.getItem("pfpExtension");
@@ -57,6 +72,7 @@ window.onload = function() {
     //If not already set up, set up the localStorage
     var storage = window.localStorage;
     if(!storage.signedIn) {
+        localStorage.setItem("theme", "light");
         localStorage.setItem("signedIn", false);
         localStorage.setItem("firstTime", true);
         signedIn = false;
@@ -189,55 +205,6 @@ function infoOnHover(el, txt) {
 })
 }
 
-function menu(type) {
-    var el = document.createElement("div");
-    el.setAttribute("class", "menu");
-    document.body.appendChild(el);
-    switch(type) {
-        case "user":
-
-            var header = document.createElement("div");
-            header.setAttribute("class", "header");
-            el.appendChild(header);
-
-        break;
-    }
-
-    var back = document.createElement("button");
-    back.setAttribute("class", "fd-button smooth-shadow");
-    back.setAttribute("style", `
-        position: absolute;
-        bottom: 1rem;
-        left: 1rem;
-        height: 3rem;
-        width: 3rem;
-        z-index: 10;
-    `);
-
-    infoOnHover(back, "Go back");
-
-    back.addEventListener("click", function() {
-        el.parentNode.removeChild(el);
-        if(document.getElementsByClassName("information-popup")) {
-            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
-        }
-    })
-
-    var ico = document.createElement("i");
-    ico.setAttribute("class", "material-icons");
-    ico.innerHTML = "keyboard_backspace";
-    back.appendChild(ico);
-    ico.setAttribute("style", `
-        color: white;
-        line-height: 3rem;
-        font-size: 1.4rem;
-        text-align: center;
-        transform: translateX(-0.15rem);
-    `)
-
-    el.appendChild(back);
-    return el;
-}
 
 
 function userSettings() {
@@ -308,7 +275,7 @@ function userSettings() {
     h1.setAttribute("style", `
         display: inline-block;
         line-height: 5rem;
-        color: white;
+        color: var(--title-color);
         vertical-align: top;
         margin: 0;
         font-weight: lighter;
@@ -351,6 +318,8 @@ function userSettings() {
         var usrName = document.createElement("input");
         usrName.setAttribute("type", "username");
         usrName.setAttribute("placeholder", "Email");
+        usrName.style.backgroundColor = "var(--main-button-color)";
+        usrName.style.color = "var(--title-color)";
         //TEMPORARY
         usrName.value = "frikk44@gmail.com";
         setTimeout(function() {
@@ -360,6 +329,8 @@ function userSettings() {
         var pswrd = document.createElement("input");
         pswrd.setAttribute("type", "password");
         pswrd.setAttribute("placeholder", "Password");
+        pswrd.style.backgroundColor = "var(--main-button-color)";
+        pswrd.style.color = "var(--paragraph-color)";
         //TEMPORARY
         pswrd.value = "frikkern123";
         form.appendChild(usrName);
@@ -371,19 +342,20 @@ function userSettings() {
             width: 6.7rem;
             height: 2.3rem;
             transition: all 300ms ease-in-out;
+            
         `);
         var ico = document.createElement("i");
         ico.setAttribute("class", "material-icons");
         ico.innerHTML = "login";
         ico.setAttribute("style", `
             line-height: 2.3rem;
-            color: white;
+            color: var(--paragraph-color);
         `);
         var p = pEl();
         p.innerHTML = "Sign in ";
         p.setAttribute("style", `
             line-height: 2.3rem;
-            color: white;
+            color: var(--paragraph-color);
             margin-left: 0.5rem;
         `);
         logIn.appendChild(ico);
@@ -576,7 +548,7 @@ function userScreen(info, header, signIn) {
     h1.setAttribute("style", `
         display: inline-block;
         line-height: 5rem;
-        color: white;
+        color: var(--title-color);
         vertical-align: top;
         margin: 0;
         font-weight: lighter;
@@ -638,6 +610,9 @@ function userScreen(info, header, signIn) {
 
     var themes = createSettingsButton();
     themes.innerHTML = "Themes";
+    themes.addEventListener("click", function() {
+        Themes(content);
+    })
 
     var aboutButt = createSettingsButton();
     aboutButt.innerHTML = "About";
@@ -662,7 +637,6 @@ function createSettingsButton() {
     button.setAttribute("class", "fd-settings-button smooth-shadow");
     button.setAttribute("style", `
         width: fit-content;
-        color: white;
         margin-right: 1rem;
         margin-bottom: 1rem;
     `);
@@ -679,7 +653,7 @@ function divider() {
     el.setAttribute("style", `
         width: 40rem;
         height: 0.095rem;
-        background-color: #1B2630;
+        background-color: var(--main-button-color);
         margin-top: 1rem;
         margin-left: 50%;
         transform: translateX(-52%);
@@ -766,4 +740,37 @@ function changeState() {
 
     }
 
+}
+
+
+function inputWithText(text) {
+    var el = document.createElement("div");
+    el.setAttribute("class", "input-field");
+
+    var p = document.createElement("p");
+    p.innerHTML = text;
+    p.setAttribute("style", `
+        color: var(--paragraph-color);
+        margin: 0;
+        display: block;
+        height: 2rem;
+        font-size: 1rem;
+    `)
+
+    var input = document.createElement("input");
+    input.setAttribute("type", "text");
+    input.setAttribute("style", `
+        border-style: solid;
+        border-width: 0 0 2px;
+        border-color: var(--secondary-button-color);
+        outline: none;
+        height: 2rem;
+        font-size: 1.5rem;
+        background-color: transparent;
+    `);
+
+    el.appendChild(p);
+    el.appendChild(input);
+
+    return el;
 }

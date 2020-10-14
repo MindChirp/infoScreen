@@ -45,8 +45,93 @@ function createList(arr) {
 
         var txt = document.createElement("p");
         txt.innerHTML = x;
+        txt.setAttribute("style", `
+            display: inline-block;
+        `)
         el.appendChild(txt);
+
+        el.setAttribute("onmouseenter", "fileList.hover(this)");
+
+        el.setAttribute("onmouseleave", "fileList.leave(this)");
+
     }
 }
 
+}
+
+
+var fileList = {
+    hover: function(el) {
+            var menu = document.createElement("div");
+            menu.setAttribute("style", `
+                height: 100%;
+                width: fit-content;
+                display: inline-block;
+                float: right;
+                padding-right: 1rem;
+            `);
+
+            var open = document.createElement("button");
+            open.setAttribute("style", `
+                height: 100%;
+                width: fit-content;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            `);
+            infoOnHover(open,"Open");
+            var ico = document.createElement("i");
+            ico.setAttribute("class", "material-icons");
+            ico.innerHTML = "folder";
+            ico.setAttribute("style", `
+                height: 100%;
+                line-height: 2.5rem;
+                color: var(--paragraph-color);
+            `)
+
+            open.appendChild(ico);
+
+
+
+
+            var del = document.createElement("button");
+            del.setAttribute("style", `
+                height: 100%;
+                width: fit-content;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            `);
+            del.setAttribute("onclick", "fileList.delete(this)")
+            infoOnHover(del,"Delete");
+            
+            var ico = document.createElement("i");
+            ico.setAttribute("class", "material-icons");
+            ico.innerHTML = "delete";
+            ico.setAttribute("style", `
+                height: 100%;
+                line-height: 2.5rem;
+                color: var(--paragraph-color);
+            `)
+
+            del.appendChild(ico);
+
+            menu.appendChild(del);
+            menu.appendChild(open);
+
+
+
+
+            el.appendChild(menu);
+    },
+
+    leave: function(el) {
+        el.childNodes[1].parentNode.removeChild(el.childNodes[1]);
+    },
+
+    delete: function(el) {
+
+    }
 }

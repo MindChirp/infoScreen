@@ -24,16 +24,16 @@
             </div>
             <h1 id="main-title"></h1> <!--Insert user name here-->
             <div id="actions-container">
-                <button id="new-project" class="smooth-shadow"><i class="material-icons">add</i> <p>Create</p></button>
+                <button id="new-project" onclick="createProject()" class="smooth-shadow"><i class="material-icons">add</i> <p>Create</p></button>
                 <button id="open-project" class="smooth-shadow"><i class="material-icons">folder_open</i> <p>Open</p></button>
                 <button id="open-server" class="smooth-shadow"><i class="material-icons">dns</i> <p>From server</p></button>
-                <button id="live-edit" class="smooth-shadow"><i class="material-icons">brush</i> <p>Live edit</p></button>
+                <button id="live-edit" onclick="liveEdit()" class="smooth-shadow"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow" onclick="launchProgram()" disabled><i class="material-icons">flag</i> <p>Developer start</p></button>
 
             </div>
 
             <h1 class="title" style="margin: 3rem 0 0.5rem;">Your Projects</h1>
-            <div id="list">
+            <div id="list" class="smooth-shadow">
                 <p style="margin-left: 1rem; line-height: 2.5rem; height: 2.5rem; color: rgb(150,150,150);">No recent projects</p>
             </div>
         </div>
@@ -43,8 +43,11 @@
         <script src="/javascripts/launcher/feedback.js" async defer></script>
         <script src="/javascripts/launcher/about.js" async defer></script>
         <!--<script src="/javascripts/launcher/about.js" async defer></script>-->
+        <script src="/javascripts/launcher/themes.js" async defer></script>
+        <script src="/javascripts/launcher/createProject.js" async defer></script>
         <script src="/javascripts/launcher/launcher.js" async defer></script>
         <script src="/javascripts/launcher/pfp.js" async defer></script>
+        <script src="/javascripts/launcher/liveEdit.js" async defer></script>
         <script src="/javascripts/launcher/loadProjects.js" async defer></script>
     </body>
 </html>

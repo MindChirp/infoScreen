@@ -15,11 +15,49 @@ body {
     background-color: transparent;
 }
 
+
+
+
+*, *::after, *::before {
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+}
+
 body p, h1, h2, h3, input, textarea {
   font-family: bahnschrift;
-  color: white;
+  color: var(--paragraph-color);
   font-weight: lighter;
 }
+
+body input::placeholder {
+  color: var(--paragraph-color);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+  /*:root {
+    --main-bg-color: #171F26;
+    --main-button-color: #1B2630;
+    --secondary-button-color: #121a21;
+    --title-color: white;
+    --secondary-color: rgb(15, 20, 25);
+    --paragraph-color: rgb(220,220,220);
+    --slider-color: #0075ff;
+  }*/
+
+  :root {
+    --main-bg-color: white;
+    --main-button-color: #E8E0D9;
+    --secondary-button-color: #d9cbbf;
+    --title-color: black;
+    --secondary-color: #E8E0D9;
+    --paragraph-color: rgb(50,50,50);
+    --slider-color: #4da0ff;
+  }
 
 
 
@@ -48,9 +86,10 @@ body p, h1, h2, h3, input, textarea {
     height: 3rem;
     width: 3rem;
     white-space: nowrap;
-    background-color: #1B2630;
+    background-color: var(--main-button-color);
     border: none;
     border-radius: 1.75rem;
+    color: var(--paragraph-color);
     outline: none;
     cursor: pointer;
     padding: 0 1rem;
@@ -62,16 +101,16 @@ body p, h1, h2, h3, input, textarea {
   letter-spacing: 0.10em;
   width: fit-content;
   white-space: nowrap;
-  background-color: #1B2630;
+  background-color: var(--main-button-color);
   border: none;
   border-radius: 1.75rem;
+  color: var(--paragraph-color);
   outline: none;
   cursor: pointer;
   padding: 0 1.5rem;
   margin-right: 0rem;
   font-family: bahnschrift;
   font-weight: lighter;
-  color: white;
   line-height: 2.5rem;
 }
 
@@ -82,7 +121,7 @@ body p, h1, h2, h3, input, textarea {
     overflow: hidden;
     width: 97%;
     padding-left: 1.5rem;
-    background-color: #171F26;
+    background: var(--main-bg-color);
 }
 
 #content #drag-bar {
@@ -101,7 +140,7 @@ body p, h1, h2, h3, input, textarea {
   }
 
 #main-title {
-    color: white;
+    color: var(--title-color);
     font-weight: lighter;
 }
 
@@ -117,7 +156,7 @@ body p, h1, h2, h3, input, textarea {
     width: fit-content;
     padding: 0 1rem;
     white-space: nowrap;
-    background-color: #1B2630;
+    background-color: var(--main-button-color);
     border: none;
     border-radius: 1.5rem;
     outline: none;
@@ -134,30 +173,30 @@ body p, h1, h2, h3, input, textarea {
 #actions-container button i, p {
     display: inline-block;
     line-height: 3rem;
-    color: white;
+    color: var(--paragraph-color);
     vertical-align: top;
     margin: 0;
 }
 
 .title {
-    color: white;
+    color: var(--title-color);
     font-weight: lighter;
 }
 
 #list {
     height: fit-content;
-    min-height: 2rem;
+    min-height: 1.7rem;
     border-radius: 0.5rem;
     width: 50%;
-    background-color: rgb(15, 20, 25);
+    background-color: var(--secondary-color);
     line-height: 2rem;
-    color: rgb(150,150,150);
+    color: var(--paragraph-color);
     font-weight: lighter;
 }
 
 
 #list .project-item {
-  height: 1.7rem;
+  height: 2.5rem;
   width: 100%;
   display: block;
   background-color: transparent;
@@ -168,16 +207,41 @@ body p, h1, h2, h3, input, textarea {
 }
 
 #list .project-item:hover {
-  background-color: #0a0d10;
+  background-color: var(--secondary-button-color);
 }
 
 #list .project-item p {
-  height: 1.7rem;
+  height: 2.5rem;
   margin: 0;
-  font-size: 1.2em;
-  line-height: 1.7rem;
+  color: var(--paragraph-color);
+  font-size: 1.5em;
+  line-height: 2.5rem;
   margin-left: 1rem;
 }
+
+
+.theme-button {
+  height: fit-content;
+  width: 10rem;
+  display: inline-block;
+  cursor: pointer;
+  border-style: none;
+  background-color: transparent;
+  padding: 0;
+  outline: none;
+
+}
+
+.theme-button img {
+  transition: 150ms ease-in-out;
+
+}
+/*
+\/\/\/\/\/\/ LEGACY \/\/\/\/\/\/
+.theme-button:focus img {
+  border: solid 2px coral;
+  box-sizing: border-box;
+}*/
 
 
 
@@ -237,7 +301,7 @@ body p, h1, h2, h3, input, textarea {
     white-space: nowrap;
     overflow: hidden;
     padding: 0;
-    background-color: #1B2630;
+    background-color: var(--main-button-color);
     border: none;
     border-radius: 1.75rem;
     outline: none;
@@ -257,7 +321,7 @@ body p, h1, h2, h3, input, textarea {
     top: 0;
     left: 0;
     animation: pop-in 300ms ease-in-out;
-    background-color: #171F26;
+    background: var(--main-bg-color);
     border-radius: 0.5rem;
     overflow: hidden;
 }
@@ -265,9 +329,8 @@ body p, h1, h2, h3, input, textarea {
 .menu .header {
     height: 10rem;
     width: 100%;
-    background-color: rgb(15, 20, 25);
+    background-color: var(--secondary-color);
 }
-
 
 .menu #login-container form input {
     height: 2rem;
@@ -319,7 +382,35 @@ button:disabled {
 
 
 
+.template-card.standard {
+  height: 5rem;
+  width: 10rem;
+  background-color: var(--main-button-color);
+  border-radius: 0.25rem;
+  display: inline-block;
+  margin-right: 0.7rem;
+  margin-bottom: 0.5rem;
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.32);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.32);
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.32);
+  vertical-align: top;
+}
 
+.template-card.no-shadow {
+  height: 5rem;
+  width: 10rem;
+  background-color: var(--main-button-color);
+  border-radius: 0.25rem;
+  display: inline-block;
+  margin-right: 0.7rem;
+  margin-bottom: 0.5rem;
+  vertical-align: top;
+}
+
+.template-card.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 
 
 
@@ -374,6 +465,39 @@ button:disabled {
   100% {transform: translateX(5%)}
 }
 
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--main-button-color);;
+  border: 0px none transparent;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--main-button-color);
+}
+::-webkit-scrollbar-thumb:active {
+  background: var(--main-button-color);;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+  background: transparent;
+}
+::-webkit-scrollbar-track:active {
+  background: transparent;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
 
 
@@ -479,7 +603,7 @@ button:disabled {
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 0px 0px 0px #000000;
-    background: #0075ff;
+    background: var(--slider-color);
     border-radius: 19px;
     border: 0px solid #000000;
   }
@@ -489,13 +613,13 @@ button:disabled {
     height: 10px;
     width: 10px;
     border-radius: 20px;
-    background: #0075ff;
+    background: var(--slider-color);
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: -2px;
   }
   input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #0075ff;
+    background: var(--slider-color);;
   }
   input[type=range]::-moz-range-track {
     width: 100%;
@@ -503,7 +627,7 @@ button:disabled {
     cursor: pointer;
     animate: 0.2s;
     box-shadow: 0px 0px 0px #000000;
-    background: #0075ff;
+    background: var(--slider-color);;
     border-radius: 19px;
     border: 0px solid #000000;
   }
@@ -513,7 +637,7 @@ button:disabled {
     height: 10px;
     width: 10px;
     border-radius: 20px;
-    background: #0075ff;
+    background: var(--slider-color);;
     cursor: pointer;
   }
   input[type=range]::-ms-track {
@@ -526,13 +650,13 @@ button:disabled {
     color: transparent;
   }
   input[type=range]::-ms-fill-lower {
-    background: #0075ff;
+    background: var(--slider-color);;
     border: 0px solid #000000;
     border-radius: 38px;
     box-shadow: 0px 0px 0px #000000;
   }
   input[type=range]::-ms-fill-upper {
-    background: #0075ff;
+    background: var(--slider-color);;
     border: 0px solid #000000;
     border-radius: 38px;
     box-shadow: 0px 0px 0px #000000;
@@ -543,12 +667,12 @@ button:disabled {
     height: 10px;
     width: 10px;
     border-radius: 20px;
-    background: #0075ff;
+    background: var(--slider-color);;
     cursor: pointer;
   }
   input[type=range]:focus::-ms-fill-lower {
-    background: #0075ff;
+    background: var(--slider-color);;
   }
   input[type=range]:focus::-ms-fill-upper {
-    background: #0075ff;
+    background: var(--slider-color);;
   }

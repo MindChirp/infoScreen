@@ -33,10 +33,10 @@ function feedback(parent) {
         display: inline-block;
         float: left;
         width: 45%;
-        background-color: #1B2630;
+        background-color: var(--main-button-color);
         border-radius: 0.5rem;
         padding: 0.5rem;
-
+        color: var(--paragraph-color);
     `);
     left.setAttribute("class", "smooth-shadow");
 
@@ -47,7 +47,8 @@ function feedback(parent) {
     Femail.setAttribute("style", `
         height: 2rem;
         font-size: 1.3rem;
-        `);
+        color: var(--paragraph-color);
+    `);
     var email = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
     Femail.setAttribute("type", "email");
     Femail.placeholder = "Your email";
@@ -62,7 +63,7 @@ function feedback(parent) {
         display: inline-block;
         float: right;
         width: 45%;
-        background-color: #1B2630;
+        background-color: var(--main-button-color);
         border-radius: 0.5rem;
         padding: 0.5rem;
 
@@ -75,6 +76,8 @@ function feedback(parent) {
     subject.setAttribute("style", `
         height: 2rem;
         font-size: 1.3rem;
+        color: var(--title-color);
+
         `);
     subject.setAttribute("type", "text");
     subject.placeholder = "Subject";
@@ -83,7 +86,8 @@ function feedback(parent) {
     var letter = document.createElement("textarea");
     wrapper.appendChild(letter);
     letter.setAttribute("style", `
-        background-color: #1B2630;
+        color: var(--paragraph-color);
+        background-color: var(--main-button-color);
         border-radius: 0.5rem;
         width: 98%;
         height: 4rem;
@@ -105,7 +109,7 @@ function feedback(parent) {
     send.setAttribute("style", `
         margin-top: 0.5rem;
         position: relative;
-        background-color: #121a21;
+        background-color: var(--secondary-button-color);
         float: right;
         width: 5.5rem;
         transition: all 300ms ease-in-out;

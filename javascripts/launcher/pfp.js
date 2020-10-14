@@ -1,5 +1,5 @@
 const { fstat, fdatasync } = require("fs");
-const fs = require("fs");
+//const fs = require("fs");
 const { ipcRenderer } = require("electron");    
 const { settings } = require("cluster");
 const { isFunction } = require("util");
@@ -35,7 +35,7 @@ function profilePhoto(parent) {
         display: inline-block;
         float: left;
         border-radius: 0.5rem;
-        background-color: #1B2630;
+        background-color: var(--main-button-color);
         transition: all 500ms ease-in-out;
         overflow: hidden;
     `);
@@ -69,17 +69,14 @@ function profilePhoto(parent) {
 
     selImg.addEventListener("click", function() {
         var path = ipcRenderer.sendSync("open-pfp-selector");
-        console.log(path)
         if(path != "cancelled") {
 
 
     var letters = ["A","B","C","D","E","F","G","H","I","J"];
-        console.log(path)
 
 
         var extension = path[0].split("\\")[path[0].split("\\").length-1].split(".")[path[0].split("\\")[path[0].split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
-        console.log(localStorage.getItem("pfpExtension"));
         var directory = "./data/programData/profilePics/"
         fs.readdir(directory, (err, files) => {
             if(err) throw err;
@@ -111,7 +108,6 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    console.log(ext);
                     img.src = "../data/programData/profilePics/user" + ext;
                     changeState();
                     img.style.height = "100%";
@@ -146,7 +142,7 @@ function profilePhoto(parent) {
                 if(err) throw err;
             })
         }
-            console.log(dat);
+
 
         
 
@@ -184,7 +180,6 @@ function profilePhoto(parent) {
 
             scale.addEventListener("change", function(event) {
                 var start = 1;
-                console.log(parseInt(start) + parseInt(event.target.value)*2)
                 document.getElementById("img-positioner-image").style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + event.target.value + ")";
                 size = event.target.value;
             });
@@ -203,7 +198,6 @@ function profilePhoto(parent) {
 
             scale.addEventListener("change", function(event) {
                 var start = -50;
-                console.log(parseInt(start) + parseInt(event.target.value)*2)
                 document.getElementById("img-positioner-image").style.transform = "translateX(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) translateY(" + Ypos + "%) scale(" + size + ")";
                 Xpos = parseInt(start) + parseInt(event.target.value)*2;
             });
@@ -224,7 +218,6 @@ function profilePhoto(parent) {
 
             scale.addEventListener("change", function(event) {
                 var start = 0;
-                console.log(parseInt(start) + parseInt(event.target.value)*2)
                 document.getElementById("img-positioner-image").style.transform = "translateX(" + Xpos + "%) translateY(" + parseInt(parseInt(start) + parseInt(event.target.value)*2) + "%) scale(" + size + ")";
                 Ypos = parseInt(start) + parseInt(event.target.value)*2;
             });
@@ -232,7 +225,7 @@ function profilePhoto(parent) {
             var save = document.createElement("button");
             save.setAttribute("class", "fd-settings-button smooth-shadow");
             save.setAttribute("style", `
-                background-color: #121a21;
+                background-color: var(--secondary-button-color);
                 display: block;
                 margin-top: 0.5rem;
             `);
@@ -246,7 +239,6 @@ function profilePhoto(parent) {
             localStorage.setItem("pfpPos", JSON.stringify([Xpos,Ypos,size]));
                 fs.writeFileSync("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
                     if(err) throw err;
-                    console.log("Success")
                 })
                 changeState();
             })
@@ -265,7 +257,7 @@ function profilePhoto(parent) {
 }
 
 
-
+/*
 var zip = new require("node-zip")();
 zip.file("test.txt", "hello there");
 var data = zip.generate({base64:false,compression:'DEFLATE'});
@@ -275,4 +267,6 @@ fs.writeFileSync('./data/programData/projects/test.proj', data, 'binary');
 var zip = new require("node-zip")();
 zip.file("test.txt", "no there");
 var data = zip.generate({base64:false,compression:'DEFLATE'});
-fs.writeFileSync('./data/programData/projects/test1.proj', data, 'binary');
+fs.writeFileSync('./data/programData/projects/test1.proj', data, 'binary');'
+
+*/

@@ -7,14 +7,15 @@ function infoBox(el, title) {
             height: fit-content;
             width: fit-content;
             max-width: 15rem;
-            background-color: #0a0d10;
+            background-color: var(--secondary-color);
             z-index: 101;
             padding: 0 1rem;
-            color: white;
             font-weight: lighter;
             border-radius: 0.5rem;
             animation: slide-in 200ms ease-in-out;
         `);
+        
+        //background-color: #0a0d10;
 
         var text = document.createElement("p");
         text.style.lineHeight = "1rem";
@@ -55,3 +56,56 @@ document.addEventListener("click", function() {
     }
     
 })
+
+
+
+
+function menu(type) {     
+    console.log(type)  
+    var el = document.createElement("div");
+    el.setAttribute("class", "menu");
+    document.body.appendChild(el);
+    switch(type) {
+        case "user":
+
+            var header = document.createElement("div");
+            header.setAttribute("class", "header");
+            el.appendChild(header);
+
+        break;
+    }
+
+    var back = document.createElement("button");
+    back.setAttribute("class", "fd-button smooth-shadow back-button");
+    back.setAttribute("style", `
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        height: 3rem;
+        width: 3rem;
+        z-index: 10;
+    `);
+
+    infoOnHover(back, "Go back");
+
+    back.addEventListener("click", function() {
+        el.parentNode.removeChild(el);
+        if(document.getElementsByClassName("information-popup")) {
+            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
+        }
+    })
+
+    var ico = document.createElement("i");
+    ico.setAttribute("class", "material-icons");
+    ico.innerHTML = "keyboard_backspace";
+    back.appendChild(ico);
+    ico.setAttribute("style", `
+        line-height: 3rem;
+        font-size: 1.4rem;
+        text-align: center;
+        transform: translateX(-0.15rem);
+    `)
+
+    el.appendChild(back);
+    return el;
+}
