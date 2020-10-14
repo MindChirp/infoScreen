@@ -30,104 +30,22 @@ function Themes(parent) {
     wrapper.appendChild(cont);
 
 
-    var light = document.createElement("button");
-    light.setAttribute("style", `
-        float: left;
-    `);
-    light.setAttribute("class", "theme-button");
-    
-    var img = document.createElement("img");
-    img.setAttribute("style", `
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `)
-    img.setAttribute("class", "smooth-shadow");
-    img.setAttribute("src", "./data/files/images/lighttheme.png");   
-    light.appendChild(img);
-
-    var p = document.createElement("p");
-    p.innerHTML = "Light Theme";
-    light.appendChild(p);
-    p.setAttribute("style", `
-        width: 100%;
-        text-align: center;
-        height: 1rem;
-        line-height: 1rem;
-    `)
-
+    var buttons = [];
+    var light = themes.addCard("Light Theme", "./data/files/images/lighttheme.png");
     cont.appendChild(light);
+    buttons.push(light);
 
-
-
-    var dark = document.createElement("button");
-    dark.setAttribute("style", `
-        float: right;
-    `);
-    dark.setAttribute("class", "theme-button");
-
-    var img = document.createElement("img");
-    img.setAttribute("style", `
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `)
-    img.setAttribute("class", "smooth-shadow");
-    img.setAttribute("src", "./data/files/images/darktheme.png");   
-    dark.appendChild(img);
-
-    var p = document.createElement("p");
-    p.innerHTML = "Dark Theme";
-    dark.appendChild(p);
-    p.setAttribute("style", `
-        width: 100%;
-        text-align: center;
-        height: 1rem;
-        line-height: 1rem;
-    `)
-
+    var dark = themes.addCard("Dark Theme", "./data/files/images/darktheme.png");
     cont.appendChild(dark);
+    buttons.push(dark);
 
 
+    //Future easter egg?
+    /*var cancer = themes.addCard("Cancer Theme", "./data/files/images/cancertheme.png");
+    cont.appendChild(cancer);*/
 
-    var cancer = document.createElement("button");
-    cancer.setAttribute("style", `
-        float: right;
-    `);
-    cancer.setAttribute("class", "theme-button");
-
-    var img = document.createElement("img");
-    img.setAttribute("style", `
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `)
-    img.setAttribute("class", "smooth-shadow");
-    img.setAttribute("src", "./data/files/images/cancertheme.png");   
-    cancer.appendChild(img);
-
-    var p = document.createElement("p");
-    p.innerHTML = "Cancer Theme";
-    cancer.appendChild(p);
-    p.setAttribute("style", `
-        width: 100%;
-        text-align: center;
-        height: 1rem;
-        line-height: 1rem;
-    `)
-
-    cont.appendChild(cancer);
-
-
-    light.addEventListener("click", function() {
-        setTheme(0);
-        light.childNodes[0].setAttribute("style", `
+    var styles = [
+        [`
             border: solid 2px coral;
             box-sizing: border-box;
             height: auto;
@@ -135,167 +53,57 @@ function Themes(parent) {
             margin-left: auto;
             margin-right: auto;
             border-radius: 0.5rem;
-        `);
-        dark.childNodes[0].setAttribute("style", `
+        `],
+        [`
             border: none;
             height: auto;
             width: 10rem;
             margin-left: auto;
             margin-right: auto;
             border-radius: 0.5rem;
-        `);
-        cancer.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    })
-    
+        `]
+    ]
+
 
 
     var theme = localStorage.getItem("theme");
     if(theme == "light") {
-        light.childNodes[0].setAttribute("style", `
-        border: solid 2px coral;
-        box-sizing: border-box;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    dark.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    cancer.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
+        light.childNodes[0].setAttribute("style", styles[0][0]);
+        dark.childNodes[0].setAttribute("style", styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style", styles[1][0]);
     } else if(theme=="dark"){
-        dark.childNodes[0].setAttribute("style", `
-        border: solid 2px coral;
-        box-sizing: border-box;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    light.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    cancer.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
+        dark.childNodes[0].setAttribute("style", styles[0][0]);
+        light.childNodes[0].setAttribute("style", styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style", styles[1][0]);
 
-    } else if(theme=="cancer"){
-        cancer.childNodes[0].setAttribute("style", `
-        border: solid 2px coral;
-        box-sizing: border-box;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    light.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    dark.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
+    } /*else if(theme=="cancer"){
+        cancer.childNodes[0].setAttribute("style", styles[0][0]);
+    light.childNodes[0].setAttribute("style", styles[1][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
     }
+*/
 
+light.addEventListener("click", function() {
+    setTheme(0);
+    console.log(styles[0][0])
+    light.childNodes[0].setAttribute("style", styles[0][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
+    //cancer.childNodes[0].setAttribute("style", styles[1][0]);
+})
 
     dark.addEventListener("click", function() {
         setTheme(1);
-        dark.childNodes[0].setAttribute("style", `
-        border: solid 2px coral;
-        box-sizing: border-box;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    light.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    cancer.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);     
+        dark.childNodes[0].setAttribute("style", styles[0][0]);
+        light.childNodes[0].setAttribute("style",  styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style",  styles[1][0]);  
     })
-
+/*
     cancer.addEventListener("click", function() {
         setTheme(2);
-        cancer.childNodes[0].setAttribute("style", `
-        border: solid 2px coral;
-        box-sizing: border-box;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    light.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    dark.childNodes[0].setAttribute("style", `
-        border: none;
-        height: auto;
-        width: 10rem;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 0.5rem;
-    `);
-    })
+        cancer.childNodes[0].setAttribute("style", styles[0][0]);
+    light.childNodes[0].setAttribute("style", styles[1][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
+    })*/
 }
 
 
@@ -327,5 +135,43 @@ function setTheme(theme) {
         document.documentElement.style.setProperty("--main-button-color", "#FFBD00");
         document.documentElement.style.setProperty("--slider-color", "#CC99FF");
         localStorage.setItem("theme", "cancer");
+    }
+}
+
+var themes = {
+    addCard: function(name, path) {
+
+
+        var el = document.createElement("button");
+        el.setAttribute("style", `
+
+        `);
+        el.setAttribute("class", "theme-button");
+
+        var img = document.createElement("img");
+        img.setAttribute("style", `
+            height: auto;
+            width: 10rem;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+        `)
+        img.setAttribute("class", "smooth-shadow");
+        img.setAttribute("src", path);   
+        el.appendChild(img);
+
+        var p = document.createElement("p");
+        p.innerHTML = name;
+        el.appendChild(p);
+        p.setAttribute("style", `
+            width: 100%;
+            text-align: center;
+            height: 1rem;
+            line-height: 1rem;
+        `)
+
+        return el;
+
+
     }
 }
