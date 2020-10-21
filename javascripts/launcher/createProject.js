@@ -226,4 +226,6 @@ function createFile(template) {
     zip.file("meta.json", meta);
     var data = zip.generate({base64:false,compression:'DEFLATE'});
     fs.writeFileSync('./data/programData/projects/' + title + '.proj', data, 'binary');
+
+    initializeProjectList();
 }

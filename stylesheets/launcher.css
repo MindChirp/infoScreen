@@ -185,13 +185,35 @@ input::-webkit-inner-spin-button {
 
 #list {
     height: fit-content;
+    max-height: 10rem;
+    overflow-y: hidden;
     min-height: 1.7rem;
     border-radius: 0.5rem;
-    width: 50%;
+    width: 25rem;
     background-color: var(--secondary-color);
     line-height: 2rem;
     color: var(--paragraph-color);
     font-weight: lighter;
+    padding-left: 0.33rem;
+}
+
+
+#list #projects-container {
+  height: fit-content;
+  max-height: 10rem;
+  width: 25rem;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+#list #projects-container > div.project-item {
+  scroll-snap-align: start;
+}
+
+#list #projects-container::-webkit-scrollbar-thumb {
+  background: var(--secondary-button-color);;
+  border: 0px none transparent;
+  border-radius: 50px;
 }
 
 
@@ -378,6 +400,10 @@ button:disabled {
   opacity: 1;
 }
 
+div.disabled {
+  cursor: default;
+  opacity: 0.5;
+}
 
 
 

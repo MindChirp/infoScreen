@@ -25,7 +25,7 @@
             <h1 id="main-title"></h1> <!--Insert user name here-->
             <div id="actions-container">
                 <button id="new-project" onclick="createProject()" class="smooth-shadow"><i class="material-icons">add</i> <p>Create</p></button>
-                <button id="open-project" class="smooth-shadow"><i class="material-icons">folder_open</i> <p>Open</p></button>
+                <button id="open-project" onclick="openProject()"class="smooth-shadow"><i class="material-icons">folder_open</i> <p>Open</p></button>
                 <button id="open-server" class="smooth-shadow"><i class="material-icons">dns</i> <p>From server</p></button>
                 <button id="live-edit" onclick="liveEdit()" class="smooth-shadow"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow" onclick="launchProgram()" disabled><i class="material-icons">flag</i> <p>Developer start</p></button>
@@ -49,5 +49,6 @@
         <script src="/javascripts/launcher/pfp.js" async defer></script>
         <script src="/javascripts/launcher/liveEdit.js" async defer></script>
         <script src="/javascripts/launcher/loadProjects.js" async defer></script>
+        <script src="/javascripts/launcher/openProjects.js" async defer></script>
     </body>
 </html>

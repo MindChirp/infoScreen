@@ -28,20 +28,28 @@ fs.readdir(projectFilePath, (err, dat) => {
 
 function createList(arr) {
     //Create an item for each project
-    var x;
     var parent = document.getElementById("list");
-
     if(arr.length > 0) {
         parent.innerHTML = "";
         parent.style.paddingTop = "0.5rem";
         parent.style.paddingBottom = "0.5rem";
+
     }
+    var x;
+    var holder;
+    if(!document.getElementById("projects-container")) {
+        holder = document.createElement("div");
+        holder.setAttribute("id", "projects-container");
+        parent.appendChild(holder);
+        console.log("øioajnsd")
+    }
+    
 
 
     for(x of arr) {
         var el = document.createElement("div");
         el.setAttribute("class", "project-item");
-        parent.appendChild(el);
+        holder.appendChild(el);
 
         var txt = document.createElement("p");
         txt.innerHTML = x;
@@ -54,6 +62,18 @@ function createList(arr) {
 
         el.setAttribute("onmouseleave", "fileList.leave(this)");
 
+    }
+
+    var hasVerticalScrollbar = holder.scrollHeight > holder.clientHeight;
+    if(hasVerticalScrollbar) {
+        holder.style.paddingRight = "0";
+        document.getElementById("list").style.width = "25rem"
+
+    } else {
+        holder.style.paddingRight = "0.33rem"
+        document.getElementById("list").style.width = "25.33rem";
+
+        console.log("ouiahsd")
     }
 }
 
@@ -70,6 +90,29 @@ var fileList = {
                 float: right;
                 padding-right: 1rem;
             `);
+
+            var preview = document.createElement("button");
+            preview.setAttribute("style", `
+                height: 100%;
+                width: fit-content;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+            `);
+            infoOnHover(preview,"Preview");
+            var ico = document.createElement("i");
+            ico.setAttribute("class", "material-icons");
+            ico.innerHTML = "remove_red_eye";
+            ico.setAttribute("style", `
+                height: 100%;
+                line-height: 2.5rem;
+                color: var(--paragraph-color);
+            `)
+
+            preview.appendChild(ico);
+
+            
 
             var open = document.createElement("button");
             open.setAttribute("style", `
@@ -114,17 +157,19 @@ var fileList = {
                 height: 100%;
                 line-height: 2.5rem;
                 color: var(--paragraph-color);
-            `)
+            `);
 
             del.appendChild(ico);
 
+            menu.appendChild(preview);
             menu.appendChild(del);
             menu.appendChild(open);
 
 
 
 
-            el.appendChild(menu);
+            el.appendChild(menu); 
+
     },
 
     leave: function(el) {

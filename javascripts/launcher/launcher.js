@@ -1,6 +1,7 @@
 const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
+const { ipcMain, ipcRenderer } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const projectFilePath = "./data/programData/projects";
 
@@ -201,7 +202,7 @@ function infoOnHover(el, txt) {
             }
 
         }
-    }, 500)
+    }, 200)
 })
 }
 
@@ -774,3 +775,18 @@ function inputWithText(text) {
 
     return el;
 }
+
+
+
+
+//This is supposed to be used to figure out whether the program has been opened via a file or not. 
+//Need to package a version to test it out on. 
+/*
+var data = ipcRenderer.sendSync('get-file-data')
+if (data ===  null) {
+    console.log("There is no file")
+} else {
+    // Do something with the file.
+    console.log(data)
+}
+*/

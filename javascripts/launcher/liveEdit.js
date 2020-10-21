@@ -36,7 +36,7 @@ function liveEdit() {
 
     for(let i = 0; i < 9; i++) {
         var el = document.createElement("div");
-        el.setAttribute("class", "template-card no-shadow smooth-shadow");
+        el.setAttribute("class", "template-card no-shadow smooth-shadow disabled");
         el.style.margin = "0 0.5rem 0";
         el.style.height = "7rem";
         el.style.width = "14rem";

@@ -24,7 +24,7 @@ function Themes(parent) {
     
     cont.setAttribute("style", `
         height: fit-conten;
-        width: 90%;
+        width: 50%;
         margin: auto;
     `);
     wrapper.appendChild(cont);
@@ -36,6 +36,7 @@ function Themes(parent) {
     buttons.push(light);
 
     var dark = themes.addCard("Dark Theme", "./data/files/images/darktheme.png");
+    dark.style.float = "right";
     cont.appendChild(dark);
     buttons.push(dark);
 

@@ -1,6 +1,5 @@
 const { fstat, fdatasync } = require("fs");
-//const fs = require("fs");
-const { ipcRenderer } = require("electron");    
+//const fs = require("fs");   
 const { settings } = require("cluster");
 const { isFunction } = require("util");
 function profilePhoto(parent) {

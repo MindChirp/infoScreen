@@ -17,6 +17,7 @@ function boot() {
       nodeIntegration: true
     },
     width: 850,
+    hasShadow: true,
     maxWidth: 850,
     minWidth: 850,
     height: 650,
@@ -66,6 +67,14 @@ ipcMain.on("open-pfp-selector", (event) => {
       }
 })
 
+ipcMain.on('get-file-data', function(event) {
+  var data = null
+  if (process.platform == 'win32' && process.argv.length >= 2) {
+    var openFilePath = process.argv[1]
+    data = openFilePath
+  }
+  event.returnValue = data
+})
 
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', boot);
