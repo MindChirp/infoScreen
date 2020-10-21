@@ -13,7 +13,7 @@ if(env != "development") {
 
 const ipc = require("electron").ipcRenderer
 function launchProgram() {
-    ipc.send("load-program");
+    ipc.send("open-main-window");
 }
 
 //Loading wheel

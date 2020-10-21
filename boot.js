@@ -2,8 +2,8 @@ const {app, BrowserWindow, ipcMain, dialog} = require('electron');
 const ipc = require
 const url = require('url');
 let win = null;
-let bootWin = null;
-
+let launcherWin = null;
+let programWin = null;
 
 try {
   require('electron-reloader')(module, {ignore: ['./data/programData']});
@@ -48,6 +48,48 @@ function boot() {
     slashes: true
   }))*/
 }
+
+
+function openEditor() {
+    //lage et nytt vindu
+    try {
+      var { screen } = require("electron");
+      var {width, height} = screen.getPrimaryDisplay().workAreaSize;
+
+
+      programWin = new BrowserWindow({
+        webPreferences: {
+          nodeIntegration: true
+        },
+        width: width,
+        height: height,
+        hasShadow: true,
+        minWidth: 850,
+        minHeight:650,
+        frame: false,
+        transparent: true
+      })
+    
+      programWin.loadURL(url.format({
+        pathname: 'home.html',
+        slashes: true
+      }))
+      return true;
+    } catch (error) {
+      return error;
+    }
+}
+
+
+ipcMain.on("open-main-window", (event) => {
+  var open = openEditor();
+  if(open) {
+    event.returnValue = open;
+  } else {
+    event.returnValue = open;
+  }
+})
+
 ipcMain.on("open-pfp-selector", (event) => {
   var file = dialog.showOpenDialog(launcherWin,
     {
@@ -73,7 +115,7 @@ ipcMain.on('get-file-data', function(event) {
     var openFilePath = process.argv[1]
     data = openFilePath
   }
-  event.returnValue = data
+  event.returnValue = data;
 })
 
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
