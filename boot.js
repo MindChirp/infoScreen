@@ -51,6 +51,9 @@ function boot() {
 
 
 function openEditor() {
+  if(launcherWin) {
+    
+  }
     //lage et nytt vindu
     try {
       var { screen } = require("electron");

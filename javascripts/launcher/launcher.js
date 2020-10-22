@@ -1,7 +1,7 @@
 const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
-const { ipcMain, ipcRenderer } = require("electron");
+const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const projectFilePath = "./data/programData/projects";
 
@@ -13,7 +13,11 @@ if(env != "development") {
 
 const ipc = require("electron").ipcRenderer
 function launchProgram() {
-    ipc.send("open-main-window");
+    var val = ipc.sendSync("open-main-window");
+    if(val) {
+        var window = remote.getCurrentWindow();
+        window.close();
+    }
 }
 
 //Loading wheel
