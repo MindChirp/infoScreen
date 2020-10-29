@@ -126,7 +126,7 @@ function feedback(parent) {
     wrapper.appendChild(info);
     wrapper.appendChild(send);
 
-    //Handle the send request
+    //Handle the send request   
 
     send.addEventListener("click", function() {
         var email = Femail;

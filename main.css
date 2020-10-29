@@ -8,20 +8,98 @@ body {
     cursor: default;
     font-family: bahnschrift;
     user-select: none;
+    background-color: var(--main-bg-color)
 }
 
 html {
     height: 100%;
     width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
+
+:root {
+    --main-bg-color: white;
+    --main-button-color: #E8E0D9;
+    --secondary-button-color: #d9cbbf;
+    --title-color: black;
+    --secondary-color: #E8E0D9;
+    --paragraph-color: rgb(50,50,50);
+    --slider-color: #4da0ff;
+  }
+
+
+
+
+
+.select {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+    width: 100%;
+}    
+
+.select select {
+    font-family: Bahnschrift;
+    font-size: 1em;
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    padding: 10px 15px;
+    outline: 0;
+    border: 0px solid #000000;
+    border-radius: 0.5rem;
+    background: var(--secondary-button-color);
+    color: #000000;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.select select::-ms-expand {
+    display: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+.select select:hover,
+.select select:focus {
+    color: var(--paragraph-color);
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: var(--secondary-button-color);
+}
+.select select:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.select_arrow {
+    position: absolute;
+    top: 16px;
+    right: 15px;
+    pointer-events: none;
+    border-style: solid;
+    border-width: 8px 5px 0px 5px;
+    border-color: #7b7b7b transparent transparent transparent;
+}
+.select select:hover ~ .select_arrow,
+.select select:focus ~ .select_arrow {
+    border-top-color: #000000;
+}
+.select select:disabled ~ .select_arrow {
+    border-top-color: #cccccc;
+}
+
+
+
+
 
 
 #app-bar {
     height: 26px;
     width: 100%;
-    background-color: #222F3B;
-    display: inline-grid;
-    grid-template-columns: auto 150px 150px;
+    display: grid;
+    grid-template-columns: auto 150px;
+    background-color: var(--main-bg-color);
 }
 
 #app-bar #drag-region {
@@ -33,6 +111,151 @@ html {
     z-index: -1;
 }
 
+#main-container-wrapper {
+    height: 100%;
+    width: 100%;
+    display: inline-grid;
+    grid-template-rows: 26px auto;
+}
+
+#main-container {
+    display: grid;
+    grid-template-rows: 50% auto;
+    padding-top: 1rem;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#main-container #top-layer {
+    display: grid;
+    grid-template-columns: auto auto;
+    height: 100%;
+    column-gap: 1rem;
+    width: 98%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#main-container #top-layer #browser {
+    height: 100%;
+    width: 100%;
+    background-color: var(--secondary-color);
+    border-radius: 0.5rem;
+}
+
+#main-container #top-layer #viewport {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(50,50,50);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+#main-container #top-layer #viewport #content {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#main-container #top-layer #viewport .settings-button {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 100%;
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    cursor: pointer;
+}
+
+#main-container #top-layer #viewport .settings-button i {
+    height: 2rem;
+    width: 2rem;
+    text-align: center;
+    line-height: 2rem;
+    color: white;
+}
+
+#main-container #top-layer #viewport .settings-bar {
+    height: 100%;
+    width: 13rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--main-button-color);
+    opacity: 1;
+    transition: all 150ms ease-in-out;
+    animation: slide-in-right 300ms ease-in-out;
+    line-height: 2.1rem;
+    z-index: 2;
+    display: none;
+    padding-left: 1rem;
+}
+
+#main-container #top-layer #viewport .settings-bar .header {
+    height: 2.1rem;
+    width: 100%;
+}
+
+#main-container #top-layer #viewport .settings-bar .header p {
+    height: 100%;
+    width: fit-content; 
+    float: left;
+    display: inline-block;
+    margin: 0;
+    line-height: 2.1rem;
+}   
+
+#main-container #top-layer #viewport .settings-bar .header .close-button {
+    height: 2.1rem;
+    width: 2.1rem;
+    background-color: transparent;
+    float: right;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    width: 2.1rem;
+    outline: none;
+}
+
+#main-container #top-layer #viewport .settings-bar .close-button i {
+    line-height: 2.1rem;
+}
+
+#main-container #top-layer #viewport .settings-bar .content {
+    height: fit-content;
+    width: 100%;
+    padding: 0 1rem 0 0;
+    box-sizing: border-box;
+    margin-top: 1rem;
+}
+
+#main-container #top-layer #viewport .settings-bar .content p {
+    margin: 0;
+}
+
+#main-container #bottom-layer {
+    height: 100%;
+    width: 98%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+}
+
+#main-container #bottom-layer #timeline {
+    height: 100%;
+    width: 100%;    
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--main-button-color);
+}
 
 ::-webkit-scrollbar {
     width: 5px;
