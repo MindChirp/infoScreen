@@ -8,7 +8,7 @@ body {
     cursor: default;
     font-family: bahnschrift;
     user-select: none;
-    background-color: var(--main-bg-color)
+    background-color: var(--main-bg-color);
 }
 
 body p, i {
@@ -214,11 +214,36 @@ html {
 
 .file-ghost {
     height: 5rem;
-    width: 10rem;
-    background-color: var(--slider-color);
+    width: 9rem;
+    background-color: var(--dark-shade);
+    backdrop-filter: blur(3px);
     position: absolute;
     opacity: 0.5;
     border-radius: 0.5rem;
+    z-index: 100;
+    display: grid;
+    grid-template-rows: auto 1.5rem;
+    grid-template-columns: 9rem;
+    padding-top: 0.1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.file-ghost img {
+    height: 100%;
+    margin: 0;
+    width: auto;
+    margin-left: 50%;
+    transform: translate(-50%);
+    pointer-events: none;
+    border-radius: 0.25rem;
+}
+
+.file-ghost p {
+    line-height: 1.5rem;
+    margin: 0;
+    width: 100%;
+    text-align: center;;
 }
 
 
@@ -307,7 +332,7 @@ html {
 #main-container #top-layer #browser .content-container #files > div {
     height: 100%;
     width: 100%;
-    background-color: var(--secondary-button-color);
+
     border-radius: 0.25rem;
     display: inline-block;
     vertical-align: top;
@@ -497,6 +522,27 @@ html {
     border-radius: 0.5rem;
     overflow: hidden;
     background-color: var(--main-button-color);
+    display: grid;
+    grid-template-columns: 4rem auto;
+}
+
+#main-container #bottom-layer #timeline .side-bar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--secondary-color);
+}
+
+#main-container #bottom-layer #timeline .sub-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 4rem auto;
+}
+
+#main-container #bottom-layer #timeline .sub-container .top-bar {
+    height: 100%;
+    width: 100%;
+    background-color: var(--secondary-color);
 }
 
 ::-webkit-scrollbar {

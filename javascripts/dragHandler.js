@@ -3,10 +3,18 @@ function dragFileHandler(el) {
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
 
-    var h1 = document.createElement("h3");
-    h1.innerHTML = "THIS IS A FILE HEHE"
+    var src = el.childNodes[0].childNodes[0].getAttribute("src");
+    var name = el.childNodes[0].childNodes[1].innerHTML;
 
-    ghost.appendChild(h1);
+    var img = document.createElement("img");
+    img.setAttribute("src", src);
+
+    ghost.appendChild(img);
+
+    var p = document.createElement("p");
+    p.innerHTML = name;
+
+    ghost.appendChild(p);
 
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -14,12 +22,17 @@ function dragFileHandler(el) {
     document.body.addEventListener("mouseup", function(e) {
         //The file has been let go.
         document.removeEventListener("mousemove", handleMouseMove);
+        ghost.parentNode.removeChild(ghost);
     }, {once:true});
 }
 
 function handleMouseMove(e) {
     console.log(e);
-    document.getElementsByClassName("file-ghost")[0].style.top = e.screenY-70 + "px";
-    document.getElementsByClassName("file-ghost")[0].style.left = e.screenX-80 + "px";
+
+    //Position the element relative to the mouse cursor
+    var [offsetX, offsetY] = [72,70]
+    
+    document.getElementsByClassName("file-ghost")[0].style.top = e.screenY-offsetY + "px";
+    document.getElementsByClassName("file-ghost")[0].style.left = e.screenX-offsetX + "px";
 
 }
