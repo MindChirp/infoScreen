@@ -10,100 +10,130 @@
     <link rel="stylesheet" href="/stylesheets/cfg.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="/javascripts/inputs.js"></script>   
+    <script src="/javascripts/main.js"></script>   
+    <script src="/javascripts/fileHandler.js"></script>   
+    <script src="/javascripts/dragHandler.js"></script>   
 
 </head>
 
 <body>
-    <!--Application bar-->
 
-<div id="main-container-wrapper">
-    <div id="app-bar">
-        <div id="drag-region"></div>
-        <!--<div id="app-bar-dropdown-menus">
-            <div class="options" style="margin-left: 1rem;"><h1>File</h1></div>
-            <div class="options"><h1>Help</h1></div>
-            <div class="options"><h1>Contact</h1></div>
+    <div id="blocking-loading-pane">
+        <div class="positioner">
+            <h1>Preparing your experience</h1>
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
-    -->
+        
     </div>
 
-    <div id="main-container">
+    <div id="main-container-wrapper">
+        <!--Application bar-->
+        <div id="app-bar">
+            <div id="drag-region"></div>
+            <!--<div id="app-bar-dropdown-menus">
+                <div class="options" style="margin-left: 1rem;"><h1>File</h1></div>
+                <div class="options"><h1>Help</h1></div>
+                <div class="options"><h1>Contact</h1></div>
+            </div>
+        -->
+        </div>
 
-        <div id="top-layer">
+        <div id="main-container">
 
-            <div id="browser" class="smooth-shadow"></div>
-            <div id="viewport" class="smooth-shadow">
-                <div id="content"></div>
-                <div class="settings-bar">
-                    <div class="header">
-                        <p>Viewport Settings</p>
-                        <button class="close-button" onclick="closeViewportSettings(this)"><i class="material-icons">highlight_off</i></button>
-                    </div>
-                    
-                    <div class="content">
-                        <script>
-                            var script = document.currentScript;
-                            var opts = ["16:9", "8:5", "9:16", "5:4", "2:3"];
-                            var menu = fsinputs.dropdown(opts);
+            <div id="top-layer">
 
-                            var p = document.createElement("p");
-                            p.innerHTML = "Aspect ratio";
-                            script.parentNode.appendChild(p);
+                <div id="browser" class="smooth-shadow">
 
-                            script.parentNode.appendChild(menu);
-                        </script>
+                    <div class="side-bar">
 
+                        <div class="buttons-container">
+                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('files', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
+                            <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
+                            <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
+                            <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
 
-                        <script>
-                            var script = document.currentScript;
-                            var opts = ["Black", "White", "Coral", "Auto"];
-                            var menu = fsinputs.dropdown(opts);
-
-                            var p = document.createElement("p");
-                            p.innerHTML = "Background color";
-                            script.parentNode.appendChild(p);
-
-                            script.parentNode.appendChild(menu);
-                        </script>
-
-                        <script>
-                            var script = document.currentScript;
-                            var opts = ["Yes", "No", "Yes", "Maybe"];
-                            var menu = fsinputs.dropdown(opts);
-
-                            var p = document.createElement("p");
-                            p.innerHTML = "blahblahblah";
-                            script.parentNode.appendChild(p);
-
-                            script.parentNode.appendChild(menu);
-                        </script>
+                        </div>
 
                     </div>
 
+                    <div class="content-container">
+                        <div id="edit" style="display: none;"></div>
+                        <div id="widgets" style="display: none;"></div>
+                        <div id="files" style="display: none;"></div>
+                    </div>
 
                 </div>
-                <div class="settings-button" onclick="viewportSettings()"><i class="material-icons">settings</i></div>
+                <div id="viewport" class="smooth-shadow">
+                    <div id="content"></div>
+                    <div class="settings-bar">
+                        <div class="header">
+                            <p>Viewport Settings</p>
+                            <button class="close-button" onclick="closeViewportSettings(this)"><i class="material-icons">highlight_off</i></button>
+                        </div>
+                        
+                        <div class="content">
+                            <script>
+                                var script = document.currentScript;
+                                var opts = ["16:9", "8:5", "9:16", "5:4", "2:3"];
+                                var menu = fsinputs.dropdown(opts);
+
+                                var p = document.createElement("p");
+                                p.innerHTML = "Aspect ratio";
+                                script.parentNode.appendChild(p);
+
+                                script.parentNode.appendChild(menu);
+                            </script>
+
+
+                            <script>
+                                var script = document.currentScript;
+                                var opts = ["Black", "White", "Coral", "Blue"];
+                                var menu = fsinputs.dropdown(opts);
+
+                                var p = document.createElement("p");
+                                p.innerHTML = "Background color";
+                                script.parentNode.appendChild(p);
+
+                                script.parentNode.appendChild(menu);
+                            </script>
+
+                            <script>
+                                var script = document.currentScript;
+                                var opts = ["Yes", "No", "Yes", "Maybe"];
+                                var menu = fsinputs.dropdown(opts);
+
+                                var p = document.createElement("p");
+                                p.innerHTML = "blahblahblah";
+                                script.parentNode.appendChild(p);
+
+                                script.parentNode.appendChild(menu);
+                            </script>
+
+                        </div>
+
+
+                    </div>
+                    <div class="settings-button" onclick="viewportSettings()"><i class="material-icons">settings</i></div>
+                </div>
+
             </div>
 
-        </div>
+            <div id="bottom-layer">
 
-        <div id="bottom-layer">
+                <div id="timeline" class="smooth-shadow">
+                    <h1 style="font-size: 3rem; margin-top: 0.5rem; margin-left: 1rem; color: var(--title-color)">SKRUBBER</h1>
+                </div>
 
-            <div id="timeline" class="smooth-shadow"></div>
-
+            </div>
         </div>
     </div>
-</div>
 
-<script>
 
-</script>
-<script src="/javascripts/menus.js"></script>
-<script src="/javascripts/app-bar.js" async defer></script>
-<script src="/javascripts/background-scripts.js" async defer></script>
-<script src="/javascripts/notrification-handler.js" async defer></script>   
-<script src="/javascripts/viewport.js" async defer></script>   
-<script src="/javascripts/main.js" async defer></script>   
+    <script src="/javascripts/menus.js"></script>
+    <script src="/javascripts/app-bar.js" async defer></script>
+    <script src="/javascripts/background-scripts.js" async defer></script>
+    <script src="/javascripts/notrification-handler.js" async defer></script>   
+    <script src="/javascripts/viewport.js" async defer></script>   
 <!--<script src="/javascripts/drag-handler.js" async defer></script>
 <script src="/javascripts/main.js"></script>
     <link rel="stylesheet" href="/stylesheets/file-explorer.css">
@@ -116,16 +146,23 @@
         const effectsWindow = new effects();
         window.onload = function () {
             
-
+            loadFilesIntoExplorer();
             //Start off with showing the file explorer
             //this can be changed to something smarter in the future
            // programLoaded();
-               bkgScript();
+            bkgScript();
 
             /*var el = document.getElementById("viewport").querySelector(".settings-button");
             infoOnHover(el, "Viewport settings");*/
             //effectsWindow.files();
 
+            //Get the theme
+            var theme = localStorage.getItem("theme");
+            if(theme == "light") {
+                setTheme(0);
+            } else if(theme == "dark") {
+                setTheme(1);
+            }
 
 
             //Hide the notifications menu

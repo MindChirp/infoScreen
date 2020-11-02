@@ -182,6 +182,18 @@
     
   }
 
+  @keyframes slide-in-left {
+    0% {transform: translate(-0.5rem,0); opacity: 0;}
+    100% {transform: translate(0,0); opacity: 1;}
+    
+  }
+
+  @keyframes loading-pane {
+    0%{opacity: 1; display: block;}
+    99% {opacity:0; display: block;}
+    100% {opacity: 0; display: none; pointer-events: none;}
+  }
+
   input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
