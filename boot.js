@@ -67,8 +67,8 @@ function openEditor() {
         width: width,
         height: height,
         hasShadow: true,
-        minWidth: 850,
-        minHeight:700,
+        minWidth: 1026,
+        minHeight:963,
         frame: false,
         transparent: true
       })

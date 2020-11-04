@@ -227,6 +227,7 @@ html {
     padding-top: 0.1rem;
     box-sizing: border-box;
     overflow: hidden;
+    pointer-events: none;
 }
 
 .file-ghost img {
@@ -276,7 +277,7 @@ html {
 
 #main-container {
     display: grid;
-    grid-template-rows: 50% auto;
+    grid-template-rows: auto 30rem;
     padding-top: 1rem;
     height: 100%;
     width: 100%;
@@ -365,6 +366,27 @@ html {
     transform: translate(-50%);
     pointer-events: none;
 }
+
+#main-container #top-layer #browser .content-container #widgets {
+        /*Display grid is in reality set in the main.js script*/
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(10rem,1fr));
+        white-space: pre-wrap;
+        grid-template-rows: repeat(4, 6rem);
+        row-gap: 1rem;
+        column-gap: 0.5rem;
+        padding: 0.5rem;
+        box-sizing: border-box;
+        overflow-y: visible;
+}
+
+#main-container #top-layer #browser .content-container #widgets .explorer-widget {
+    height: 100%;
+    width: 100%;
+    background-color: var(--light-shade);
+    border-radius: 0.25rem;
+}
+
 
 #main-container #top-layer #browser .side-bar {
     height: 100%;
@@ -545,6 +567,46 @@ html {
     background-color: var(--secondary-color);
 }
 
+#main-container #bottom-layer #timeline .sub-container .scrubber {
+    height: 100%;
+    width: 100%;
+    display: inline-grid;
+    grid-template-columns: repeat(15,6rem); 
+    grid-template-rows: 100%;
+    overflow-x: auto;
+}
+
+
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column {
+    height: 100%;
+    width: 100%;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
+    height: 4rem;
+    width: 100%;
+    
+}
+
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row[version="A"] {
+    background-color: var(--main-bg-color);
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element {
+    height: 100%;
+    width: 100%;
+    background-color: var(--main-bg-color);
+    overflow: hidden;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element img {
+    height: 100%;
+    width: auto;
+    margin-left: 50%;
+    transform: translate(-50%);
+}
 ::-webkit-scrollbar {
     width: 5px;
 }

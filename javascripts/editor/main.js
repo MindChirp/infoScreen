@@ -84,7 +84,7 @@ function activateBrowserItem(arg, el) {
         break;
         case "widgets":
             deactivateOtherPages();
-            document.getElementById(arg).style.display = "block";
+            document.getElementById(arg).style.display = "grid";
         break;
         case "files":
             deactivateOtherPages();
@@ -96,9 +96,8 @@ function activateBrowserItem(arg, el) {
         var pages = document.getElementById("browser").querySelector(".content-container").getElementsByTagName("div");
         var y;
         for(y of pages) {
-            if(y.getAttribute("class") != "file-item" && y.getAttribute("class") != "content") {
+            if(y.getAttribute("class") != "file-item" && y.getAttribute("class") != "content" && y.getAttribute("class") != "explorer-widget") {
                 y.style.display = "none";
-                console.log(y);
             }
         }
     }
@@ -136,4 +135,39 @@ function setTheme(theme) {
         document.documentElement.style.setProperty("--slider-color", "#CC99FF");
         localStorage.setItem("theme", "cancer");
     }
+}
+
+    //Columns
+/* x x x x x x x
+   x 0 0 0 0 0 0
+   x 0 0 0 0 0 0
+   x 0 0 0 0 0 0
+   x 0 0 0 0 0 0
+   x 0 0 0 0 0 0
+   */
+function initScrubber(rows,cols) {
+    //Create columns
+    var cont = document.getElementById("timeline").querySelector(".sub-container").querySelector(".scrubber");
+    for(let i = 0; i < cols; i++) {
+        var col = document.createElement("div");
+        col.setAttribute("class", "timeline-column");
+        cont.appendChild(col);
+        col.setAttribute("onmouseenter", "highlightColumn(this, true)");
+        col.setAttribute("onmouseleave", "highlightColumn(this, false)");
+        //Create rows
+        for(let k = 0; k < rows; k++) {
+            var row = document.createElement("div");
+            if(k % 2 != 0) {
+                row.setAttribute("version", "B");
+            } else {
+                row.setAttribute("version", "A");
+            }
+            row.setAttribute("class", "timeline-row");
+            row.setAttribute("droppable", "");
+
+            col.appendChild(row);
+        }
+
+    }
+
 }

@@ -53,6 +53,8 @@ function loadFilesIntoExplorer() {
                     img = document.createElement("img");
                     cont.appendChild(img);
                     img.setAttribute("src", dir + "/" + x);
+                    //Set the type of the file to image
+                    el.setAttribute("type", "img");
                 } else {
                     img = document.createElement("video");
                     img.setAttribute("width", "auto");
@@ -62,7 +64,10 @@ function loadFilesIntoExplorer() {
                     src.setAttribute("type", "video/mp4");
                     img.appendChild(src);
                     cont.appendChild(img);
-                    img.setAttribute("draggable", "true")
+                    img.setAttribute("draggable", "true");
+                    //Set the type of the file to video
+                    el.setAttribute("type", "vid");
+
                 }
                 var p = document.createElement("p");
                 p.innerHTML = x;

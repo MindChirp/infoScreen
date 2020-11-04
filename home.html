@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="/stylesheets/cfg.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="/javascripts/inputs.js"></script>   
-    <script src="/javascripts/main.js"></script>   
-    <script src="/javascripts/fileHandler.js"></script>   
-    <script src="/javascripts/dragHandler.js"></script>   
+    <script src="/javascripts/editor/inputs.js"></script>   
+    <script src="/javascripts/editor/main.js"></script>   
+    <script src="/javascripts/editor/explorer/fileHandler.js"></script>   
+    <script src="/javascripts/editor/dragHandler.js"></script>   
+    <script src="/javascripts/editor/explorer/widgets.js"></script>   
 
 </head>
 
@@ -134,6 +135,7 @@
 
                         </div>
 
+                        <div class="scrubber"></div>
                     </div>
                 </div>
 
@@ -142,11 +144,11 @@
     </div>
 
 
-    <script src="/javascripts/menus.js"></script>
-    <script src="/javascripts/app-bar.js" async defer></script>
-    <script src="/javascripts/background-scripts.js" async defer></script>
-    <script src="/javascripts/notrification-handler.js" async defer></script>   
-    <script src="/javascripts/viewport.js" async defer></script>   
+    <script src="/javascripts/editor/menus.js"></script>
+    <script src="/javascripts/editor/app-bar.js" async defer></script>
+    <script src="/javascripts/editor/background-scripts.js" async defer></script>
+    <script src="/javascripts/editor/notrification-handler.js" async defer></script>   
+    <script src="/javascripts/editor/viewport.js" async defer></script>   
 <!--<script src="/javascripts/drag-handler.js" async defer></script>
 <script src="/javascripts/main.js"></script>
     <link rel="stylesheet" href="/stylesheets/file-explorer.css">
@@ -158,8 +160,9 @@
                 
         const effectsWindow = new effects();
         window.onload = function () {
-            
+            initScrubber(6,15);
             loadFilesIntoExplorer();
+            loadWidgets();
             //Start off with showing the file explorer
             //this can be changed to something smarter in the future
            // programLoaded();
