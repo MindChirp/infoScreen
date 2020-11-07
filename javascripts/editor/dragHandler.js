@@ -3,23 +3,40 @@ function dragFileHandler(el) {
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
 
-    var src = el.childNodes[0].childNodes[0].getAttribute("src");
-    var name = el.childNodes[0].childNodes[1].innerHTML;
-    var type = el.getAttribute("type");
+    if(el.getAttribute("type") == "widget") {
+        var widgetType = el.getAttribute("name");
+        var type = el.getAttribute("type");
+        localStorage.setItem("dragCache", JSON.stringify([widgetType, name, type]));
+        var p = document.createElement("p");
+        p.innerHTML = "Time";
+        ghost.appendChild(p);
+        p.setAttribute("style", `
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            line-height: 5rem;
+            margin: 0;
+            font-weight: lighter;
+        `);
+    } else {
+        var src = el.childNodes[0].childNodes[0].getAttribute("src");
+        var name = el.childNodes[0].childNodes[1].innerHTML;
+        var type = el.getAttribute("type");
 
-    //Save the information of the dragged element to 
-    //localStorage
+        //Save the information of the dragged element to 
+        //localStorage
+        localStorage.setItem("dragCache", JSON.stringify([src, name, type]));
+        var img = document.createElement("img");
+        img.setAttribute("src", src);
+        
+        ghost.appendChild(img);
+    
+        var p = document.createElement("p");
+        p.innerHTML = name;
+        
+        ghost.appendChild(p);
+    }
 
-    localStorage.setItem("dragCache", JSON.stringify([src, name, type]));
-    var img = document.createElement("img");
-    img.setAttribute("src", src);
-
-    ghost.appendChild(img);
-
-    var p = document.createElement("p");
-    p.innerHTML = name;
-
-    ghost.appendChild(p);
 
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -39,12 +56,29 @@ function dragFileHandler(el) {
 
         //Get the path, name
         var fileInfo = JSON.parse(localStorage.getItem("dragCache"));
-        var path = fileInfo[0]
-        var img = document.createElement("img");
-        img.setAttribute("src", path);
-        file.appendChild(img);
-        file.setAttribute("type", fileInfo[2]);
-        infoOnHover(file, fileInfo[1]);
+        if(fileInfo[2] == "img" || fileInfo[2] == "vid") {
+            var path = fileInfo[0]
+            var img = document.createElement("img");
+            img.setAttribute("src", path);
+            file.appendChild(img);
+            file.setAttribute("type", fileInfo[2]);
+            infoOnHover(file, fileInfo[1]);
+        } else if(fileInfo[2] == "widget") {
+            if(fileInfo[0] == "time") {
+                var p = document.createElement("p");
+                p.innerHTML = "Time";
+                file.appendChild(p);
+                p.setAttribute("style", `
+                    height: 100%;
+                    width: 100%;
+                    text-align: center;
+                    line-height: 4rem;
+                    margin: 0;
+                    font-weight: lighter;
+                `);
+                infoOnHover(file, "Widget");
+            }
+        }
     }, {once:true});
 }
 

@@ -6,6 +6,7 @@ function loadWidgets() {
     //clock widget
     var el = document.createElement("div");
     el.setAttribute("class", "explorer-widget");
+    el.setAttribute("onmousedown", "dragFileHandler(this)")
     el.setAttribute("type", "widget");
     el.setAttribute("name", "time");
     cont.appendChild(el);
@@ -17,6 +18,8 @@ function loadWidgets() {
         text-align: center;
         line-height: 6rem;
         font-weight: lighter;
+        /*animation: fade-in 300ms ease-in-out 0.5s;
+        animation-fill-mode: backwards;*/
     `);
     el.appendChild(h1);
     setInterval(function() {
@@ -30,9 +33,12 @@ function loadWidgets() {
     h1.innerHTML = "Weather";
     h1.setAttribute("style", `
         height: 100%;
-        width: 100%;
+        width: fit-content;
+        padding: 0 0.1rem;
         margin: 0;
-        text-align: center;
+        margin-left: 50%;
+        transform: translate(-50%);
+        text-align: left;
         line-height: 6rem;
         font-weight: lighter;
     `);
@@ -41,7 +47,6 @@ function loadWidgets() {
     cont.appendChild(el);
 
 }
-
 
 function updateClockWidgets() {
     //Update widgets in explorer

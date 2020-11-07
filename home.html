@@ -65,7 +65,16 @@
 
                 </div>
                 <div id="viewport" class="smooth-shadow">
-                    <div id="content"></div>
+                    <div class="controls">
+                        <input class="fd-slider" type="range" min="0" max="100" step="1" value="0">
+                        <div class="action-buttons">
+                            <button><i class="material-icons">play_arrow</i><script>infoOnHover(document.currentScript.parentNode, "Play")</script></button>
+                            <button><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
+                            <button><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
+                        </div>
+                    </div>
+                    <div id="content">
+                    </div>
                     <div class="settings-bar">
                         <div class="header">
                             <p>Viewport Settings</p>

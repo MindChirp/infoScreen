@@ -28,4 +28,26 @@ settings[1].addEventListener("change", function() {
         document.getElementById("viewport").setAttribute("style", "background-color: var(--dark-shade);")
 
     }
+});
+
+
+//Handle the progress bar background colors etc. 
+var bar = document.getElementById("viewport").querySelector(".fd-slider");
+var mouseDownOnProgressBar;
+bar.addEventListener("mousedown", function(e) {
+    mouseDownOnProgressBar = true;
+
+    //Update the progress bar if it is only clicked, and not dragged
+    setTimeout(function() {
+        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+    }, 10)
+});
+bar.addEventListener("mouseup", function(e) {
+    mouseDownOnProgressBar = false;
+})
+bar.addEventListener("mousemove", function(e) {
+    if(mouseDownOnProgressBar) {
+        //Update the progress bar if it is only dragged, and not clicked
+        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+    }
 })

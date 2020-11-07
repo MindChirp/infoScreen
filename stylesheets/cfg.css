@@ -212,3 +212,90 @@ input::-webkit-inner-spin-button {
   font-weight: bold;
   cursor: pointer;
 }
+
+
+input[type=range].fd-slider {
+  -webkit-appearance: none;
+  margin: 10px 0;
+  border-radius: 19px;
+  background-color: none;
+}
+
+input[type=range].fd-slider:focus {
+  background-color: none;
+  outline: none;
+}
+
+input[type=range].fd-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 7px;
+  cursor: pointer;
+  animate: 0.2s;  
+  box-shadow: 0px 0px 0px #000000;
+  background: var(--slider-color);
+  border-radius: 19px;
+  border: 0px solid #000000;
+}
+input[type=range].fd-slider::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000;
+  border: 1px solid #ffffff;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: var(--slider-color);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -2px;
+}
+input[type=range].fd-slider:focus::-webkit-slider-runnable-track {
+  /*background: var(--slider-color);*/
+}
+input[type=range].fd-slider::-moz-range-track {
+  width: 100%;
+  height: 7px;
+  cursor: pointer;
+  animate: 0.2s;
+  box-shadow: 0px 0px 0px #000000;
+  background: var(--slider-color);
+  border-radius: 19px;
+  border: 0px solid #000000;
+}
+input[type=range].fd-slider::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000;
+  border: 1px solid #ffffff;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: var(--slider-color);
+  cursor: pointer;
+}
+input[type=range].fd-slider::-ms-track {
+  width: 100%;
+  height: 7px;
+  cursor: pointer;
+  animate: 0.2s;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range].fd-slider::-ms-fill-lower {
+  background: var(--slider-color);
+  border: 0px solid #000000;
+  border-radius: 38px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range].fd-slider::-ms-fill-upper {
+  background: var(--slider-color);
+  border: 0px solid #000000;
+  border-radius: 38px;
+  box-shadow: 0px 0px 0px #000000;
+}
+input[type=range].fd-slider::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000;
+  border: 1px solid #ffffff;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: var(--slider-color);
+  cursor: pointer;
+}

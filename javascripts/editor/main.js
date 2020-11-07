@@ -154,6 +154,12 @@ function initScrubber(rows,cols) {
         cont.appendChild(col);
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
+
+        var pos = document.createElement("div");
+        if(i == 0) {
+            pos.setAttribute("active", "true");
+        }
+        document.getElementById("timeline").querySelector(".sub-container").querySelector(".top-bar").appendChild(pos);
         //Create rows
         for(let k = 0; k < rows; k++) {
             var row = document.createElement("div");
