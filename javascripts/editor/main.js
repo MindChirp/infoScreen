@@ -1,3 +1,8 @@
+document.addEventListener("click", function() {
+
+})
+
+
 function infoOnHover(el, txt) {
     el.addEventListener("mouseenter", function(event) {
     var mouseover = true;
@@ -92,16 +97,30 @@ function activateBrowserItem(arg, el) {
         break;
     }
 
+
+
+//FIX THIS CODE PLSSSS
     function deactivateOtherPages() {
-        var pages = document.getElementById("browser").querySelector(".content-container").getElementsByTagName("div");
+        var pages = [document.getElementById("edit"), document.getElementById("widgets"), document.getElementById("files")];
         var y;
         for(y of pages) {
-            if(y.getAttribute("class") != "file-item" && y.getAttribute("class") != "content" && y.getAttribute("class") != "explorer-widget") {
                 y.style.display = "none";
-            }
         }
     }
 
+}
+
+//Check if an element is a child of another.
+//Thanks to Anna on stack overflow <3333
+function isDescendant(parent, child) {
+    var node = child.parentNode;
+    while (node != null) {
+        if (node == parent) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
 }
 
 
@@ -154,7 +173,9 @@ function initScrubber(rows,cols) {
         cont.appendChild(col);
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
-
+        //Setup the column
+        col.setAttribute("time", "00:10");
+        col.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
         var pos = document.createElement("div");
         if(i == 0) {
             pos.setAttribute("active", "true");
@@ -176,4 +197,175 @@ function initScrubber(rows,cols) {
 
     }
 
+}
+
+
+
+
+function infoBox(el, title) {
+    el.addEventListener("click", function(event) {
+    
+        var cont = document.createElement("div");
+        cont.setAttribute("class", "smooth-shadow information-card");
+        cont.setAttribute("style", `
+            height: fit-content;
+            width: fit-content;
+            max-width: 15rem;
+            background-color: var(--secondary-color);
+            z-index: 101;
+            padding: 0 1rem;
+            font-weight: lighter;
+            border-radius: 0.5rem;
+            animation: fade-in 100ms ease-in-out;
+        `);
+        
+        //background-color: #0a0d10;
+
+        var text = document.createElement("p");
+        text.style.lineHeight = "1rem";
+        text.style.marginTop ="1em";
+        text.style.marginBottom ="1em";
+        text.innerHTML = title;
+        cont.appendChild(text);
+
+
+        var x = event.clientX;
+        var y = event.clientY;
+    
+        cont.style.position = "absolute";
+    
+        cont.style.top = y + "px";
+        cont.style.left = x + "px";
+    
+    setTimeout(function() {
+        document.body.appendChild(cont);
+    }, 100);
+    
+    });
+}
+
+
+document.addEventListener("click", function() {
+    if(document.getElementsByClassName("information-card")[0]) {
+
+        var element = document.getElementsByClassName("information-card")[0] 
+        var inside = element.contains(event.target);
+    }
+
+    if(!inside) {
+        if(element) {
+            element.parentNode.removeChild(element);
+
+        }
+    }
+    
+})
+
+
+
+
+function menu(type) {     
+    console.log(type)  
+    var el = document.createElement("div");
+    el.setAttribute("class", "menu");
+    document.body.appendChild(el);
+    switch(type) {
+        case "user":
+
+            var header = document.createElement("div");
+            header.setAttribute("class", "header");
+            el.appendChild(header);
+
+        break;
+    }
+
+    var back = document.createElement("button");
+    back.setAttribute("class", "fd-button smooth-shadow back-button");
+    back.setAttribute("style", `
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        height: 3rem;
+        width: 3rem;
+        z-index: 10;
+    `);
+
+    infoOnHover(back, "Go back");
+
+    back.addEventListener("click", function() {
+        el.parentNode.removeChild(el);
+        if(document.getElementsByClassName("information-popup")) {
+            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
+        }
+    })
+
+    var ico = document.createElement("i");
+    ico.setAttribute("class", "material-icons");
+    ico.innerHTML = "keyboard_backspace";
+    back.appendChild(ico);
+    ico.setAttribute("style", `
+        line-height: 3rem;
+        font-size: 1.4rem;
+        text-align: center;
+        transform: translateX(-0.15rem);
+    `)
+
+    el.appendChild(back);
+    return el;
+}
+
+
+function contextMenu(ev, el, type) {
+    if(document.getElementsByClassName("context-menu")) {
+        var els = document.getElementsByClassName("context-menu");
+        var x;
+        for(x of els) {
+            x.parentNode.removeChild(x);
+        }
+    }
+
+    var menu = createCtxMenu();
+
+    switch(type) {
+        case 0:
+            var b = document.createElement("button");
+            b.innerHTML = "Undo";
+            menu.appendChild(b);
+
+            var b = document.createElement("button");
+            b.innerHTML = "Delete";
+            menu.appendChild(b);
+
+        break;
+    }
+    
+    
+
+    setTimeout(function() {
+        document.body.appendChild(menu);
+    }, 10)
+    menu.style.top = ev.clientY + "px";
+    menu.style.left = ev.clientX + "px";
+
+    document.addEventListener("click", removeCtxMenu);
+    setTimeout(function() {
+        document.addEventListener("contextmenu", removeCtxMenu);
+    }, 10)
+}
+
+function createCtxMenu() {
+    var el = document.createElement("div");
+    el.setAttribute("class", "context-menu smooth-shadow");
+    return el;
+}
+
+function removeCtxMenu(e) {
+    if(document.getElementsByClassName("context-menu")[0]) {
+        if(e.target != document.getElementsByClassName("context-menu")[0] && !isDescendant(document.getElementsByClassName("context-menu")[0], e.target)) {
+            var el = document.getElementsByClassName("context-menu")[0];
+            el.parentNode.removeChild(el);
+            document.removeEventListener("click", removeCtxMenu);
+            document.removeEventListener("contextmenu", removeCtxMenu);
+        }
+    }
 }

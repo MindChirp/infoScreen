@@ -154,8 +154,49 @@ html {
     }
   }
   
+#edit {
+    padding: 1rem;
+    box-sizing: border-box;
+}
 
+#edit p {
+    margin: 0;
+}
 
+#edit #default-bg-img {
+    display: none;
+}
+
+#edit label {
+    background-color: var(--main-button-color);
+    padding: 0.5rem;
+    box-sizing: border-box;
+    transform: translate(0 1rem);
+    cursor: pointer;
+    color: var(--paragraph-color);
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+#edit .container {
+    height: fit-content;
+    width: fit-content;
+}
+
+#edit input {
+    background-color: var(--main-button-color);
+    border: none;
+    outline: none;
+    height: 1.5rem;
+    width: 15rem;
+    border-radius: 0.25rem;
+    color: var(--paragraph-color);
+    padding-left: 0.5rem;
+    box-sizing: border-box;
+    font-family: Bahnschrift;
+    font-size: 1rem;
+}
 
 .select {
     position: relative;

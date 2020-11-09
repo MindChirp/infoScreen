@@ -42,6 +42,9 @@ bar.addEventListener("mousedown", function(e) {
         e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
     }, 10)
 });
+bar.addEventListener("change", function(e) {
+    e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+})
 bar.addEventListener("mouseup", function(e) {
     mouseDownOnProgressBar = false;
 })
