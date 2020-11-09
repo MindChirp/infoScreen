@@ -350,7 +350,7 @@ function contextMenu(ev, el, type) {
     document.addEventListener("click", removeCtxMenu);
     setTimeout(function() {
         document.addEventListener("contextmenu", removeCtxMenu);
-    }, 10)
+    }, 10);
 }
 
 function createCtxMenu() {
