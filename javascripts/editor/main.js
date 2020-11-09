@@ -324,18 +324,11 @@ function contextMenu(ev, el, type) {
         }
     }
 
-    var menu = createCtxMenu();
+    var menu;
 
     switch(type) {
         case 0:
-            var b = document.createElement("button");
-            b.innerHTML = "Undo";
-            menu.appendChild(b);
-
-            var b = document.createElement("button");
-            b.innerHTML = "Delete";
-            menu.appendChild(b);
-
+            menu = createCtxMenu([["Undo", "Ctrl+Z"], ["Redo", "Ctrl+Y"], ["Delete", ""]]);
         break;
     }
     
@@ -353,9 +346,22 @@ function contextMenu(ev, el, type) {
     }, 10);
 }
 
-function createCtxMenu() {
+function createCtxMenu(bts) {
     var el = document.createElement("div");
     el.setAttribute("class", "context-menu smooth-shadow");
+    
+    var x;
+    for(x of bts) {
+        var b = document.createElement("button");
+        b.innerHTML = x[0];
+        el.appendChild(b);
+
+        var desc = document.createElement("div");
+        desc.setAttribute("class", "key-bind");
+        b.appendChild(desc);
+        desc.innerHTML = x[1];
+    }
+
     return el;
 }
 
