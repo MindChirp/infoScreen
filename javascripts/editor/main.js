@@ -175,7 +175,6 @@ function initScrubber(rows,cols) {
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
         //Setup the column
         col.setAttribute("time", "00:10");
-        col.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
         var pos = document.createElement("div");
         if(i == 0) {
             pos.setAttribute("active", "true");
@@ -191,6 +190,7 @@ function initScrubber(rows,cols) {
             }
             row.setAttribute("class", "timeline-row");
             row.setAttribute("droppable", "");
+            row.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
 
             col.appendChild(row);
         }
@@ -316,34 +316,39 @@ function menu(type) {
 
 
 function contextMenu(ev, el, type) {
-    if(document.getElementsByClassName("context-menu")) {
-        var els = document.getElementsByClassName("context-menu");
-        var x;
-        for(x of els) {
-            x.parentNode.removeChild(x);
+    if(el == ev.target) {
+        if(document.getElementsByClassName("context-menu")) {
+            var els = document.getElementsByClassName("context-menu");
+            var x;
+            for(x of els) {
+                x.parentNode.removeChild(x);
+            }
         }
-    }
-
-    var menu;
-
-    switch(type) {
-        case 0:
-            menu = createCtxMenu([["Undo", "Ctrl+Z"], ["Redo", "Ctrl+Y"], ["Delete", ""]]);
-        break;
-    }
     
+        var menu;
     
-
-    setTimeout(function() {
-        document.body.appendChild(menu);
-    }, 10)
-    menu.style.top = ev.clientY + "px";
-    menu.style.left = ev.clientX + "px";
-
-    document.addEventListener("click", removeCtxMenu);
-    setTimeout(function() {
-        document.addEventListener("contextmenu", removeCtxMenu);
-    }, 10);
+        switch(type) {
+            case 0:
+                menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"], ["Delete", ""]]);
+            break;
+            case 1:
+                menu = createCtxMenu([["Delete", "Del"]])
+            break;
+        }
+        
+        
+    
+        setTimeout(function() {
+            document.body.appendChild(menu);
+        }, 10)
+        menu.style.top = ev.clientY + "px";
+        menu.style.left = ev.clientX + "px";
+    
+        document.addEventListener("mousedown", removeCtxMenu);
+        setTimeout(function() {
+            document.addEventListener("contextmenu", removeCtxMenu);
+        }, 10);
+    }
 }
 
 function createCtxMenu(bts) {
@@ -360,6 +365,8 @@ function createCtxMenu(bts) {
         desc.setAttribute("class", "key-bind");
         b.appendChild(desc);
         desc.innerHTML = x[1];
+
+        b.setAttribute("onclick", x[2]);
     }
 
     return el;

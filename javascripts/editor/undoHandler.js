@@ -3,7 +3,6 @@
 //made by the user in a list, which can be iterated through on-demand
 
 //Define the ctrl-z combination
-
 document.addEventListener("keydown", function(e) {
     if(e.keyCode == 90) {
         undo();
@@ -12,6 +11,8 @@ document.addEventListener("keydown", function(e) {
     }
 })
 
+var undoClipboard = [];
+var redoClipboard = [];
 
 
 //UNDO FUNCTION

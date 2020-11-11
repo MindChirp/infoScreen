@@ -59,9 +59,12 @@ function dragFileHandler(el) {
         if(fileInfo[2] == "img" || fileInfo[2] == "vid") {
             var path = fileInfo[0]
             var img = document.createElement("img");
+            img.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
             img.setAttribute("src", path);
             file.appendChild(img);
             file.setAttribute("type", fileInfo[2]);
+            file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
+            
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {
             if(fileInfo[0] == "time") {

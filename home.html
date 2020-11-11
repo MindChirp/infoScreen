@@ -26,8 +26,8 @@
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
         
-    </div>-->
-
+    </div>
+-->
     <div id="main-container-wrapper">
         <!--Application bar-->
         <div id="app-bar">
@@ -49,7 +49,7 @@
                     <div class="side-bar">
 
                         <div class="buttons-container">
-                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('edit', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
+                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('edit', scr.parentNode.getElementsByTagName("div")[0])}, 100); //Activate on startup</script>
                             <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
                             <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
                             <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
@@ -183,7 +183,22 @@
                 
         const effectsWindow = new effects();
         window.onload = function () {
-            initScrubber(6,15);
+            //Get the width and height of the timeline element to calculate the 
+            //nescessary amount of rows and columns to cover the entire
+            //element
+
+            var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
+            var w = parseInt(window.getComputedStyle(path).width.split("px"));
+            var h = parseInt(window.getComputedStyle(path).height.split("px"));
+            var elW = 96;
+            var elH = 64;
+
+            //Compensate for the side-bar and top-bar
+            var noCols = Math.round((w-64)/96) + 3;
+            var noRows = Math.round((h-64)/64) + 3;
+            console.log(noRows)
+
+            initScrubber(noRows,noCols);
             loadFilesIntoExplorer();
             loadWidgets();
             //Start off with showing the file explorer

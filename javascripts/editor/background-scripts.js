@@ -13,5 +13,13 @@ function bkgScript() {
     document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
     document.getElementById("content").style.height = width / (16/9) - 20 + "px";
     */
+
+
+   //#main-container #bottom-layer #timeline .sub-container .scrubber
+    var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
+    var w = window.getComputedStyle(path).width;
+    var h = window.getComputedStyle(path).height;
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxWidth = parseInt(w.split("px")[0]-64) + "px";
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = parseInt(h.split("px")[0]-64) + "px";
     setTimeout(bkgScript, 10);
 }

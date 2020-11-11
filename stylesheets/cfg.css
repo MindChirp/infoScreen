@@ -339,6 +339,14 @@ input[type=range].fd-slider::-ms-thumb {
   font-weight: lighter;
 }
 
+.context-menu button .key-bind {
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+  float: right;
+  color: var(--dark-shade);
+}
+
 .context-menu button:hover {
   background-color: var(--main-button-color);
 }
