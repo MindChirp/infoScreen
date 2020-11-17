@@ -171,12 +171,8 @@ function initScrubber(rows,cols) {
         var col = document.createElement("div");
         col.setAttribute("class", "timeline-column");
         cont.appendChild(col);
-<<<<<<< HEAD
-
-=======
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
->>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
         //Setup the column
         col.setAttribute("time", "00:10");
         var pos = document.createElement("div");
@@ -195,12 +191,8 @@ function initScrubber(rows,cols) {
             row.setAttribute("class", "timeline-row");
             row.setAttribute("droppable", "");
             row.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
-<<<<<<< HEAD
             row.setAttribute("onmouseenter", "highlightColumn(this, true)");
             row.setAttribute("onmouseleave", "highlightColumn(this, false)");
-=======
-
->>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
             col.appendChild(row);
         }
 
@@ -343,12 +335,9 @@ function contextMenu(ev, el, type) {
             case 1:
                 menu = createCtxMenu([["Delete", "Del"]])
             break;
-<<<<<<< HEAD
             case 2:
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
             break;    
-=======
->>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
         }
         
         
@@ -397,7 +386,6 @@ function removeCtxMenu(e) {
         }
     }
 }
-<<<<<<< HEAD
 
 function generateIntroText() {
     var texts = [
@@ -450,5 +438,3 @@ function clickScrubberElement(el) {
         el.style.opacity = "0.5";
     }
 }
-=======
->>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
