@@ -671,6 +671,7 @@ html {
     width: 113.6rem;
     max-width: 113.6rem;
     max-height: 24rem;
+<<<<<<< HEAD
     /*
     display: grid;
     grid-template-columns: repeat(40,6rem); 
@@ -678,6 +679,13 @@ html {
     overflow-x: scroll;
     overflow-y: scroll;
     white-space: nowrap;
+=======
+    display: grid;
+    grid-template-columns: repeat(40,6rem); 
+    grid-template-rows: 10rem;
+    overflow-x: scroll;
+    overflow-y: scroll;
+>>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
 }
 
 

@@ -19,6 +19,7 @@ function bkgScript() {
     var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
     var w = window.getComputedStyle(path).width;
     var h = window.getComputedStyle(path).height;
+<<<<<<< HEAD
     var scrollH = path.querySelector(".sub-container").querySelector(".scrubber").scrollHeight;
     var scrollW = path.querySelector(".sub-container").querySelector(".scrubber").scrollWidth;
 
@@ -77,5 +78,9 @@ function bkgScript() {
     }
     
     
+=======
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxWidth = parseInt(w.split("px")[0]-64) + "px";
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = parseInt(h.split("px")[0]-64) + "px";
+>>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
     setTimeout(bkgScript, 10);
 }

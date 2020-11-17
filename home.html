@@ -194,10 +194,18 @@
             var elH = 64;
 
             //Compensate for the side-bar and top-bar
+<<<<<<< HEAD
             var NoCols = Math.round((w-64)/96) + 3;
             var NoRows = Math.round((h-64)/64) + 3;
 
             initScrubber(NoRows,NoCols);
+=======
+            var noCols = Math.round((w-64)/96) + 3;
+            var noRows = Math.round((h-64)/64) + 3;
+            console.log(noRows)
+
+            initScrubber(noRows,noCols);
+>>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
             loadFilesIntoExplorer();
             loadWidgets();
             
