@@ -29,6 +29,7 @@ function loadWidgets() {
     //weather widget
     var el = document.createElement("div");
     el.setAttribute("class", "explorer-widget");
+    el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
     h1.innerHTML = "Weather";
     h1.setAttribute("style", `
@@ -43,6 +44,7 @@ function loadWidgets() {
         font-weight: lighter;
     `);
     el.setAttribute("type", "widget");
+    el.setAttribute("name", "weather");
     el.appendChild(h1);
     cont.appendChild(el);
 

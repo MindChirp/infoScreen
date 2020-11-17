@@ -8,7 +8,14 @@ function dragFileHandler(el) {
         var type = el.getAttribute("type");
         localStorage.setItem("dragCache", JSON.stringify([widgetType, name, type]));
         var p = document.createElement("p");
-        p.innerHTML = "Time";
+        switch(widgetType) {
+            case "time":
+                p.innerHTML = "Time";
+            break;
+            case "weather":
+                p.innerHTML = "Weather"
+            break;
+        }
         ghost.appendChild(p);
         p.setAttribute("style", `
             height: 100%;
@@ -52,6 +59,8 @@ function dragFileHandler(el) {
         if(el.getAttribute("droppable") == null) return; 
         var file = document.createElement("div");
         file.setAttribute("class", "scrubber-element");
+        file.setAttribute("onclick", "clickScrubberElement(this)");
+        file.setAttribute("style", "opacity: 1");
         el.appendChild(file);
 
         //Get the path, name
@@ -59,24 +68,35 @@ function dragFileHandler(el) {
         if(fileInfo[2] == "img" || fileInfo[2] == "vid") {
             var path = fileInfo[0]
             var img = document.createElement("img");
+            img.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
             img.setAttribute("src", path);
             file.appendChild(img);
             file.setAttribute("type", fileInfo[2]);
+            file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
+            
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {
-            if(fileInfo[0] == "time") {
-                var p = document.createElement("p");
-                p.innerHTML = "Time";
-                file.appendChild(p);
-                p.setAttribute("style", `
-                    height: 100%;
-                    width: 100%;
-                    text-align: center;
-                    line-height: 4rem;
-                    margin: 0;
-                    font-weight: lighter;
-                `);
-                infoOnHover(file, "Widget");
+            var p = document.createElement("p");
+            p.setAttribute("oncontextmenu", "contextMenu(event, this, 2)")
+            //Only append event listener to p element because it covers all of
+            //of the div
+            file.appendChild(p);
+            p.setAttribute("style", `
+            height: 100%;
+            width: 100%;
+            text-align: center;
+            line-height: 4rem;
+            margin: 0;
+            font-weight: lighter;
+            `);
+            infoOnHover(file, "Widget");
+            switch(fileInfo[0]) {
+                case "time":
+                    p.innerHTML = "Time"
+                break;
+                case "weather":
+                    p.innerHTML = "Weather";
+                break;
             }
         }
     }, {once:true});
@@ -86,7 +106,6 @@ function handleMouseMove(e) {
 
     //Position the element relative to the mouse cursor
     var [offsetX, offsetY] = [72,70]
-
     document.getElementsByClassName("file-ghost")[0].style.top = e.clientY-offsetY + "px";
     document.getElementsByClassName("file-ghost")[0].style.left = e.clientX-offsetX + "px";
 

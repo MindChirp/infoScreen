@@ -2,3 +2,5 @@
 
 >>NOT FIXED
     *Tabbing to button behind the user settings pane (launcher)
+    *Context menu can be displayed outside of the screen in certain edge cases
+    *The drag-ghost sometimes lags (possibly linked to to the size of the timeline)

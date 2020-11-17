@@ -46,7 +46,7 @@ html {
     top: 0;
     left: 0;
     animation: loading-pane 500ms ease-in-out 2s;
-    z-index: 4;
+    z-index: 100;
     background-color: var(--main-bg-color);
     animation-fill-mode: forwards;
 }
@@ -154,8 +154,49 @@ html {
     }
   }
   
+#edit {
+    padding: 1rem;
+    box-sizing: border-box;
+}
 
+#edit p {
+    margin: 0;
+}
 
+#edit #default-bg-img {
+    display: none;
+}
+
+#edit label {
+    background-color: var(--main-button-color);
+    padding: 0.5rem;
+    box-sizing: border-box;
+    transform: translate(0 1rem);
+    cursor: pointer;
+    color: var(--paragraph-color);
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+}
+
+#edit .container {
+    height: fit-content;
+    width: fit-content;
+}
+
+#edit input {
+    background-color: var(--main-button-color);
+    border: none;
+    outline: none;
+    height: 1.5rem;
+    width: 15rem;
+    border-radius: 0.25rem;
+    color: var(--paragraph-color);
+    padding-left: 0.5rem;
+    box-sizing: border-box;
+    font-family: Bahnschrift;
+    font-size: 1rem;
+}
 
 .select {
     position: relative;
@@ -272,7 +313,7 @@ html {
 #main-container-wrapper {
     height: 100%;
     width: 100%;
-    display: inline-grid;
+    display: grid;
     grid-template-rows: 26px auto;
 }
 
@@ -582,7 +623,6 @@ html {
     width: 98%;
     padding-top: 1rem;
     padding-bottom: 1rem;
-
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
@@ -592,10 +632,10 @@ html {
     height: 100%;
     width: 100%;    
     border-radius: 0.5rem;
-    overflow: hidden;
     background-color: var(--main-button-color);
     display: grid;
-    grid-template-columns: 4rem auto;
+    grid-template-columns: 4rem 20rem;
+    overflow: hidden;
 }
 
 #main-container #bottom-layer #timeline .side-bar {
@@ -616,7 +656,7 @@ html {
     width: 100%;
     background-color: var(--secondary-color);
     display: grid;
-    grid-template-columns: repeat(15,6rem);
+    grid-template-columns: repeat(40,6rem);
 }
 
 #main-container #bottom-layer #timeline .sub-container .top-bar div[active="true"] {
@@ -628,29 +668,39 @@ html {
 
 #main-container #bottom-layer #timeline .sub-container .scrubber {
     height: 100%;
-    width: 100%;
-    display: inline-grid;
-    grid-template-columns: repeat(15,6rem); 
-    grid-template-rows: 100%;
-    overflow-x: auto;
+    width: 113.6rem;
+    max-width: 113.6rem;
+    max-height: 24rem;
+    /*
+    display: grid;
+    grid-template-columns: repeat(40,6rem); 
+    grid-template-rows: 20rem;*/
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
 }
 
 
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column {
-    height: 100%;
-    width: 100%;
+    height: fit-content;
+    width: 6rem;
+    margin: 0; 
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
     height: 4rem;
     width: 100%;
-    
+    border-radius: 0.25rem;
+    position: relative;
 }
 
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row[version="A"] {
-    background-color: var(--main-bg-color);
+    /*background-color: var(--main-bg-color);*/
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element {
@@ -658,6 +708,9 @@ html {
     width: 100%;
     background-color: var(--main-bg-color);
     overflow: hidden;
+    border-radius: 0.25rem;
+    transition: all 200ms ease-in-out;
+    opacity: 1;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element img {
@@ -668,6 +721,7 @@ html {
 }
 ::-webkit-scrollbar {
     width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-button {

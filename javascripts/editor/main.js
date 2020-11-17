@@ -1,3 +1,8 @@
+document.addEventListener("click", function() {
+
+})
+
+
 function infoOnHover(el, txt) {
     el.addEventListener("mouseenter", function(event) {
     var mouseover = true;
@@ -92,16 +97,30 @@ function activateBrowserItem(arg, el) {
         break;
     }
 
+
+
+//FIX THIS CODE PLSSSS
     function deactivateOtherPages() {
-        var pages = document.getElementById("browser").querySelector(".content-container").getElementsByTagName("div");
+        var pages = [document.getElementById("edit"), document.getElementById("widgets"), document.getElementById("files")];
         var y;
         for(y of pages) {
-            if(y.getAttribute("class") != "file-item" && y.getAttribute("class") != "content" && y.getAttribute("class") != "explorer-widget") {
                 y.style.display = "none";
-            }
         }
     }
 
+}
+
+//Check if an element is a child of another.
+//Thanks to Anna on stack overflow <3333
+function isDescendant(parent, child) {
+    var node = child.parentNode;
+    while (node != null) {
+        if (node == parent) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
 }
 
 
@@ -152,9 +171,9 @@ function initScrubber(rows,cols) {
         var col = document.createElement("div");
         col.setAttribute("class", "timeline-column");
         cont.appendChild(col);
-        col.setAttribute("onmouseenter", "highlightColumn(this, true)");
-        col.setAttribute("onmouseleave", "highlightColumn(this, false)");
 
+        //Setup the column
+        col.setAttribute("time", "00:10");
         var pos = document.createElement("div");
         if(i == 0) {
             pos.setAttribute("active", "true");
@@ -167,13 +186,254 @@ function initScrubber(rows,cols) {
                 row.setAttribute("version", "B");
             } else {
                 row.setAttribute("version", "A");
-            }
+            }   
             row.setAttribute("class", "timeline-row");
             row.setAttribute("droppable", "");
-
+            row.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
+            row.setAttribute("onmouseenter", "highlightColumn(this, true)");
+            row.setAttribute("onmouseleave", "highlightColumn(this, false)");
             col.appendChild(row);
         }
 
     }
 
+}
+
+
+
+
+function infoBox(el, title) {
+    el.addEventListener("click", function(event) {
+    
+        var cont = document.createElement("div");
+        cont.setAttribute("class", "smooth-shadow information-card");
+        cont.setAttribute("style", `
+            height: fit-content;
+            width: fit-content;
+            max-width: 15rem;
+            background-color: var(--secondary-color);
+            z-index: 101;
+            padding: 0 1rem;
+            font-weight: lighter;
+            border-radius: 0.5rem;
+            animation: fade-in 100ms ease-in-out;
+        `);
+        
+        //background-color: #0a0d10;
+
+        var text = document.createElement("p");
+        text.style.lineHeight = "1rem";
+        text.style.marginTop ="1em";
+        text.style.marginBottom ="1em";
+        text.innerHTML = title;
+        cont.appendChild(text);
+
+
+        var x = event.clientX;
+        var y = event.clientY;
+    
+        cont.style.position = "absolute";
+    
+        cont.style.top = y + "px";
+        cont.style.left = x + "px";
+    
+    setTimeout(function() {
+        document.body.appendChild(cont);
+    }, 100);
+    
+    });
+}
+
+
+document.addEventListener("click", function() {
+    if(document.getElementsByClassName("information-card")[0]) {
+
+        var element = document.getElementsByClassName("information-card")[0] 
+        var inside = element.contains(event.target);
+    }
+
+    if(!inside) {
+        if(element) {
+            element.parentNode.removeChild(element);
+
+        }
+    }
+    
+})
+
+
+
+
+function menu(type) {     
+    console.log(type)  
+    var el = document.createElement("div");
+    el.setAttribute("class", "menu");
+    document.body.appendChild(el);
+    switch(type) {
+        case "user":
+
+            var header = document.createElement("div");
+            header.setAttribute("class", "header");
+            el.appendChild(header);
+
+        break;
+    }
+
+    var back = document.createElement("button");
+    back.setAttribute("class", "fd-button smooth-shadow back-button");
+    back.setAttribute("style", `
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+        height: 3rem;
+        width: 3rem;
+        z-index: 10;
+    `);
+
+    infoOnHover(back, "Go back");
+
+    back.addEventListener("click", function() {
+        el.parentNode.removeChild(el);
+        if(document.getElementsByClassName("information-popup")) {
+            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
+        }
+    })
+
+    var ico = document.createElement("i");
+    ico.setAttribute("class", "material-icons");
+    ico.innerHTML = "keyboard_backspace";
+    back.appendChild(ico);
+    ico.setAttribute("style", `
+        line-height: 3rem;
+        font-size: 1.4rem;
+        text-align: center;
+        transform: translateX(-0.15rem);
+    `)
+
+    el.appendChild(back);
+    return el;
+}
+
+
+function contextMenu(ev, el, type) {
+    if(el == ev.target) {
+        if(document.getElementsByClassName("context-menu")) {
+            var els = document.getElementsByClassName("context-menu");
+            var x;
+            for(x of els) {
+                x.parentNode.removeChild(x);
+            }
+        }
+    
+        var menu;
+    
+        switch(type) {
+            case 0:
+                menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"], ["Delete", ""]]);
+            break;
+            case 1:
+                menu = createCtxMenu([["Delete", "Del"]])
+            break;
+            case 2:
+                menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
+            break;    
+        }
+        
+        
+    
+        setTimeout(function() {
+            document.body.appendChild(menu);
+        }, 10)
+        menu.style.top = ev.clientY + "px";
+        menu.style.left = ev.clientX + "px";
+    
+        document.addEventListener("mousedown", removeCtxMenu);
+        setTimeout(function() {
+            document.addEventListener("contextmenu", removeCtxMenu);
+        }, 10);
+    }
+}
+
+function createCtxMenu(bts) {
+    var el = document.createElement("div");
+    el.setAttribute("class", "context-menu smooth-shadow");
+    
+    var x;
+    for(x of bts) {
+        var b = document.createElement("button");
+        b.innerHTML = x[0];
+        el.appendChild(b);
+
+        var desc = document.createElement("div");
+        desc.setAttribute("class", "key-bind");
+        b.appendChild(desc);
+        desc.innerHTML = x[1];
+
+        b.setAttribute("onclick", x[2]);
+    }
+
+    return el;
+}
+
+function removeCtxMenu(e) {
+    if(document.getElementsByClassName("context-menu")[0]) {
+        if(e.target != document.getElementsByClassName("context-menu")[0] && !isDescendant(document.getElementsByClassName("context-menu")[0], e.target)) {
+            var el = document.getElementsByClassName("context-menu")[0];
+            el.parentNode.removeChild(el);
+            document.removeEventListener("click", removeCtxMenu);
+            document.removeEventListener("contextmenu", removeCtxMenu);
+        }
+    }
+}
+
+function generateIntroText() {
+    var texts = [
+        "Ye like dick n' balls?",
+        "Hitler was right",
+        "Holocaust didn't happen",
+        "George Bush did 9/11",
+        "MAGA 2020",
+        "White lives matter",
+        "Aryan race for the win!",
+        "Blue lives matter",
+        "Kalkulatoren til Nora, Sara, Leja og Frikk er mye bedre enn kalkulatorene til Ola, Jakob og Jesper",
+        "Jews should be burned",
+        "Look behind you",
+        "5G causes cancer",
+        "Vaccines causes autism",
+        "Bill Gates is worse than satan",
+        "Judas is worse than Hitler",
+        "Stalin only wanted what was best for the USSR"
+    ]
+
+    var ran = Math.round(getRandomArbitrary(0,texts.length-1));
+    console.log(ran);
+    return texts[ran];
+}
+
+
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive).
+ * The value is no lower than min (or the next integer greater than min
+ * if min isn't an integer) and no greater than max (or the next integer
+ * lower than max if max isn't an integer).
+ * Using Math.round() will give you a non-uniform distribution!
+ */
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function clickScrubberElement(el) {
+    if(el.getAttribute("selected") != "true") {
+        el.style.opacity = "1";
+    } else {
+        //Not selected, select the element
+        el.style.opacity = "0.5";
+    }
 }

@@ -12,7 +12,7 @@ function infoBox(el, title) {
             padding: 0 1rem;
             font-weight: lighter;
             border-radius: 0.5rem;
-            animation: slide-in 200ms ease-in-out;
+            animation: fade-in 100ms ease-in-out;
         `);
         
         //background-color: #0a0d10;

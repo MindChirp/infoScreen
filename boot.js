@@ -5,16 +5,13 @@ let win = null;
 let launcherWin = null;
 let programWin = null;
 
-try {
-  require('electron-reloader')(module, {ignore: ['./data/programData']});
-} catch (_) {}
-
 
 function boot() {
   //lage et nytt vindu
   launcherWin = new BrowserWindow({
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      webSecurity: false
     },
     width: 850,
     hasShadow: true,

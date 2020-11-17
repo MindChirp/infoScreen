@@ -1,3 +1,13 @@
+TO MAKE A DRAGGABLE ELEMENT:
+    1. Add the onmousedown attribute "dragFileHandler(this)"
+    2. Set the attribute of type (e.g. widget or img)
+    3. 
+
+
+
+
+::FORMAT OF THE .proj FILE::
+
 ./project_name.proj/meta.json:
 
 {

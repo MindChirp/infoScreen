@@ -299,3 +299,54 @@ input[type=range].fd-slider::-ms-thumb {
   background: var(--slider-color);
   cursor: pointer;
 }
+
+
+
+.info-circle {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 100%;
+  background-color: white;
+  color: rgb(100,100,100);
+  display: inline-block;
+  margin-left: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+} 
+
+.context-menu {
+  height: fit-content;
+  width: 10rem;
+  background-color: var(--main-bg-color);
+  position: absolute;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.context-menu button {
+  background: none;
+  border: none;
+  color: var(--paragraph-color);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 0.25rem 0.25rem 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: Bahnschrift;
+  font-size: 1rem;
+  outline: none;
+  font-weight: lighter;
+}
+
+.context-menu button .key-bind {
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+  float: right;
+  color: var(--dark-shade);
+}
+
+.context-menu button:hover {
+  background-color: var(--main-button-color);
+}

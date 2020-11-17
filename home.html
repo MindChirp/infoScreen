@@ -14,6 +14,7 @@
     <script src="/javascripts/editor/explorer/fileHandler.js"></script>   
     <script src="/javascripts/editor/dragHandler.js"></script>   
     <script src="/javascripts/editor/explorer/widgets.js"></script>   
+    <script src="/javascripts/editor/undoHandler.js"></script>   
 
 </head>
 
@@ -21,12 +22,12 @@
 <!--
     <div id="blocking-loading-pane">
         <div class="positioner">
-            <h1>Preparing your experience</h1>
+            <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
         
-    </div>-->
-
+    </div>
+-->
     <div id="main-container-wrapper">
         <!--Application bar-->
         <div id="app-bar">
@@ -48,7 +49,7 @@
                     <div class="side-bar">
 
                         <div class="buttons-container">
-                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('files', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
+                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('edit', scr.parentNode.getElementsByTagName("div")[0])}, 100); //Activate on startup</script>
                             <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
                             <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
                             <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
@@ -58,7 +59,20 @@
                     </div>
 
                     <div class="content-container">
-                        <div id="edit" style="display: none;"></div>
+                        <div id="edit" style="display: none;">
+                            <p>Time</p>
+                            <input value="00:10">
+
+                            <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Default background image</p>
+                            <input type="file" id="default-bg-img">
+                            <label for="default-bg-img">Choose a file</label>
+                            <div class="container">
+                                <button style="font-size: 1rem; display: inline-block; cursor: pointer; background-color: var(--main-button-color); padding: 0.5rem; color: var(--paragraph-color); border-radius: 0.25rem; margin-top: 1.5rem; border: none; outline: none; font-family: Bahnschrift">Clear column</button>
+                                <div class="info-circle" style="display: inline-block;">?</div>
+                                <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
+
+                            </div>
+                        </div>
                         <div id="widgets" style="display: none;"></div>
                         <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
                     </div>
@@ -169,9 +183,29 @@
                 
         const effectsWindow = new effects();
         window.onload = function () {
-            initScrubber(6,15);
+            //Get the width and height of the timeline element to calculate the 
+            //nescessary amount of rows and columns to cover the entire
+            //element
+
+            var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
+            var w = parseInt(window.getComputedStyle(path).width.split("px"));
+            var h = parseInt(window.getComputedStyle(path).height.split("px"));
+            var elW = 96;
+            var elH = 64;
+
+            //Compensate for the side-bar and top-bar
+            var NoCols = Math.round((w-64)/96) + 3;
+            var NoRows = Math.round((h-64)/64) + 3;
+
+            initScrubber(NoRows,NoCols);
             loadFilesIntoExplorer();
             loadWidgets();
+            
+            if(  document.getElementById("blocking-loading-pane")) {
+                //var introStr = "Loading";
+                var introStr = generateIntroText();
+                document.getElementById("blocking-loading-pane").querySelector(".positioner").getElementsByTagName("h1")[0].innerHTML = introStr;
+            }
             //Start off with showing the file explorer
             //this can be changed to something smarter in the future
            // programLoaded();
