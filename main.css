@@ -340,10 +340,32 @@ html {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-columns: 4rem auto;
+    grid-template-rows: auto 2rem;
     background-color: var(--secondary-color);
     border-radius: 0.5rem;
     overflow: hidden;
+}
+
+#main-container #top-layer #browser .wrapper:first-of-type {
+    display: grid;
+    grid-template-columns: 4rem auto;
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type {
+    height: 100%;
+    width: 100%;
+    background-color: var(--main-bg-color);
+    position: relative;
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .question-circle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    opacity: 0.8;
+    height: 1rem;
+    width: fit-content;
 }
 
 
@@ -642,6 +664,7 @@ html {
     height: 100%;
     width: 100%;
     background-color: var(--secondary-color);
+    z-index: 2;
 }
 
 #main-container #bottom-layer #timeline .sub-container {
@@ -657,6 +680,7 @@ html {
     background-color: var(--secondary-color);
     display: grid;
     grid-template-columns: repeat(40,6rem);
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
 }
 
 #main-container #bottom-layer #timeline .sub-container .top-bar div[active="true"] {
@@ -671,7 +695,6 @@ html {
     width: 113.6rem;
     max-width: 113.6rem;
     max-height: 24rem;
-<<<<<<< HEAD
     /*
     display: grid;
     grid-template-columns: repeat(40,6rem); 
@@ -679,13 +702,7 @@ html {
     overflow-x: scroll;
     overflow-y: scroll;
     white-space: nowrap;
-=======
-    display: grid;
-    grid-template-columns: repeat(40,6rem); 
-    grid-template-rows: 10rem;
-    overflow-x: scroll;
-    overflow-y: scroll;
->>>>>>> 7df2ec49fa6884deb211f7644840dbc1d43e5eba
+    scroll-snap-type: both mandatory;
 }
 
 
@@ -697,6 +714,7 @@ html {
     position: relative;
     display: inline-block;
     vertical-align: top;
+    transition: all 75ms ease-in-out;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
@@ -704,6 +722,7 @@ html {
     width: 100%;
     border-radius: 0.25rem;
     position: relative;
+    scroll-snap-align: start;
 }
 
 
@@ -712,20 +731,68 @@ html {
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element {
-    height: 100%;
-    width: 100%;
+    height: 95%;
+    width: 98%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: relative;
     background-color: var(--main-bg-color);
-    overflow: hidden;
     border-radius: 0.25rem;
-    transition: all 200ms ease-in-out;
+    /*transition: all 200ms ease-in-out;*/
     opacity: 1;
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.75);
 }
+
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element img {
     height: 100%;
     width: auto;
+    max-width: 6rem;
+    border-radius: 0.25rem;
     margin-left: 50%;
     transform: translate(-50%);
+}
+
+body .file-dropdown-menu {
+    min-height: 2rem;
+    min-width: 20rem;
+    position: absolute;
+    background-color: var(--main-bg-color);
+    animation: fade-in 200ms ease-in-out;
+    display: block;
+    transform: translate(-50%);
+    z-index: 5;
+    border-radius: 0.25rem;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element .settings-button {
+    float: right;
+    background-color: var(--main-bg-color);
+    border-radius: 100%;
+    position: absolute;
+    right: 0.2rem;
+    bottom: 0.2rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    display: none;
+    z-index: 3;
+    cursor: pointer;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element .settings-button i {
+    line-height: 1.5rem;
+    width: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element .settings-button:hover {
+    display: block;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element:hover .settings-button {
+    display: block;
 }
 ::-webkit-scrollbar {
     width: 5px;

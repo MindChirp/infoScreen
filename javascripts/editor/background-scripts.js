@@ -29,11 +29,16 @@ function bkgScript() {
         x.style.height = h; 
     }
 
-    path.querySelector(".sub-container").querySelector(".scrubber").style.maxWidth = parseInt(w.split("px")[0]-64) + "px";
-    path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = parseInt(h.split("px")[0]-64) + "px";
+    var maxW = parseInt(w.split("px")[0]-64);
+    var maxH = parseInt(h.split("px")[0]-64);
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxWidth = maxW + "px";
+    path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = maxH + "px";
 
     var el = path.querySelector(".sub-container").querySelector(".scrubber");
-    if(el.scrollTop >= scrollH-400) {
+
+    //Calculate the height of the timeline scroll bar in pixels
+    var scrollThumbH = (maxH / scrollH)*scrollH;
+    if(el.scrollTop+scrollThumbH >= scrollH) {
         //Add rows
 
         var cols = path.querySelector(".sub-container").querySelector(".scrubber").getElementsByClassName("timeline-column");
@@ -45,35 +50,21 @@ function bkgScript() {
                 r.setAttribute("class", "timeline-row");
                 r.setAttribute("droppable", "");
                 r.setAttribute("oncontextmenu", "contextMenu(event, this, 0)");
-                r.setAttribute("onmouseenter", "highlightColumn(this, true)");
                 r.setAttribute("onmouseleave", "highlightColumn(this, false)");
                 x.appendChild(r);
             }
         }
 
     }
-    if(el.scrollLeft >= scrollW-1576) {
+
+    //Calculate the width of the timeline scroll bar in pixels
+    var scrollThumbW = (maxW / scrollW)*scrollW;
+    if(el.scrollLeft+scrollThumbW >= scrollW) {
         var columns = path.querySelector(".sub-container").querySelector(".scrubber");
         var rows = columns.childNodes;
+        var c = addFiledsToScrubber(5);
 
-        for(var i = 0; i < 5; i++) {
-            var c = document.createElement("div");
-            c.setAttribute("class", "timeline-column");
-            c.setAttribute("time", "00:10");
-            c.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
-            for(var l = 0; l < parseInt(rows[0].childNodes.length-1); l++) {
-                var r = document.createElement("div");
-                r.setAttribute("class", "timeline-row");
-                r.setAttribute("droppable", "");
-                r.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
-                r.setAttribute("onmouseenter", "highlightColumn(this, true)");
-                r.setAttribute("onmouseleave", "highlightColumn(this, false)");
-                c.appendChild(r);
-            }
-
-            columns.appendChild(c);
-
-        }
+        columns.appendChild(c);
     }
     
     

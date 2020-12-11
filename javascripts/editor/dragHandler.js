@@ -63,6 +63,15 @@ function dragFileHandler(el) {
         file.setAttribute("style", "opacity: 1");
         el.appendChild(file);
 
+        var settings = document.createElement("div");
+        settings.setAttribute("class", "settings-button smooth-shadow");
+        settings.setAttribute("onclick", "fileDropdownMenu(this)")
+
+        var i = document.createElement("i");
+        i.setAttribute("class", "material-icons");
+        i.innerHTML = "more_vert";
+        settings.appendChild(i);    
+        file.appendChild(settings);
         //Get the path, name
         var fileInfo = JSON.parse(localStorage.getItem("dragCache"));
         if(fileInfo[2] == "img" || fileInfo[2] == "vid") {

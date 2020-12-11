@@ -1,5 +1,26 @@
-document.addEventListener("click", function() {
 
+document.addEventListener("click", function(e) {
+    if(document.getElementsByClassName("file-dropdown-menu")) {
+        var els = document.getElementsByClassName("file-dropdown-menu");
+        var x;
+        for(x of els) {
+            if(!e.target.closest(".file-dropdown-menu")) {
+                x.parentNode.removeChild(x);
+            }
+        }
+    }
+})
+
+document.addEventListener("wheel", function(e) {
+    if(document.getElementsByClassName("file-dropdown-menu")) {
+        var els = document.getElementsByClassName("file-dropdown-menu");
+        var x;
+        for(x of els) {
+            if(!e.target.closest(".file-dropdown-menu")) {
+                x.parentNode.removeChild(x);
+            }
+        }
+    }
 })
 
 
@@ -191,8 +212,8 @@ function initScrubber(rows,cols) {
             row.setAttribute("class", "timeline-row");
             row.setAttribute("droppable", "");
             row.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
-            row.setAttribute("onmouseenter", "highlightColumn(this, true)");
-            row.setAttribute("onmouseleave", "highlightColumn(this, false)");
+            //row.setAttribute("onmouseenter", "highlightColumn(this, true)");
+            //row.setAttribute("onmouseleave", "highlightColumn(this, false)");
             col.appendChild(row);
         }
 
@@ -204,6 +225,8 @@ function initScrubber(rows,cols) {
 
 
 function infoBox(el, title) {
+    //Display an information box next to the desired element
+    //when it is clicked
     el.addEventListener("click", function(event) {
     
         var cont = document.createElement("div");
@@ -330,10 +353,14 @@ function contextMenu(ev, el, type) {
     
         switch(type) {
             case 0:
-                menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"], ["Delete", ""]]);
+                menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);
             break;
             case 1:
                 menu = createCtxMenu([["Delete", "Del"]])
+                menu.setAttribute("rootElement", el);
+                menu.childNodes[0].addEventListener("click", function(e) {
+                    deleteFile(false, el, ev);
+                })
             break;
             case 2:
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
@@ -436,5 +463,94 @@ function clickScrubberElement(el) {
     } else {
         //Not selected, select the element
         el.style.opacity = "0.5";
+    }
+}
+
+
+function deleteFile(fromShortcut, el, event) {
+    if(fromShortcut) {
+
+    } else {
+        var root = el.parentNode;
+        root.parentNode.removeChild(root);
+        setTimeout(function() {
+            removeCtxMenu(event);
+        //Should there be a timeout for the context menu to dissapear?
+        })
+    }
+}
+
+
+function fileDropdownMenu(el) {
+    //Creates a dropdown menu for a file, for when the three vertival
+    //dots are clicked.
+    setTimeout(function() {
+        
+        var dropDown = document.createElement("div");
+        dropDown.setAttribute("class","file-dropdown-menu smooth-shadow");
+        dropDown.style.display = "block";
+        dropDown.style.position = "absolute";
+
+        var p = document.createElement("p");
+        p.innerHTML = "Test";
+        dropDown.appendChild(p);
+
+
+
+
+        //Get the position of the parent element
+        var file = el.closest(".scrubber-element");
+        var pos = file.getBoundingClientRect();
+
+        //Get the program dimensions
+        var progH = window.innerHeight;
+        var progW = window.innerWidth;
+
+        document.body.appendChild(dropDown)
+        
+        //Get the size of the dropdown
+        var dropdownH = window.getComputedStyle(dropDown).height.split("px")[0];
+        var dropdownW = window.getComputedStyle(dropDown).width.split("px")[0];
+        console.log(dropdownH)
+        //Compensate for the width of the file element
+        var w = window.getComputedStyle(file).width.split("px")[0]
+        var h = window.getComputedStyle(file).height.split("px")[0]
+
+        if(pos.left-parseInt(w) <= 10) {
+            dropDown.style.left = parseInt(20 + parseInt(dropdownW)/2)+ "px";
+        } else {
+            dropDown.style.left = parseInt(pos.left + w/2)+ "px";
+        }
+
+        if(pos.top+parseInt(h) > parseInt(progH)-200) {
+            dropDown.style.top = parseInt(parseInt(pos.top - dropdownH)) - 10 + "px";
+        } else {
+            dropDown.style.top = parseInt(pos.top + h) + 70 + "px";
+        }
+    }, 10)
+}
+
+function addFiledsToScrubber(amnt) {
+    var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
+    var columns = path.querySelector(".sub-container").querySelector(".scrubber");
+    var rows = columns.childNodes;
+    for(var i = 0; i < amnt; i++) {
+        var c = document.createElement("div");
+        c.setAttribute("class", "timeline-column");
+        c.setAttribute("time", "00:10");
+        c.setAttribute("oncontextmenu", "contextMenu(event, this, 0)");
+        c.setAttribute("onmouseenter", "highlightColumn(this, true)");
+        c.setAttribute("onmouseleave", "highlightColumn(this, false)");
+
+        for(var l = 0; l < parseInt(rows[0].childNodes.length-1); l++) {
+            var r = document.createElement("div");
+            r.setAttribute("class", "timeline-row");
+            r.setAttribute("droppable", "");
+            r.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
+            c.appendChild(r);
+        }
+
+        return c
+
     }
 }

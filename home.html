@@ -15,19 +15,20 @@
     <script src="/javascripts/editor/dragHandler.js"></script>   
     <script src="/javascripts/editor/explorer/widgets.js"></script>   
     <script src="/javascripts/editor/undoHandler.js"></script>   
+    <script src="/javascripts/editor/shortcuts.js"></script>   
 
 </head>
 
 <body>
-<!--
-    <div id="blocking-loading-pane">
+
+    <!--<div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
         
-    </div>
--->
+    </div>-->
+
     <div id="main-container-wrapper">
         <!--Application bar-->
         <div id="app-bar">
@@ -45,38 +46,52 @@
             <div id="top-layer">
 
                 <div id="browser" class="smooth-shadow">
+                    <div class="wrapper" style="height: 100%; width: 100%;">
+                        <div class="side-bar">
 
-                    <div class="side-bar">
-
-                        <div class="buttons-container">
-                            <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('edit', scr.parentNode.getElementsByTagName("div")[0])}, 100); //Activate on startup</script>
-                            <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
-                            <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
-                            <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="content-container">
-                        <div id="edit" style="display: none;">
-                            <p>Time</p>
-                            <input value="00:10">
-
-                            <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Default background image</p>
-                            <input type="file" id="default-bg-img">
-                            <label for="default-bg-img">Choose a file</label>
-                            <div class="container">
-                                <button style="font-size: 1rem; display: inline-block; cursor: pointer; background-color: var(--main-button-color); padding: 0.5rem; color: var(--paragraph-color); border-radius: 0.25rem; margin-top: 1.5rem; border: none; outline: none; font-family: Bahnschrift">Clear column</button>
-                                <div class="info-circle" style="display: inline-block;">?</div>
-                                <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
+                            <div class="buttons-container">
+                                <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('files', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
+                                <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
+                                <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
+                                <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
 
                             </div>
-                        </div>
-                        <div id="widgets" style="display: none;"></div>
-                        <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
-                    </div>
 
+                        </div>
+
+                        <div class="content-container">
+                            <div id="edit" style="display: none;">
+                                <p>Time</p>
+                                <input value="00:10">
+
+                                <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Default background image</p>
+                                <input type="file" id="default-bg-img">
+                                <label for="default-bg-img">Choose a file</label>
+                                <div class="container">
+                                    <button style="font-size: 1rem; display: inline-block; cursor: pointer; background-color: var(--main-button-color); padding: 0.5rem; color: var(--paragraph-color); border-radius: 0.25rem; margin-top: 1.5rem; border: none; outline: none; font-family: Bahnschrift">Clear column</button>
+                                    <div class="info-circle" style="display: inline-block;">?</div>
+                                    <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
+
+                                </div>
+                            </div>
+                            <div id="widgets" style="display: none;"></div>
+                            <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
+                        </div>
+                    </div>
+                    <div class="wrapper">
+
+
+
+
+
+
+                        <!--Info circle-->
+                        <div class="question-circle">
+                            <div class="info-circle" style="display: inline-block;">?</div>
+                            <script>infoBox(document.currentScript.parentNode.childNodes[1], "The browser tab manager")</script>
+                        </div>
+                         
+                    </div>
                 </div>
                 <div id="viewport" class="smooth-shadow">
                     <div class="controls">
@@ -115,7 +130,7 @@
                                 var menu = fsinputs.dropdown(opts);
 
                                 var p = document.createElement("p");
-                                p.innerHTML = "Background color";
+                                p.innerHTML = "Viewport color";
                                 script.parentNode.appendChild(p);
 
                                 script.parentNode.appendChild(menu);
@@ -202,8 +217,8 @@
             loadWidgets();
             
             if(  document.getElementById("blocking-loading-pane")) {
-                //var introStr = "Loading";
-                var introStr = generateIntroText();
+                var introStr = "Loading";
+                //var introStr = generateIntroText();
                 document.getElementById("blocking-loading-pane").querySelector(".positioner").getElementsByTagName("h1")[0].innerHTML = introStr;
             }
             //Start off with showing the file explorer
