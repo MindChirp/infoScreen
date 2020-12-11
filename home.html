@@ -16,6 +16,7 @@
     <script src="/javascripts/editor/explorer/widgets.js"></script>   
     <script src="/javascripts/editor/undoHandler.js"></script>   
     <script src="/javascripts/editor/shortcuts.js"></script>   
+    <script src="/javascripts/editor/explorer/tabHandler.js"></script>   
 
 </head>
 
@@ -79,17 +80,20 @@
                         </div>
                     </div>
                     <div class="wrapper">
+                        <div class="scroller browser-tab-container">
 
+                            <p id="empty">Click on an element's properties to create a tab</p>
 
-
+                        </div>
 
 
 
                         <!--Info circle-->
+    <!--
                         <div class="question-circle">
-                            <div class="info-circle" style="display: inline-block;">?</div>
-                            <script>infoBox(document.currentScript.parentNode.childNodes[1], "The browser tab manager")</script>
-                        </div>
+                            <div class="info-circle smooth-shadow" style="display: inline-block;">?</div>
+                            <script>infoBox(document.currentScript.parentNode.childNodes[1], "All of your open tabs will be placed here.<br> To open a tab, open the properties of an element.")</script>
+                        </div>-->
                          
                     </div>
                 </div>

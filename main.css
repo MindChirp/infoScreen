@@ -340,7 +340,8 @@ html {
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-rows: auto 2rem;
+    grid-template-rows: auto 2.5rem;
+    grid-template-columns: 100%;
     background-color: var(--secondary-color);
     border-radius: 0.5rem;
     overflow: hidden;
@@ -356,18 +357,81 @@ html {
     width: 100%;
     background-color: var(--main-bg-color);
     position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
+#main-container #top-layer #browser .wrapper:last-of-type .scroller {
+    height: 100%;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 0.2rem;
+    box-sizing: border-box;
+    scroll-snap-type: both mandatory;
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .scroller > p {
+    height: 100%;
+    line-height: 2rem;
+    margin: 0;
+    margin-left: 0.5rem;
+    font-weight: lighter;
+    opacity: 0.2;
+    color: var(--paragraph-color);
+}
+
+
+#main-container #top-layer #browser .wrapper:last-of-type .scroller::-webkit-scrollbar {
+    width: 5px;
+    height: 2px;
+}
 #main-container #top-layer #browser .wrapper:last-of-type .question-circle {
     position: absolute;
-    right: 1rem;
+    left: 0.5rem;
     top: 50%;
     transform: translate(0, -50%);
-    opacity: 0.8;
+    opacity: 1;
     height: 1rem;
     width: fit-content;
 }
 
+#main-container #top-layer #browser .wrapper:last-of-type .tab {
+    max-height: 2rem;
+    height: 100%;
+    width: fit-content;
+    min-width: 2rem;
+    background-color: var(--secondary-color);
+    border-radius: 0.8rem;
+    display: inline-block;
+    margin-right: 0.1rem;
+    scroll-snap-align: start;
+    border: none;
+    outline: none;
+    padding: auto;
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .tab p {
+    width: fit-content; 
+    font-size: 0.9rem;
+    margin: 0;
+    display: inline-block;
+    float: left;
+    color: var(--paragraph-color);
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .tab .cross {
+    display: inline-block;
+    float: right; 
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .tab .cross i {
+    font-size: 0.9rem;
+    color: var(--paragraph-color);
+}
 
 #main-container #top-layer #browser .content-container {
     height: 100%;
