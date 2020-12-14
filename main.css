@@ -336,6 +336,12 @@ html {
     margin-right: auto;
 }
 
+#main-container #top-layer .browser-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
 #main-container #top-layer #browser {
     height: 100%;
     width: 100%;
@@ -345,6 +351,8 @@ html {
     background-color: var(--secondary-color);
     border-radius: 0.5rem;
     overflow: hidden;
+    align-items: end;
+    justify-items: start;
 }
 
 #main-container #top-layer #browser .wrapper:first-of-type {
@@ -359,6 +367,7 @@ html {
     position: relative;
     box-sizing: border-box;
     overflow: hidden;
+    z-index: 6;
 }
 
 #main-container #top-layer #browser .wrapper:last-of-type .scroller {
@@ -412,6 +421,18 @@ html {
     padding: auto;
     animation: fade-in 200ms ease-in-out;
     transition: all 100ms ease-in-out;
+}
+
+#main-container #top-layer .properties-pane {
+    height: 20rem;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 2.5rem;
+    background-color: var(--main-bg-color);
+    animation: properties-slide-in 400ms ease-in-out;
+    z-index: 5;
+    border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .browser-tab-container #empty {

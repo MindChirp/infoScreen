@@ -45,56 +45,57 @@
         <div id="main-container">
 
             <div id="top-layer">
+                <div class="browser-container smooth-shadow">
+                    <div id="browser">
+                        <div class="wrapper" style="height: 100%; width: 100%;">
+                            <div class="side-bar">
 
-                <div id="browser" class="smooth-shadow">
-                    <div class="wrapper" style="height: 100%; width: 100%;">
-                        <div class="side-bar">
-
-                            <div class="buttons-container">
-                                <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('files', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
-                                <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
-                                <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
-                                <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="content-container">
-                            <div id="edit" style="display: none;">
-                                <p>Time</p>
-                                <input value="00:10">
-
-                                <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Default background image</p>
-                                <input type="file" id="default-bg-img">
-                                <label for="default-bg-img">Choose a file</label>
-                                <div class="container">
-                                    <button style="font-size: 1rem; display: inline-block; cursor: pointer; background-color: var(--main-button-color); padding: 0.5rem; color: var(--paragraph-color); border-radius: 0.25rem; margin-top: 1.5rem; border: none; outline: none; font-family: Bahnschrift">Clear column</button>
-                                    <div class="info-circle" style="display: inline-block;">?</div>
-                                    <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
+                                <div class="buttons-container">
+                                    <script>var scr = document.currentScript; setTimeout(function(){activateBrowserItem('files', scr.parentNode.getElementsByTagName("div")[2])}, 100); //Activate on startup</script>
+                                    <div class="button" onclick="activateBrowserItem('edit', this)"><i class="material-icons" style="color: white;">edit</i><script>var el = document.currentScript.parentNode; infoOnHover(el, "Edit menu");</script></div>
+                                    <div class="button" onclick="activateBrowserItem('widgets', this)"><i class="material-icons" style="color: white;">widgets</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "Widgets");</script></div>
+                                    <div class="button" onclick="activateBrowserItem('files', this)"><i class="material-icons" style="color: white;">folder_open</i><script>var el = document.currentScript.parentNode;  infoOnHover(el, "File explorer");</script></div>
 
                                 </div>
+
                             </div>
-                            <div id="widgets" style="display: none;"></div>
-                            <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
+
+                            <div class="content-container">
+                                <div id="edit" style="display: none;">
+                                    <p>Time</p>
+                                    <input value="00:10">
+
+                                    <p style="margin-top: 1rem; margin-bottom: 0.5rem;">Default background image</p>
+                                    <input type="file" id="default-bg-img">
+                                    <label for="default-bg-img">Choose a file</label>
+                                    <div class="container">
+                                        <button style="font-size: 1rem; display: inline-block; cursor: pointer; background-color: var(--main-button-color); padding: 0.5rem; color: var(--paragraph-color); border-radius: 0.25rem; margin-top: 1.5rem; border: none; outline: none; font-family: Bahnschrift">Clear column</button>
+                                        <div class="info-circle" style="display: inline-block;">?</div>
+                                        <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
+
+                                    </div>
+                                </div>
+                                <div id="widgets" style="display: none;"></div>
+                                <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapper">
-                        <div class="scroller browser-tab-container">
+                        <div class="wrapper">
+                            <div class="scroller browser-tab-container">
 
-                            <p id="empty">Click on an element's properties to create a tab</p>
+                                <p id="empty">Click on an element's properties to create a tab</p>
 
+                            </div>
+
+
+
+                            <!--Info circle-->
+        <!--
+                            <div class="question-circle">
+                                <div class="info-circle smooth-shadow" style="display: inline-block;">?</div>
+                                <script>infoBox(document.currentScript.parentNode.childNodes[1], "All of your open tabs will be placed here.<br> To open a tab, open the properties of an element.")</script>
+                            </div>-->
+                            
                         </div>
-
-
-
-                        <!--Info circle-->
-    <!--
-                        <div class="question-circle">
-                            <div class="info-circle smooth-shadow" style="display: inline-block;">?</div>
-                            <script>infoBox(document.currentScript.parentNode.childNodes[1], "All of your open tabs will be placed here.<br> To open a tab, open the properties of an element.")</script>
-                        </div>-->
-                         
                     </div>
                 </div>
                 <div id="viewport" class="smooth-shadow">

@@ -8,7 +8,7 @@ function createTab(el, name) {
     tab.connectedElement = el;
     tab.selected = false;
     tab.addEventListener("click", function(e) {
-        openTab(e.target.closest(".tab"));
+        openTab(e.target);
     })
     //tab.setAttribute("connectedElement", el);
     var txt = document.createElement("p");
@@ -30,13 +30,21 @@ function createTab(el, name) {
     })
 
     document.getElementsByClassName("browser-tab-container")[0].appendChild(tab);
+    openTab(tab);
 }
 
 function removeTab(el) {
+
     var tabs = document.getElementsByClassName("tab");
     var x;
     for(x of tabs) {
         if(el == x.connectedElement) {
+
+            if(x.selected) {
+                var pane = document.getElementsByClassName("properties-pane")[0];
+                pane.parentNode.removeChild(pane);
+            }
+            
             el.setAttribute("hasTab", "false")
             x.parentNode.removeChild(x);
             
@@ -49,6 +57,7 @@ function removeTab(el) {
         p.innerHTML = "Click on an element's properties to create a tab";
         container.appendChild(p);
     }
+
 }
 
 function openPropertiesTab(el) {
@@ -59,15 +68,33 @@ function openPropertiesTab(el) {
 }
 
 function openTab(el) {
+    if(el.closest(".tab").selected) {
+        var pane = document.getElementsByClassName("properties-pane")[0];
+        pane.parentNode.removeChild(pane);
+        el.closest(".tab").selected = false;
+        el.closest(".tab").style.backgroundColor = "var(--secondary-color)";
+        return;
+    }
+    if(el.closest(".cross")) return;
     var tabs = document.getElementsByClassName("tab");
     var x;
     for(x of tabs) {
-        console.log(x.selected);
         if(x.selected) {
             x.style.backgroundColor = "var(--secondary-color)";
             x.selected = false;
         }
     }
-    el.style.backgroundColor = "var(--main-button-color)";
-    el.selected = true;
+
+    var tab = el.closest(".tab");
+    tab.style.backgroundColor = "var(--main-button-color)";
+    tab.selected = true;
+
+
+    //Create the pane if there is none
+    if(!document.getElementsByClassName("properties-pane")[0]) {
+        var els = document.createElement("div");
+        els.setAttribute("class", "properties-pane smooth-shadow");
+        document.getElementsByClassName("browser-container")[0].appendChild(els);
+        
+    }
 }
