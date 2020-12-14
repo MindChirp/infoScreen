@@ -410,6 +410,13 @@ html {
     border: none;
     outline: none;
     padding: auto;
+    animation: fade-in 200ms ease-in-out;
+    transition: all 100ms ease-in-out;
+}
+
+.browser-tab-container #empty {
+    animation: fade-in 200ms ease-in-out;
+    animation-fill-mode: both;
 }
 
 #main-container #top-layer #browser .wrapper:last-of-type .tab p {
@@ -419,6 +426,10 @@ html {
     display: inline-block;
     float: left;
     color: var(--paragraph-color);
+}
+
+#main-container #top-layer #browser .wrapper:last-of-type .tab:hover {
+    background-color: var(--secondary-button-color);
 }
 
 #main-container #top-layer #browser .wrapper:last-of-type .tab .cross {
@@ -827,7 +838,18 @@ body .file-dropdown-menu {
     display: block;
     transform: translate(-50%);
     z-index: 5;
+    padding: 0.5rem;
+    box-sizing: border-box;
     border-radius: 0.25rem;
+}
+
+body .context-menu button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+body .context-menu button:disabled:hover {
+    background-color: transparent;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element .settings-button {

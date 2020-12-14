@@ -21,6 +21,16 @@ document.addEventListener("wheel", function(e) {
             }
         }
     }
+
+    if(document.getElementsByClassName("context-menu")) {
+        var els = document.getElementsByClassName("context-menu");
+        var x;
+        for(x of els) {
+            if(!e.target.closest(".context-menu")) {
+                x.parentNode.removeChild(x);
+            }
+        }
+    }
 })
 
 
@@ -289,7 +299,6 @@ document.addEventListener("click", function() {
 
 
 function menu(type) {     
-    console.log(type)  
     var el = document.createElement("div");
     el.setAttribute("class", "menu");
     document.body.appendChild(el);
@@ -350,20 +359,46 @@ function contextMenu(ev, el, type) {
         }
     
         var menu;
-    
+        
+        
+        var hasTab = el.getAttribute("hasTab");
         switch(type) {
             case 0:
                 menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);
             break;
             case 1:
-                menu = createCtxMenu([["Delete", "Del"]])
+                menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
                 menu.setAttribute("rootElement", el);
                 menu.childNodes[0].addEventListener("click", function(e) {
                     deleteFile(false, el, ev);
-                })
+                });
+                menu.childNodes[1].addEventListener("click", function(e) {
+                    openPropertiesTab(el);
+                    menu.childNodes[1].disabled = true;
+                });
+
+                if(hasTab == "true") {
+                    //Disable elements if the file has a tab
+                    menu.childNodes[1].disabled = true;
+                } else {
+                    menu.childNodes[1].disabled = false;
+
+                }
             break;
             case 2:
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
+                menu.childNodes[1].addEventListener("click", function(e) {
+                    openPropertiesTab(el);
+                    menu.childNodes[1].disabled = true;
+                });
+
+                if(hasTab == "true") {
+                    //Disable elements if the file has a tab
+                    menu.childNodes[1].disabled = true;
+                } else {
+                    menu.childNodes[1].disabled = false;
+
+                }
             break;    
         }
         
@@ -435,7 +470,6 @@ function generateIntroText() {
     ]
 
     var ran = Math.round(getRandomArbitrary(0,texts.length-1));
-    console.log(ran);
     return texts[ran];
 }
 
@@ -492,11 +526,38 @@ function fileDropdownMenu(el) {
         dropDown.style.position = "absolute";
 
         var p = document.createElement("p");
-        p.innerHTML = "Test";
+        p.setAttribute("style", `
+            width: 100%;
+            text-align: center;
+            margin-top: 0.5rem;
+            color: var(--title-color);  
+        `);
+        p.innerHTML = "Quick Options";
         dropDown.appendChild(p);
 
+        var b = document.createElement("button");
+        b.setAttribute("style", "display: block; margin: auto;")
+        b.setAttribute("class", "fd-button");
+        b.innerHTML = "Set as default in current layer";
+        dropDown.appendChild(b);
 
+        var b = document.createElement("button");
+        b.setAttribute("style", "display: block; margin: auto; margin-top: 0.2rem;")
+        b.setAttribute("class", "fd-button");
+        b.innerHTML = "Set as default to the right";
+        dropDown.appendChild(b);
 
+        var b = document.createElement("button");
+        b.setAttribute("style", "display: block; margin: auto; margin-top: 0.2rem;")
+        b.setAttribute("class", "fd-button");
+        b.innerHTML = "Set as default to the left";
+        dropDown.appendChild(b);
+
+        var b = document.createElement("button");
+        b.setAttribute("style", "display: block; margin: auto; margin-top: 0.2rem;")
+        b.setAttribute("class", "fd-button");
+        b.innerHTML = "Preview element";
+        dropDown.appendChild(b);
 
         //Get the position of the parent element
         var file = el.closest(".scrubber-element");
@@ -511,7 +572,6 @@ function fileDropdownMenu(el) {
         //Get the size of the dropdown
         var dropdownH = window.getComputedStyle(dropDown).height.split("px")[0];
         var dropdownW = window.getComputedStyle(dropDown).width.split("px")[0];
-        console.log(dropdownH)
         //Compensate for the width of the file element
         var w = window.getComputedStyle(file).width.split("px")[0]
         var h = window.getComputedStyle(file).height.split("px")[0]
@@ -530,7 +590,7 @@ function fileDropdownMenu(el) {
     }, 10)
 }
 
-function addFiledsToScrubber(amnt) {
+function addFieldsToScrubber(amnt) {
     var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
     var columns = path.querySelector(".sub-container").querySelector(".scrubber");
     var rows = columns.childNodes;

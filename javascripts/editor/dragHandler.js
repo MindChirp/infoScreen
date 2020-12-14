@@ -40,7 +40,7 @@ function dragFileHandler(el) {
     
         var p = document.createElement("p");
         p.innerHTML = name;
-        
+
         ghost.appendChild(p);
     }
 
@@ -60,6 +60,7 @@ function dragFileHandler(el) {
         var file = document.createElement("div");
         file.setAttribute("class", "scrubber-element");
         file.setAttribute("onclick", "clickScrubberElement(this)");
+        file.setAttribute("hasTab", "false");
         file.setAttribute("style", "opacity: 1");
         el.appendChild(file);
 
@@ -82,7 +83,8 @@ function dragFileHandler(el) {
             file.appendChild(img);
             file.setAttribute("type", fileInfo[2]);
             file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
-            
+            img.setAttribute("hasTab", "false");
+            file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {
             var p = document.createElement("p");
@@ -98,13 +100,19 @@ function dragFileHandler(el) {
             margin: 0;
             font-weight: lighter;
             `);
+            p.setAttribute("hasTab", "false");
+
             infoOnHover(file, "Widget");
             switch(fileInfo[0]) {
                 case "time":
-                    p.innerHTML = "Time"
+                    p.innerHTML = "Time";
+                    file.setAttribute("fileName", "Time Widget");
+
                 break;
                 case "weather":
                     p.innerHTML = "Weather";
+                    file.setAttribute("fileName", "Weather Widget");
+
                 break;
             }
         }
