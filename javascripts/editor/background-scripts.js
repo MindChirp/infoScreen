@@ -13,6 +13,8 @@ function bkgScript() {
     document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
     document.getElementById("content").style.height = width / (16/9) - 20 + "px";
     */
+
+    //Make more elegant and organized later. Fixes the size of the files browser so that the layout does not get f*cked up
     var innerBrowserHeight = parseInt(window.getComputedStyle(document.getElementById("browser").querySelector(".content-container")).height.split("px")[0]);
     document.getElementById("files").style.maxHeight = innerBrowserHeight + "px";
 
