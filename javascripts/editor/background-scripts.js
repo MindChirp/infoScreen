@@ -18,7 +18,7 @@ function bkgScript() {
     var innerBrowserHeight = parseInt(window.getComputedStyle(document.getElementById("browser").querySelector(".content-container")).height.split("px")[0]);
     var innerBrowserWidth = parseInt(window.getComputedStyle(document.getElementById("browser")).width.split("px")[0]);
     document.getElementById("files").style.maxHeight = innerBrowserHeight + "px";
-    document.getElementById("browser").style.maxWidth = innerBrowserWidth + "px";
+    document.getElementsByClassName("scroller")[0].style.maxWidth = innerBrowserWidth + "px";
 
    //#main-container #bottom-layer #timeline .sub-container .scrubber
     var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");

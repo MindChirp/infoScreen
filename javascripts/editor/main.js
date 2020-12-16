@@ -1,5 +1,6 @@
 const { remote } = require("electron");
 const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
+const { darkMode } = require("electron-util");
 yourBrowserWindow.on("blur", (e) => {
     removeCtxMenu("unfocus");
 })

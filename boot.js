@@ -67,11 +67,11 @@ function openEditor() {
         hasShadow: true,
         minWidth: 1026,
         minHeight:963,
-        frame: true,
-        transparent: false
+        frame: false,
+        transparent: true
       });
       
-      const template = [
+      /*const template = [
         {
           label: 'View',
           submenu: [
@@ -110,7 +110,7 @@ function openEditor() {
       ]
 
       const menu = Menu.buildFromTemplate(template);
-      Menu.setApplicationMenu(menu);
+      Menu.setApplicationMenu(menu);*/
       /*programWin.setMenu(null); //INCLUDE THIS IN PRODUCTION!!
       */ //openDevTools(); //Exclude in production
     

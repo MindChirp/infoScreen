@@ -314,9 +314,9 @@ html {
     height: 100%;
     width: 100%;
     display: grid;
-    padding-top: 1rem;
     box-sizing: border-box;
-    /*grid-template-rows: 26px auto;*/
+    grid-template-rows: 26px auto;
+    row-gap: 1rem;
 }
 
 #main-container {
@@ -345,6 +345,8 @@ html {
     height: 100%;
     width: 100%;
     position: relative;
+    background-color: transparent;
+    border-radius: 0.5rem;
 }
 
 #main-container #top-layer #browser {

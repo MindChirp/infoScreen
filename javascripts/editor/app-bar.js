@@ -1,4 +1,4 @@
-/*var appB = require("app-buttons");
+var appB = require("app-buttons");
 
 var appButtons = appB.appButtons(document.getElementById("app-bar"), true);
 var children = appButtons.childNodes;
@@ -24,4 +24,4 @@ function programMinimize() {
 
 function programMaximize() {
     
-}*/
+}
