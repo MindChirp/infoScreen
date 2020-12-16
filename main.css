@@ -319,8 +319,8 @@ html {
 
 #main-container {
     display: grid;
-    grid-template-rows: auto 30rem;
-    padding-top: 1rem;
+    grid-template-rows: 50% auto;
+    /*padding-top: 1rem;*/
     height: 100%;
     width: 100%;
     box-sizing: border-box;
@@ -412,9 +412,9 @@ html {
     width: fit-content;
     min-width: 2rem;
     background-color: var(--secondary-color);
-    border-radius: 0.8rem;
+    border-radius: 1rem;
     display: inline-block;
-    margin-right: 0.1rem;
+    margin-right: 0.2rem;
     scroll-snap-align: start;
     border: none;
     outline: none;
@@ -433,6 +433,22 @@ html {
     animation: properties-slide-in 400ms ease-in-out;
     z-index: 5;
     border-radius: 0.5rem 0.5rem 0 0;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+#main-container #top-layer .properties-pane .container {
+    height: 100%;
+    width: 100%;
+    animation: slide-in-left-properties 400ms ease-in-out;
+    animation-fill-mode: both;
+}
+
+#main-container #top-layer .properties-pane .container h1.title {
+    margin: 0;
+    color: var(--title-color);
+    font-size: 1.5rem;
+    font-weight: lighter;
 }
 
 .browser-tab-container #empty {

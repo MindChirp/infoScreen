@@ -80,6 +80,7 @@ function dragFileHandler(el) {
             var img = document.createElement("img");
             img.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
             img.setAttribute("src", path);
+            file.path = path;
             file.appendChild(img);
             file.setAttribute("type", fileInfo[2]);
             file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")

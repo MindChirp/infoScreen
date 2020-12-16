@@ -62,7 +62,7 @@ function bkgScript() {
     if(el.scrollLeft+scrollThumbW >= scrollW) {
         var columns = path.querySelector(".sub-container").querySelector(".scrubber");
         var rows = columns.childNodes;
-        var c = addFiledsToScrubber(5);
+        var c = addFieldsToScrubber(5);
 
         columns.appendChild(c);
     }

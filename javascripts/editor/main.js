@@ -1,3 +1,9 @@
+const { remote } = require("electron");
+const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
+yourBrowserWindow.on("blur", (e) => {
+    removeCtxMenu("unfocus");
+})
+
 
 document.addEventListener("click", function(e) {
     if(document.getElementsByClassName("file-dropdown-menu")) {
@@ -440,6 +446,13 @@ function createCtxMenu(bts) {
 
 function removeCtxMenu(e) {
     if(document.getElementsByClassName("context-menu")[0]) {
+        if(e == "unfocus") {
+            var el = document.getElementsByClassName("context-menu")[0];
+            el.parentNode.removeChild(el);
+            document.removeEventListener("click", removeCtxMenu);
+            document.removeEventListener("contextmenu", removeCtxMenu);
+            return;
+        }
         if(e.target != document.getElementsByClassName("context-menu")[0] && !isDescendant(document.getElementsByClassName("context-menu")[0], e.target)) {
             var el = document.getElementsByClassName("context-menu")[0];
             el.parentNode.removeChild(el);

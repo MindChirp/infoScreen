@@ -1,4 +1,5 @@
-const {app, BrowserWindow, ipcMain, dialog} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut} = require('electron');
+const { openDevTools } = require('electron-debug');
 const ipc = require
 const url = require('url');
 let win = null;
@@ -66,9 +67,39 @@ function openEditor() {
         hasShadow: true,
         minWidth: 1026,
         minHeight:963,
-        frame: false,
-        transparent: true
-      })
+        frame: true,
+        transparent: false
+      });
+      
+      var menu = Menu.buildFromTemplate([
+        {
+          label: "Menu",
+          submenu: [
+            {
+              label:"Settings",
+              click() {
+
+              }
+            },
+            {type:"separator"},
+            {
+              label:"Quit",
+              click() {
+                app.quit()
+              }
+            },
+            {label:"Ur mom"},
+            {
+              label: "Force reload",
+              accelerator: "CmdOrCtrl+R",
+              click: () => { programWin.reload() }
+            }
+          ]
+        }
+      ])
+      Menu.setApplicationMenu(menu);
+      /*programWin.setMenu(null); //INCLUDE THIS IN PRODUCTION!!
+      */openDevTools(); //Exclude in production
     
       programWin.loadURL(url.format({
         pathname: 'home.html',

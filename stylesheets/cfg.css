@@ -188,6 +188,12 @@
     
   }
 
+  @keyframes slide-in-left-properties {
+    0% {transform: translate(-1rem,0); opacity: 0;}
+    70% {opacity: 1}
+    100% {transform: translate(0,0); opacity: 1;}
+  }
+
   @keyframes loading-pane {
     0%{opacity: 1; display: block;}
     99% {opacity:0; display: block;}
