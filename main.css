@@ -37,6 +37,17 @@ html {
     --light-shade: rgb(150,150,150);
   }
 
+#project-name {
+    position: absolute;
+    top: 0.2rem;
+    font-weight: lighter;
+    height: 26px;
+    left: 50%;
+    transform: translate(-50%);
+    width: fit-content;
+    z-index: 6;
+    margin: 0;
+}
 
 
 #blocking-loading-pane {
@@ -293,12 +304,54 @@ html {
 
 
 #app-bar {
+    padding-left: 0;
     height: 26px;
     width: 100%;
     display: grid;
-    grid-template-columns: auto 150px;
+    grid-template-columns: 15rem auto 150px;
+    grid-template-rows: 100%;
     background-color: var(--main-bg-color);
     z-index: 5;
+}
+
+#app-bar #menu {
+    padding: 0 0 0 0.5rem;
+    padding-top: 0.1rem;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+#app-bar #menu li, .icon {
+    display: inline-block;
+    line-height: 26px;
+    height: 26px;
+    margin-right: 0;
+}
+
+#app-bar #menu .icon {
+    margin-right: 0.3rem;
+    height: fit-content;
+    margin-left: 0.7rem;
+}
+
+#app-bar #menu img {
+    height: 20px;
+}
+
+#app-bar #menu li {
+    transform: translate(0, -5px);
+    color: var(--paragraph-color);
+    opacity: 0.8;
+    font-weight: lighter;
+    padding: 0 0.9rem;  
+    margin-right: -0.3rem;
+}
+
+#app-bar #menu li:hover {
+    background-color: rgba(0,0,0,0.75);
 }
 
 #app-bar #drag-region {
@@ -347,6 +400,7 @@ html {
     position: relative;
     background-color: transparent;
     border-radius: 0.5rem;
+    overflow: hidden;
 }
 
 #main-container #top-layer #browser {

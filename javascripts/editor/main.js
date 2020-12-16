@@ -3,6 +3,18 @@ const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
 const { darkMode } = require("electron-util");
 yourBrowserWindow.on("blur", (e) => {
     removeCtxMenu("unfocus");
+    var appBar = document.getElementById("app-bar");
+    appBar.style.opacity = 0.5;
+    
+    document.getElementById("project-name").style.opacity = 0.5;
+})
+
+yourBrowserWindow.on("focus", (e) => {
+    var appBar = document.getElementById("app-bar");
+    appBar.style.opacity = 1;
+
+    document.getElementById("project-name").style.opacity = 1;
+
 })
 
 
