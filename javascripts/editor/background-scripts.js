@@ -13,7 +13,8 @@ function bkgScript() {
     document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
     document.getElementById("content").style.height = width / (16/9) - 20 + "px";
     */
-
+    var innerBrowserHeight = parseInt(window.getComputedStyle(document.getElementById("browser").querySelector(".content-container")).height.split("px")[0]);
+    document.getElementById("files").style.maxHeight = innerBrowserHeight + "px";
 
    //#main-container #bottom-layer #timeline .sub-container .scrubber
     var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
