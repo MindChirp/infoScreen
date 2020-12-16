@@ -71,24 +71,35 @@ function openEditor() {
         transparent: false
       });
       
-      var menu = Menu.buildFromTemplate([
+      const template = [
         {
-          label: "Menu",
+          label: 'View',
           submenu: [
             {
-              label:"Settings",
-              click() {
-
+              label: "Settings",
+              click: () => {
+                //Open the settings or something blah blah blah
               }
             },
-            {type:"separator"},
             {
-              label:"Quit",
-              click() {
-                app.quit()
+              label: "Help",
+              click: () => {
+                //Show some help or something
               }
             },
-            {label:"Ur mom"},
+            
+
+          ]
+        },
+        {
+          label: "Application",
+          submenu: [
+            {
+              label: "Quit",
+              click: () => {
+                app.quit();
+              }
+            },
             {
               label: "Force reload",
               accelerator: "CmdOrCtrl+R",
@@ -96,10 +107,12 @@ function openEditor() {
             }
           ]
         }
-      ])
+      ]
+
+      const menu = Menu.buildFromTemplate(template);
       Menu.setApplicationMenu(menu);
       /*programWin.setMenu(null); //INCLUDE THIS IN PRODUCTION!!
-      */openDevTools(); //Exclude in production
+      */ //openDevTools(); //Exclude in production
     
       programWin.loadURL(url.format({
         pathname: 'home.html',

@@ -16,7 +16,9 @@ function bkgScript() {
 
     //Make more elegant and organized later. Fixes the size of the files browser so that the layout does not get f*cked up
     var innerBrowserHeight = parseInt(window.getComputedStyle(document.getElementById("browser").querySelector(".content-container")).height.split("px")[0]);
+    var innerBrowserWidth = parseInt(window.getComputedStyle(document.getElementById("browser")).width.split("px")[0]);
     document.getElementById("files").style.maxHeight = innerBrowserHeight + "px";
+    document.getElementById("browser").style.maxWidth = innerBrowserWidth + "px";
 
    //#main-container #bottom-layer #timeline .sub-container .scrubber
     var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
