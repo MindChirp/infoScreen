@@ -29,18 +29,16 @@
         </div>
         
     </div>-->
-    <p id="project-name">New Unsaved Project</p>
+    <p id="project-name">New Unnamed Project</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
         <div id="app-bar">
-            <ul id="menu">
+            <div class="app-bar-menu-container">
                 <div class="icon">
                     <img src="data/files/images/icon.png">
                 </div>
-                <li>File</li>
-                <li>Help</li>
-                <li>Server</li>
-            </ul>
+
+            </div>
             <div id="drag-region"></div>
             <!--
             <div id="app-bar-dropdown-menus">
@@ -197,8 +195,8 @@
 
 
     <script src="/javascripts/editor/menus.js"></script>
-    <script src="/javascripts/editor/app-bar.js" async defer></script>
     <script src="/javascripts/editor/background-scripts.js" async defer></script>
+    <script src="/javascripts/editor/app-bar.js"></script>
     <script src="/javascripts/editor/notrification-handler.js" async defer></script>   
     <script src="/javascripts/editor/viewport.js" async defer></script>   
 <!--<script src="/javascripts/drag-handler.js" async defer></script>
@@ -229,8 +227,9 @@
             initScrubber(NoRows,NoCols);
             loadFilesIntoExplorer();
             loadWidgets();
-            
-            if(  document.getElementById("blocking-loading-pane")) {
+            enableAppBarButtons();
+
+            if(document.getElementById("blocking-loading-pane")) {
                 var introStr = "Loading";
                 //var introStr = generateIntroText();
                 document.getElementById("blocking-loading-pane").querySelector(".positioner").getElementsByTagName("h1")[0].innerHTML = introStr;
@@ -251,6 +250,11 @@
             } else if(theme == "dark") {
                 setTheme(1);
             }
+
+
+            document.getElementById("files").addEventListener("drop", function(e) {
+                console.log(e.target.closest("#files"));
+            })
 
 
             //Hide the notifications menu

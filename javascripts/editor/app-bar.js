@@ -1,4 +1,5 @@
 var appB = require("app-buttons");
+const menuHandler = new Appmenu();
 
 var appButtons = appB.appButtons(document.getElementById("app-bar"), true);
 appButtons.style.opacity = "0.7";
@@ -24,4 +25,50 @@ function programMinimize() {
 
 function programMaximize() {
     
+}
+
+
+const template = [
+    {
+        label: "File",
+        submenu: [
+            {
+                label: "New",
+                accelerator: "Ctrl+N",
+                click: () => {}
+            },
+            {
+                label: "Open",
+                accelerator: "Ctrl+O",
+                click: () => {}
+            }
+        ]
+    },
+    {
+        label: "Help",
+        submenu: [
+            {
+                label: "No.",
+
+            }
+        ]
+    },
+    {
+        label: "Settings",
+        submenu: [
+            {
+                label: "Ur mom"
+            }
+        ]
+    }
+]
+
+
+function enableAppBarButtons() {
+    var instantiate = menuHandler.appbar(template);
+    var parent = document.getElementById("app-bar").querySelector(".app-bar-menu-container");
+
+    instantiate.setAttribute("id", "menu");
+
+    parent.appendChild(instantiate);
 }

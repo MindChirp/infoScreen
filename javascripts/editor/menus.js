@@ -137,3 +137,100 @@ function toggleNotificationMenu() {
         pane.style.display = "none";
     }
 }
+
+
+
+
+
+
+
+//App bar menu handler
+function Appmenu() {
+    this.appbar = function(template) {
+        var menu = document.createElement("ul");
+
+        var x;
+        for(x of template) {
+            var b = document.createElement("li");    
+            b.style.position = "relative";
+            b.innerHTML = x.label;
+            menu.appendChild(b);
+
+            if(x.submenu) {
+
+                var sub = document.createElement("div");
+                sub.setAttribute("style", `
+                    height: fit-content;
+                    min-height: 2rem;
+                    width: 15rem;
+                    display: none;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    z-index: 100;
+                    background-color: var(--secondary-color);
+                    opacity: 1;
+                `);
+                sub.className = "sub-menu smooth-shadow"
+
+                var y;
+                for(y of x.submenu) {
+                    var el = document.createElement("div");
+                    el.style = `
+                        height: 2rem;
+                        width: 100%;
+                        position: relative; 
+                    `
+                    var label = document.createElement("p");
+                    label.style = `
+                        height: 100%;
+                        line-height: 2rem;
+                        width: fit-content;
+                        max-width: 7rem;
+                        color: var(--paragraph-color);
+                        display: inline-block;
+                        float: left;
+                        margin: 0;
+                        margin-left: 0.5rem;
+
+                    `;
+                    label.innerHTML = y.label;
+                    var acc;
+                    if(y.accelerator) {
+                        acc = document.createElement("p");
+                        acc.innerHTML = y.accelerator;
+                        acc.style = `
+                            height: 100%;
+                            line-height: 2rem;
+                            width: fit-content;
+                            margin: 0;
+                            display: inline-block;
+                            float: right;
+                            margin-right: 0.5rem;
+                            color: var(--paragraph-color);
+                            opacity: 0.6;
+                        `;
+                        el.appendChild(acc);
+                    }
+                    el.appendChild(label);
+                    sub.appendChild(el);
+                }
+                b.appendChild(sub);
+
+
+            }
+
+            b.onclick = function(e) {
+                setTimeout(function() {
+                    //Open the menu after the global onclick script has run
+                    e.target.closest("li").querySelector(".sub-menu").style.display = "block";
+                    console.log(b.querySelector(".sub-menu"))
+                }, 1)
+            }
+
+        }
+
+
+        return menu;
+    }
+}

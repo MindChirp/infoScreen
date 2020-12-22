@@ -28,6 +28,22 @@ document.addEventListener("click", function(e) {
             }
         }
     }
+
+
+
+})
+
+document.addEventListener("mousedown", function(e) {
+    //Check if any prompts are open
+    if(!e.target.closest(".sub-menu")) {
+        var prompts = document.getElementsByClassName("sub-menu");
+        var x;
+        for(x of prompts) {
+            if(x.style.display != "none") {
+                x.style.display = "none";
+            }
+        }
+    }
 })
 
 document.addEventListener("wheel", function(e) {

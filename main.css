@@ -324,33 +324,37 @@ html {
     box-sizing: border-box;
 }
 
-#app-bar #menu li, .icon {
+#app-bar .app-bar-menu-container li,ul, .icon {
     display: inline-block;
     line-height: 26px;
     height: 26px;
     margin-right: 0;
 }
 
-#app-bar #menu .icon {
+#app-bar .app-bar-menu-container .icon {
     margin-right: 0.3rem;
     height: fit-content;
     margin-left: 0.7rem;
 }
 
-#app-bar #menu img {
+#app-bar .app-bar-menu-container img {
     height: 20px;
 }
 
-#app-bar #menu li {
-    transform: translate(0, -5px);
+#app-bar .app-bar-menu-container li {
+    transform: translate(0, -2px);
     color: var(--paragraph-color);
-    opacity: 0.8;
     font-weight: lighter;
     padding: 0 0.9rem;  
     margin-right: -0.3rem;
 }
+#app-bar .app-bar-menu-container #menu {
+    display: inline-block; 
+    width: fit-content;
+    
+}
 
-#app-bar #menu li:hover {
+#app-bar .app-bar-menu-container li:hover {
     background-color: rgba(0,0,0,0.75);
 }
 
