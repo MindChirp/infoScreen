@@ -38,9 +38,18 @@ const template = [
                 click: () => {}
             },
             {
-                label: "Open",
+                label: "Open...",
                 accelerator: "Ctrl+O",
-                click: () => {}
+                submenu: [
+                    {
+                        label: "...From server",
+                        accelerator: "Ctrl+O+S"
+                    },
+                    {
+                        label: "...From PC",
+                        accelerator: "Ctrl+O"
+                    }
+                ]
             }
         ]
     },
@@ -48,8 +57,19 @@ const template = [
         label: "Help",
         submenu: [
             {
-                label: "No.",
-
+                label: "Check for Updates"
+            },
+            {
+                label: "divider"
+            },          
+            {
+                label: "Report Issue"
+            },
+            {
+                label: "divider"
+            },
+            {
+                label: "About"
             }
         ]
     },

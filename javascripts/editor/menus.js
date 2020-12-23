@@ -1,4 +1,5 @@
-        const fs = require("fs");
+        const { EALREADY } = require("constants");
+const fs = require("fs");
 
 
 //Code for the effects ribbon-menu
@@ -147,6 +148,7 @@ function toggleNotificationMenu() {
 //App bar menu handler
 function Appmenu() {
     this.appbar = function(template) {
+
         var menu = document.createElement("ul");
 
         var x;
@@ -170,50 +172,87 @@ function Appmenu() {
                     z-index: 100;
                     background-color: var(--secondary-color);
                     opacity: 1;
+                    border-radius: 0.25rem;
                 `);
                 sub.className = "sub-menu smooth-shadow"
 
                 var y;
                 for(y of x.submenu) {
-                    var el = document.createElement("div");
-                    el.style = `
-                        height: 2rem;
-                        width: 100%;
-                        position: relative; 
-                    `
-                    var label = document.createElement("p");
-                    label.style = `
-                        height: 100%;
-                        line-height: 2rem;
-                        width: fit-content;
-                        max-width: 7rem;
-                        color: var(--paragraph-color);
-                        display: inline-block;
-                        float: left;
-                        margin: 0;
-                        margin-left: 0.5rem;
+                    console.log(y);
+                    if(y.label == "divider") {
 
-                    `;
-                    label.innerHTML = y.label;
-                    var acc;
-                    if(y.accelerator) {
-                        acc = document.createElement("p");
-                        acc.innerHTML = y.accelerator;
-                        acc.style = `
+                        var div = document.createElement("div");
+                        div.style = `
+                            height: 1px;
+                            background-color: var(--main-bg-color);
+                            width: 95%;
+                            margin: 0rem auto;
+                        `
+                        sub.appendChild(div);
+                    } else {
+
+                    
+
+                        var el = document.createElement("div");
+                        el.className = "button";
+                        el.style = `
+                            height: 2rem;
+                            width: 100%;
+                            position: relative; 
+                        `
+                        var label = document.createElement("p");
+                        label.style = `
                             height: 100%;
                             line-height: 2rem;
                             width: fit-content;
-                            margin: 0;
-                            display: inline-block;
-                            float: right;
-                            margin-right: 0.5rem;
+                            max-width: 7rem;
                             color: var(--paragraph-color);
-                            opacity: 0.6;
+                            display: inline-block;
+                            float: left;
+                            margin: 0;
+                            margin-left: 0.5rem;
+
                         `;
-                        el.appendChild(acc);
+                        label.innerHTML = y.label;
+                        var acc;
+                        if(y.accelerator) {
+                            acc = document.createElement("p");
+                            acc.innerHTML = y.accelerator;
+                            acc.style = `
+                                height: 100%;
+                                line-height: 2rem;
+                                width: fit-content;
+                                margin: 0;
+                                display: inline-block;
+                                float: right;
+                                margin-right: 0.5rem;
+                                color: var(--paragraph-color);
+                                opacity: 0.6;
+                            `;
+                            el.appendChild(acc);
+                        }
+                        
+                        el.addEventListener("mouseenter", function(e) {
+                            if(e.target.closest(".button").querySelector(".sub-menu")) {
+                                e.target.closest(".button").querySelector(".sub-menu").style.display = "block";
+                            }
+                        })
+
+                        el.addEventListener("mouseleave", function(e) {
+                            if(e.target.closest(".button").querySelector(".sub-menu")) {
+                                e.target.closest(".button").querySelector(".sub-menu").style.display = "none";
+                            }
+                        })
+                        //Check for submenu
+                        if(y.submenu) {
+                            var subMenu = appendSubMenu(y.submenu);
+                            console.log(y.submenu)
+                            el.appendChild(subMenu);
+                        }
+
+                        el.appendChild(label);
+                        sub.appendChild(el);
                     }
-                    el.appendChild(label);
-                    sub.appendChild(el);
                 }
                 b.appendChild(sub);
 
@@ -233,4 +272,86 @@ function Appmenu() {
 
         return menu;
     }
+}
+
+function appendSubMenu(submenu) {
+    var sub = document.createElement("div");
+    sub.setAttribute("class", "sub-menu smooth-shadow");
+    sub.style = `
+        height: fit-content;
+        min-height: 2rem;
+        width: 15rem;
+        display: block;
+        position: absolute;
+        right: 0;
+        transform: translate(98%);
+        z-index: 100;
+        background-color: var(--secondary-color);
+        opacity: 1;
+        border-radius: 0.25rem;
+    `;
+    var x;
+    for(x of submenu) {
+        var el = document.createElement("div");
+        el.className = "button";
+        el.style = `
+            height: 2rem;
+            width: 100%;
+            position: relative; 
+        `
+        var label = document.createElement("p");
+        label.style = `
+            height: 100%;
+            line-height: 2rem;
+            width: fit-content;
+            max-width: 7rem;
+            color: var(--paragraph-color);
+            display: inline-block;
+            float: left;
+            margin: 0;
+            margin-left: 0.5rem;
+    
+        `;
+        label.innerHTML = x.label;
+
+        var acc;
+        if(x.accelerator) {
+            acc = document.createElement("p");
+            acc.innerHTML = x.accelerator;
+            acc.style = `
+                height: 100%;
+                line-height: 2rem;
+                width: fit-content;
+                margin: 0;
+                display: inline-block;
+                float: right;
+                margin-right: 0.5rem;
+                color: var(--paragraph-color);
+                opacity: 0.6;
+            `;
+            el.appendChild(acc);
+        }
+
+        el.appendChild(label);
+        sub.appendChild(el);
+
+        if(x.submenu) {
+            var menuThing = appendSubMenu(x.submenu);
+            el.appendChild(menuThing);
+            
+            el.addEventListener("mouseenter", function(e) {
+                if(e.target.closest(".button").querySelector(".sub-menu")) {
+                    e.target.closest(".button").querySelector(".sub-menu").style.display = "block";
+                }
+            })
+
+            el.addEventListener("mouseleave", function(e) {
+                if(e.target.closest(".button").querySelector(".sub-menu")) {
+                    e.target.closest(".button").querySelector(".sub-menu").style.display = "none";
+                }
+            })
+        }
+    }
+
+    return sub;
 }

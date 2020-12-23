@@ -48,6 +48,12 @@ html {
     z-index: 6;
     margin: 0;
 }
+.sub-menu > div {
+    border-radius: 0.25rem;
+}
+.sub-menu > div:hover {
+    background-color: var(--main-button-color);
+}
 
 
 #blocking-loading-pane {
