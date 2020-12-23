@@ -361,3 +361,27 @@ input[type=range].fd-slider::-ms-thumb {
 .context-menu button:hover {
   background-color: var(--main-button-color);
 }
+
+.menu {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: pop-in 300ms ease-in-out;
+  background: var(--main-bg-color);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.menu .header {
+  height: 10rem;
+  width: 100%;
+  background-color: var(--secondary-color);
+}
+
+@keyframes pop-in {
+  0% {opacity: 0; transform: scale(0.93);}
+  50%{opacity: 100%;}
+  100% {transform: scale(1);}
+}
