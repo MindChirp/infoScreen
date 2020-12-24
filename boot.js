@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut, webContents} = require('electron');
 const { openDevTools } = require('electron-debug');
 const { autoUpdater } = require("electron-updater");
 const ipc = require
@@ -13,12 +13,17 @@ if(isDev) {
   //Do some stuff if the app is in developement mode
   const log = require('electron-log');
   
-  autoUpdater.checkForUpdatesAndNotify();
   autoUpdater.logger = log;
   autoUpdater.logger.transports.file.level = 'info';
   
   log.info('App starting...');
 }
+
+
+
+
+
+
 
 function boot() {
   //lage et nytt vindu
@@ -37,7 +42,19 @@ function boot() {
     frame: false,
     transparent: true
   })
-
+  launcherWin.webContents.on("did-finish-load", () => {
+    //launcherWin.webContents.send("message", "Your mom is gay");
+    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.on("checking-for-update", () => {})
+    autoUpdater.on("update-available", () => {
+      launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false}])
+    })
+    autoUpdater.on("update-downloaded", () => {
+      //Quit the program and install the changes
+      autoUpdater.quitAndInstall();
+    })
+    autoUpdater.on("error", () => {})
+  });
   var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({
     pathname: htmlPath,

@@ -37,9 +37,11 @@
     "win": {
       "target": "NSIS",
       "icon": "./build/infoScreen icon.png",
-      "publish": [
-        "github"
-      ]
+      "publish": [{
+        "provider": "github",
+        "owner": "MindChirp",
+        "repo": "infoScreen"
+      }]
     }
   },
   "scripts": {
@@ -47,7 +49,8 @@
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build-installer": "ng-build --prod && electron-builder"
+    "build-installer": "ng-build --prod && electron-builder",
+    "gh-publish": "electron-builder --x64 --win -p always"
   },
   "repository": {
     "type": "git",

@@ -253,7 +253,6 @@ function userSettings() {
     
     if(signedIn == "true") {
         var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
-        console.log(imgPath);
         img.setAttribute("src", imgPath);
         img.setAttribute("style", `
         height: 5rem;
@@ -261,7 +260,6 @@ function userSettings() {
         `);        
     } else {
         var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "default.png");
-        console.log(imgPath + " (false)");
         img.setAttribute("src",imgPath)
         img.setAttribute("style", `
         height: 5rem;
@@ -416,7 +414,6 @@ function userSettings() {
 
                     var dat = JSON.parse(this.responseText);
                     if(dat[0] == "OK") {
-                        console.log("SIGNING IN")
                         setTimeout(function() {
                             //Transition everything
                             var subheader = document.getElementsByClassName("user-header-wrapper")[0];
@@ -436,7 +433,6 @@ function userSettings() {
 
                                 //Update the main launcher screen to reflect the localStorage values
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
-                                console.log(dat);
                                 userScreen(dat, header, true);
                                 changeState();
 
@@ -705,13 +701,11 @@ function changeState() {
         var img = document.getElementById("profile-photo-image");
 
         var pos = JSON.parse(localStorage.getItem("pfpPos"));
-        console.log(pos);
         var Xpos = pos[0];
         var Ypos = pos[1];
         var size = pos[2];
         img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
         var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
-        console.log(imgPath)
         img.setAttribute("src", imgPath);
 
         //Enable all buttons
@@ -802,3 +796,8 @@ if (data ===  null) {
     console.log(data)
 }
 */
+
+
+ipcRenderer.on("message", function(e, data) {
+    alert("Recieved data: " + data);
+})

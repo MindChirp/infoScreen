@@ -131,13 +131,20 @@ function profilePhoto(parent) {
         var size = 1;
         var Xpos = -50;
         var Ypos = 0;
+
         var data;
         try {
             var datPath = path.join(path.dirname(__dirname),"extraResources", "data","programData","profilePics","profilePicDat.json");
             var data = fs.readFileSync(datpath);
         } catch (error) {
-            console.log("Could not find or read the profile picture metadata");
-            data = "Some unparsable gibberish";
+            console.log("Could not find or read the profile picture metadata. Retrying..");
+            try {
+                var datPath = path.join(__dirname,"extraResources", "data","programData","profilePics","profilePicDat.json");
+                var data = fs.readFileSync(datpath);
+            } catch (error) {
+                console.log("Could not find or read the profile picture metadata.");
+                data = "Some unparsable gibberish";
+            }
         }
         var dat;
         try{
