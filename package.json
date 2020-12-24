@@ -7,11 +7,13 @@
     "app-buttons": "^1.3.1",
     "electron-context-menu": "^2.3.0",
     "electron-debug": "^3.1.0",
+    "electron-is-dev": "^1.2.0",
     "electron-store": "^6.0.1",
     "electron-unhandled": "^3.0.2",
     "electron-updater": "^4.3.5",
     "electron-util": "^0.14.2",
     "fs": "0.0.1-security",
+    "fs-extra": "^9.0.1",
     "node-zip": "^1.1.1"
   },
   "devDependencies": {
@@ -21,7 +23,17 @@
     "electron-reloader": "^1.0.1"
   },
   "build": {
-    "appId": "appId",
+    "extraResources": [
+      {
+        "from": "./extraResources",
+        "to": "extraResources",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "asar": true,
+    "appId": "com.electron.infoScreen",
     "win": {
       "target": "NSIS",
       "icon": "./build/infoScreen icon.png",

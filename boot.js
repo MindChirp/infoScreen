@@ -1,6 +1,5 @@
 const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut} = require('electron');
 const { openDevTools } = require('electron-debug');
-const log = require('electron-log');
 const { autoUpdater } = require("electron-updater");
 const ipc = require
 const url = require('url');
@@ -8,12 +7,19 @@ let win = null;
 let launcherWin = null;
 let programWin = null;
 const path = require("path");
+const isDev = require("electron-is-dev");
 
-autoUpdater.checkForUpdatesAndNotify();
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
+if(isDev) {
+  //Do some stuff if the app is in developement mode
+  const log = require('electron-log');
+  
+  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.logger = log;
+  autoUpdater.logger.transports.file.level = 'info';
+  
+  log.info('App starting...');
+}
 
-log.info('App starting...');
 function boot() {
   //lage et nytt vindu
   launcherWin = new BrowserWindow({

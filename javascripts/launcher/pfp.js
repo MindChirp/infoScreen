@@ -43,7 +43,7 @@ function profilePhoto(parent) {
     var img = document.createElement("img");
     img.setAttribute("id", "img-positioner-image")
     var ext = localStorage.getItem("pfpExtension");
-    var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+    var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
     img.src = imgPath;
     img.style.height = "100%";
     img.style.width = "auto";
@@ -78,14 +78,14 @@ function profilePhoto(parent) {
 
         var extension = paths[0].split("\\")[paths[0].split("\\").length-1].split(".")[paths[0].split("\\")[paths[0].split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
-        var directory = "./data/programData/profilePics/"
+        var directory = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics");
         fs.readdir(directory, (err, files) => {
             if(err) throw err;
             for(const file of files) {
                 if(file == "default.png" || file == "profilePicDat.json") {
                     
                 } else {
-                    fs.unlink("./data/programData/profilePics/" + file, (err) => {
+                    fs.unlink(path.join(directory, file), (err) => {
                         if(err) throw err;
                     });
                 }
@@ -95,8 +95,13 @@ function profilePhoto(parent) {
             /*fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
                 if(err) throw err;
             });*/
-
-            fs.copyFileSync(paths[0], "./data/programData/profilePics/user" + localStorage.getItem("pfpExtension"));
+            var imgPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "profilePics", "user");
+            try {
+                fs.copySync(paths[0], imgPath + localStorage.getItem("pfpExtension"));
+            } catch (error) {
+                console.log("Could not copy profile picture");
+                console.error(error);
+            }
             if(document.getElementById("img-positioner-image")) {
                 var img = document.getElementById("img-positioner-image");
                 img.parentNode.removeChild(img);
@@ -109,7 +114,7 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+                    var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
                     img.src = imgPath;
                     changeState();
                     img.style.height = "100%";
@@ -126,7 +131,14 @@ function profilePhoto(parent) {
         var size = 1;
         var Xpos = -50;
         var Ypos = 0;
-        var data = fs.readFileSync("./data/programData/profilePics/profilePicDat.json");
+        var data;
+        try {
+            var datPath = path.join(path.dirname(__dirname),"extraResources", "data","programData","profilePics","profilePicDat.json");
+            var data = fs.readFileSync(datpath);
+        } catch (error) {
+            console.log("Could not find or read the profile picture metadata");
+            data = "Some unparsable gibberish";
+        }
         var dat;
         try{
             dat = JSON.parse(data);
@@ -140,7 +152,8 @@ function profilePhoto(parent) {
             var dat = `{
                 "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
             }`;
-            fs.writeFileSync("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
+            var datPath = path.join(path.dirname(__dirname),"extraResources", "data","programData","profilePics","profilePicDat.json");
+            fs.writeFileSync(datPath, dat, (err) => {
                 if(err) throw err;
             })
         }
