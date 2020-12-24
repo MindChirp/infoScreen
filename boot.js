@@ -1,10 +1,14 @@
 const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut} = require('electron');
 const { openDevTools } = require('electron-debug');
+const { autoUpdater } = require("electron-updater");
 const ipc = require
 const url = require('url');
 let win = null;
 let launcherWin = null;
 let programWin = null;
+const path = require("path");
+
+autoUpdater.checkForUpdatesAndNotify();
 
 
 function boot() {
@@ -25,8 +29,9 @@ function boot() {
     transparent: true
   })
 
+  var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({
-    pathname: 'launcher.html',
+    pathname: htmlPath,
     slashes: true
   }))
 
@@ -113,9 +118,9 @@ function openEditor() {
       Menu.setApplicationMenu(menu);*/
       /*programWin.setMenu(null); //INCLUDE THIS IN PRODUCTION!!
       */ //openDevTools(); //Exclude in production
-    
+      var htmlPath = path.join(__dirname, "home.html");
       programWin.loadURL(url.format({
-        pathname: 'home.html',
+        pathname: htmlPath,
         slashes: true
       }))
       return true;

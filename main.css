@@ -45,8 +45,14 @@ html {
     left: 50%;
     transform: translate(-50%);
     width: fit-content;
-    z-index: 6;
+    z-index: 103;
     margin: 0;
+}
+.sub-menu > div {
+    border-radius: 0.25rem;
+}
+.sub-menu > div:hover {
+    background-color: var(--main-button-color);
 }
 
 
@@ -311,7 +317,7 @@ html {
     grid-template-columns: 15rem auto 150px;
     grid-template-rows: 100%;
     background-color: var(--main-bg-color);
-    z-index: 5;
+    z-index: 102;
 }
 
 #app-bar #menu {

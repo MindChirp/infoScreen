@@ -9,31 +9,28 @@
     "electron-debug": "^3.1.0",
     "electron-store": "^6.0.1",
     "electron-unhandled": "^3.0.2",
+    "electron-updater": "^4.3.5",
     "electron-util": "^0.14.2",
     "fs": "0.0.1-security",
     "node-zip": "^1.1.1"
   },
   "devDependencies": {
+    "electron": "^5.0.6",
     "electron-builder": "^22.9.1",
-    "electron-reloader": "^1.0.1",
-    "electron": "^5.0.6"
+    "electron-reloader": "^1.0.1"
   },
   "build": {
     "appId": "appId",
-    "productName": "Info Screen (alpha)",
-    "target": "NSIS",
-    "directories": {
-      "buildResources": "build"
-    },
-    "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "oneClick": false
+    "win": {
+      "target": "NSIS",
+      "icon": "./build/infoScreen icon.png"
     }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "dist": "electron-builder --windows",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "build-installer": "ng-build --prod && electron-builder"
   },
   "repository": {
