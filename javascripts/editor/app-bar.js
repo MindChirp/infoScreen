@@ -1,4 +1,5 @@
 var appB = require("app-buttons");
+const { ipcMain, ipcRenderer } = require("electron");
 const menuHandler = new Appmenu();
 
 var appButtons = appB.appButtons(document.getElementById("app-bar"), true);
@@ -13,18 +14,15 @@ children.forEach(function(e) {
 //Define the different functions for closing etc
 
 function programExit() {
-
-    const remote = require('electron').remote
-let w = remote.getCurrentWindow()
-w.close()
+    ipcRenderer.send("close", true);
 }
 
 function programMinimize() {
-
+    ipcRenderer.send("minimize", true);
 }
 
 function programMaximize() {
-    
+    ipcRenderer.send("restore", true);
 }
 
 

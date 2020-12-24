@@ -397,7 +397,7 @@ function userSettings() {
             //Make server request
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://localhost:3000/auth");
+            xhr.open("POST", "80.213.230.181:3000/auth");
 
             var pass = pswrd.value;
             var usrname = usrName.value;

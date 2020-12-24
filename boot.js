@@ -8,7 +8,10 @@ let launcherWin = null;
 let programWin = null;
 const path = require("path");
 const isDev = require("electron-is-dev");
-
+var programWidth;
+var programHeight;
+var programHeight1;
+var programWidth1;
 if(isDev) {
   //Do some stuff if the app is in developement mode
   const log = require('electron-log');
@@ -101,7 +104,18 @@ function openEditor() {
         frame: false,
         transparent: true
       });
+
       
+      programWin.webContents.on("did-finish-load", () => {
+      const screen = require("electron").screen;
+      var { width, height } = screen.getPrimaryDisplay().workAreaSize; 
+      programWidth = width;
+      programHeight = height;
+
+      programHeight1 = height - 100;
+      programWidth1= width - 200;
+    })
+        
       /*const template = [
         {
           label: 'View',
@@ -153,6 +167,9 @@ function openEditor() {
     } catch (error) {
       return error;
     }
+
+
+
 }
 
 
@@ -192,6 +209,31 @@ ipcMain.on('get-file-data', function(event) {
   }
   event.returnValue = data;
 })
+
+//Check for app-bar button presses
+ipcMain.on("minimize", function(e) {
+  programWin.minimize();
+})
+
+  //programWidth
+  //programHeight
+  //programHeight1;
+  //programWidth1;
+  var state = 0;
+ipcMain.on("restore", function(e) {
+  if(state == 0) {
+    programWin.unmaximize();
+    state = 1;
+  } else {
+    programWin.maximize();
+    state = 0;
+  }
+})
+
+ipcMain.on("close", function(e) {
+  programWin.close();
+})
+
 
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', boot);

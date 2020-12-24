@@ -41,6 +41,13 @@ function bkgScript() {
 
     var el = path.querySelector(".sub-container").querySelector(".scrubber");
 
+    //Calculate the height of the top layer
+    var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
+    var topLayerHeight = (elHeight-44)/2;
+    document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px auto";
+
+
+
     //Calculate the height of the timeline scroll bar in pixels
     var scrollThumbH = (maxH / scrollH)*scrollH;
     if(el.scrollTop+scrollThumbH >= scrollH) {
