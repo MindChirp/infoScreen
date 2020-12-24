@@ -152,10 +152,17 @@ function profilePhoto(parent) {
             var dat = `{
                 "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
             }`;
-            var datPath = path.join(path.dirname(__dirname),"extraResources", "data","programData","profilePics","profilePicDat.json");
-            fs.writeFileSync(datPath, dat, (err) => {
-                if(err) throw err;
-            })
+            try {
+                var datPath = path.join(path.dirname(__dirname),"extraResources", "data","programData","profilePics","profilePicDat.json");
+                fs.writeFileSync(datPath, dat, (err) => {
+                    if(err) throw err;
+                })
+            } catch (error) {
+                var datPath = path.join(__dirname,"extraResources", "data","programData","profilePics","profilePicDat.json");
+                fs.writeFileSync(datPath, dat, (err) => {
+                    if(err) throw err;
+                }) 
+            }
         }
 
 

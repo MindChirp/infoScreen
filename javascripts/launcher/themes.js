@@ -31,11 +31,12 @@ function Themes(parent) {
 
 
     var buttons = [];
-    var light = themes.addCard("Light Theme", "./data/files/images/lighttheme.png");
+    var paths = path.join(__dirname, "extraResources", "data", "files", "images");
+    var light = themes.addCard("Light Theme", paths+"/lighttheme.png");
     cont.appendChild(light);
     buttons.push(light);
 
-    var dark = themes.addCard("Dark Theme", "./data/files/images/darktheme.png");
+    var dark = themes.addCard("Dark Theme", paths+"/darktheme.png");
     dark.style.float = "right";
     cont.appendChild(dark);
     buttons.push(dark);

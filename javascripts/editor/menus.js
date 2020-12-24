@@ -40,10 +40,8 @@ var effects = function () {
                 `)
 
                 if(e.length > 10) {
-                    console.log("Yes");
                     var holder = e;
                     var j = holder.substring(0, 10);
-                    console.log(j)
                 p.innerHTML = j + "...";
                 } else {
                     p.innerHTML = e;
@@ -178,7 +176,6 @@ function Appmenu() {
 
                 var y;
                 for(y of x.submenu) {
-                    console.log(y);
                     if(y.label == "divider") {
 
                         var div = document.createElement("div");
@@ -249,7 +246,6 @@ function Appmenu() {
                         //Check for submenu
                         if(y.submenu) {
                             var subMenu = appendSubMenu(y.submenu);
-                            console.log(y.submenu)
                             el.appendChild(subMenu);
                         }
 
@@ -266,7 +262,6 @@ function Appmenu() {
                 setTimeout(function() {
                     //Open the menu after the global onclick script has run
                     e.target.closest("li").querySelector(".sub-menu").style.display = "block";
-                    console.log(b.querySelector(".sub-menu"))
                 }, 1)
             }
 
@@ -386,7 +381,6 @@ function appendSubMenu(submenu) {
 
 
 function fullPageMenu(type) {     
-    console.log(type)  
     var el = document.createElement("div");
     el.setAttribute("class", "menu");
     document.body.appendChild(el);
