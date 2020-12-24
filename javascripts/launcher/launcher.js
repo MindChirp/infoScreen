@@ -71,7 +71,8 @@ window.onload = function() {
             var size = pos[2];
             var img = document.getElementById("profile-photo-image");
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-            img.src = "../data/programData/profilePics/user"+ ext;
+            var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+            img.src = imgPath;
             
         }
     //If not already set up, set up the localStorage
@@ -250,15 +251,18 @@ function userSettings() {
     var ext = localStorage.getItem("pfpExtension");
     var signedIn = localStorage.getItem("signedIn");
     
-    if(signedIn == true) {
-
-        img.setAttribute("src", "../data/programData/profilePics/user" + ext);
+    if(signedIn == "true") {
+        var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+        console.log(imgPath);
+        img.setAttribute("src", imgPath);
         img.setAttribute("style", `
         height: 5rem;
         width: auto;
         `);        
     } else {
-        img.setAttribute("src","../data/programData/profilePics/default.png")
+        var imgPath = path.join(__dirname, "data", "programData", "profilePics", "default.png");
+        console.log(imgPath + " (false)");
+        img.setAttribute("src",imgPath)
         img.setAttribute("style", `
         height: 5rem;
         width: auto;
@@ -509,7 +513,8 @@ function userScreen(info, header, signIn) {
 
     var img = document.createElement("img");
     var ext = localStorage.getItem("pfpExtension");
-    img.setAttribute("src", "../data/programData/profilePics/user"+ ext);
+    var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+    img.setAttribute("src", imgPath);
     pfp.appendChild(img);
     img.setAttribute("style", `
         position: absolute;
@@ -705,7 +710,9 @@ function changeState() {
         var Ypos = pos[1];
         var size = pos[2];
         img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-        img.setAttribute("src", "../data/programData/profilePics/user"+ ext);
+        var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+        console.log(imgPath)
+        img.setAttribute("src", imgPath);
 
         //Enable all buttons
         var butts = document.getElementById("actions-container").childNodes;
@@ -730,7 +737,8 @@ function changeState() {
 
         var img = document.getElementById("profile-photo-image");
         img.style.transform = "translateX(-50%) translateY(0) scale(1)";
-        img.setAttribute("src", "../data/programData/profilePics/default.png");
+        var imgPath = path.join(__dirname, "data", "programData", "profilePics", "default.png");
+        img.setAttribute("src", imgPath);
 
         //Disable all buttons
         var butts = document.getElementById("actions-container").childNodes;

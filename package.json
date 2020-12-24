@@ -17,13 +17,17 @@
   "devDependencies": {
     "electron": "^5.0.6",
     "electron-builder": "^22.9.1",
+    "electron-log": "^4.3.1",
     "electron-reloader": "^1.0.1"
   },
   "build": {
     "appId": "appId",
     "win": {
       "target": "NSIS",
-      "icon": "./build/infoScreen icon.png"
+      "icon": "./build/infoScreen icon.png",
+      "publish": [
+        "github"
+      ]
     }
   },
   "scripts": {

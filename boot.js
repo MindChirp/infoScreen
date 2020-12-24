@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut} = require('electron');
 const { openDevTools } = require('electron-debug');
+const log = require('electron-log');
 const { autoUpdater } = require("electron-updater");
 const ipc = require
 const url = require('url');
@@ -9,8 +10,10 @@ let programWin = null;
 const path = require("path");
 
 autoUpdater.checkForUpdatesAndNotify();
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
-
+log.info('App starting...');
 function boot() {
   //lage et nytt vindu
   launcherWin = new BrowserWindow({

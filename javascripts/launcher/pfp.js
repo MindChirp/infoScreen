@@ -2,6 +2,7 @@ const { fstat, fdatasync } = require("fs");
 //const fs = require("fs");   
 const { settings } = require("cluster");
 const { isFunction } = require("util");
+const path = require("path");
 function profilePhoto(parent) {
 
     if(document.getElementById("settings-wrapper")) {
@@ -42,7 +43,8 @@ function profilePhoto(parent) {
     var img = document.createElement("img");
     img.setAttribute("id", "img-positioner-image")
     var ext = localStorage.getItem("pfpExtension");
-    img.src = "../data/programData/profilePics/user" + ext;
+    var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+    img.src = imgPath;
     img.style.height = "100%";
     img.style.width = "auto";
     img.style.marginLeft = "50%";   
@@ -67,14 +69,14 @@ function profilePhoto(parent) {
     selImg.style.display = "block";
 
     selImg.addEventListener("click", function() {
-        var path = ipcRenderer.sendSync("open-pfp-selector");
-        if(path != "cancelled") {
+        var paths = ipcRenderer.sendSync("open-pfp-selector");
+        if(paths != "cancelled") {
 
 
     var letters = ["A","B","C","D","E","F","G","H","I","J"];
 
 
-        var extension = path[0].split("\\")[path[0].split("\\").length-1].split(".")[path[0].split("\\")[path[0].split("\\").length-1].split(".").length-1];
+        var extension = paths[0].split("\\")[paths[0].split("\\").length-1].split(".")[paths[0].split("\\")[paths[0].split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
         var directory = "./data/programData/profilePics/"
         fs.readdir(directory, (err, files) => {
@@ -94,7 +96,7 @@ function profilePhoto(parent) {
                 if(err) throw err;
             });*/
 
-            fs.copyFileSync(path[0], "./data/programData/profilePics/user" + localStorage.getItem("pfpExtension"));
+            fs.copyFileSync(paths[0], "./data/programData/profilePics/user" + localStorage.getItem("pfpExtension"));
             if(document.getElementById("img-positioner-image")) {
                 var img = document.getElementById("img-positioner-image");
                 img.parentNode.removeChild(img);
@@ -107,7 +109,8 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    img.src = "../data/programData/profilePics/user" + ext;
+                    var imgPath = path.join(__dirname, "data", "programData", "profilePics", "user" + ext);
+                    img.src = imgPath;
                     changeState();
                     img.style.height = "100%";
                     img.style.width = "auto";
