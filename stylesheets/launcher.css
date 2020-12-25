@@ -391,6 +391,13 @@ input::-webkit-inner-spin-button {
     border: none;
 }
 
+.login-form > p {
+  margin: 0;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  color: var(--paragraph-color);
+}
+
 #controls {
   margin-top: 1rem;
   padding-bottom: 3rem;
@@ -415,6 +422,10 @@ input::-webkit-inner-spin-button {
 .login-button:disabled {
     cursor: default; 
     opacity: 1;
+}
+
+.register-user-link {
+
 }
 
 button:disabled {

@@ -11,7 +11,8 @@ if(env != "development") {
 }
 
 
-const ipc = require("electron").ipcRenderer
+const ipc = require("electron").ipcRenderer;
+const { format } = require("path");
 function launchProgram() {
     var val = ipc.sendSync("open-main-window");
     if(val) {
@@ -347,14 +348,14 @@ function userSettings() {
         pswrd.value = "frikkern123";
         form.appendChild(usrName);
         form.appendChild(pswrd);
-        
+
         var logIn = document.createElement("button");
         logIn.setAttribute("class", "smooth-shadow fd-button login-button");
         logIn.setAttribute("style", `
             width: 6.7rem;
             height: 2.3rem;
             transition: all 300ms ease-in-out;
-            
+            display: inline-block;
         `);
         var ico = document.createElement("i");
         ico.setAttribute("class", "material-icons");
@@ -373,6 +374,24 @@ function userSettings() {
         logIn.appendChild(ico);
         logIn.appendChild(p); 
         form.appendChild(logIn);
+
+        var register = document.createElement("p");
+        register.innerHTML = "Or register";
+        register.style = `
+            height: 2.3rem;
+            line-height: 2.3rem;
+            width: fit-content;
+            display: inline-block;
+            margin-left: 1rem;
+            color: var(--paragraph-color);
+            opacity: 0.8;
+            cursor: pointer;
+        `;
+        register.className = "register-user-link"
+        form.appendChild(register);
+
+
+
         logIn.addEventListener("click", function(event) {
             event.preventDefault(); 
 
@@ -453,6 +472,89 @@ function userSettings() {
             }
 
 
+        })
+
+
+        register.addEventListener("click", function(e) {
+            var form = document.createElement("form");
+            form.className = "login-form";
+            
+            var p = document.createElement("p");
+            p.innerHTML = "Full name";
+            var name = document.createElement("input");
+            name.type = "username";
+            name.placeholder = "...";
+
+            var p1 = document.createElement("p");
+            p1.innerHTML = "Email";
+            var email = document.createElement("input");
+            email.type = "email";
+            email.placeholder = "...";
+
+            var p2 = document.createElement("p");
+            p2.innerHTML = "Password";
+            var pass = document.createElement("input");
+            pass.type = "password";
+            pass.placeholder = "...";
+
+            var p3 = document.createElement("p");
+            p3.innerHTML = "Repeat password";
+            var pass1 = document.createElement("input");
+            pass1.type = "password";
+            pass1.placeholder = "...";
+
+            var register = document.createElement("button");
+            register.setAttribute("class", "smooth-shadow fd-button login-button");
+            register.setAttribute("style", `
+                width: 6.7rem;
+                height: 2.3rem;
+                transition: all 300ms ease-in-out;
+                display: inline-block;
+            `);
+            var ico = document.createElement("i");
+            ico.setAttribute("class", "material-icons");
+            ico.innerHTML = "login";
+            ico.setAttribute("style", `
+                line-height: 2.3rem;
+                color: var(--paragraph-color);
+            `);
+            var text = pEl();
+            text.innerHTML = "Register ";
+            text.setAttribute("style", `
+                line-height: 2.3rem;
+                color: var(--paragraph-color);
+                margin-left: 0.5rem;
+            `);
+            register.appendChild(ico);
+            register.appendChild(text); 
+            
+            register.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                if(pass.value == pass1.value) {
+                    //Do some stuff with the server to create a new user...
+                }
+
+            })
+
+
+            form.appendChild(p);
+            form.appendChild(name);
+            form.appendChild(p1);
+            form.appendChild(email);
+            form.appendChild(p2);
+            form.appendChild(pass);
+            form.appendChild(p3);
+            form.appendChild(pass1);
+            form.appendChild(register);
+            var parent = document.getElementsByClassName("login-form")[0].parentNode;
+            document.getElementsByClassName("login-form")[0].parentNode.removeChild(document.getElementsByClassName("login-form")[0])
+
+
+
+
+
+            parent.appendChild(form);
         })
 
         field.appendChild(form);
