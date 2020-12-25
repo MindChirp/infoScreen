@@ -3,7 +3,7 @@ const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
-const projectFilePath = "./data/programData/projects";
+const projectFilePath = "./extraResources/data/programData/projects";
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -110,7 +110,9 @@ window.onload = function() {
         var butts = document.getElementById("actions-container").childNodes;
         for(let i = 0; i < butts.length; i++) {
             if(i%2 != 0) {
-                if(butts[i].childNodes[2].innerHTML != "Developer start") {
+                var tag = butts[i].childNodes[2].innerHTML;
+                console.log(tag)
+                if(tag != "Developer start" && tag != "Quit") {
                     butts[i].disabled = true;
                 }
             }
@@ -133,6 +135,9 @@ window.onload = function() {
 
     var el = document.getElementById("pfp");
     infoOnHover(el, "User settings");
+
+    var el = document.getElementById("notifications-button");
+    infoOnHover(el, "Notifications");
 
     var el = document.getElementById("new-project");
     infoOnHover(el, "Create a new slideshow");
@@ -397,7 +402,7 @@ function userSettings() {
             //Make server request
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "80.213.230.181:3000/auth");
+            xhr.open("POST", "http://80.213.230.181:3000/auth");
 
             var pass = pswrd.value;
             var usrname = usrName.value;
@@ -797,7 +802,91 @@ if (data ===  null) {
 }
 */
 
+const messages = [
+    {title: "New update available", meta: "Click to download",version: "v0.0.32", importance: 1},
+    {title: "New update installed", meta: "Click to install", importance: 2},
+    {title: "Could not download the update", meta: "Error while fetching files", importance: 1},
+    {title: "Checking for updates", meta: "Hang tight!", importance: 3}
+]
+ipcRenderer.on("update-handler", function(e, data) {
+    //Information sent by the autoupdater system
+    var root = data[0];
+    var checkingForUpdate = root.checking;
+    var installed = root.installed;
+    var newUpdate = root.newUpdate;
+    var error = root.error;
+    var checking;
+    if(newUpdate) {
+        var notif = createNotification(messages[0]);
+        document.getElementById("notifications-pane").appendChild(notif);
+    } else if(error) {
+        var notif = createNotification(messages[2]);
+        document.getElementById("notifications-pane").appendChild(notif);
+    } else if(installed) {
+        var notif = createNotification(messages[1]);
+        document.getElementById("notifications-pane").appendChild(notif);
+    } else if(checkingForUpdate) {
+        checking = createNotification(messages[3]);
+        document.getElementById("notifications-pane").appendChild(checking);
+    } else { 
+        if(checking != null) {
+            removeNotification(checking);
+        }
+    }
 
-ipcRenderer.on("message", function(e, data) {
-    alert("Recieved data: " + data);
+    
 })
+
+function createNotification(data) {
+
+    //Clear the "nothing to show" message
+    if(document.getElementById("notifications-pane").querySelector(".nothingToShow")) {
+        document.getElementById("notifications-pane").innerHTML="";
+    }
+
+
+    var el = document.createElement("div");
+    el.className = "notification";
+    el.importance = data.importance;
+    var title = document.createElement("p");
+    title.innerHTML = data.title;
+    title.className = "title";
+
+    var sub = document.createElement("p");
+    sub.innerHTML = data.meta;
+    sub.className = "meta";
+
+    el.appendChild(title);
+    el.appendChild(sub);
+
+    var ver;
+    if(data.version) {
+        ver = document.createElement("p");
+        ver.class = "version";
+        ver.innerHTML = data.version;
+        el.appendChild(ver);
+    }
+
+    var icon = document.getElementById("notifications-button").childNodes[0];
+    if(data.importance == 1) {
+        icon.innerHTML = "notification_important";
+    }
+
+    return el;
+}
+
+function removeNotification(el) {
+    var parent = el.parentNode;
+    el.parentNode.removeChild(el);
+    if(el.parentNode.childNodes.length > 0) {
+        var p = document.createElement("p");
+        p.innerHTML = "Nothing to show";
+        p.className = "nothingToShow"
+        parent.appendChild(p);
+    }
+}
+
+
+function exitProgram() {
+    ipcRenderer.send("closeLauncher", true);
+}

@@ -24,6 +24,26 @@ if(isDev) {
 
 
 
+autoUpdater.on("checking-for-update", () => {
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
+  
+})
+autoUpdater.on("update-available", () => {
+  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
+})
+autoUpdater.on("update-downloaded", () => {
+  //Quit the program and install the changes
+  autoUpdater.quitAndInstall();
+})
+autoUpdater.on("update-not-available", () => {
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false}])
+  
+})
+autoUpdater.on("error", () => {
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: true}])
+})
+
+
 
 
 
@@ -46,17 +66,9 @@ function boot() {
     transparent: true
   })
   launcherWin.webContents.on("did-finish-load", () => {
-    //launcherWin.webContents.send("message", "Your mom is gay");
     autoUpdater.checkForUpdatesAndNotify();
-    autoUpdater.on("checking-for-update", () => {})
-    autoUpdater.on("update-available", () => {
-      launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false}])
-    })
-    autoUpdater.on("update-downloaded", () => {
-      //Quit the program and install the changes
-      autoUpdater.quitAndInstall();
-    })
-    autoUpdater.on("error", () => {})
+    
+    //launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
   });
   var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({
@@ -107,6 +119,7 @@ function openEditor() {
 
       
       programWin.webContents.on("did-finish-load", () => {
+
       const screen = require("electron").screen;
       var { width, height } = screen.getPrimaryDisplay().workAreaSize; 
       programWidth = width;
@@ -233,7 +246,14 @@ ipcMain.on("restore", function(e) {
 ipcMain.on("close", function(e) {
   programWin.close();
 })
+ipcMain.on("closeLauncher", function(e) {
+  launcherWin.close();
+})
 
 
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
-app.on('ready', boot);
+app.on('ready', () => {
+//  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
+  boot();
+
+});

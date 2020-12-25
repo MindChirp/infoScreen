@@ -21,6 +21,10 @@
                     </canvas>
                 </button>
 
+                <button id="notifications-button" onclick="toggleNotificationsPane()"><i class="material-icons">notifications_none</i></button>
+                <div id="notifications-pane" class="smooth-shadow" style="display: none">
+                    <p class="nothingToShow">Nothing to show</p>
+                </div>
             </div>
             <h1 id="main-title"></h1> <!--Insert user name here-->
             <div id="actions-container">
@@ -29,6 +33,7 @@
                 <button id="open-server" class="smooth-shadow"><i class="material-icons">dns</i> <p>From server</p></button>
                 <button id="live-edit" onclick="liveEdit()" class="smooth-shadow"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow" onclick="launchProgram()"><i class="material-icons">flag</i> <p>Developer start</p></button>
+                <button id="developer-start" class="smooth-shadow" onclick="exitProgram()"><i class="material-icons">exit_to_app</i> <p>Quit</p></button>
 
             </div>
 

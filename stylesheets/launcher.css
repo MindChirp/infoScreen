@@ -296,8 +296,9 @@ input::-webkit-inner-spin-button {
 
 #user-container {
     height: 3.5rem;
-    width: 3.5rem;
+    width: 6rem;
     transform: translateY(20%);
+    position: relative;
 }
 
 #user-container #pfp #profile-photo-image {
@@ -330,6 +331,26 @@ input::-webkit-inner-spin-button {
     outline: none;
     cursor: pointer;
     margin-right: 0rem;
+    display: inline-block;
+}
+
+#notifications-button {
+  height: 2rem;
+  width: 2rem;
+  background: none;
+  border: none;
+  outline: none;
+  vertical-align: top;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+#notifications-button i {
+  font-size: 2rem;
+  color: var(--paragraph-color);
+  font-weight: lighter;
 }
 
 #user-container #pfp:hover canvas {
@@ -442,7 +463,52 @@ div.disabled {
 
 
 
+#notifications-pane {
+  height: fit-content;
+  min-height: 2rem;
+  width: 20rem;
+  background-color: var(--secondary-color);
+  border-radius: 0.25rem;
+  position: absolute;
+  right: 0;
+  transform: translate(105%);
+  top: 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  animation: fade-in 150ms ease-in-out;
+}
 
+#notifications-pane > p {
+  margin: 0;
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+
+#notifications-pane .notification {
+  height: 4rem;
+  border-radius: 0.25rem;
+  width: 100%;
+  padding: 0.25rem;
+  box-sizing: border-box;
+}
+
+#notifications-pane .notification:hover {
+  background-color: var(--secondary-button-color);
+}
+
+#notifications-pane .notification p {
+  margin: 0;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  margin-right: 1rem;
+
+}
+
+#notifications-pane .notification .title {
+  display: block;
+  font-weight: bold;
+  margin: 0;
+}
 
 
 

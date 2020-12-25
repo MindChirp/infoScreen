@@ -109,3 +109,15 @@ function menu(type) {
     el.appendChild(back);
     return el;
 }
+
+
+//Notifications handler
+function toggleNotificationsPane() {
+    var pane = document.getElementById("notifications-pane");
+
+    if(pane.style.display == "none") {
+        pane.style.display = "block";
+    } else {
+        pane.style.display = "none";
+    }
+}

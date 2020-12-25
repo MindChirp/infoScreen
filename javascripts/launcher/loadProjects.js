@@ -1,4 +1,4 @@
-//const projectFilePath = "./data/programData/projects";
+//const projectFilePath = "./extraResources/data/programData/projects";
 
 //Check if the client has logged in:
 function initializeProjectList() {
