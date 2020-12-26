@@ -41,17 +41,26 @@ function infoBox(el, title) {
 }
 
 
-document.addEventListener("click", function() {
+document.addEventListener("click", function(e) {
     if(document.getElementsByClassName("information-card")[0]) {
 
         var element = document.getElementsByClassName("information-card")[0] 
-        var inside = element.contains(event.target);
+        var inside = element.contains(e.target);
     }
 
     if(!inside) {
         if(element) {
             element.parentNode.removeChild(element);
 
+        }
+    }
+
+    if(document.getElementById("notifications-pane")) {
+        var el = document.getElementById("notifications-pane");
+        console.log(el.contains(e.target))
+        console.log(el.style.display);
+        if(el.style.display != "none" && !el.contains(e.target)) {
+            el.style.display = "none";
         }
     }
     
@@ -114,10 +123,11 @@ function menu(type) {
 //Notifications handler
 function toggleNotificationsPane() {
     var pane = document.getElementById("notifications-pane");
-
-    if(pane.style.display == "none") {
-        pane.style.display = "block";
-    } else {
-        pane.style.display = "none";
-    }
+    setTimeout(function() { //Set delay to allow the menu closing scripts to run first
+        if(pane.style.display == "none") {
+            pane.style.display = "block";
+        } else {
+            pane.style.display = "none";
+        }
+    }, 10)
 }

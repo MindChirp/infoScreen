@@ -24,7 +24,7 @@ function bkgScript() {
         x.style.height = h; 
     }
 
-    
+
     var maxW = parseInt(w.split("px")[0]-64);
     var maxH = parseInt(h.split("px")[0]-64);
     path.querySelector(".sub-container").querySelector(".scrubber").style.width = maxW + "px";
@@ -104,13 +104,19 @@ function calculateLayout() {
     // Keep track of viewport and resize to keep 16:9 aspect ratio //
     /////////////////////////////////////////////////////////////////
     var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    var parentStyle = getComputedStyle(document.getElementById("viewport"));
     var width = parseInt(style.width.split("px")[0]);
-    document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
-    /*document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
-    document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
-    document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
-    document.getElementById("content").style.height = width / (16/9) - 20 + "px";
-    */ //--Legacy code, might as well remove later
+    var parentHeight = parseInt(parentStyle.height.split("px")[0]);
+
+    var neededHeight = width / (ratio);
+    console.log(neededHeight + " " + parentHeight)
+    if(neededHeight > parentHeight) {
+        document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
+        document.getElementById("viewport").querySelector("#content").style.height = "100%";
+    } else {
+        document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+        document.getElementById("viewport").querySelector("#content").style.width = "100%";
+    }
 
 
 
@@ -125,22 +131,39 @@ function calculateLayoutOnStartup() {
     var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
     document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
 
-
-        
-    /////////////////////////////////////////////////////////////////
-    // Keep track of viewport and resize to keep 16:9 aspect ratio //
-    /////////////////////////////////////////////////////////////////
-    
-    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
-    var width = parseInt(style.width.split("px")[0]);
-    document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
-
-
     ////////////////////////////////////////////////////////////////////////////////////////
     // Set the height of the #main-container, and thus keep the program properly dispayed //
     ////////////////////////////////////////////////////////////////////////////////////////
     var winHeight = window.innerHeight;
     var contHeight = winHeight - 22*2 + "px" // 22*2 == height of the app-bar and the padding between it and the main container
     document.getElementById("main-container").style.height = contHeight + "px";
+
+    ////////////////////////////////////////////////////////////
+    // Calculate the height of the top layer and bottom layer //
+    ////////////////////////////////////////////////////////////
+    //var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px")); --Might remove later
+    var topLayerHeight = contHeight/2; //Use contHeight from the previous lines
+    var bottomLayerHeight = (contHeight-((contHeight/2)+15));
+    document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";
+        
+
+    /////////////////////////////////////////////////////////////////
+    // Keep track of viewport and resize to keep 16:9 aspect ratio //
+    /////////////////////////////////////////////////////////////////
+    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    var parentStyle = getComputedStyle(document.getElementById("viewport"));
+    var width = parseInt(style.width.split("px")[0]);
+    var parentHeight = parseInt(parentStyle.height.split("px")[0]);
+
+    var neededHeight = width / (ratio);
+    console.log(neededHeight + " " + parentHeight)
+    if(neededHeight > parentHeight) {
+        document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
+        document.getElementById("viewport").querySelector("#content").style.height = "100%";
+    } else {
+        document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+        document.getElementById("viewport").querySelector("#content").style.width = "100%";
+    }
+
 
 }

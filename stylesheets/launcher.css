@@ -472,7 +472,9 @@ div.disabled {
 }
 
 
-
+#notifications-button {
+  cursor: pointer;
+}
 
 #notifications-pane {
   height: fit-content;
@@ -488,6 +490,8 @@ div.disabled {
   box-sizing: border-box;
   animation: fade-in 150ms ease-in-out;
   z-index: 100;
+  max-height: 20.9rem;
+  overflow-y: auto;
 }
 
 #notifications-pane > p {

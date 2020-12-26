@@ -696,9 +696,16 @@ html {
     background-color: black;
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
 }
 
+#main-container #top-layer #viewport #content .container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
 
 #main-container #top-layer #viewport .controls {
   position: absolute;
