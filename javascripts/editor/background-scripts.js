@@ -31,10 +31,7 @@ function bkgScript() {
 
     var el = path.querySelector(".sub-container").querySelector(".scrubber");
 
-    //Calculate the height of the top layer
-    var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
-    var topLayerHeight = (elHeight-44)/2;
-    document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px auto";
+
 
 
 
@@ -85,20 +82,34 @@ function calculateLayout() {
     document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // Set the height of the #main-container, and thus keep the program properly dispayed //
+    ////////////////////////////////////////////////////////////////////////////////////////
+    var winHeight = window.innerHeight;
+    var contHeight = winHeight - 22*2 // 22 == height of the app-bar
+    document.getElementById("main-container").style.height = contHeight + "px";
+    document.getElementById("main-container");
 
 
-/////////////////////////////////////////////////////////////////
-// Keep track of viewport and resize to keep 16:9 aspect ratio //
-/////////////////////////////////////////////////////////////////
-   
-var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
-var width = parseInt(style.width.split("px")[0]);
-document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
-/*document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
-document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
-document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
-document.getElementById("content").style.height = width / (16/9) - 20 + "px";
-*/ //--Legacy code, might as well remove later
+    ////////////////////////////////////////////////////////////
+    // Calculate the height of the top layer and bottom layer //
+    ////////////////////////////////////////////////////////////
+    var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
+    var topLayerHeight = contHeight/2; //Use contHeight from the previous lines
+    var bottomLayerHeight = (contHeight-((contHeight/2)+15));
+    document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";
+
+    /////////////////////////////////////////////////////////////////
+    // Keep track of viewport and resize to keep 16:9 aspect ratio //
+    /////////////////////////////////////////////////////////////////
+    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    var width = parseInt(style.width.split("px")[0]);
+    document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+    /*document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
+    document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
+    document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
+    document.getElementById("content").style.height = width / (16/9) - 20 + "px";
+    */ //--Legacy code, might as well remove later
 
 
 
@@ -122,5 +133,13 @@ function calculateLayoutOnStartup() {
     var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
     var width = parseInt(style.width.split("px")[0]);
     document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+    // Set the height of the #main-container, and thus keep the program properly dispayed //
+    ////////////////////////////////////////////////////////////////////////////////////////
+    var winHeight = window.innerHeight;
+    var contHeight = winHeight - 22*2 + "px" // 22*2 == height of the app-bar and the padding between it and the main container
+    document.getElementById("main-container").style.height = contHeight + "px";
 
 }
