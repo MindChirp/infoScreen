@@ -1,6 +1,6 @@
 {
   "name": "infoscreen",
-  "version": "0.0.33",
+  "version": "0.0.35",
   "description": "An info screen program made by Frikk O. Larsen",
   "main": "boot.js",
   "dependencies": {

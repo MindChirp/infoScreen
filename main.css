@@ -876,8 +876,6 @@ html {
 
 #main-container #bottom-layer #timeline .sub-container .scrubber {
     height: 100%;
-    width: 113.6rem;
-    max-width: 113.6rem;
     max-height: 24rem;
     /*
     display: grid;

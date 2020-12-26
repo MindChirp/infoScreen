@@ -926,7 +926,9 @@ ipcRenderer.on("update-handler", function(e, data) {
     } else if(installed) {
         var notif = createNotification(messages[1]);
         document.getElementById("notifications-pane").appendChild(notif);
-        notif.addEventListener("click", applyUpdate());
+        notif.onclick = function() {
+            applyUpdate();
+        }
         notif.style.cursor = "pointer";
     } else if(checkingForUpdate) {
         checking = createNotification(messages[3]);

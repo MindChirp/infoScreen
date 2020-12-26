@@ -24,9 +24,10 @@ function bkgScript() {
         x.style.height = h; 
     }
 
+    
     var maxW = parseInt(w.split("px")[0]-64);
     var maxH = parseInt(h.split("px")[0]-64);
-    path.querySelector(".sub-container").querySelector(".scrubber").style.maxWidth = maxW + "px";
+    path.querySelector(".sub-container").querySelector(".scrubber").style.width = maxW + "px";
     path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = maxH + "px";
 
     var el = path.querySelector(".sub-container").querySelector(".scrubber");
