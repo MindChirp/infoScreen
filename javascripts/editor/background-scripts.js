@@ -104,3 +104,23 @@ document.getElementById("content").style.height = width / (16/9) - 20 + "px";
 
 
 }
+
+function calculateLayoutOnStartup() {
+    ///////////////////////////////////////////
+    // Set the correct width of the timeline //
+    ///////////////////////////////////////////
+    var parentWidth = parseInt(window.getComputedStyle(document.getElementById("bottom-layer")).width.split("px")[0]);
+    var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
+    document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
+
+
+        
+    /////////////////////////////////////////////////////////////////
+    // Keep track of viewport and resize to keep 16:9 aspect ratio //
+    /////////////////////////////////////////////////////////////////
+    
+    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    var width = parseInt(style.width.split("px")[0]);
+    document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+
+}

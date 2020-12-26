@@ -214,10 +214,8 @@
             //nescessary amount of rows and columns to cover the entire
             //element
 
-            //Set the correct width of the timeline
-            var parentWidth = parseInt(window.getComputedStyle(document.getElementById("bottom-layer")).width.split("px")[0]);
-            var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
-            document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
+            calculateLayoutOnStartup();
+
 
             var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
             var w = parseInt(window.getComputedStyle(path).width.split("px"));
