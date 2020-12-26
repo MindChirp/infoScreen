@@ -3,7 +3,6 @@ const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
-const projectFilePath = "./extraResources/data/programData/projects";
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -905,8 +904,8 @@ if (data ===  null) {
 */
 
 const messages = [
-    {title: "New update available", meta: "Click to download",version: "v0.0.32", importance: 1},
-    {title: "New update installed", meta: "Click to install", importance: 2},
+    {title: "Installing update", meta: "Please wait!",version: "v0.0.32", importance: 1},
+    {title: "New update installed", meta: "Click to apply changes", importance: 2},
     {title: "Could not download the update", meta: "Error while fetching files", importance: 1},
     {title: "Checking for updates", meta: "Hang tight!", importance: 3}
 ]
@@ -927,6 +926,8 @@ ipcRenderer.on("update-handler", function(e, data) {
     } else if(installed) {
         var notif = createNotification(messages[1]);
         document.getElementById("notifications-pane").appendChild(notif);
+        notif.addEventListener("click", applyUpdate());
+        notif.style.cursor = "pointer";
     } else if(checkingForUpdate) {
         checking = createNotification(messages[3]);
         document.getElementById("notifications-pane").appendChild(checking);
@@ -938,6 +939,13 @@ ipcRenderer.on("update-handler", function(e, data) {
 
     
 })
+
+function applyUpdate() {
+    ipcRenderer.send("apply-update");
+}
+
+
+var notificationTracker = [{severe: 0, medium: 0, mild: 0}]
 
 function createNotification(data) {
 
@@ -970,8 +978,20 @@ function createNotification(data) {
     }
 
     var icon = document.getElementById("notifications-button").childNodes[0];
+    var notifs = notificationTracker[0];
     if(data.importance == 1) {
+        notificationTracker[0].severe = notificationTracker[0].severe+1
         icon.innerHTML = "notification_important";
+    } else if(data.importance == 2) {
+        notificationTracker[0].medium = notificationTracker[0].medium+1
+        if(notifs.severe == 0) {
+            icon.innerHTML = "notifications_active";
+        }
+    } else if(data.importance == 3) {
+        notificationTracker[0].mild = notificationTracker[0].mild+1;
+        if(notifs.severe == 0 && notifs.medium == 0) {
+            icon.innerHTML = "notifications";
+        }
     }
 
     return el;
@@ -980,6 +1000,16 @@ function createNotification(data) {
 function removeNotification(el) {
     var parent = el.parentNode;
     el.parentNode.removeChild(el);
+
+    //Handle the importance values
+    if(el.importance == 1) {
+        notificationTracker[0].severe = notificationTracker[0].severe-1;
+    } else if(el.importance == 2) {
+        notificationTracker[0].medium = notificationTracker[0].medium-1;
+    } else if(el.importance == 3) {
+        notificationTracker[0].mild = notificationTracker[0].mild-1;
+    }
+
     if(el.parentNode.childNodes.length > 0) {
         var p = document.createElement("p");
         p.innerHTML = "Nothing to show";
@@ -987,6 +1017,7 @@ function removeNotification(el) {
         parent.appendChild(p);
     }
 }
+ 
 
 
 function exitProgram() {

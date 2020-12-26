@@ -33,7 +33,7 @@ autoUpdater.on("update-available", () => {
 })
 autoUpdater.on("update-downloaded", () => {
   //Quit the program and install the changes
-  autoUpdater.quitAndInstall();
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false}])
 })
 autoUpdater.on("update-not-available", () => {
   launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false}])
@@ -67,6 +67,7 @@ function boot() {
   })
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false}])
     
     //launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
   });
@@ -185,6 +186,10 @@ function openEditor() {
 
 }
 
+
+ipcMain.on("apply-update", () => {
+  autoUpdater.quitAndInstall();
+})
 
 ipcMain.on("open-main-window", (event) => {
   var open = openEditor();

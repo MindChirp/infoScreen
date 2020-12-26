@@ -1,4 +1,5 @@
-//const projectFilePath = "./extraResources/data/programData/projects";
+
+var projectFilePath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "projects");
 
 //Check if the client has logged in:
 function initializeProjectList() {

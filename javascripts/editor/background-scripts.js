@@ -2,17 +2,7 @@ var ratio = 16/9;
 function bkgScript() {
 //All background processes
 
-// --Keep track of viewport and resize to keep 16:9 aspect ratio
 
-   
-    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
-    var width = parseInt(style.width.split("px")[0]);
-    document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
-    /*document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
-    document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
-    document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
-    document.getElementById("content").style.height = width / (16/9) - 20 + "px";
-    */
 
     //Make more elegant and organized later. Fixes the size of the files browser so that the layout does not get f*cked up
     var innerBrowserHeight = parseInt(window.getComputedStyle(document.getElementById("browser").querySelector(".content-container")).height.split("px")[0]);
@@ -78,7 +68,39 @@ function bkgScript() {
 
         columns.appendChild(c);
     }
-    
+
     
     setTimeout(bkgScript, 10);
+}
+
+
+
+function calculateLayout() {
+    //Triggers every time the window is resized
+
+    //Get window size, calculate 98% of its width
+    var winWidth = window.innerWidth;
+    var parentWidth = (winWidth*98)/100;
+    var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
+    document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
+
+
+
+
+/////////////////////////////////////////////////////////////////
+// Keep track of viewport and resize to keep 16:9 aspect ratio //
+/////////////////////////////////////////////////////////////////
+   
+var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+var width = parseInt(style.width.split("px")[0]);
+document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+/*document.getElementById("middle-layer-container").style.maxHeight = width / (16/9) + 25 + "px";
+document.getElementById("middle-layer-container").style.height = width / (16/9) + 25 + "px";
+document.getElementById("effects").style.height = width / (16/9) + 25 + "px";
+document.getElementById("content").style.height = width / (16/9) - 20 + "px";
+*/ //--Legacy code, might as well remove later
+
+
+
+
 }
