@@ -156,6 +156,53 @@ window.onload = function() {
 
     var el = document.getElementById("developer-start");
     infoOnHover(el, "Trump likes the big pp");
+
+
+
+    //Add ripple on click effect to all the desired elements
+    var buttons = document.getElementsByClassName("ripple-element");
+    console.log(buttons)
+    var x;
+    for(x of buttons) {
+        appendRipple(x);
+    }
+}
+
+
+function appendRipple(el) {
+    if(!el.hasRipple) {
+
+        el.hasRipple = true;
+        el.addEventListener("click", function(e) {
+            var ripple = document.createElement("div");
+            ripple.setAttribute("class", "ripple-effect-circle");
+            el.appendChild(ripple);
+
+            var elStyle = window.getComputedStyle(el);
+            console.log(e);
+            var elHeight = elStyle.height;
+            var elWidth = elStyle.width;
+            var x = e.layerX + "px";
+            var y = e.layerY + "px";
+            ripple.style = `
+                left: ` + x + `;
+                top: ` + y + `;
+                height: ` + elHeight + `;
+                width: ` + elWidth + `;
+                position: absolute;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                animation: ripple-animation 500ms ease-in-out;
+                animation-fill-mode: both;
+                border-radius: 100%;
+                opacity: 0.5;
+                pointer-events: none;
+            `;
+            setTimeout(function() {
+                ripple.parentNode.removeChild(ripple);
+            }, 500);
+        })
+    }
 }
 
 
@@ -725,7 +772,8 @@ function userScreen(info, header, signIn) {
     info.innerHTML = "User information";
     info.addEventListener("click", function() {
         userInfo(content);
-    })
+    });
+
     var privacy = createSettingsButton();
     privacy.innerHTML = "Privacy";
 
@@ -761,6 +809,8 @@ function createSettingsButton() {
         margin-right: 1rem;
         margin-bottom: 1rem;
     `);
+    button.classList.add("ripple-element");
+    appendRipple(button);
     
     return button;
 }
@@ -948,7 +998,6 @@ ipcRenderer.on("update-handler", function(e, data) {
     if(root.info) {
         var notif = createNotification(messages[4]);
         document.getElementById("notifications-pane").appendChild(notif);
-
         notif.addEventListener("click", function() {
             var modal = menu("user");
             var releaseNotes = root.info.releaseNotes;
@@ -965,7 +1014,9 @@ ipcRenderer.on("update-handler", function(e, data) {
 
     if(newUpdate == true) {
         var notif = createNotification(messages[0]);
+        notif.classList.add("new-installation")
         document.getElementById("notifications-pane").appendChild(notif);
+        notif.showsProgress = false;
         notif.onclick = function() {
             startDownloading();
         }
@@ -1021,6 +1072,9 @@ function createNotification(data) {
 
     var el = document.createElement("div");
     el.className = "notification";
+    
+
+
     el.importance = data.importance;
     var title = document.createElement("p");
     title.innerHTML = data.title;
@@ -1165,4 +1219,73 @@ function appendReleaseNotes(rN, menu) {
 
 ipcRenderer.on("download-progress", function(progObj) {
     console.log(progObj);
+
+    if(document.getElementsByClassName("new-installation")[0]) {
+        var parent = document.getElementsByClassName("new-installation")[0];
+        if(!parent.showsProgress) {
+            parent.showsProgress = true;
+
+            var content = parent.getElementsByTagName("p");
+            content[1].parentNode.removeChild(content[1]);
+            content[2].parentNode.removeChild(content[2]);
+
+
+            var progCont = document.createElement("div");
+            progCont.className = "download-progress-bar-container";
+            
+            var progBar = document.createElement("div");
+            progBar.className = "progress-bar";
+            progCont.appendChild(progBar);
+
+            var percent = document.createElement("p");
+            percent.style = `
+                display: block;
+                color: var(--paragraph-color);
+                margin: 0;
+            `;
+            percent.innerHTML = "Loading...";
+            progCont.appendChild(percent);
+
+            parent.appendChild(progCont);
+        }
+    }
+
 })
+
+function debugDownloadBar() {
+    
+    if(document.getElementsByClassName("new-installation")[0]) {
+        var parent = document.getElementsByClassName("new-installation")[0];
+        if(!parent.showsProgress) {
+            parent.showsProgress = true;
+
+            var content = parent.getElementsByTagName("p");
+            content[1].parentNode.removeChild(content[1]);
+            content[2].parentNode.removeChild(content[2]);
+
+
+            var progCont = document.createElement("div");
+            progCont.className = "download-progress-bar-container";
+            
+            var progBar = document.createElement("div");
+            progBar.className = "progress-bar";
+            progCont.appendChild(progBar);
+
+            var percent = document.createElement("p");
+            percent.style = `
+                display: block;
+                color: var(--paragraph-color);
+                margin: 0;
+            `;
+            percent.innerHTML = "Loading...";
+            progCont.appendChild(percent);
+
+            parent.appendChild(progCont);
+        }
+    }
+}
+
+/*
+setTimeout(function() {
+    debugDownloadBar();
+}, 1000)*/

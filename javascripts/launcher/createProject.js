@@ -65,6 +65,8 @@ function createProject() {
         display: inline-block;
         float: right;
     `);
+    createB.classList.add("ripple-element");
+    appendRipple(createB);
 
     
     bottomRight.appendChild(createB);
@@ -122,6 +124,7 @@ function createProject() {
     for(let i = 0; i < 5; i++) {
         var el = document.createElement("div");
         el.setAttribute("class", "template-card standard smooth-shadow disabled");
+
         templateContainer.appendChild(el);
         if(i == 0) {
             el.setAttribute("class", "template-card standard smooth-shadow");
@@ -136,6 +139,9 @@ function createProject() {
                 text-align: center;
 
             `);
+
+            el.classList.add("ripple-element");
+            appendRipple(el);
         }
     }
 

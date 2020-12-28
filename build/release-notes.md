@@ -1,19 +1,19 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
         <li>Added better formatting for the changelog</li>
-        <li>Remember to put in all the changes here!</li>
+        <li>Added ripple effects on buttons for better interaction feedback</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>Notification pane is displayed behind disabled buttons in launcher</li>
+        <li>None</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>To be decided</li>
+        <li>None</li>
     </ul>
         <br>
 

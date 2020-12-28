@@ -76,15 +76,14 @@ function boot() {
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
 
-    var releaseNotes = fs.readFileSync("./build/release-notes.md", "utf8");
+    /*var releaseNotes = fs.readFileSync("./build/release-notes.md", "utf8");
 
-    
-    launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
-    setTimeout(function() {
+  
     launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: {version: "0.0.39", releaseNotes: releaseNotes}}])
-
-    }, 5000);
+*/
   });
+
+
   var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({
     pathname: htmlPath,

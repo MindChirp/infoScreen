@@ -93,14 +93,16 @@ function menu(type) {
         width: 3rem;
         z-index: 10;
     `);
+    back.classList.add("ripple-element");
+    appendRipple(back);
 
     infoOnHover(back, "Go back");
 
     back.addEventListener("click", function() {
-        el.parentNode.removeChild(el);
-        if(document.getElementsByClassName("information-popup")[0]) {
-            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
-        }
+            el.parentNode.removeChild(el);
+            if(document.getElementsByClassName("information-popup")[0]) {
+                document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
+            }
     })
 
     var ico = document.createElement("i");

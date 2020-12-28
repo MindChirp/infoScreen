@@ -380,6 +380,8 @@ input[type=range].fd-slider::-ms-thumb {
   background-color: var(--secondary-color);
 }
 
+
+
 @keyframes pop-in {
   0% {opacity: 0; transform: scale(0.93);}
   50%{opacity: 100%;}
