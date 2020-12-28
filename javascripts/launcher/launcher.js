@@ -78,7 +78,7 @@ window.onload = function() {
     //If not already set up, set up the localStorage
     var storage = window.localStorage;
     if(!storage.signedIn) {
-        localStorage.setItem("theme", "light");
+        localStorage.setItem("theme", "dark");
         localStorage.setItem("signedIn", false);
         localStorage.setItem("firstTime", true);
         signedIn = false;
@@ -909,16 +909,21 @@ if (data ===  null) {
 }
 */
 
-const messages = [
-    {title: "Installing update", meta: "Please wait!",version: "v0.0.32", importance: 1},
-    {title: "New update installed", meta: "Click to apply changes", importance: 2},
-    {title: "Could not download the update", meta: "Error while fetching files", importance: 1},
-    {title: "Checking for updates", meta: "Hang tight!", importance: 3}
-]
+
 var checking; 
 ipcRenderer.on("update-handler", function(e, data) {
     //Information sent by the autoupdater system
     var root = data[0];
+
+    var messages = [
+        {title: "Update available", meta: "Click to download", importance: 1, version: root.info.version},
+        {title: "New update installed", meta: "Click to apply changes", importance: 2},
+        {title: "Could not download the update", meta: "Error while fetching files", importance: 1},
+        {title: "Checking for updates", meta: "Hang tight!", importance: 3},
+    ]
+
+    console.log("Version: " + root.info.version);
+
     var checkingForUpdate = root.checking;
     var installed = root.installed;
     var newUpdate;
@@ -931,6 +936,9 @@ ipcRenderer.on("update-handler", function(e, data) {
     if(newUpdate == true) {
         var notif = createNotification(messages[0]);
         document.getElementById("notifications-pane").appendChild(notif);
+        notif.onclick = function() {
+            startDownloading();
+        }
     } else if(error) {
         var notif = createNotification(messages[2]);
         document.getElementById("notifications-pane").appendChild(notif);
@@ -955,6 +963,10 @@ ipcRenderer.on("update-handler", function(e, data) {
 
 function applyUpdate() {
     ipcRenderer.send("apply-update");
+}
+
+function startDownloading() {
+    ipcRenderer.send("start-downloading-update");
 }
 
 

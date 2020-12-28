@@ -33,6 +33,10 @@ function Themes(parent) {
     var buttons = [];
     var paths = path.join(__dirname, "internalResources", "images");
     var light = themes.addCard("Light Theme", paths+"/lighttheme.png");
+    light.deactivated = true;
+    light.style.opacity = 0.2;
+    light.style.cursor = "default";
+    infoOnHover(light, "Coming Soon");
     cont.appendChild(light);
     buttons.push(light);
 
@@ -85,13 +89,17 @@ function Themes(parent) {
     }
 
 
+    /////////////////////////////
+    // DEACTIVATED LIGHT THEME //
+    /////////////////////////////
+/*
 light.addEventListener("click", function() {
     setTheme(0);
     console.log(styles[0][0])
     light.childNodes[0].setAttribute("style", styles[0][0]);
     dark.childNodes[0].setAttribute("style", styles[1][0]);
     //cancer.childNodes[0].setAttribute("style", styles[1][0]);
-})
+})*/
 
     dark.addEventListener("click", function() {
         setTheme(1);
@@ -107,6 +115,7 @@ light.addEventListener("click", function() {
     dark.childNodes[0].setAttribute("style", styles[1][0]);
     })*/
 }
+
 
 
 function setTheme(theme) {

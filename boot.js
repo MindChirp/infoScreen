@@ -22,14 +22,15 @@ if(isDev) {
   log.info('App starting...');
 }
 
+autoUpdater.autoDownload = false;
 
 
 autoUpdater.on("checking-for-update", () => {
   launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
   
 })
-autoUpdater.on("update-available", () => {
-  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false}])
+autoUpdater.on("update-available", (updateInfo) => {
+  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: updateInfo}])
 })
 autoUpdater.on("update-downloaded", () => {
   //Quit the program and install the changes
@@ -192,6 +193,11 @@ function openEditor() {
 ipcMain.on("apply-update", () => {
   autoUpdater.quitAndInstall();
 })
+
+ipcMain.on("start-downloading-update", () => {
+  autoUpdater.downloadUpdate();
+})
+
 
 ipcMain.on("open-main-window", (event) => {
   var open = openEditor();
