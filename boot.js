@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut, webContents} = require('electron');
 const { openDevTools } = require('electron-debug');
 const { autoUpdater } = require("electron-updater");
+const fs = require("fs");
 const ipc = require
 const url = require('url');
 let win = null;
@@ -36,6 +37,12 @@ autoUpdater.on("update-downloaded", () => {
   //Quit the program and install the changes
   launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false, noUpdate: false}])
 })
+
+autoUpdater.on("download-progress", (progressObj) => {
+  //Quit the program and install the changes
+  launcherWin.webContents.send("download-progress", progressObj);
+})
+
 autoUpdater.on("update-not-available", () => {
   launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false, noUpdate: true}])
   
@@ -68,11 +75,15 @@ function boot() {
   })
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
+
+    var releaseNotes = fs.readFileSync("./build/release-notes.md", "utf8");
+
     
-    /*launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
+    launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
     setTimeout(function() {
-      launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false, noUpdate: true}])
-    }, 5000);*/
+    launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: {version: "0.0.39", releaseNotes: releaseNotes}}])
+
+    }, 5000);
   });
   var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({

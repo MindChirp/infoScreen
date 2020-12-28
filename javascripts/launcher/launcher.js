@@ -55,6 +55,9 @@ window.onload = function() {
         //Also, set the correct color theme, since we now know what preferences
         //The user has
 
+        //Light theme is disabled, so if by any odd chance localStorage is
+        //messed up, dark theme will be selected no matter what
+        setTheme(1);
         if(localStorage.getItem("theme") == "light") {
             setTheme(0);
         } else if(localStorage.getItem("theme") == "dark") {
@@ -914,39 +917,75 @@ var checking;
 ipcRenderer.on("update-handler", function(e, data) {
     //Information sent by the autoupdater system
     var root = data[0];
-
+    var version = "0.0.0";
+    var releaseNotes;
+    if(root.info) {
+        version = root.info.version;
+    }
     var messages = [
-        {title: "Update available", meta: "Click to download", importance: 1, version: root.info.version},
+        {title: "Update available", meta: "Click to download", importance: 2, version: version},
         {title: "New update installed", meta: "Click to apply changes", importance: 2},
-        {title: "Could not download the update", meta: "Error while fetching files", importance: 1},
+        {title: "Error", meta: "Could not connect to the file provider", importance: 1},
         {title: "Checking for updates", meta: "Hang tight!", importance: 3},
+        {title: "Release notes", meta: "Click to view the release notes", importance: 3}
     ]
-
-    console.log("Version: " + root.info.version);
 
     var checkingForUpdate = root.checking;
     var installed = root.installed;
     var newUpdate;
+
+    //root.info.releaseNotes
+
     if(root.newUpdate == true) {
         newUpdate = root.newUpdate;
     } else if(root.noUpdate) {
         newUpdate = "noUpdate";
     }
     var error = root.error;
+
+    //If root.info is included, there must be a releaseNote attached.
+    //Create a notification for the release note.
+    if(root.info) {
+        var notif = createNotification(messages[4]);
+        document.getElementById("notifications-pane").appendChild(notif);
+
+        notif.addEventListener("click", function() {
+            var modal = menu("user");
+            var releaseNotes = root.info.releaseNotes;
+            appendReleaseNotes(releaseNotes, modal);
+        })
+
+
+        if(checking) {
+            console.log(checking)
+            removeNotification(checking);
+        }
+
+    }
+
     if(newUpdate == true) {
         var notif = createNotification(messages[0]);
         document.getElementById("notifications-pane").appendChild(notif);
         notif.onclick = function() {
             startDownloading();
         }
+        if(checking) {
+            removeNotification(checking);
+        }
     } else if(error) {
         var notif = createNotification(messages[2]);
         document.getElementById("notifications-pane").appendChild(notif);
+        if(checking) {
+            removeNotification(checking);
+        }
     } else if(installed) {
         var notif = createNotification(messages[1]);
         document.getElementById("notifications-pane").appendChild(notif);
         notif.onclick = function() {
             applyUpdate();
+        }
+        if(checking) {
+            removeNotification(checking);
         }
         notif.style.cursor = "pointer";
     } else if(checkingForUpdate) {      
@@ -1004,29 +1043,32 @@ function createNotification(data) {
         width: 1.5rem;
         cursor: pointer;
         border-radius: 100%;
-        background-color: var(--main-button-color);
         position: absolute;
+        z-index: 2;
     `;
 
     var p = document.createElement("p");
     p.innerHTML = "×";
     p.style = `
-    line-height: 1.5rem;
-    font-size: 2rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    text-align: center;
-    margin: 0;
-    transform: translate(0, 1px);
+        line-height: 1.5rem;
+        font-size: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        text-align: center;
+        margin: 0;
+        transform: translate(0, 1px);
     `;
     cross.appendChild(p);
-    
-    cross.setAttribute("onclick", "removeNotification(this.closest('.notification'))");
+    //removeNotification(this.closest('.notification'))
+    cross.addEventListener("click", function(e) {
+        e.stopPropagation(); //Prevent the event from propagating into the parent event listener
+        removeNotification(e.target.closest('.notification'));
+    });
 
     el.appendChild(cross);
 
 
-    var ver;
+    var ver = null;
     if(data.version) {
         ver = document.createElement("p");
         ver.class = "version";
@@ -1091,3 +1133,36 @@ function removeNotification(el) {
 function exitProgram() {
     ipcRenderer.send("closeLauncher", true);
 }
+
+
+
+function appendReleaseNotes(rN, menu) {
+/*           ::Formatting::
+    # - title - #
+    ## - sub-title - ##
+    -- - divider line
+*/
+    var header = menu.querySelector(".header");
+    var h1 = document.createElement("h1");
+    h1.style = `
+        margin: 0;
+        height: 100%;
+        width: fit-content;
+        margin-left: 1rem;
+        line-height: 10rem;
+    `
+    h1.innerHTML = "Release Notes";
+    header.appendChild(h1);
+
+    var p = document.createElement("p");
+    p.innerHTML = rN;
+    p.style = `
+        line-height: 1rem;
+        margin: 1rem 0 0 1rem;
+    `
+    menu.appendChild(p);
+}
+
+ipcRenderer.on("download-progress", function(progObj) {
+    console.log(progObj);
+})

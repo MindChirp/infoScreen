@@ -57,8 +57,7 @@ document.addEventListener("click", function(e) {
 
     if(document.getElementById("notifications-pane")) {
         var el = document.getElementById("notifications-pane");
-        if(e.target.closest("#notifications-pane")) {
-
+        if(e.target.closest(".notification")) {
         } else {
             el.style.display = "none";
         }
