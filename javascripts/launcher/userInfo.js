@@ -29,17 +29,17 @@ function userInfo(parent) {
     var el = textCont("License", "Standard (Developer/Tester)");
     wrapper.appendChild(el)
 
-    var el = textCont("Account age", userData.creationDate);
+    var el = textCont("First Seen", userData.creationDate);
     wrapper.appendChild(el)
 
-    var pass =  userData.password;
+    /*var pass =  userData.password;
     var hidden = "";
     
     for(let i = 0; i < pass.length; i++) {
         hidden = hidden + "*";
     }
     var el = textCont("Password", hidden);
-    wrapper.appendChild(el)
+    wrapper.appendChild(el)*/
 
     parent.appendChild(wrapper);
 

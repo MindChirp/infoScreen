@@ -137,6 +137,8 @@ function highlightColumn(el, entered) {
             el.style.backgroundColor = "transparent";
         }
     } else {
-        el.style.backgroundColor = "transparent";
+            if(document.getElementsByClassName("file-ghost")[0]) {
+                el.style.backgroundColor = "initial";
+            }
     }
 }

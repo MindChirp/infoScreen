@@ -20,7 +20,18 @@ function about(parent) {
     parent.appendChild(wrapper);
 
     //Read the package.json file to get the version
-    var dat = fs.readFileSync("./package.json")
+    var dat;
+    try {
+        var dir = path.join(path.dirname(__dirname), "package.json");
+        dat = fs.readFileSync(dir);
+    } catch (error) {
+        try {
+            var dir = path.join(__dirname, "package.json");
+            dat = fs.readFileSync(dir);
+        } catch (error) {
+            
+        }
+    }
 
         data = JSON.parse(dat);
         console.log(data.version);

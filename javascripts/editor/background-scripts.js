@@ -65,9 +65,28 @@ function bkgScript() {
         var c = addFieldsToScrubber(5);
 
         columns.appendChild(c);
+    }    
+
+
+        /////////////////////////////////////////////////////////////////
+    // Keep track of viewport and resize to keep 16:9 aspect ratio //
+    /////////////////////////////////////////////////////////////////
+    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    var parentStyle = getComputedStyle(document.getElementById("viewport"));
+    var width = parseInt(style.width.split("px")[0]);
+    var parentHeight = parseInt(parentStyle.height.split("px")[0]);
+
+    var neededHeight = width / (ratio);
+    console.log(neededHeight + " " + parentHeight)
+    if(neededHeight > parentHeight) {
+        document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
+        document.getElementById("viewport").querySelector("#content").style.height = "100%";
+    } else {
+        document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+        document.getElementById("viewport").querySelector("#content").style.width = "100%";
     }
 
-    
+
     setTimeout(bkgScript, 10);
 }
 
@@ -141,7 +160,7 @@ function calculateLayoutOnStartup() {
     ////////////////////////////////////////////////////////////
     // Calculate the height of the top layer and bottom layer //
     ////////////////////////////////////////////////////////////
-    //var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px")); --Might remove later
+    //var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
     var topLayerHeight = contHeight/2; //Use contHeight from the previous lines
     var bottomLayerHeight = (contHeight-((contHeight/2)+15));
     document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";

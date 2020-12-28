@@ -57,9 +57,9 @@ document.addEventListener("click", function(e) {
 
     if(document.getElementById("notifications-pane")) {
         var el = document.getElementById("notifications-pane");
-        console.log(el.contains(e.target))
-        console.log(el.style.display);
-        if(el.style.display != "none" && !el.contains(e.target)) {
+        if(e.target.closest("#notifications-pane")) {
+
+        } else {
             el.style.display = "none";
         }
     }
@@ -99,7 +99,7 @@ function menu(type) {
 
     back.addEventListener("click", function() {
         el.parentNode.removeChild(el);
-        if(document.getElementsByClassName("information-popup")) {
+        if(document.getElementsByClassName("information-popup")[0]) {
             document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
         }
     })
@@ -129,5 +129,5 @@ function toggleNotificationsPane() {
         } else {
             pane.style.display = "none";
         }
-    }, 10)
+    }, 10);
 }

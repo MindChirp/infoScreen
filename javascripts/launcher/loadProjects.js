@@ -1,5 +1,4 @@
 
-var projectFilePath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "projects");
 
 //Check if the client has logged in:
 function initializeProjectList() {
@@ -8,23 +7,9 @@ function initializeProjectList() {
     }
 }
 
-function loadProjects() {
 
 
 var projects = [];
-fs.readdir(projectFilePath, (err, dat) => {
-    if (err) throw err;
-
-    //Get all the projects, and list them out wihtout their extensions
-    var x;
-    for(x of dat) {
-        if(x.split(".")[x.split(".").length-1] == "proj") {
-            projects.push(x.split(".")[0])
-        }
-    }
-
-    createList(projects);
-})
 
 
 function createList(arr) {
@@ -77,6 +62,49 @@ function createList(arr) {
         console.log("ouiahsd")
     }
 }
+
+function loadInDevMode() {
+
+    //Loading using the standard path has failed, resort to the dev path
+    var projectFilePath = path.join(__dirname,"extraResources", "data", "programData", "projects");
+    projects = [];
+    fs.readdir(projectFilePath, (err, dat) => {
+        if (err) throw err;
+
+        //Get all the projects, and list them out wihtout their extensions
+        var x;
+        for(x of dat) {
+            if(x.split(".")[x.split(".").length-1] == "proj") {
+                projects.push(x.split(".")[0])
+            }
+        }
+        
+        createList(projects);
+    })
+}
+
+function loadProjects() {
+
+
+var projectFilePath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "projects");
+fs.readdir(projectFilePath, (err, dat) => {
+    if (err) {
+        loadInDevMode()
+        return;
+    }
+    //Get all the projects, and list them out wihtout their extensions
+    var x;
+    for(x of dat) {
+        if(x.split(".")[x.split(".").length-1] == "proj") {
+            projects.push(x.split(".")[0])
+        }
+    }
+
+    createList(projects);
+})
+
+
+
 
 }
 

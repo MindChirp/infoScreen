@@ -29,14 +29,14 @@ autoUpdater.on("checking-for-update", () => {
   
 })
 autoUpdater.on("update-available", () => {
-  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
+  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false}])
 })
 autoUpdater.on("update-downloaded", () => {
   //Quit the program and install the changes
-  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false}])
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false, noUpdate: false}])
 })
 autoUpdater.on("update-not-available", () => {
-  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false}])
+  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false, noUpdate: true}])
   
 })
 autoUpdater.on("error", () => {
@@ -67,9 +67,11 @@ function boot() {
   })
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
-  launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: true, checking: false, error: false}])
     
-    //launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false}])
+    /*launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])
+    setTimeout(function() {
+      launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: false, error: false, noUpdate: true}])
+    }, 5000);*/
   });
   var htmlPath = path.join(__dirname, "launcher.html");
   launcherWin.loadURL(url.format({

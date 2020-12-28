@@ -228,7 +228,8 @@
             var NoCols = Math.round((w-64)/96) + 3;
             var NoRows = Math.round((h-64)/64) + 3;
 
-            initScrubber(NoRows,NoCols);
+            //Select column 0 by default
+            initScrubber(NoRows,NoCols, 0);
             loadFilesIntoExplorer();
             loadWidgets();
             enableAppBarButtons();

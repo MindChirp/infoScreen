@@ -230,7 +230,7 @@ function setTheme(theme) {
    x 0 0 0 0 0 0
    x 0 0 0 0 0 0
    */
-function initScrubber(rows,cols) {
+function initScrubber(rows,cols,activeColumn) {
     //Create columns
     var cont = document.getElementById("timeline").querySelector(".sub-container").querySelector(".scrubber");
     for(let i = 0; i < cols; i++) {
@@ -242,7 +242,7 @@ function initScrubber(rows,cols) {
         //Setup the column
         col.setAttribute("time", "00:10");
         var pos = document.createElement("div");
-        if(i == 0) {
+        if(i == activeColumn) {
             pos.setAttribute("active", "true");
         }
         document.getElementById("timeline").querySelector(".sub-container").querySelector(".top-bar").appendChild(pos);
@@ -263,6 +263,7 @@ function initScrubber(rows,cols) {
         }
 
     }
+    cont.childNodes[activeColumn].setAttribute("displaying", "true");
 
 }
 

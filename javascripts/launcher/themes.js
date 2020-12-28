@@ -31,7 +31,7 @@ function Themes(parent) {
 
 
     var buttons = [];
-    var paths = path.join(__dirname, "extraResources", "data", "files", "images");
+    var paths = path.join(__dirname, "internalResources", "images");
     var light = themes.addCard("Light Theme", paths+"/lighttheme.png");
     cont.appendChild(light);
     buttons.push(light);
@@ -43,7 +43,7 @@ function Themes(parent) {
 
 
     //Future easter egg?
-    /*var cancer = themes.addCard("Cancer Theme", "./data/files/images/cancertheme.png");
+    /*var cancer = themes.addCard("Cancer Theme", "./internalResources/images/cancertheme.png");
     cont.appendChild(cancer);*/
 
     var styles = [
@@ -78,12 +78,12 @@ function Themes(parent) {
         light.childNodes[0].setAttribute("style", styles[1][0]);
         //cancer.childNodes[0].setAttribute("style", styles[1][0]);
 
-    } /*else if(theme=="cancer"){
+    } else if(theme=="cancer"){
         cancer.childNodes[0].setAttribute("style", styles[0][0]);
     light.childNodes[0].setAttribute("style", styles[1][0]);
     dark.childNodes[0].setAttribute("style", styles[1][0]);
     }
-*/
+
 
 light.addEventListener("click", function() {
     setTheme(0);
@@ -99,8 +99,8 @@ light.addEventListener("click", function() {
         light.childNodes[0].setAttribute("style",  styles[1][0]);
         //cancer.childNodes[0].setAttribute("style",  styles[1][0]);  
     })
-/*
-    cancer.addEventListener("click", function() {
+
+    /*cancer.addEventListener("click", function() {
         setTheme(2);
         cancer.childNodes[0].setAttribute("style", styles[0][0]);
     light.childNodes[0].setAttribute("style", styles[1][0]);

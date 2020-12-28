@@ -872,6 +872,7 @@ html {
     display: grid;
     grid-template-columns: repeat(40,6rem);
     box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+    z-index: 2;
 }
 
 #main-container #bottom-layer #timeline .sub-container .top-bar div[active="true"] {
@@ -892,6 +893,7 @@ html {
     overflow-y: scroll;
     white-space: nowrap;
     scroll-snap-type: both mandatory;
+    z-index: 1;
 }
 
 
@@ -904,6 +906,11 @@ html {
     display: inline-block;
     vertical-align: top;
     transition: all 75ms ease-in-out;
+
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column[displaying="true"] {
+    background-color: #23313D;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
@@ -956,7 +963,9 @@ body .file-dropdown-menu {
     box-sizing: border-box;
     border-radius: 0.25rem;
 }
-
+body .context-menu {
+    z-index: 104;       
+}
 body .context-menu button:disabled {
     opacity: 0.3;
     cursor: default;

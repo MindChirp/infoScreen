@@ -1,3 +1,4 @@
+const { resolveFiles } = require("electron-updater/out/providers/Provider");
 const fs = require("fs-extra");
 
 function createProject() {
@@ -84,7 +85,7 @@ function createProject() {
 
 
     createB.addEventListener("click", function() {
-        create(name.value, creators.childNodes[1].value, slides.childNodes[1].value)
+        create(name.value, creators.childNodes[1].value, slides.childNodes[1].value, cont);
     });
 
 
@@ -141,8 +142,7 @@ function createProject() {
 }
 
 
-function create(title,author,slides) {
-    console.log("oansd");
+function create(title,author,slides, menu) {
     if(title.trim() == "") {
         project.error("Specify a project name");
     } else if(author.trim() == "" || slides.trim() == "") {
@@ -150,7 +150,24 @@ function create(title,author,slides) {
     } else if(slides == 0) {
         project.error("Project must have at least one slide")
     } else {
-        createFile();
+        var create = new Promise((resolve, reject) => {
+            var result = createFile()
+            if(result) {
+                resolve();
+            } else {
+                reject();
+            }
+        })
+        .then(function(result) {
+            //Close the menu modal
+            menu.parentNode.removeChild(menu);
+            console.log("oiasdoiunasduna");
+        })
+        .catch(function() {
+            project.error("Could not create the project");
+        })
+
+        
     }
 }
 
@@ -225,7 +242,18 @@ function createFile(template) {
     var zip = new require("node-zip")();
     zip.file("meta.json", meta);
     var data = zip.generate({base64:false,compression:'DEFLATE'});
-    fs.writeFileSync('./data/programData/projects/' + title + '.proj', data, 'binary');
-
-    initializeProjectList();
+    try {
+        var dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
+        fs.writeFileSync(path.join(dirPath, title + '.proj'), data, 'binary');
+        initializeProjectList();
+        return true;
+    } catch (error) {
+        try {
+            var dirPath = path.join(__dirname, "extraResources", "data", "programData", "projects");
+            fs.writeFileSync(path.join(dirPath, title + '.proj'), data, 'binary');
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
 }
