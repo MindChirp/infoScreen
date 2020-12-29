@@ -9,6 +9,12 @@ yourBrowserWindow.on("blur", (e) => {
     document.getElementById("project-name").style.opacity = 0.5;
 })
 
+
+
+
+
+
+
 yourBrowserWindow.on("focus", (e) => {
     var appBar = document.getElementById("app-bar");
     appBar.style.opacity = 1;
@@ -239,6 +245,17 @@ function initScrubber(rows,cols,activeColumn) {
         cont.appendChild(col);
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
+
+        //Create an observer for the timeline columns
+        const observerOptions = {
+            childList: true,
+            attributes: false,
+            subtree: true
+        }
+  
+        const observer = new MutationObserver(columnChangeCallBack);
+
+        observer.observe(col, observerOptions);
         //Setup the column
         col.setAttribute("time", "00:10");
         var pos = document.createElement("div");

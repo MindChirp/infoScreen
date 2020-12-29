@@ -25,6 +25,7 @@
     <h2 style="margin: 0">Acknowledged bugs</h2>
     <ul>
         <li>Profile picture issues in launcher</li>
+        <li>Movie file dragging shadows and timeline elements are broken</li>
         <li>Client occationally signs out by its own</li>
         <li>File-browser content displaying issue</li>
         <li>Redirecting links crashes the program (Need to create a hyperlink-handler)</li>

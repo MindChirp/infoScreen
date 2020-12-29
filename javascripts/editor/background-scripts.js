@@ -114,22 +114,11 @@ function calculateLayout() {
     var bottomLayerHeight = (contHeight-((contHeight/2)+15));
     document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";
 
+
     /////////////////////////////////////////////////////////////////
     // Keep track of viewport and resize to keep 16:9 aspect ratio //
     /////////////////////////////////////////////////////////////////
-    var parentStyle = getComputedStyle(document.getElementById("viewport"));
-    var parentWidth = parseInt(parentStyle.width.split("px")[0]);
-    var parentHeight = parseInt(parentStyle.height.split("px")[0]);
-
-    var neededHeight = parentWidth / (ratio);
-    console.log(neededHeight + " " + parentHeight)
-    if(neededHeight > parentHeight) {
-        document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
-        document.getElementById("viewport").querySelector("#content").style.height = "100%";
-    } else {
-        document.getElementById("viewport").querySelector("#content").style.height = parentWidth / (ratio) + "px";
-        document.getElementById("viewport").querySelector("#content").style.width = "100%";
-    }
+    calculateViewportSize();
 
 }
 
@@ -159,20 +148,27 @@ function calculateLayoutOnStartup() {
     /////////////////////////////////////////////////////////////////
     // Keep track of viewport and resize to keep 16:9 aspect ratio //
     /////////////////////////////////////////////////////////////////
-    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
+    calculateViewportSize();
+
+
+
+}
+
+function calculateViewportSize() {
+    /////////////////////////////////////////////////////////////////
+    // Keep track of viewport and resize to keep 16:9 aspect ratio //
+    /////////////////////////////////////////////////////////////////
     var parentStyle = getComputedStyle(document.getElementById("viewport"));
-    var width = parseInt(style.width.split("px")[0]);
+    var parentWidth = parseInt(parentStyle.width.split("px")[0]);
     var parentHeight = parseInt(parentStyle.height.split("px")[0]);
 
-    var neededHeight = width / (ratio);
+    var neededHeight = parentWidth / (ratio);
     console.log(neededHeight + " " + parentHeight)
     if(neededHeight > parentHeight) {
         document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
         document.getElementById("viewport").querySelector("#content").style.height = "100%";
     } else {
-        document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+        document.getElementById("viewport").querySelector("#content").style.height = parentWidth / (ratio) + "px";
         document.getElementById("viewport").querySelector("#content").style.width = "100%";
     }
-
-
 }

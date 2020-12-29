@@ -141,21 +141,3 @@ function handleMouseMove(e) {
 
 }
 
-function highlightColumn(el, entered) {
-    if(document.getElementsByClassName("file-ghost")[0]) {
-        if(entered) {
-            el.style.backgroundColor = "var(--dark-shade)";
-        } else if(!entered) {
-            if(el.getAttribute("displaying") == "true") {
-                el.style.backgroundColor = "#23313D";
-            } else {
-                
-                el.style.backgroundColor = "transparent";
-            }
-        }
-    } else {
-            if(document.getElementsByClassName("file-ghost")[0]) {
-                el.style.backgroundColor = "transparent";
-            }
-    }
-}
