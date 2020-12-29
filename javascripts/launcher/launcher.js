@@ -191,7 +191,7 @@ function appendRipple(el) {
                 width: ` + elWidth + `;
                 position: absolute;
                 transform: translate(-50%, -50%);
-                background-color: white;
+                background-color: rgb(20,20,20);
                 animation: ripple-animation 500ms ease-in-out;
                 animation-fill-mode: both;
                 border-radius: 100%;
@@ -445,7 +445,16 @@ function userSettings() {
         register.className = "register-user-link"
         form.appendChild(register);
 
-
+        var devSignIn = document.createElement("button");
+        devSignIn.className = "fd-settings-button smooth-shadow";
+        devSignIn.style = `
+            position: absolute;
+            bottom: 2rem;
+            right: 1rem;
+        `;
+        devSignIn.innerHTML = "Dev Sign-In"
+        cont.appendChild(devSignIn);
+        devSignIn.setAttribute("onclick", "developerSignIn()");
 
         logIn.addEventListener("click", function(event) {
             event.preventDefault(); 
@@ -476,8 +485,9 @@ function userSettings() {
             //Make server request
 
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", "http://80.213.230.181:3000/auth");
-
+            //xhr.open("POST", "http://80.213.230.181:3000/auth");
+            xhr.open("POST", "http://localhost:3000/auth");
+            
             var pass = pswrd.value;
             var usrname = usrName.value;
 
@@ -512,6 +522,7 @@ function userSettings() {
 
                                 //Update the main launcher screen to reflect the localStorage values
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
+                                console.log(JSON.stringify(dat));
                                 userScreen(dat, header, true);
                                 changeState();
 
@@ -1172,7 +1183,7 @@ function removeNotification(el) {
     } else {
         icon.innerHTML = "notifications_none";
     }
-    parent.removeChild(el);
+    el.parentNode.removeChild(el);
 
     if(parent.childNodes.length == 0) {
         var p = document.createElement("p");
@@ -1217,6 +1228,8 @@ function appendReleaseNotes(rN, menu) {
     menu.appendChild(p);
 }
 
+
+/*
 ipcRenderer.on("download-progress", function(progObj) {
     console.log(progObj);
 
@@ -1284,7 +1297,7 @@ function debugDownloadBar() {
         }
     }
 }
-
+*/
 /*
 setTimeout(function() {
     debugDownloadBar();

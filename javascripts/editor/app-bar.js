@@ -83,7 +83,7 @@ const template = [
                     },
                     {label: "divider"},
                     {
-                        label: "Advanced"
+                        label: "Advanced",
                     }
                 ]
             },

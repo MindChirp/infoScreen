@@ -263,6 +263,8 @@ function initScrubber(rows,cols,activeColumn) {
         }
 
     }
+    
+    calculateColumnHeights();
     cont.childNodes[activeColumn].setAttribute("displaying", "true");
 
 }
@@ -652,8 +654,24 @@ function addFieldsToScrubber(amnt) {
             r.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
             c.appendChild(r);
         }
-
+        calculateColumnHeights();
         return c
 
+    }
+}
+
+function calculateColumnHeights() {
+    //////////////////////////////////////////////
+    // Set the height of each individual column //
+    //////////////////////////////////////////////
+    //Get the amount of rows in the first column, and the height of each row
+    var path = document.getElementById("main-container").querySelector("#bottom-layer").querySelector("#timeline");
+    var cols = document.getElementsByClassName("timeline-column");
+    var amntRows = cols[0].childNodes.length;
+    var rowHeight = parseInt(window.getComputedStyle(cols[0].childNodes[0]).height.split("px"));
+    var h = amntRows*rowHeight;
+    var x;
+    for(x of cols) {
+        x.style.height = h+"px"; 
     }
 }

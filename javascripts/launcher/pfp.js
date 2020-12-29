@@ -183,6 +183,8 @@ function profilePhoto(parent) {
     adjust.innerHTML = "Position image";
     adjust.style.display = "block";
     adjust.style.marginTop = "0.5rem";
+    adjust.classList.add("ripple-element");
+    appendRipple(adjust);
 
     adjust.addEventListener("click", function() {
         imgCont.style.borderRadius = "100%";
@@ -259,6 +261,9 @@ function profilePhoto(parent) {
                 margin-top: 0.5rem;
             `);
             save.innerHTML = "Save changes";
+            save.classList.add("ripple-element");
+            appendRipple(save);
+
             cont.appendChild(save)
 
             save.addEventListener("click", function() {

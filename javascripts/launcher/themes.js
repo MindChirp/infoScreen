@@ -36,7 +36,7 @@ function Themes(parent) {
     light.deactivated = true;
     light.style.opacity = 0.2;
     light.style.cursor = "default";
-    infoOnHover(light, "Coming Soon");
+    infoOnHover(light, "In the works");
     cont.appendChild(light);
     buttons.push(light);
 

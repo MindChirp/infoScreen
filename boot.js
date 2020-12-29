@@ -24,7 +24,7 @@ if(isDev) {
 }
 
 autoUpdater.autoDownload = false;
-
+autoUpdater.autoInstallOnAppQuit = false;
 
 autoUpdater.on("checking-for-update", () => {
   launcherWin.webContents.send("update-handler", [{newUpdate: false, installed: false, checking: true, error: false}])

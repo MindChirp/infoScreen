@@ -17,12 +17,7 @@ function bkgScript() {
     var scrollH = path.querySelector(".sub-container").querySelector(".scrubber").scrollHeight;
     var scrollW = path.querySelector(".sub-container").querySelector(".scrubber").scrollWidth;
 
-    var cols = document.getElementsByClassName("timeline-column");
-    var h = window.getComputedStyle(path).height;
-    var x;
-    for(x of cols) {
-        x.style.height = h; 
-    }
+
 
 
     var maxW = parseInt(w.split("px")[0]-64);
@@ -54,6 +49,7 @@ function bkgScript() {
                 x.appendChild(r);
             }
         }
+        calculateColumnHeights();
 
     }
 
@@ -67,8 +63,8 @@ function bkgScript() {
         columns.appendChild(c);
     }    
 
-
-        /////////////////////////////////////////////////////////////////
+/*
+    /////////////////////////////////////////////////////////////////
     // Keep track of viewport and resize to keep 16:9 aspect ratio //
     /////////////////////////////////////////////////////////////////
     var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
@@ -86,7 +82,7 @@ function bkgScript() {
         document.getElementById("viewport").querySelector("#content").style.width = "100%";
     }
 
-
+*/
     setTimeout(bkgScript, 10);
 }
 
@@ -114,7 +110,6 @@ function calculateLayout() {
     ////////////////////////////////////////////////////////////
     // Calculate the height of the top layer and bottom layer //
     ////////////////////////////////////////////////////////////
-    var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
     var topLayerHeight = contHeight/2; //Use contHeight from the previous lines
     var bottomLayerHeight = (contHeight-((contHeight/2)+15));
     document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";
@@ -122,23 +117,19 @@ function calculateLayout() {
     /////////////////////////////////////////////////////////////////
     // Keep track of viewport and resize to keep 16:9 aspect ratio //
     /////////////////////////////////////////////////////////////////
-    var style = getComputedStyle(document.getElementById("viewport").querySelector("#content"));
     var parentStyle = getComputedStyle(document.getElementById("viewport"));
-    var width = parseInt(style.width.split("px")[0]);
+    var parentWidth = parseInt(parentStyle.width.split("px")[0]);
     var parentHeight = parseInt(parentStyle.height.split("px")[0]);
 
-    var neededHeight = width / (ratio);
+    var neededHeight = parentWidth / (ratio);
     console.log(neededHeight + " " + parentHeight)
     if(neededHeight > parentHeight) {
         document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
         document.getElementById("viewport").querySelector("#content").style.height = "100%";
     } else {
-        document.getElementById("viewport").querySelector("#content").style.height = width / (ratio) + "px";
+        document.getElementById("viewport").querySelector("#content").style.height = parentWidth / (ratio) + "px";
         document.getElementById("viewport").querySelector("#content").style.width = "100%";
     }
-
-
-
 
 }
 
@@ -154,13 +145,12 @@ function calculateLayoutOnStartup() {
     // Set the height of the #main-container, and thus keep the program properly dispayed //
     ////////////////////////////////////////////////////////////////////////////////////////
     var winHeight = window.innerHeight;
-    var contHeight = winHeight - 22*2 + "px" // 22*2 == height of the app-bar and the padding between it and the main container
+    var contHeight = winHeight - 22*2; // 22*2 == height of the app-bar and the padding between it and the main container
     document.getElementById("main-container").style.height = contHeight + "px";
 
     ////////////////////////////////////////////////////////////
     // Calculate the height of the top layer and bottom layer //
     ////////////////////////////////////////////////////////////
-    //var elHeight = parseInt(window.getComputedStyle(document.getElementById("main-container-wrapper")).height.split("px"));
     var topLayerHeight = contHeight/2; //Use contHeight from the previous lines
     var bottomLayerHeight = (contHeight-((contHeight/2)+15));
     document.getElementById("main-container").style.gridTemplateRows = topLayerHeight + "px " + bottomLayerHeight + "px";

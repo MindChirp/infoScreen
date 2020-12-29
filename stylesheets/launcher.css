@@ -17,7 +17,9 @@ body {
   }
 
 
-
+a {
+  color: var(--slider-color);
+}
 
 *, *::after, *::before {
 	-webkit-user-select: none;
@@ -59,7 +61,6 @@ input::-webkit-inner-spin-button {
     --paragraph-color: rgb(50,50,50);
     --slider-color: #4da0ff;
   }
-
 
 
 .info-circle {
@@ -301,7 +302,7 @@ input::-webkit-inner-spin-button {
     width: 7rem;
     transform: translateY(20%);
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 #user-container #pfp #profile-photo-image {
@@ -511,7 +512,6 @@ div.disabled {
   padding: 0.5rem;
   box-sizing: border-box;
   animation: fade-in 150ms ease-in-out;
-  z-index: 1000;
   max-height: 20.9rem;
   overflow-y: auto;
 }

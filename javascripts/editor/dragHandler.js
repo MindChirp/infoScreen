@@ -56,6 +56,18 @@ function dragFileHandler(el) {
 
         //Get the element which the mouse has been let go over
         var el = e.target;
+
+        //Remove the column highlight
+        var col = el.closest(".timeline-column");
+        if(col != undefined && col.getAttribute("displaying") != "true") {
+            col.style.backgroundColor = "transparent";
+        }
+        console.log(col.getAttribute("displaying"))
+        if(col.getAttribute("displaying") == "true") {
+            console.log(col)
+            col.style.backgroundColor = "#23313D";
+        }
+
         if(el.getAttribute("droppable") == null) return; 
         var file = document.createElement("div");
         file.setAttribute("class", "scrubber-element");
@@ -94,12 +106,12 @@ function dragFileHandler(el) {
             //of the div
             file.appendChild(p);
             p.setAttribute("style", `
-            height: 100%;
-            width: 100%;
-            text-align: center;
-            line-height: 4rem;
-            margin: 0;
-            font-weight: lighter;
+                height: 100%;
+                width: 100%;
+                text-align: center;
+                line-height: 4rem;
+                margin: 0;
+                font-weight: lighter;
             `);
             p.setAttribute("hasTab", "false");
 
@@ -134,11 +146,16 @@ function highlightColumn(el, entered) {
         if(entered) {
             el.style.backgroundColor = "var(--dark-shade)";
         } else if(!entered) {
-            el.style.backgroundColor = "transparent";
+            if(el.getAttribute("displaying") == "true") {
+                el.style.backgroundColor = "#23313D";
+            } else {
+                
+                el.style.backgroundColor = "transparent";
+            }
         }
     } else {
             if(document.getElementsByClassName("file-ghost")[0]) {
-                el.style.backgroundColor = "initial";
+                el.style.backgroundColor = "transparent";
             }
     }
 }
