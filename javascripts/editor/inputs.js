@@ -38,6 +38,8 @@ function TabSystem() {
             width: fit-content;
             height: fit-content;
             float: left;
+            display: block;
+            margin-bottom: 0.5rem;
         `;
 
         var p = document.createElement("p");
@@ -81,7 +83,7 @@ function TabSystem() {
             p.innerHTML = unit;
             p.style = `
                 display: inline-block;
-                margin-left: 0.5rem;
+                margin: 0 0 0 0.5rem;
                 color: var(--paragraph-color);
                 opacity: 0.6;
             `;
@@ -89,6 +91,34 @@ function TabSystem() {
             el.appendChild(p);
         }
 
+        return el;
+    },
+    this.slider = function(title) {
+        var el = document.createElement("div");
+        el.style = `
+            width: 100%;
+            height: fit-content;
+            float: left;
+            display: block;
+        `;
+
+        var p = document.createElement("p");
+        p.innerHTML = title;
+        p.style = `
+            margin: 0;
+            line-height: 1rem;
+            font-weight: lighter;
+        `
+        el.appendChild(p);
+
+        var slider = document.createElement("input");
+        slider.style = `
+            margin: 0;  
+            width: 100%;
+        `
+        slider.className = "fd-slider";
+        slider.type = "range";
+        el.appendChild(slider);
         return el;
     }
 

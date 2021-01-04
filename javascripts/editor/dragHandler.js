@@ -75,7 +75,13 @@ function dragFileHandler(el) {
         file.setAttribute("hasTab", "false");
         file.setAttribute("style", "opacity: 1");
         el.appendChild(file);
-        file.handlerId = Date.now();
+        
+        //Define the default settings for the timeline element
+        //This will be used later to load in the tab 
+        var borderRadius = "0.25";
+        var opacity = "1";
+        var shadowMultiplier = 0;
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier}];
 
         var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");

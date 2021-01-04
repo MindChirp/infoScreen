@@ -52,7 +52,7 @@ function columnChangeCallBack(mutationList, observer) {
             //Handle the added nodes
             
             if(!mutation.addedNodes[0]) return;
-            
+
             //Get the changed column index
             if(mutation.addedNodes[0].getAttribute("class") == "scrubber-element") {
                 var addedNode = mutation.addedNodes[0];

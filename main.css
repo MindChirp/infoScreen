@@ -514,7 +514,7 @@ html {
     animation-fill-mode: both;
 }
 
-#main-container #top-layer .properties-pane .container h1.title {
+#main-container #top-layer .properties-pane .container > h1.title {
     margin: 0;
     color: var(--title-color);
     font-size: 1.5rem;
@@ -536,7 +536,6 @@ html {
 #main-container #top-layer .properties-pane .container .preview-window > div {
     height: 70%;
     width: fit-content;
-    overflow: hidden;
     margin: auto;
     position: absolute;
     top: 50%;
@@ -734,6 +733,10 @@ html {
     position: relative;
     height: 100%;
     width: 100%;
+}
+
+#main-container #top-layer #viewport #content .container * {
+    cursor:grab;
 }
 
 #main-container #top-layer #viewport .controls {

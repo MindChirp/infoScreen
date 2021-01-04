@@ -80,7 +80,7 @@ function renderColumn(col) {
     for(let i = 0; i < rows.length; i++) {
         if(rows[i].hasChildNodes()) {
             //Gather information about the element
-            var x = rows[i].childNodes[0];
+            var x = rows[i].querySelector(".scrubber-element");
             var type = x.getAttribute("type");
             var name;
             if(type == "img" || type == "vid") {
@@ -90,7 +90,7 @@ function renderColumn(col) {
             var zIndex = i+1;
 
             //Push each element in the column to the indexation array with all the nescessary information
-            indexes.push([{type: type, name: name, zIndex: zIndex, element: rows[i].querySelector(".scrubber-element")}])
+            indexes.push([{type: type, name: name, zIndex: zIndex, element: x, config: x.config[0]}])
         }
     }
 
@@ -127,12 +127,17 @@ function RenderingToolKit() {
             el.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", name);
         }
 
+        var borderRadius = data.config.borderRadius;
+        var opacity = data.config.opacity;
+        var shadowMultiplier = data.config.shadowMultiplier;
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
             top: 0;
             left: 0;
-            border-radius: 0.25rem;
+            border-radius: ` + borderRadius + `rem;
+            box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
+            opacity: ` + opacity + `;
             height: 30%;
             width: auto;
         `;
@@ -163,10 +168,28 @@ function RenderingToolKit() {
                 for(x of imgs) {
                     if(x.connectedElement == timeLineFile) {
                         x.parentNode.removeChild(x);
-                        console.log("iuahsd")
                     }
                 }
             }
         }
+    },
+    this.isRendered = function(timeLineFile) {
+        if(timeLineFile.closest(".timeline-column")) {
+            if(timeLineFile.closest(".timeline-column").getAttribute("displaying") == "true") {
+                return true;
+            } 
+            return false;
+        }
+    },
+    this.renderedColumn = function() {
+        var cols = document.getElementsByClassName("timeline-column");
+        for(var i = 0; i < cols.length; i++) {
+            if(cols[i].getAttribute("displaying") == "true") {
+                return i;
+            }
+        }
+        return undefined;
     }
 }
+
+

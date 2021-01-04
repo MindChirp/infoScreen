@@ -1,3 +1,4 @@
+
 //var path = require("path");
 const tabInputs = new TabSystem();
 
@@ -167,9 +168,22 @@ function openTab(el) {
     previewElement.appendChild(media);
     preview.appendChild(previewElement);
 
+    //Get the timeline element config
+    var data = timelineEl.config[0];
+
+    var inputCont = document.createElement("div");
+    cont.appendChild(inputCont);
+    inputCont.style = `
+        width: 10rem;
+        height: fit-content;
+        display: inline-block;
+        float: left;
+        white-space: normal;
+    `
     //Border radius input
     var radius = tabInputs.input("Border radius", "number", "rem");
-    radius.childNodes[1].value = "0.25";
+    //radius.childNodes[1] is the input field
+    radius.childNodes[1].value = data.borderRadius;
     radius.childNodes[1].placeholder = "0";
     radius.childNodes[1].addEventListener("change", function(e) {
         var value = e.target.value;
@@ -177,9 +191,15 @@ function openTab(el) {
             value = 0;
         }
         media.style.borderRadius = value + "rem";
+        //Update the timeline element
+        timelineEl.config[0].borderRadius = value;
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
     }); 
     radius.style.marginTop = "0.5rem";
-    cont.appendChild(radius);
+    inputCont.appendChild(radius);
 
     var info = createInfoCircle(`
         '<b>rem</b>' is a unit which is adjusted relative 
@@ -189,6 +209,46 @@ function openTab(el) {
     infoOnHover(info, "Why use rem?");
     radius.appendChild(info);
 
+    var opacity = tabInputs.input("Opacity", "number");
+    opacity.childNodes[1].value = data.opacity;
+    opacity.childNodes[1].placeholder = 1;
+    opacity.childNodes[1].max = 1;
+    opacity.childNodes[1].min = 0;
+    opacity.childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.value;
+        if(e.target.value == "") {
+            value = 1;
+        }
+        media.style.opacity = value;
+        //Update the timeline element
+        timelineEl.config[0].opacity = value;
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
+    }); 
+
+
+    inputCont.appendChild(opacity);
+
+    var shadowSize = tabInputs.slider("Shadow size");
+    shadowSize.childNodes[1].max = 20;
+    shadowSize.childNodes[1].min = 0;
+    shadowSize.childNodes[1].value = data.shadowMultiplier;
+    
+    shadowSize.childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.value;
+        media.style.boxShadow = value + "px " + value + "px " + 1.3*value + "px 0px rgba(0,0,0,0.75)";
+        //Update the timeline element
+        timelineEl.config[0].shadowMultiplier = value;
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
+    }); 
+
+
+    inputCont.appendChild(shadowSize);
 
 }
 
