@@ -1,6 +1,6 @@
 {
   "name": "infoscreen",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "description": "Infoscreen program",
   "main": "boot.js",
   "dependencies": {
@@ -8,6 +8,7 @@
     "electron-context-menu": "^2.3.0",
     "electron-debug": "^3.1.0",
     "electron-is-dev": "^1.2.0",
+    "electron-is-packaged": "^1.0.2",
     "electron-store": "^6.0.1",
     "electron-unhandled": "^3.0.2",
     "electron-updater": "^4.3.5",
@@ -37,11 +38,13 @@
     "win": {
       "target": "NSIS",
       "icon": "./build/infoScreen icon.png",
-      "publish": [{
-        "provider": "github",
-        "owner": "MindChirp",
-        "repo": "infoScreen"
-      }]
+      "publish": [
+        {
+          "provider": "github",
+          "owner": "MindChirp",
+          "repo": "infoScreen"
+        }
+      ]
     }
   },
   "scripts": {

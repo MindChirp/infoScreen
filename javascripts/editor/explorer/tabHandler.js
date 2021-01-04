@@ -1,3 +1,6 @@
+//var path = require("path");
+const tabInputs = new TabSystem();
+
 function createTab(el, name) {
     if(document.getElementsByClassName("browser-tab-container")[0].querySelector("#empty")) {
         document.getElementsByClassName("browser-tab-container")[0].innerHTML = "";
@@ -42,6 +45,7 @@ function createTab(el, name) {
 
     document.getElementsByClassName("browser-tab-container")[0].appendChild(tab);
     openTab(tab);
+    return tab;
 }
 
 function removeTab(el) {
@@ -75,7 +79,8 @@ function openPropertiesTab(el) {
     el.setAttribute("hasTab", "true");
     
     var fileName = el.closest(".scrubber-element").getAttribute("fileName");
-    createTab(el, fileName);
+    var tab = createTab(el, fileName);
+
 }
 
 function openTab(el) {
@@ -130,12 +135,64 @@ function openTab(el) {
     els.appendChild(cont);
     
 
-    var path = timelineEl.getAttribute("fileName");
+    var elPath = timelineEl.getAttribute("fileName");
     var h1 = document.createElement("h1");
     h1.setAttribute("class", "title");
-    h1.innerHTML = path;
+    h1.innerHTML = elPath;
     cont.appendChild(h1);
+
+    //Create a file preview
+    var preview = document.createElement("div");
+    preview.className = "preview-window";
+
+    cont.appendChild(preview);
+
+    var dirName; 
+    if(isPackaged) {
+        dirName = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+    } else {
+        dirName = path.join(__dirname, "extraResources", "data", "files");
+    }
+    var previewElement = document.createElement("div");
+    var type = timelineEl.getAttribute("type");
+    console.log(type);
+    var media;
+    switch(type) {
+        case "img": 
+            media = document.createElement("img");
+            media.src = dirName + "/" + elPath;
+        break;
+    }
+
+    previewElement.appendChild(media);
+    preview.appendChild(previewElement);
+
+    //Border radius input
+    var radius = tabInputs.input("Border radius", "number", "rem");
+    radius.childNodes[1].value = "0.25";
+    radius.childNodes[1].placeholder = "0";
+    radius.childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.value;
+        if(e.target.value == "") {
+            value = 0;
+        }
+        media.style.borderRadius = value + "rem";
+    }); 
+    radius.style.marginTop = "0.5rem";
+    cont.appendChild(radius);
+
+    var info = createInfoCircle(`
+        '<b>rem</b>' is a unit which is adjusted relative 
+        to the standard font size. Therefore, rounded borders
+        will look good on many screen sizes.
+    `);
+    infoOnHover(info, "Why use rem?");
+    radius.appendChild(info);
+
+
 }
+
+
 
 
 

@@ -75,6 +75,7 @@ function dragFileHandler(el) {
         file.setAttribute("hasTab", "false");
         file.setAttribute("style", "opacity: 1");
         el.appendChild(file);
+        file.handlerId = Date.now();
 
         var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");

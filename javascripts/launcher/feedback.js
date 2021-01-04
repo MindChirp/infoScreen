@@ -120,7 +120,7 @@ function feedback(parent) {
     info.innerHTML = "?";
     info.setAttribute("style", `
         margin-top: 0.5rem;
-    `)
+    `);
     infoBox(info, "The information you disclose in this form will not be published anywhere exept from in references to it in a changelog or a bugfix patch.")
 
     wrapper.appendChild(info);

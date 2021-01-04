@@ -521,6 +521,35 @@ html {
     font-weight: lighter;
 }
 
+#main-container #top-layer .properties-pane .container .preview-window {
+    height: 10rem;
+    width: 50%;
+    border: solid var(--slider-color) 2px;
+    border-radius: 0.5rem;
+    display: inline-block;
+    float: right;
+    background-color: var(--main-button-color);
+    overflow: hidden;
+    position: relative;
+}
+
+#main-container #top-layer .properties-pane .container .preview-window > div {
+    height: 70%;
+    width: fit-content;
+    overflow: hidden;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#main-container #top-layer .properties-pane .container .preview-window > div img, video {
+    height: 100%;
+    width: auto;
+    border-radius: 0.25rem;
+}
+
 .browser-tab-container #empty {
     animation: fade-in 200ms ease-in-out;
     animation-fill-mode: both;

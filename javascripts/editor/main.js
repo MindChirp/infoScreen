@@ -14,7 +14,6 @@ yourBrowserWindow.on("blur", (e) => {
 
 
 
-
 yourBrowserWindow.on("focus", (e) => {
     var appBar = document.getElementById("app-bar");
     appBar.style.opacity = 1;
@@ -333,6 +332,17 @@ function infoBox(el, title) {
     });
 }
 
+function createInfoCircle(content) {
+    var info = document.createElement("div");
+    info.setAttribute("class", "info-circle");
+    info.innerHTML = "?";
+    info.setAttribute("style", `
+        margin-top: 0.5rem;
+    `);
+    infoBox(info, content);
+    return info;
+}
+
 
 document.addEventListener("click", function() {
     if(document.getElementsByClassName("information-card")[0]) {
@@ -425,7 +435,11 @@ function contextMenu(ev, el, type) {
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
                 menu.setAttribute("rootElement", el);
                 menu.childNodes[0].addEventListener("click", function(e) {
+                    renderer.unrender(el);
                     deleteFile(false, el, ev);
+
+                    //Remove the associated tab (if there is one)
+                    removeTab(el);
                 });
                 menu.childNodes[1].addEventListener("click", function(e) {
                     openPropertiesTab(el);

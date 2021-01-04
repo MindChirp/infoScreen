@@ -1,3 +1,5 @@
+const { isPackaged } = require("electron-is-packaged");
+
 const renderer = new RenderingToolKit()
 
 function viewportSettings() {
@@ -66,9 +68,10 @@ bar.addEventListener("mousemove", function(e) {
 
 //renderer --> RenderingToolKit()
 function renderColumn(col) {
-    console.log("RENDERING COLUMN " + parseInt(col + 1));
+    //console.log("RENDERING COLUMN " + parseInt(col + 1));
     //Get the rows
-
+    var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
+    viewport.innerHTML = "";
     var rows = document.getElementsByClassName("timeline-column")[col].childNodes;
     
     //Create indexation array
@@ -87,7 +90,7 @@ function renderColumn(col) {
             var zIndex = i+1;
 
             //Push each element in the column to the indexation array with all the nescessary information
-            indexes.push([{type: type, name: name, zIndex: zIndex}])
+            indexes.push([{type: type, name: name, zIndex: zIndex, element: rows[i].querySelector(".scrubber-element")}])
         }
     }
 
@@ -100,26 +103,29 @@ function renderColumn(col) {
     var x;
     for(x of indexes) {
         if(x[0].type == "img") {
-            renderer.image(x[0]);
+            renderer.image(x[0], isPackaged);
         } else if(x[0].type == "vid") {
-            renderer.movie(x[0]);
+            renderer.movie(x[0], isPackaged);
         } else if(x[0].type == "widget") {
-            renderer.widget(x[0]);
+            renderer.widget(x[0], isPackaged);
         }
     }
 
 }
 
 function RenderingToolKit() {
-    this.image = function(data) {
+    this.image = function(data, packaged) {
         var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
         //Render image to the viewport
         var el = document.createElement("img");
-        
+        el.connectedElement = data.element;
         var zIndex = data.zIndex;
         var name = data.name;
-
-        el.src = "./extraResources/data/files/" + name;
+        if(!packaged) {
+            el.src = "./extraResources/data/files/" + name;
+        } else {
+            el.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", name);
+        }
 
         el.style = `
             z-index: ` + zIndex + `;
@@ -127,7 +133,7 @@ function RenderingToolKit() {
             top: 0;
             left: 0;
             border-radius: 0.25rem;
-            height: 15%;
+            height: 30%;
             width: auto;
         `;
 
@@ -141,5 +147,26 @@ function RenderingToolKit() {
     },
     this.movie = function(data) {
 
+    },
+    this.unrender = function(timeLineFile) {
+        //Unrender a passed element from the viewport, if the parent column is
+        //being displayed
+
+        //Get the parent column
+        var timeLineFile = timeLineFile.closest(".scrubber-element");
+        var column = timeLineFile.closest(".timeline-column");
+        if(column) {
+            if(column.getAttribute("displaying") == "true") {
+                //Get all the images in the viewport
+                var imgs = document.getElementById("viewport").querySelector("#content").querySelector(".container").getElementsByTagName("img");
+                var x;
+                for(x of imgs) {
+                    if(x.connectedElement == timeLineFile) {
+                        x.parentNode.removeChild(x);
+                        console.log("iuahsd")
+                    }
+                }
+            }
+        }
     }
 }
