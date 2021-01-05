@@ -171,6 +171,14 @@ function openTab(el) {
     //Get the timeline element config
     var data = timelineEl.config[0];
 
+    //Initialize the preview image with the timeline element config
+    media.style.opacity = data.opacity;
+    media.style.borderRadius = data.borderRadius;
+    media.style.boxShadow = data.shadowMultiplier + "px " + data.shadowMultiplier + "px " + 1.3*data.shadowMultiplier + "px 0px rgba(0,0,0,0.75)";
+    media.style.filter = "blur(" + data.blur + "px)";
+
+
+
     var inputCont = document.createElement("div");
     cont.appendChild(inputCont);
     inputCont.style = `
@@ -249,6 +257,26 @@ function openTab(el) {
 
 
     inputCont.appendChild(shadowSize);
+
+    var blur = tabInputs.slider("Blur");
+    blur.childNodes[1].max = 20;
+    blur.childNodes[1].min = 0;
+    blur.childNodes[1].step = 0.5;
+    blur.childNodes[1].value = data.blur;
+    
+    blur.childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.value;
+        media.style.filter = "blur(" + value+"px)";
+        //Update the timeline element
+        timelineEl.config[0].blur = value;
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
+    }); 
+
+
+    inputCont.appendChild(blur);
 
 }
 

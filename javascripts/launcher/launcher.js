@@ -3,7 +3,7 @@ const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
-
+const { isPackaged } = require("electron-is-packaged")
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
     devButton.parentNode.removeChild(devButton);
@@ -1229,10 +1229,10 @@ function appendReleaseNotes(rN, menu) {
 }
 
 
-/*
+
 ipcRenderer.on("download-progress", function(progObj) {
     console.log(progObj);
-
+/*
     if(document.getElementsByClassName("new-installation")[0]) {
         var parent = document.getElementsByClassName("new-installation")[0];
         if(!parent.showsProgress) {
@@ -1262,7 +1262,7 @@ ipcRenderer.on("download-progress", function(progObj) {
             parent.appendChild(progCont);
         }
     }
-
+*/
 })
 
 function debugDownloadBar() {
@@ -1297,8 +1297,17 @@ function debugDownloadBar() {
         }
     }
 }
-*/
 /*
 setTimeout(function() {
     debugDownloadBar();
 }, 1000)*/
+
+function showChangeLog() {
+    ipcRenderer.send("show-changelog", (error) => {
+        if(error) throw error;
+    });
+}
+
+if(!isPackaged) {
+    showChangeLog();
+}

@@ -46,7 +46,15 @@ const template = [
                     {
                         label: "...From PC",
                         accelerator: "Ctrl+O"
-                    }
+                    }/*,
+                    {
+                        label:"...From chip in brein",
+                        accelerator:"Ctrl+B",
+                        click:()=>{
+                            alert("Opening ur brein...") 
+                        }
+
+                    }*/
                 ]
             }
         ]

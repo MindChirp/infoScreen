@@ -112,8 +112,8 @@
                         <input class="fd-slider" type="range" min="0" max="100" step="1" value="0">
                         <div class="action-buttons">
                             <button><i class="material-icons">play_arrow</i><script>infoOnHover(document.currentScript.parentNode, "Play")</script></button>
-                            <button><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
-                            <button><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
+                            <button onclick="activateColumnNo(0, 2)"><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
+                            <button onclick="activateColumnNo(0, 1)"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
                         </div>
                     </div>
                     <div id="content">
@@ -153,11 +153,11 @@
 
                             <script>
                                 var script = document.currentScript;
-                                var opts = ["Yes", "No", "Yes", "Maybe"];
+                                var opts = ["Yes", "No", "Yes", "Maybe", ":))"];
                                 var menu = fsinputs.dropdown(opts);
 
                                 var p = document.createElement("p");
-                                p.innerHTML = "blahblahblah";
+                                p.innerHTML = "blahblahblahhhhh";
                                 script.parentNode.appendChild(p);
 
                                 script.parentNode.appendChild(menu);

@@ -130,6 +130,7 @@ function RenderingToolKit() {
         var borderRadius = data.config.borderRadius;
         var opacity = data.config.opacity;
         var shadowMultiplier = data.config.shadowMultiplier;
+        var blur = data.config.blur;
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
@@ -138,13 +139,16 @@ function RenderingToolKit() {
             border-radius: ` + borderRadius + `rem;
             box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
             opacity: ` + opacity + `;
+            filter: blur(` + blur + `px);
             height: 30%;
             width: auto;
         `;
 
         viewport.appendChild(el);
-
-
+        addResizingBorders(el);
+        el.addEventListener("dragstart", function(e) {
+            e.preventDefault();
+        });
 
     },
     this.widget = function(data) {
@@ -190,6 +194,27 @@ function RenderingToolKit() {
         }
         return undefined;
     }
+}
+
+
+//Adds resizing borders and move abilities
+function addResizingBorders(el) {
+    var resizeMargin = 20; //px
+    var clickPos = [];
+    var topEdge, rightEdge, bottomEdge, leftEdge;
+
+
+    el.addEventListener("mousedown", function(e) {
+        clickPos = [e.offsetX, e.offsetY];
+    });
+
+    el.addEventListener("mouseup", function(e) {
+
+    })
+
+    el.addEventListener("", function(e) {
+        console.log(e);
+    })
 }
 
 

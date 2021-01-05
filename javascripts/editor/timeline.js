@@ -22,11 +22,25 @@ function highlightColumn(el, entered) {
 function activateColumnNo(no, direction) {
     //no        --> column number
     //direction --> 1: next
-    //              2: prev
+    //              0: prev
     var cols = document.getElementsByClassName("timeline-column");
     if(direction) {
         //Do something that i couldn't be bothered to code right now
-
+        if(direction == 2) {
+            var i = renderer.renderedColumn();
+            console.log(i);
+            if(i > 0) {
+                activateColumnNo(i-1);
+            }
+            return;
+        } else if(direction == 1) {
+            var i = renderer.renderedColumn();
+            var cols = document.getElementsByClassName("timeline-column");
+            if(i < cols.length) {
+                activateColumnNo(i+1);
+            }
+            return;
+        }
     }
 
     if(cols[no]) {

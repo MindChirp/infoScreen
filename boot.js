@@ -61,7 +61,7 @@ function boot() {
   launcherWin = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: false
+      webSecurity: true
     },
     width: 850,
     hasShadow: true,
@@ -76,11 +76,6 @@ function boot() {
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
 
-    /*var releaseNotes = fs.readFileSync("./build/release-notes.md", "utf8");
-
-  
-    launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: {version: "0.0.39", releaseNotes: releaseNotes}}])
-*/
   });
 
 
@@ -271,6 +266,14 @@ ipcMain.on("close", function(e) {
 })
 ipcMain.on("closeLauncher", function(e) {
   launcherWin.close();
+})
+
+ipcMain.on("show-changelog", function(e) {
+  
+  var releaseNotes = fs.readFileSync("./build/release-notes.md", "utf8");
+
+  
+  launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: {version: "0.0.39", releaseNotes: releaseNotes}}])
 })
 
 

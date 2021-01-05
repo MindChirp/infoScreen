@@ -257,11 +257,16 @@ function initScrubber(rows,cols,activeColumn) {
         observer.observe(col, observerOptions);
         //Setup the column
         col.setAttribute("time", "00:10");
+        
+        /*
+        //White line on top of timeline (disabled)
         var pos = document.createElement("div");
         if(i == activeColumn) {
             pos.setAttribute("active", "true");
         }
         document.getElementById("timeline").querySelector(".sub-container").querySelector(".top-bar").appendChild(pos);
+        */
+        
         //Create rows
         for(let k = 0; k < rows; k++) {
             var row = document.createElement("div");
