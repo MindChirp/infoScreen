@@ -12,4 +12,4 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Currently there is no way to report vulnerabilities, other than contacting me on email. I am not planning to push any security patches in near future
+Currently there is no way to report vulnerabilities, other than contacting me on email. I am not planning to push any security patches in the near future
