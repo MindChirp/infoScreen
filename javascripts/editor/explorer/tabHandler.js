@@ -142,11 +142,24 @@ function openTab(el) {
     h1.innerHTML = elPath;
     cont.appendChild(h1);
 
+    //Create right side wrapper for the tab
+    var wrapper = document.createElement("div");
+    cont.appendChild(wrapper);
+    wrapper.className = "right"
+
+
+
+    //Create keyframe timeline
+    var timeline = document.createElement("div");
+    timeline.className = "timeline";
+
+
     //Create a file preview
     var preview = document.createElement("div");
     preview.className = "preview-window";
 
-    cont.appendChild(preview);
+    wrapper.appendChild(preview);
+    wrapper.appendChild(timeline)
 
     var dirName; 
     if(isPackaged) {
@@ -156,17 +169,23 @@ function openTab(el) {
     }
     var previewElement = document.createElement("div");
     var type = timelineEl.getAttribute("type");
-    console.log(type);
     var media;
     switch(type) {
         case "img": 
             media = document.createElement("img");
             media.src = dirName + "/" + elPath;
+            timeline.style.backgroundImage = "url('./extraResources/data/files/" + elPath +"')";
+            timeline.style.backgroundRepeat = "repeat";
+            timeline.style.backgroundSize = "auto 100%";
+        
         break;
     }
 
     previewElement.appendChild(media);
     preview.appendChild(previewElement);
+
+
+
 
     //Get the timeline element config
     var data = timelineEl.config[0];

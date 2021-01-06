@@ -82,7 +82,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [0,0]}];
 
         var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");

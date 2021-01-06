@@ -521,16 +521,36 @@ html {
     font-weight: lighter;
 }
 
-#main-container #top-layer .properties-pane .container .preview-window {
-    height: 10rem;
-    width: 50%;
-    border: solid var(--slider-color) 2px;
-    border-radius: 0.5rem;
+#main-container #top-layer .properties-pane .container .right {
+    background-color: transparent;
     display: inline-block;
     float: right;
+    height: fit-content;
+    width: 50%;
+    
+}
+
+#main-container #top-layer .properties-pane .container .right .timeline {
+    height: 3rem;
+    margin-top: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    border-width: 0.1rem 0.5rem;
+    border-color: white;
+    border-style: solid;
+    border-radius: 0.25rem;
+}
+
+#main-container #top-layer .properties-pane .container .preview-window {
+    height: 10rem;
+    width: 100%;
+    border: solid var(--slider-color) 2px;
+    border-radius: 0.5rem;
     background-color: var(--main-button-color);
     overflow: hidden;
     position: relative;
+    box-sizing: border-box;
 }
 
 #main-container #top-layer .properties-pane .container .preview-window > div {
@@ -737,7 +757,7 @@ html {
 }
 
 #main-container #top-layer #viewport #content .container * {
-    cursor:grab;
+
 }
 
 #main-container #top-layer #viewport .controls {

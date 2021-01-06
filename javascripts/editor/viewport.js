@@ -121,6 +121,7 @@ function RenderingToolKit() {
         el.connectedElement = data.element;
         var zIndex = data.zIndex;
         var name = data.name;
+        el.className = "viewport-image";
         if(!packaged) {
             el.src = "./extraResources/data/files/" + name;
         } else {
@@ -131,6 +132,7 @@ function RenderingToolKit() {
         var opacity = data.config.opacity;
         var shadowMultiplier = data.config.shadowMultiplier;
         var blur = data.config.blur;
+        var position = data.config.position;
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
@@ -142,6 +144,9 @@ function RenderingToolKit() {
             filter: blur(` + blur + `px);
             height: 30%;
             width: auto;
+            /*Positioning*/
+            left: ` + position[0] + `px;
+            top: ` + position[1] + `px;
         `;
 
         viewport.appendChild(el);
@@ -196,25 +201,126 @@ function RenderingToolKit() {
     }
 }
 
+var clickPos = [];
+var draggingElement;
+var viewportDragFileHandler = function(e) {
+    console.log(e.offsetX);
+    draggingElement.style.left = e.offsetX-clickPos[0] + "px";
+    draggingElement.style.top = e.offsetY-clickPos[1] + "px";
+}
 
 //Adds resizing borders and move abilities
 function addResizingBorders(el) {
     var resizeMargin = 20; //px
-    var clickPos = [];
-    var topEdge, rightEdge, bottomEdge, leftEdge;
+    //var topEdge, rightEdge, bottomEdge, leftEdge;
 
+    var grabbing = false;
+    var cursorPos = {top: false, right: false, bottom: false, left: false}
+    var states = {left: false, topLeft: false, top: false, topRight: false, right: false, bottomRight: false, bottom: false, bottomLeft: false, canMove: false, moving: false}
 
     el.addEventListener("mousedown", function(e) {
         clickPos = [e.offsetX, e.offsetY];
+
+        if(states.canMove) {
+            //Can grab element
+            draggingElement = el;
+            el.style.pointerEvents = "none";
+            document.getElementById("viewport").querySelector("#content").querySelector(".container").addEventListener("mousemove", viewportDragFileHandler);
+            states.moving = true;
+        }
+
     });
 
-    el.addEventListener("mouseup", function(e) {
+    document.body.addEventListener("mouseup", function(e) {
+        document.getElementById("viewport").querySelector("#content").querySelector(".container").removeEventListener("mousemove", viewportDragFileHandler);
+        states.moving = false;
+        el.style.pointerEvents = "";
+
+        var left = parseInt(el.style.left.split("px")[0]);
+        var top = parseInt(el.style.top.split("px")[0]);
+        el.connectedElement.config.position = [left, top];
+        console.log(el.connectedElement.config);
 
     })
 
-    el.addEventListener("", function(e) {
-        console.log(e);
+    el.addEventListener("mouseleave", function(e) {
+        states.canMove = false;
+    })
+
+
+    el.addEventListener("mousemove", function(e) {
+        if(e.target.className == "viewport-image" && !states.moving) {
+            var x = e.offsetX;
+            var y = e.offsetY;
+            var h = e.target.height;
+            var w = e.target.width;
+            
+
+
+            if(x < resizeMargin) {
+                //Left side
+                cursorPos.left = true;
+                states.canMove = false;
+            } else {
+                cursorPos.left = false;
+            } 
+            
+            if((w-x) < resizeMargin) {
+                //Right side
+                cursorPos.right = true;
+                states.canMove = false;
+            } else {
+                cursorPos.right = false;
+            }
+
+            if(y < resizeMargin) {
+                //Top side
+                cursorPos.top = true;
+                states.canMove = false;
+            } else {
+                cursorPos.top = false;
+            } 
+            
+            if((h-y) < resizeMargin) {
+                //Bottom side
+                cursorPos.bottom = true;
+                states.canMove = false;
+            } else {
+                cursorPos.bottom = false;
+            }
+
+
+            if(cursorPos.left && cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
+                e.target.style.cursor = "nw-resize";
+            } else if(!cursorPos.left && cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
+                e.target.style.cursor = "n-resize";
+            } else if(!cursorPos.left && cursorPos.top && cursorPos.right && !cursorPos.bottom) {
+                e.target.style.cursor = "ne-resize";
+            } else if(!cursorPos.left && !cursorPos.top && cursorPos.right && !cursorPos.bottom) {
+                e.target.style.cursor = "e-resize";
+            } else if(!cursorPos.left && !cursorPos.top && cursorPos.right && cursorPos.bottom) {
+                e.target.style.cursor = "nw-resize";
+            } else if(!cursorPos.left && !cursorPos.top && !cursorPos.right && cursorPos.bottom) {
+                e.target.style.cursor = "n-resize";
+            } else if(cursorPos.left && !cursorPos.top && !cursorPos.right && cursorPos.bottom) {
+                e.target.style.cursor = "ne-resize";
+            } else if(cursorPos.left && !cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
+                e.target.style.cursor = "e-resize";
+            } else {
+                //Move cursor
+                e.target.style.cursor = "grab";
+                states.canMove = true;
+            }
+
+
+
+            //e.target.style.cursor = "e-resize";
+            //e.target.style.cursor = "n-resize";
+            //e.target.style.cursor = "move"
+        }
     })
 }
+
+
 
 

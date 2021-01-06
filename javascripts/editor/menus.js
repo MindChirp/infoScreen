@@ -42,7 +42,7 @@ var effects = function () {
                 if(e.length > 10) {
                     var holder = e;
                     var j = holder.substring(0, 10);
-                p.innerHTML = j + "...";
+                    p.innerHTML = j + "...";
                 } else {
                     p.innerHTML = e;
                 }
