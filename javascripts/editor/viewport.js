@@ -204,7 +204,6 @@ function RenderingToolKit() {
 var clickPos = [];
 var draggingElement;
 var viewportDragFileHandler = function(e) {
-    console.log(e.offsetX);
     draggingElement.style.left = e.offsetX-clickPos[0] + "px";
     draggingElement.style.top = e.offsetY-clickPos[1] + "px";
 }
@@ -222,25 +221,43 @@ function addResizingBorders(el) {
         clickPos = [e.offsetX, e.offsetY];
 
         if(states.canMove) {
+            
+            
+            
             //Can grab element
             draggingElement = el;
             el.style.pointerEvents = "none";
             document.getElementById("viewport").querySelector("#content").querySelector(".container").addEventListener("mousemove", viewportDragFileHandler);
             states.moving = true;
+            
+            //Disable all pointer events of all viewport elements
+            var els = document.getElementById("viewport").querySelector("#content").querySelector(".container").childNodes;
+            var x;
+            for(x of els) {
+                x.style.pointerEvents = "none";
+            }
         }
 
     });
 
     document.body.addEventListener("mouseup", function(e) {
-        document.getElementById("viewport").querySelector("#content").querySelector(".container").removeEventListener("mousemove", viewportDragFileHandler);
-        states.moving = false;
-        el.style.pointerEvents = "";
+        if(states.moving) {
 
-        var left = parseInt(el.style.left.split("px")[0]);
-        var top = parseInt(el.style.top.split("px")[0]);
-        el.connectedElement.config.position = [left, top];
-        console.log(el.connectedElement.config);
+            document.getElementById("viewport").querySelector("#content").querySelector(".container").removeEventListener("mousemove", viewportDragFileHandler);
+            states.moving = false;
+            el.style.pointerEvents = "";
+            
+            var left = parseInt(el.style.left.split("px")[0]);
+            var top = parseInt(el.style.top.split("px")[0]);
+            el.connectedElement.config[0].position = [left, top];
 
+            //Enable all viewport element pointer events 
+            var els = document.getElementById("viewport").querySelector("#content").querySelector(".container").childNodes;
+            var x;
+            for(x of els) {
+                x.style.pointerEvents = "";
+            }
+        }
     })
 
     el.addEventListener("mouseleave", function(e) {

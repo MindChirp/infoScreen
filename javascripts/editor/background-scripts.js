@@ -163,7 +163,6 @@ function calculateViewportSize() {
     var parentHeight = parseInt(parentStyle.height.split("px")[0]);
 
     var neededHeight = parentWidth / (ratio);
-    console.log(neededHeight + " " + parentHeight)
     if(neededHeight > parentHeight) {
         document.getElementById("viewport").querySelector("#content").style.width = parentHeight*ratio + "px";
         document.getElementById("viewport").querySelector("#content").style.height = "100%";

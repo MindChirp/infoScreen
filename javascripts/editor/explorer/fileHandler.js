@@ -12,7 +12,6 @@ function loadFilesIntoExplorer() {
             } catch (error) {
                 dir = path.join(__dirname, "extraResources", "data", "files");
                 fs.readdir(dir, (err,dat) => {
-                    console.log(dat)
                     fetchFiles(dir, dat);
                 })
             }

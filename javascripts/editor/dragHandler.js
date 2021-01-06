@@ -62,9 +62,7 @@ function dragFileHandler(el) {
         if(col != undefined && col.getAttribute("displaying") != "true") {
             col.style.backgroundColor = "transparent";
         }
-        console.log(col.getAttribute("displaying"))
         if(col.getAttribute("displaying") == "true") {
-            console.log(col)
             col.style.backgroundColor = "#23313D";
         }
 
@@ -82,8 +80,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [0,0]}];
-
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10]}];
         var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)")
