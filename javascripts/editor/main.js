@@ -437,6 +437,7 @@ function contextMenu(ev, el, type) {
                 menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);
             break;
             case 1:
+                //Image
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
                 menu.setAttribute("rootElement", el);
                 menu.childNodes[0].addEventListener("click", function(e) {
@@ -460,11 +461,24 @@ function contextMenu(ev, el, type) {
                 }
             break;
             case 2:
+                //Widget 
                 menu = createCtxMenu([["Delete", "Del"], ["Properties", "Ctrl+P"]])
+                
+                menu.setAttribute("rootElement", el);
+
                 menu.childNodes[1].addEventListener("click", function(e) {
-                    openPropertiesTab(el);
                     menu.childNodes[1].disabled = true;
+                    openPropertiesTab(el);
                 });
+
+                menu.childNodes[0].addEventListener("click", function(e) {
+                    renderer.unrender(el);
+                    deleteFile(false, el, ev);
+
+                    //Remove the associated tab (if there is one)
+                    removeTab(el);
+                });
+
 
                 if(hasTab == "true") {
                     //Disable elements if the file has a tab

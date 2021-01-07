@@ -66,12 +66,11 @@ function columnChangeCallBack(mutationList, observer) {
             //Handle the added nodes
             
             if(!mutation.addedNodes[0]) return;
-
+            if(!mutation.addedNodes[0].closest(".scrubber-element")) return;
             //Get the changed column index
-            if(mutation.addedNodes[0].getAttribute("class") == "scrubber-element") {
-                var addedNode = mutation.addedNodes[0];
+            if(mutation.addedNodes[0].closest(".scrubber-element").getAttribute("class") == "scrubber-element") {
+                var addedNode = mutation.addedNodes[0].closest(".scrubber-element");
                 var column = mutation.addedNodes[0].closest(".timeline-column");
-
                 //Get all the columns and compare
                 var columns = document.getElementsByClassName("timeline-column");
                 var y;

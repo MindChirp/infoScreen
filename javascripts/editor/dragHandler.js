@@ -109,7 +109,9 @@ function dragFileHandler(el) {
             p.setAttribute("oncontextmenu", "contextMenu(event, this, 2)")
             //Only append event listener to p element because it covers all of
             //of the div
-            file.appendChild(p);
+            console.log(fileInfo[2])
+            file.setAttribute("type", fileInfo[2]);
+
             p.setAttribute("style", `
                 height: 100%;
                 width: 100%;
@@ -119,7 +121,7 @@ function dragFileHandler(el) {
                 font-weight: lighter;
             `);
             p.setAttribute("hasTab", "false");
-
+            file.appendChild(p);
             infoOnHover(file, "Widget");
             switch(fileInfo[0]) {
                 case "time":

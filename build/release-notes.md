@@ -3,22 +3,20 @@
         <li>Added options to the file tabs
             <ul><li><em>Widgets not accounted for yet</em></li></ul>
         </li>
-        <li>Basic viewport file dragging, but the code is remains dorment for now</li>
-        <li>The corresponding tab is now deleted when deleting a timeline element</li>
+        <li>Widgets can now be deleted from the timeline <em>yaaay!</em></li>
+
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>Files not reliably deleted from viewport</li>
+        <li>None</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Added more advanced viewport rendering</li>
-        <li>Removed autofilled credentials from login form</li>
-        <li>Redesigned some functional code to improve overall reliability</li>
+        <li>None</li>
     </ul>
         <br>
 

@@ -85,6 +85,8 @@ function renderColumn(col) {
             var name;
             if(type == "img" || type == "vid") {
                 name = x.getAttribute("filename");
+            } else if(type == "widget") {
+                name = x.getAttribute("filename");
             }
 
             var zIndex = i+1;
@@ -102,6 +104,7 @@ function renderColumn(col) {
     
     var x;
     for(x of indexes) {
+        console.log(x[0].type)
         if(x[0].type == "img") {
             renderer.image(x[0], isPackaged);
         } else if(x[0].type == "vid") {
@@ -157,6 +160,38 @@ function RenderingToolKit() {
 
     },
     this.widget = function(data) {
+        var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
+        console.log(data);
+
+        var widget = createWidget(data.name.split(" ")[0].toLowerCase(), data);
+        widget.connectedElement = data.element;
+        
+        var zIndex = data.zIndex;
+        var borderRadius = data.config.borderRadius;
+        var opacity = data.config.opacity;
+        var shadowMultiplier = data.config.shadowMultiplier;
+        var blur = data.config.blur;
+        var position = data.config.position;
+        widget.style = `
+            z-index: ` + zIndex + `;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: ` + borderRadius + `rem;
+            box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
+            opacity: ` + opacity + `;
+            filter: blur(` + blur + `px);
+            height: 30%;
+            background-color: var(--main-bg-color);
+            width: 50%;
+            /*Positioning*/
+            left: ` + position[0] + `px;
+            top: ` + position[1] + `px;
+        `;
+
+        viewport.appendChild(widget);
+        addResizingBorders(widget);
+
 
     },
     this.movie = function(data) {
@@ -172,9 +207,10 @@ function RenderingToolKit() {
         if(column) {
             if(column.getAttribute("displaying") == "true") {
                 //Get all the images in the viewport
-                var imgs = document.getElementById("viewport").querySelector("#content").querySelector(".container").getElementsByTagName("img");
+                var imgs = document.getElementById("viewport").querySelector("#content").querySelector(".container").childNodes;
                 var x;
                 for(x of imgs) {
+                    console.log(x.connectedElement);
                     if(x.connectedElement == timeLineFile) {
                         x.parentNode.removeChild(x);
                     }
@@ -219,8 +255,8 @@ function addResizingBorders(el) {
 
     el.addEventListener("mousedown", function(e) {
         clickPos = [e.offsetX, e.offsetY];
-
         if(states.canMove) {
+            console.log("oaknsd");
             
             
             
@@ -266,13 +302,13 @@ function addResizingBorders(el) {
 
 
     el.addEventListener("mousemove", function(e) {
+        console.log("ijbasd")
         if(e.target.className == "viewport-image" && !states.moving) {
             var x = e.offsetX;
             var y = e.offsetY;
             var h = e.target.height;
             var w = e.target.width;
             
-
 
             if(x < resizeMargin) {
                 //Left side
