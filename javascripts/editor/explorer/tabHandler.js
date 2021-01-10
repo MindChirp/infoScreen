@@ -129,6 +129,7 @@ function openTab(el) {
     
     //Get the timeline element
     var timelineEl = el.closest(".tab").connectedElement.closest(".scrubber-element");
+    //Clear contents of the properties pane
     els.innerHTML = "";
 
     var cont = document.createElement("div");
@@ -149,9 +150,9 @@ function openTab(el) {
 
 
 
-    //Create keyframe timeline
-    var timeline = document.createElement("div");
-    timeline.className = "timeline";
+    //Create keyframe timeline (or not?)
+    /*var timeline = document.createElement("div");
+    timeline.className = "timeline";*/
 
 
     //Create a file preview
@@ -159,7 +160,7 @@ function openTab(el) {
     preview.className = "preview-window";
 
     wrapper.appendChild(preview);
-    wrapper.appendChild(timeline)
+    //wrapper.appendChild(timeline)
 
     var dirName; 
     if(isPackaged) {
@@ -174,10 +175,29 @@ function openTab(el) {
         case "img": 
             media = document.createElement("img");
             media.src = dirName + "/" + elPath;
-            timeline.style.backgroundImage = "url('./extraResources/data/files/" + elPath +"')";
+            /*timeline.style.backgroundImage = "url('./extraResources/data/files/" + elPath +"')";
             timeline.style.backgroundRepeat = "repeat";
-            timeline.style.backgroundSize = "auto 100%";
+            timeline.style.backgroundSize = "auto 100%";*/
         
+        break;
+        case "widget":
+            previewElement.style.width = "70%";
+            media = document.createElement("div");
+            media.style.overflow = "hidden";
+            media.style.height = "100%";
+            media.style.width = "100%";
+            
+            //Get widget type
+            var type = elPath.split(" ")[0].toLowerCase();
+            //Create widget of that type
+            var widget = createWidget(type);
+
+            widget.style.backgroundColor = "var(--main-bg-color)";
+            widget.style.width = "100%";
+            widget.style.height = "100%";
+
+            //Append widget to the preview wrapper
+            media.appendChild(widget);
         break;
     }
 
@@ -192,7 +212,7 @@ function openTab(el) {
 
     //Initialize the preview image with the timeline element config
     media.style.opacity = data.opacity;
-    media.style.borderRadius = data.borderRadius;
+    media.style.borderRadius = data.borderRadius+"rem";
     media.style.boxShadow = data.shadowMultiplier + "px " + data.shadowMultiplier + "px " + 1.3*data.shadowMultiplier + "px 0px rgba(0,0,0,0.75)";
     media.style.filter = "blur(" + data.blur + "px)";
 

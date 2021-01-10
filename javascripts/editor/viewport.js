@@ -161,7 +161,6 @@ function RenderingToolKit() {
     },
     this.widget = function(data) {
         var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
-        console.log(data);
 
         var widget = createWidget(data.name.split(" ")[0].toLowerCase(), data);
         widget.connectedElement = data.element;
@@ -302,14 +301,15 @@ function addResizingBorders(el) {
 
 
     el.addEventListener("mousemove", function(e) {
-        console.log("ijbasd")
-        if(e.target.className == "viewport-image" && !states.moving) {
+        console.log("ijbasd")       
+        if(e.target.closest(".viewport-image") && !states.moving) {
+            var root = e.target.closest(".viewport-image");
             var x = e.offsetX;
             var y = e.offsetY;
-            var h = e.target.height;
-            var w = e.target.width;
+            var h = parseInt(window.getComputedStyle(root).height.split("px"));
+            var w = parseInt(window.getComputedStyle(root).width.split("px"));
             
-
+            console.log(x,y,h,w)
             if(x < resizeMargin) {
                 //Left side
                 cursorPos.left = true;

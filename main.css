@@ -289,6 +289,7 @@ html {
     pointer-events: none;
 }
 
+
 .file-ghost img {
     height: 100%;
     margin: 0;
@@ -307,6 +308,23 @@ html {
 }
 
 
+.timeline-file-ghost {
+    height: 4rem;
+    width: 6rem;
+    background-color: var(--main-bg-color);
+    backdrop-filter: blur(3px);
+    position: absolute;
+    opacity: 1;
+    border-radius: 0.5rem;
+    z-index: 100;
+    display: grid;
+    grid-template-rows: auto 1.5rem;
+    grid-template-columns: 9rem;
+    padding-top: 0.1rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+}
 
 
 #app-bar {

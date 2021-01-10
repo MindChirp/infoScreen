@@ -435,6 +435,8 @@ function contextMenu(ev, el, type) {
         switch(type) {
             case 0:
                 menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);
+                menu.childNodes[0].disabled = true;
+                menu.childNodes[1].disabled = true;
             break;
             case 1:
                 //Image
@@ -724,4 +726,9 @@ function calculateColumnHeights() {
     for(x of cols) {
         x.style.height = h+"px"; 
     }
+}
+
+
+function preventDefault(e) {
+    e.preventDefault();
 }
