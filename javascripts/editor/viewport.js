@@ -136,7 +136,7 @@ function RenderingToolKit() {
         var position = data.config.position;
         var heights = data.config.size.height;
         var widths = data.config.size.width;
-
+        var display = data.config.display;
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
@@ -151,6 +151,7 @@ function RenderingToolKit() {
             /*Positioning*/
             left: ` + position[0] + `px;
             top: ` + position[1] + `px;
+            display: ` + display + `;
         `;
 
         viewport.appendChild(el);
@@ -163,7 +164,7 @@ function RenderingToolKit() {
     this.widget = function(data) {
         var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
 
-        var widget = createWidget(data.name.split(" ")[0].toLowerCase(), data);
+        var widget = createWidget(data.name.split(" ")[0].toLowerCase(), data.config, data.element);
         widget.connectedElement = data.element;
         
         var zIndex = data.zIndex;
@@ -174,6 +175,8 @@ function RenderingToolKit() {
         var position = data.config.position;
         var height = data.config.size.height;
         var width = data.config.size.width;
+        var display = data.config.display;
+
         widget.style = ` 
             z-index: ` + zIndex + `;
             position: absolute;
@@ -189,6 +192,7 @@ function RenderingToolKit() {
             /*Positioning*/
             left: ` + position[0] + `px;
             top: ` + position[1] + `px;
+            display: ` + display + `;
         `;
 
         viewport.appendChild(widget);

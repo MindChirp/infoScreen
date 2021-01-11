@@ -190,7 +190,7 @@ function openTab(el) {
             //Get widget type
             var type = elPath.split(" ")[0].toLowerCase();
             //Create widget of that type
-            var widget = createWidget(type);
+            var widget = createWidget(type, timelineEl.config[0], timelineEl);
 
             widget.style.backgroundColor = "var(--main-bg-color)";
             widget.style.width = "100%";
@@ -317,6 +317,37 @@ function openTab(el) {
 
     inputCont.appendChild(blur);
 
+
+
+    var hide = tabInputs.checkBox("Hide");
+    hide.childNodes[0].childNodes[1].value = true;
+    hide.childNodes[0].childNodes[1].addEventListener("change", function(e) {
+        if(e.target.isActive) {
+            e.target.isActive = false;
+        } else {
+            e.target.isActive = true;
+        }
+        var value = e.target.isActive;      
+        var setting;
+        switch(value) {
+            case true:
+                setting = "none";
+            break;
+            case false:
+                setting = "block";
+            break;
+        }
+        //Update the timeline element
+        timelineEl.config[0].display = setting;
+
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
+    }); 
+
+
+    inputCont.appendChild(hide);
 }
 
 

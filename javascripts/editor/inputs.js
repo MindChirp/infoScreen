@@ -120,6 +120,43 @@ function TabSystem() {
         slider.type = "range";
         el.appendChild(slider);
         return el;
+    },
+    this.checkBox = function(title) {
+        var cont = document.createElement("div");
+        cont.style = `
+            width: 100%;
+            height: fit-content;
+            float: left;
+            display: block;
+            margin-top: 0.2rem;
+        `;
+        var el = document.createElement("label");
+        el.className = "control control-checkbox";
+        el.innerHTML = title;
+        var box = document.createElement("input");
+        box.type = "checkbox";
+
+        box.isActive = false;
+
+        //BUG: Two ripples appear. Fix this sometime!!
+        //el.classList.add("ripple-element");
+        //appendRipple(el);
+        var ind = document.createElement("div");
+        ind.className = "control_indicator";
+
+        el.appendChild(box);
+        el.appendChild(ind);
+        cont.appendChild(el);
+    
+        return cont;
+
+/*
+        <label class="control control-checkbox">
+        First checkbox
+            <input type="checkbox" checked="checked" />
+        <div class="control_indicator"></div>
+    </label>*/
+
     }
 
 }

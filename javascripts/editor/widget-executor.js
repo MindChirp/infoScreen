@@ -1,4 +1,4 @@
-function createWidget(type, config) {
+function createWidget(type, config, rootEl) {
     var el = document.createElement("div");
     el.className = "viewport-image widget";
     switch(type) {
@@ -14,6 +14,9 @@ function createWidget(type, config) {
             var widgetContent = news();
             el.appendChild(widgetContent)
         break;
+        case "text":
+            var widgetContent = text(config, rootEl);
+            el.appendChild(widgetContent);
     }
     
     return el;
@@ -112,4 +115,56 @@ function news() {
         cont.appendChild(placeholder);
     
         return cont;
+}
+
+function text(config, rootEl) {
+    //Create the time widget
+    //Create the weather widget
+    var cont = document.createElement("div");
+    cont.style = `
+        height: 100%;
+        width: 100%;
+        border-radius: 0.25rem;
+        position: relative;
+        overflow: hidden;
+    `;
+    var box = document.createElement("textarea");
+    if(config.value) {
+        box.value = config.value;
+    } else {
+        box.value = "text placeholder";
+    }
+
+    box.style = `
+        height: fit-content;
+        width: fit-content;
+        margin: 0;
+        position: absolute;
+        font-weight: lighter;
+        color: var(--paragraph-color);
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        color: white; 
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        width: 100%;
+        resize: none;
+        text-align: center;
+        font-family: bahnschrift;
+    `;
+    box.style.pointerEvents = "none";
+    box.addEventListener("change", function(e) {
+        var value = e.target.value;
+        rootEl.config[0].value = value;
+
+        
+    })
+    cont.appendChild(box);
+    cont.addEventListener("click", function(e) {
+        e.target.childNodes[0].focus();   
+    })
+    return cont;
 }

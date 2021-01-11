@@ -729,6 +729,39 @@ function calculateColumnHeights() {
 }
 
 
-function preventDefault(e) {
-    e.preventDefault();
+function appendRipple(el) {
+    if(!el.hasRipple) {
+
+        el.hasRipple = true;
+        el.addEventListener("click", function(e) {
+            console.log("ojubasdoijnasd")
+            var ripple = document.createElement("div");
+            ripple.setAttribute("class", "ripple-effect-circle");
+            el.appendChild(ripple);
+
+            var elStyle = window.getComputedStyle(el);
+            console.log(e);
+            var elHeight = elStyle.height;
+            var elWidth = elStyle.width;
+            var x = e.layerX + "px";
+            var y = e.layerY + "px";
+            ripple.style = `
+                left: ` + x + `;
+                top: ` + y + `;
+                height: ` + elHeight + `;
+                width: ` + elWidth + `;
+                position: absolute;
+                transform: translate(-50%, -50%);
+                background-color: rgb(20,20,20);
+                animation: ripple-animation 500ms ease-in-out;
+                animation-fill-mode: both;
+                border-radius: 100%;
+                opacity: 0.5;
+                pointer-events: none;
+            `;
+            setTimeout(function() {
+                //ripple.parentNode.removeChild(ripple);
+            }, 500);
+        })
+    }
 }

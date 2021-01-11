@@ -18,6 +18,9 @@ function dragFileHandler(el) {
             case "news":
                 p.innerHTML = "News";
             break;
+            case "text":
+                p.innerHTML = "Text";
+            break;
         }
         ghost.appendChild(p);
         p.setAttribute("style", `
@@ -83,7 +86,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: "block"}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -146,6 +149,10 @@ function dragFileHandler(el) {
                 case "news":
                     p.innerHTML = "News";
                     file.setAttribute("fileName", "News Widget");
+                break;
+                case "text":
+                    p.innerHTML = "Text";
+                    file.setAttribute("fileName", "Text Widget");
                 break;
             }
         }
