@@ -1,7 +1,6 @@
 function createWidget(type, config) {
     var el = document.createElement("div");
     el.className = "viewport-image widget";
-    console.log(type)
     switch(type) {
         case "weather":
             var widgetContent = weather();

@@ -1,10 +1,6 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>Added options to the file tabs
-            <ul><li><em>Widgets not accounted for yet</em></li></ul>
-        </li>
-        <li>Widgets can now be deleted from the timeline <em>yaaay!</em></li>
-
+        <li>Timeline elements can be dragged</li>
     </ul>
         <br>
 

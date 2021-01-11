@@ -83,7 +83,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10]}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -111,6 +111,10 @@ function dragFileHandler(el) {
             file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {
+
+            //Set a widget width other than "auto"
+            file.config[0].size.width = "50%"; 
+
             var p = document.createElement("p");
             p.setAttribute("oncontextmenu", "contextMenu(event, this, 2)")
             //Only append event listener to p element because it covers all of
@@ -286,30 +290,37 @@ function dragFileInTimeline(el) {
         var newFile = timelineFile.cloneNode(true);
 
 
-        //Check if the element to be removed is rendered, and if so, unrender it
-        if(renderer.isRendered(timelineFile)) {
-            renderer.unrender(timelineFile);
-        }
+
 
         //Get name info from the old timeline file
         //e.target is the timeline element that the mouse has been let go over
-        e.target.appendChild(newFile); 
-        console.log(timelineFile)
-        timelineFile.parentNode.removeChild(timelineFile);
+        if(e.target.closest(".timeline-row") && !e.target.closest(".timeline-row").hasChildNodes()) {
+            e.target.appendChild(newFile); 
+            
+            
+            //Check if the element to be removed is rendered, and if so, unrender it
+            if(renderer.isRendered(timelineFile)) {
+                renderer.unrender(timelineFile);
+            }   
 
-        //If there is an image, disable its default dragging properties
-        if(newFile.getElementsByTagName("img")[0]) {
-            newFile.getElementsByTagName("img")[0].addEventListener("dragstart", (e) => {e.preventDefault()});
+
+            console.log(timelineFile)
+            timelineFile.parentNode.removeChild(timelineFile);
+            
+            //If there is an image, disable its default dragging properties
+            if(newFile.getElementsByTagName("img")[0]) {
+                newFile.getElementsByTagName("img")[0].addEventListener("dragstart", (e) => {e.preventDefault()});
+            }
+            
+            //Add all old event listeners
+            var fileName = newFile.getAttribute("fileName");
+            infoOnHover(newFile, fileName);
+            
+            //Add config from previous element
+            var tConfig = timelineFile.config;
+            newFile.config = tConfig;
+
         }
-
-        //Add all old event listeners
-        var fileName = newFile.getAttribute("fileName");
-        infoOnHover(newFile, fileName);
-        
-        //Add config from previous element
-        var tConfig = timelineFile.config;
-        newFile.config = tConfig;
-
 
     }
 

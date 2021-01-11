@@ -28,7 +28,6 @@ function activateColumnNo(no, direction) {
         //Do something that i couldn't be bothered to code right now
         if(direction == 2) {
             var i = renderer.renderedColumn();
-            console.log(i);
             if(i > 0) {
                 activateColumnNo(i-1);
             }
@@ -64,11 +63,16 @@ function columnChangeCallBack(mutationList, observer) {
         if(mutation.type == "childList") {
             //An element has been added or removed to the column.
             //Handle the added nodes
+            //if(mutation.addedNodes[0].innerHTML == "Time" || mutation.addedNodes[0].innerHTML == "Weather" || mutation.addedNodes[0].innerHTML == "News") 
             
-            if(!mutation.addedNodes[0]) return;
-            if(!mutation.addedNodes[0].closest(".scrubber-element")) return;
+            if(!mutation.addedNodes[0] || mutation.addedNodes[0].innerHTML == undefined) {
+                //No.
+            } else {
+
+            if(mutation.addedNodes[0].getAttribute("class") != "scrubber-element") return;
             //Get the changed column index
-            if(mutation.addedNodes[0].closest(".scrubber-element").getAttribute("class") == "scrubber-element") {
+            if(mutation.addedNodes[0].getAttribute("class") == "scrubber-element") {
+
                 var addedNode = mutation.addedNodes[0].closest(".scrubber-element");
                 var column = mutation.addedNodes[0].closest(".timeline-column");
                 //Get all the columns and compare
@@ -84,6 +88,7 @@ function columnChangeCallBack(mutationList, observer) {
                     }
                 }
             }
+        }
         }
     })
 }

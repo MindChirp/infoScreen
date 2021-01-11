@@ -90,7 +90,6 @@ function renderColumn(col) {
             }
 
             var zIndex = i+1;
-
             //Push each element in the column to the indexation array with all the nescessary information
             indexes.push([{type: type, name: name, zIndex: zIndex, element: x, config: x.config[0]}])
         }
@@ -104,7 +103,6 @@ function renderColumn(col) {
     
     var x;
     for(x of indexes) {
-        console.log(x[0].type)
         if(x[0].type == "img") {
             renderer.image(x[0], isPackaged);
         } else if(x[0].type == "vid") {
@@ -136,6 +134,9 @@ function RenderingToolKit() {
         var shadowMultiplier = data.config.shadowMultiplier;
         var blur = data.config.blur;
         var position = data.config.position;
+        var heights = data.config.size.height;
+        var widths = data.config.size.width;
+
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
@@ -145,8 +146,8 @@ function RenderingToolKit() {
             box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
             opacity: ` + opacity + `;
             filter: blur(` + blur + `px);
-            height: 30%;
-            width: auto;
+            height: ` + heights + `;
+            width: ` + widths + `;
             /*Positioning*/
             left: ` + position[0] + `px;
             top: ` + position[1] + `px;
@@ -171,7 +172,9 @@ function RenderingToolKit() {
         var shadowMultiplier = data.config.shadowMultiplier;
         var blur = data.config.blur;
         var position = data.config.position;
-        widget.style = `
+        var height = data.config.size.height;
+        var width = data.config.size.width;
+        widget.style = ` 
             z-index: ` + zIndex + `;
             position: absolute;
             top: 0;
@@ -180,9 +183,9 @@ function RenderingToolKit() {
             box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
             opacity: ` + opacity + `;
             filter: blur(` + blur + `px);
-            height: 30%;
+            height: ` + height + `;
+            width: ` + width + `;
             background-color: var(--main-bg-color);
-            width: 50%;
             /*Positioning*/
             left: ` + position[0] + `px;
             top: ` + position[1] + `px;
@@ -209,7 +212,6 @@ function RenderingToolKit() {
                 var imgs = document.getElementById("viewport").querySelector("#content").querySelector(".container").childNodes;
                 var x;
                 for(x of imgs) {
-                    console.log(x.connectedElement);
                     if(x.connectedElement == timeLineFile) {
                         x.parentNode.removeChild(x);
                     }
@@ -250,16 +252,13 @@ function addResizingBorders(el) {
 
     var grabbing = false;
     var cursorPos = {top: false, right: false, bottom: false, left: false}
-    var states = {left: false, topLeft: false, top: false, topRight: false, right: false, bottomRight: false, bottom: false, bottomLeft: false, canMove: false, moving: false}
+    var states = {left: false, topLeft: false, top: false, topRight: false, right: false, bottomRight: false, bottom: false, bottomLeft: false, canMove: false, moving: false, canResize: false, isResizing: false};
 
     el.addEventListener("mousedown", function(e) {
         clickPos = [e.offsetX, e.offsetY];
-        if(states.canMove) {
-            console.log("oaknsd");
+        if(states.canMove) {        
             
-            
-            
-            //Can grab element
+            //Can grab element (move, not resize)
             draggingElement = el;
             el.style.pointerEvents = "none";
             document.getElementById("viewport").querySelector("#content").querySelector(".container").addEventListener("mousemove", viewportDragFileHandler);
@@ -271,13 +270,43 @@ function addResizingBorders(el) {
             for(x of els) {
                 x.style.pointerEvents = "none";
             }
+
+            if(states.canResize) {
+                states.isResizing = true;
+            }
+        }
+
+
+
+
+        //Resize
+        if(states.canResize) {
+            states.isResizing = true;
+            document.body.addEventListener("mousemove", resizeHandler);
         }
 
     });
 
-    document.body.addEventListener("mouseup", function(e) {
-        if(states.moving) {
+    var resizeHandler = function(ev) {
+        var height = parseInt(window.getComputedStyle(el).height.split("px"));
+        var width = parseInt(window.getComputedStyle(el).width.split("px"));
 
+        //If right edge resizing
+        if(states.right) {
+            el.style.width = width + ev.movementX + "px";
+        } else if(states.bottomRight) {
+            el.style.height = ev.movementY + height + "px";
+            el.style.width = ev.movementX + width + "px";
+        } else if(states.bottom) {
+            el.style.width = width + "px";
+            el.style.height = height + ev.movementY + "px";
+        }
+
+    }
+
+
+    var mouseUpHandler = function(e) {
+        if(states.moving) {
             document.getElementById("viewport").querySelector("#content").querySelector(".container").removeEventListener("mousemove", viewportDragFileHandler);
             states.moving = false;
             el.style.pointerEvents = "";
@@ -292,24 +321,42 @@ function addResizingBorders(el) {
             for(x of els) {
                 x.style.pointerEvents = "";
             }
+        } else if(states.canResize) {
+            //End of resizing action
+            document.body.removeEventListener("mousemove", resizeHandler);
+            states.isResizing = false;
+            states.canResize = false;
+            //Save new sizing data
+            /*var height = parseInt(window.getComputedStyle(el).height.split("px")[0])
+            var width = parseInt(window.getComputedStyle(el).width.split("px")[0])*/
+            var height = window.getComputedStyle(el).height;
+            var width = window.getComputedStyle(el).width;
+
+            el.connectedElement.config[0].size.height = height;
+            el.connectedElement.config[0].size.width = width;       
         }
-    })
+    }
+
+
+    document.body.addEventListener("mouseup", mouseUpHandler);
+
 
     el.addEventListener("mouseleave", function(e) {
         states.canMove = false;
+        if(!states.isResizing && !states.moving) {
+            document.body.style.cursor = "default";
+        }
     })
 
 
     el.addEventListener("mousemove", function(e) {
-        console.log("ijbasd")       
-        if(e.target.closest(".viewport-image") && !states.moving) {
+        if(e.target.closest(".viewport-image") && !states.moving && !states.isResizing) {
             var root = e.target.closest(".viewport-image");
             var x = e.offsetX;
             var y = e.offsetY;
             var h = parseInt(window.getComputedStyle(root).height.split("px"));
             var w = parseInt(window.getComputedStyle(root).width.split("px"));
             
-            console.log(x,y,h,w)
             if(x < resizeMargin) {
                 //Left side
                 cursorPos.left = true;
@@ -343,25 +390,60 @@ function addResizingBorders(el) {
             }
 
 
+            var resetTemplate = {left: false, topLeft: false, top: false, topRight: false, right: false, bottomRight: false, bottom: false, bottomLeft: false, canMove: false, moving: false, canResize: false};
+
             if(cursorPos.left && cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
-                e.target.style.cursor = "nw-resize";
+                //Top left
+                document.body.style.cursor = "nw-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.topLeft = true;
             } else if(!cursorPos.left && cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
-                e.target.style.cursor = "n-resize";
+                //Top
+                document.body.style.cursor = "n-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.top = true;
             } else if(!cursorPos.left && cursorPos.top && cursorPos.right && !cursorPos.bottom) {
-                e.target.style.cursor = "ne-resize";
+                //Top right
+                document.body.style.cursor = "ne-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.topRight = true;
             } else if(!cursorPos.left && !cursorPos.top && cursorPos.right && !cursorPos.bottom) {
-                e.target.style.cursor = "e-resize";
+                //Right
+                document.body.style.cursor = "e-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.right = true;
             } else if(!cursorPos.left && !cursorPos.top && cursorPos.right && cursorPos.bottom) {
-                e.target.style.cursor = "nw-resize";
+                //Bottom right
+                document.body.style.cursor = "nw-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.bottomRight = true;
             } else if(!cursorPos.left && !cursorPos.top && !cursorPos.right && cursorPos.bottom) {
-                e.target.style.cursor = "n-resize";
+                //Bottom
+                states = resetTemplate;
+                document.body.style.cursor = "n-resize";
+                states.canResize = true;
+                states.bottom = true;
             } else if(cursorPos.left && !cursorPos.top && !cursorPos.right && cursorPos.bottom) {
-                e.target.style.cursor = "ne-resize";
+                //Bottom left
+                document.body.style.cursor = "ne-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.bottomLeft = true;
             } else if(cursorPos.left && !cursorPos.top && !cursorPos.right && !cursorPos.bottom) {
-                e.target.style.cursor = "e-resize";
+                //Left
+                document.body.style.cursor = "e-resize";
+                states = resetTemplate;
+                states.canResize = true;
+                states.left = true;
             } else {
                 //Move cursor
-                e.target.style.cursor = "grab";
+                document.body.style.cursor = "grab";
+                states = resetTemplate;
                 states.canMove = true;
             }
 
