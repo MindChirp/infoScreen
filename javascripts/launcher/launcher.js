@@ -1202,11 +1202,7 @@ function exitProgram() {
 
 
 function appendReleaseNotes(rN, menu) {
-/*           ::Formatting::
-    # - title - #
-    ## - sub-title - ##
-    -- - divider line
-*/
+
     var header = menu.querySelector(".header");
     var h1 = document.createElement("h1");
     h1.style = `
@@ -1226,6 +1222,20 @@ function appendReleaseNotes(rN, menu) {
         margin: 1rem 0 0 1rem;
     `
     menu.appendChild(p);
+
+
+    //Find any interactive elements, and give them interactivity
+    
+    //Find info box elements
+    var els = document.getElementsByClassName("info-circle");
+    var x;
+
+    for(x of els) {
+        infoBox(x, x.getAttribute("metaMessage"));
+
+        //NEW FEATURE IN THE RELEASE NOTE PARSER\\
+        // <div class="info-circle" metaMessage="Message to be showed in a info box here :))">?</div>
+    }
 }
 
 

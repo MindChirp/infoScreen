@@ -21,10 +21,11 @@ function loadWidgets() {
         /*animation: fade-in 300ms ease-in-out 0.5s;
         animation-fill-mode: backwards;*/
     `);
+    h1.innerHTML = "Time"
     el.appendChild(h1);
-    setInterval(function() {
+    /*setInterval(function() {
         updateClockWidgets()
-    }, 500);
+    }, 500);*/
 
     //weather widget
     var el = document.createElement("div");
@@ -53,7 +54,7 @@ function loadWidgets() {
     el.setAttribute("class", "explorer-widget");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
-    h1.innerHTML = "News/Statuses";
+    h1.innerHTML = "News";
     h1.setAttribute("style", `
         height: 100%;
         width: fit-content;

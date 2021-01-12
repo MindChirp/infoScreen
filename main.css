@@ -699,6 +699,7 @@ html {
     width: 100%;
     background-color: var(--light-shade);
     border-radius: 0.25rem;
+    overflow: hidden;
 }
 
 
@@ -1094,4 +1095,12 @@ body .context-menu button:disabled:hover {
 ::-webkit-scrollbar-track {
     background-color: #171F26;
     height: 60%;
+}
+
+::-webkit-color-swatch {
+    border-radius: 0.25rem;
+}
+
+::-webkit-color-swatch-wrapper {
+    padding: 0;
 }

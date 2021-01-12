@@ -176,23 +176,26 @@ function RenderingToolKit() {
         var height = data.config.size.height;
         var width = data.config.size.width;
         var display = data.config.display;
-
+        var bgColor = data.config.backgroundColor;
+        var txtColor = data.config.textColor;
+        var fontSize = data.config.fontSize;
         widget.style = ` 
-            z-index: ` + zIndex + `;
             position: absolute;
-            top: 0;
-            left: 0;
+            z-index: ` + zIndex + `;
             border-radius: ` + borderRadius + `rem;
             box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
             opacity: ` + opacity + `;
             filter: blur(` + blur + `px);
             height: ` + height + `;
             width: ` + width + `;
-            background-color: var(--main-bg-color);
+            background-color: ` + bgColor + `;
+            color: ` + txtColor + `;
+            /*font-size: ` + fontSize + `px;*/
+            display: ` + display + `;
+
             /*Positioning*/
             left: ` + position[0] + `px;
             top: ` + position[1] + `px;
-            display: ` + display + `;
         `;
 
         viewport.appendChild(widget);
@@ -325,7 +328,7 @@ function addResizingBorders(el) {
             for(x of els) {
                 x.style.pointerEvents = "";
             }
-        } else if(states.canResize) {
+        } else if(states.canResize && states.isResizing) {
             //End of resizing action
             document.body.removeEventListener("mousemove", resizeHandler);
             states.isResizing = false;
@@ -337,7 +340,7 @@ function addResizingBorders(el) {
             var width = window.getComputedStyle(el).width;
 
             el.connectedElement.config[0].size.height = height;
-            el.connectedElement.config[0].size.width = width;       
+            el.connectedElement.config[0].size.width = width; 
         }
     }
 

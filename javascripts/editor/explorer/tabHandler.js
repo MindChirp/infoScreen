@@ -9,7 +9,7 @@ function createTab(el, name) {
 
     var tab = document.createElement("button");
     tab.setAttribute("class", "tab smooth-shadow");
-    tab.connectedElement = el;
+    tab.connectedElement = el.closest(".scrubber-element");
     tab.selected = false;
     tab.addEventListener("click", function(e) {
         openTab(e.target);
@@ -50,7 +50,7 @@ function createTab(el, name) {
 }
 
 function removeTab(el) {
-
+    console.log(el)
     var tabs = document.getElementsByClassName("tab");
     var x;
     for(x of tabs) {
@@ -61,7 +61,7 @@ function removeTab(el) {
                 pane.parentNode.removeChild(pane);
             }
             
-            el.setAttribute("hasTab", "false")
+            el.setAttribute("hasTab", "false")    
             x.parentNode.removeChild(x);
             
         }
@@ -171,6 +171,109 @@ function openTab(el) {
     var previewElement = document.createElement("div");
     var type = timelineEl.getAttribute("type");
     var media;
+
+    var customisation = function(config) {
+        var el = document.createElement("div");
+        el.style = `
+            height: fit-content;
+            width: 100%;
+            padding-left: 0.5rem;
+        `;
+
+        var wr = document.createElement("div");
+        wr.style = `
+            display: inline-block;
+            vertical-align: top;
+        `;
+        var col = document.createElement("input");
+        col.type = "color";
+        col.style = `
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            cursor: pointer;
+        `;
+        var value = config.backgroundColor;
+        col.value = value;
+        
+        col.onchange = function(e) {
+            timelineEl.config[0].backgroundColor = e.target.value; 
+            refreshViewport(true);
+        }
+
+        var p = document.createElement("p");
+        p.innerHTML = "Background Color";
+        p.style = "margin: 0; font-weight: lighter;";
+        wr.appendChild(p);
+        wr.appendChild(col);
+        el.appendChild(wr);
+
+
+        var wr = document.createElement("div");
+        wr.style = `
+            display: inline-block;
+            margin: 0 0.5rem;
+            vertical-align: top;
+        `;
+        var txtCol = document.createElement("input");
+        txtCol.type = "color";
+        txtCol.style = `
+            border: none;
+            background-color: transparent;
+            padding: 0;
+            cursor: pointer;
+        `;
+        var value = config.textColor;
+        txtCol.value = value;
+
+        txtCol.onchange = function(e) {
+            timelineEl.config[0].textColor = e.target.value; 
+            refreshViewport(true);
+        }
+
+        var p = document.createElement("p");
+        p.innerHTML = "Text Color";
+        p.style = "margin: 0; font-weight: lighter;";
+
+        wr.appendChild(p);
+        wr.appendChild(txtCol);
+        el.appendChild(wr);
+
+        var fontSize = tabInputs.input("Font Size", "number", "vh");
+        fontSize.style.display = "block";
+        fontSize.style.float = "";
+        fontSize.childNodes[1].value = config.fontSize;
+        fontSize.childNodes[1].placeholder = "0"; 
+        fontSize.onchange = function(e) {
+            timelineEl.config[0].fontSize = e.target.value; 
+            refreshViewport(true);
+        }
+
+        el.appendChild(fontSize);
+
+
+        return el;
+    }
+
+
+
+
+    var refreshViewport = function(refreshPreview) {
+        if(renderer.isRendered(timelineEl)) {
+            var colNo = renderer.renderedColumn();
+            renderColumn(colNo);
+        }
+
+        if(refreshPreview) {
+            var widget = createWidget(type,timelineEl.config[0], timelineEl);
+            widget.style.width = "100%";
+            widget.style.height = "100%";
+            media.innerHTML = "";
+            media.appendChild(widget);
+        }
+    }
+
+
     switch(type) {
         case "img": 
             media = document.createElement("img");
@@ -192,20 +295,29 @@ function openTab(el) {
             //Create widget of that type
             var widget = createWidget(type, timelineEl.config[0], timelineEl);
 
-            widget.style.backgroundColor = "var(--main-bg-color)";
+            //widget.style.backgroundColor = "var(--main-bg-color)";
             widget.style.width = "100%";
             widget.style.height = "100%";
-
             //Append widget to the preview wrapper
             media.appendChild(widget);
+            switch(type) {
+                case "text":
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                break;
+                case "time": {
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                }
+            }
+
         break;
     }
 
+
+
     previewElement.appendChild(media);
     preview.appendChild(previewElement);
-
-
-
 
     //Get the timeline element config
     var data = timelineEl.config[0];
@@ -221,7 +333,7 @@ function openTab(el) {
     var inputCont = document.createElement("div");
     cont.appendChild(inputCont);
     inputCont.style = `
-        width: 10rem;
+        width: 12.5rem;
         height: fit-content;
         display: inline-block;
         float: left;
@@ -240,10 +352,8 @@ function openTab(el) {
         media.style.borderRadius = value + "rem";
         //Update the timeline element
         timelineEl.config[0].borderRadius = value;
-        if(renderer.isRendered(timelineEl)) {
-            var colNo = renderer.renderedColumn();
-            renderColumn(colNo);
-        }
+
+        refreshViewport(false);
     }); 
     radius.style.marginTop = "0.5rem";
     inputCont.appendChild(radius);
@@ -256,10 +366,10 @@ function openTab(el) {
     infoOnHover(info, "Why use rem?");
     radius.appendChild(info);
 
-    var opacity = tabInputs.input("Opacity", "number");
+    var opacity = tabInputs.slider("Opacity", true);
     opacity.childNodes[1].value = data.opacity;
-    opacity.childNodes[1].placeholder = 1;
     opacity.childNodes[1].max = 1;
+    opacity.childNodes[1].step = 0.01;
     opacity.childNodes[1].min = 0;
     opacity.childNodes[1].addEventListener("change", function(e) {
         var value = e.target.value;
@@ -269,10 +379,8 @@ function openTab(el) {
         media.style.opacity = value;
         //Update the timeline element
         timelineEl.config[0].opacity = value;
-        if(renderer.isRendered(timelineEl)) {
-            var colNo = renderer.renderedColumn();
-            renderColumn(colNo);
-        }
+
+        refreshViewport(false);
     }); 
 
 
@@ -288,10 +396,8 @@ function openTab(el) {
         media.style.boxShadow = value + "px " + value + "px " + 1.3*value + "px 0px rgba(0,0,0,0.75)";
         //Update the timeline element
         timelineEl.config[0].shadowMultiplier = value;
-        if(renderer.isRendered(timelineEl)) {
-            var colNo = renderer.renderedColumn();
-            renderColumn(colNo);
-        }
+
+        refreshViewport(false);
     }); 
 
 
@@ -308,10 +414,8 @@ function openTab(el) {
         media.style.filter = "blur(" + value+"px)";
         //Update the timeline element
         timelineEl.config[0].blur = value;
-        if(renderer.isRendered(timelineEl)) {
-            var colNo = renderer.renderedColumn();
-            renderColumn(colNo);
-        }
+
+        refreshViewport(false);
     }); 
 
 
@@ -340,15 +444,13 @@ function openTab(el) {
         //Update the timeline element
         timelineEl.config[0].display = setting;
 
-        if(renderer.isRendered(timelineEl)) {
-            var colNo = renderer.renderedColumn();
-            renderColumn(colNo);
-        }
+        refreshViewport(false);
     }); 
 
 
     inputCont.appendChild(hide);
 }
+
 
 
 

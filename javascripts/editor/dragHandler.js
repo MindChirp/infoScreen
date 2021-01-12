@@ -86,7 +86,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: "block"}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: "block", backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -220,6 +220,9 @@ function dragFileInTimeline(el) {
                 case "news":
                     p.innerHTML = "News";
                 break;
+                case "text":
+                    p.innerHTML = "Text";
+                break;
             }
     
             p.style = `
@@ -294,7 +297,6 @@ function dragFileInTimeline(el) {
     var injectFile = function(e) {
         var timelineFile = ghost.connectedElement;
         if(e.target.closest(".scrubber-element") == timelineFile) return;
-        var newFile = timelineFile.cloneNode(true);
 
 
 
@@ -302,16 +304,32 @@ function dragFileInTimeline(el) {
         //Get name info from the old timeline file
         //e.target is the timeline element that the mouse has been let go over
         if(e.target.closest(".timeline-row") && !e.target.closest(".timeline-row").hasChildNodes()) {
-            e.target.appendChild(newFile); 
-            
+
             
             //Check if the element to be removed is rendered, and if so, unrender it
             if(renderer.isRendered(timelineFile)) {
                 renderer.unrender(timelineFile);
             }   
+            removeTab(timelineFile);
+            //Set the hasTab attribute to false on the p element of the .scrubber-element
+            if(timelineFile.getElementsByTagName("p")[0]) {
+                timelineFile.getElementsByTagName("p")[0].setAttribute("hasTab", "false");
+            }
+
+            var newFile = timelineFile.cloneNode(true);
+            
+            //Apend the cloned node to the timeline
+            e.target.appendChild(newFile);
+            /////////////////////////////////////////////////////////////////////////////////
+            //                                                                             //
+            //   THIS IS A SERIOUSLY BAD PRACTICE and should be fixed as soon as possible  //
+            //      I just want it to work right now..                                     //
+            //                                                                             //
+            // GOOD FIX:                                                                   //
+            // --> Remove the role of the p element as a tab manager element               //
+            /////////////////////////////////////////////////////////////////////////////////
 
 
-            console.log(timelineFile)
             timelineFile.parentNode.removeChild(timelineFile);
             
             //If there is an image, disable its default dragging properties

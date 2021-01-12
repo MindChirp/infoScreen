@@ -1,17 +1,21 @@
+
 function createWidget(type, config, rootEl) {
     var el = document.createElement("div");
     el.className = "viewport-image widget";
+    el.style = `
+        background-color: ` + config.backgroundColor + `;
+    `;
     switch(type) {
         case "weather":
-            var widgetContent = weather();
+            var widgetContent = weather(config);
             el.appendChild(widgetContent);
         break;
         case "time":
-            var widgetContent = time();
+            var widgetContent = time(config);
             el.appendChild(widgetContent);
         break;
         case "news":
-            var widgetContent = news();
+            var widgetContent = news(config);
             el.appendChild(widgetContent)
         break;
         case "text":
@@ -22,7 +26,7 @@ function createWidget(type, config, rootEl) {
     return el;
 }
 
-function weather() {
+function weather(config) {
     //Create the weather widget
     var cont = document.createElement("div");
     cont.setAttribute("style", `
@@ -41,13 +45,14 @@ function weather() {
         margin: 0;
         position: absolute;
         font-weight: lighter;
-        color: var(--paragraph-color);
+        color: ` + config.textColor + `; 
         text-align: center;
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%);
-        color: white;     
         pointer-events: none;   
+        font-size: ` + config.fontSize + `vh;
+
     `
     cont.appendChild(placeholder);
 
@@ -55,7 +60,7 @@ function weather() {
     
 }
 
-function time() {
+function time(config) {
     //Create the time widget
         //Create the weather widget
         var cont = document.createElement("div");
@@ -66,8 +71,14 @@ function time() {
             position: relative;
             overflow: hidden;
         `;
+
+        var date = new Date();
+        var hours = (date.getHours() > 9) ? date.getHours() : "0" + date.getHours();
+        var minutes = (date.getMinutes() > 9) ? date.getMinutes() : "0" + date.getMinutes();
+        var seconds = (date.getSeconds() > 9) ? date.getSeconds() : "0" + date.getSeconds();
+        var time = hours + ":" + minutes + ":" + seconds;
         var placeholder = document.createElement("h1");
-        placeholder.innerHTML = "time placeholder";
+        placeholder.innerHTML = time;
         placeholder.style = `
             height: fit-content;
             width: fit-content;
@@ -79,14 +90,15 @@ function time() {
             left: 50%;
             top: 50%;
             transform: translate(-50%,-50%);
-            color: white; 
+            color: ` + config.textColor + `;
+            font-size: ` + config.fontSize + `vh; 
         `
         cont.appendChild(placeholder);
     
         return cont;
 }
 
-function news() {
+function news(config) {
         //Create the time widget
         //Create the weather widget
         var cont = document.createElement("div");
@@ -110,7 +122,7 @@ function news() {
             left: 50%;
             top: 50%;
             transform: translate(-50%,-50%);
-            color: white; 
+            color: ` + config.textColor + `; 
         `
         cont.appendChild(placeholder);
     
@@ -128,6 +140,10 @@ function text(config, rootEl) {
         position: relative;
         overflow: hidden;
     `;
+
+    cont.addEventListener("resize", function(e) {
+        console.log(e);
+    })
     var box = document.createElement("textarea");
     if(config.value) {
         box.value = config.value;
@@ -146,7 +162,7 @@ function text(config, rootEl) {
         left: 50%;
         top: 50%;
         transform: translate(-50%,-50%);
-        color: white; 
+        color: ` + config.textColor + `; 
         background-color: transparent;
         border: none;
         height: 100%;
@@ -154,12 +170,16 @@ function text(config, rootEl) {
         resize: none;
         text-align: center;
         font-family: bahnschrift;
+        font-size: ` + config.fontSize + `vh;
     `;
     box.style.pointerEvents = "none";
     box.addEventListener("change", function(e) {
         var value = e.target.value;
         rootEl.config[0].value = value;
 
+        if(renderer.isRendered(rootEl)) {
+            renderColumn(renderer.renderedColumn());
+        }
         
     })
     cont.appendChild(box);

@@ -93,7 +93,7 @@ function TabSystem() {
 
         return el;
     },
-    this.slider = function(title) {
+    this.slider = function(title, showValue) {
         var el = document.createElement("div");
         el.style = `
             width: 100%;
@@ -114,11 +114,29 @@ function TabSystem() {
         var slider = document.createElement("input");
         slider.style = `
             margin: 0;  
-            width: 100%;
+            width: 10rem;
+            display: inline-block;
         `
         slider.className = "fd-slider";
         slider.type = "range";
         el.appendChild(slider);
+
+        if(showValue) {
+            var p = document.createElement("p");
+            p.innerHTML = "1";
+            p.style = `
+                margin: 0 0 0 0.5rem;
+                display: inline-block;
+                line-height: 0.5rem;
+                vertical-align: middle;
+            `;
+            el.appendChild(p);
+
+            slider.addEventListener("change", function(e) {
+                p.innerHTML = e.target.value;
+            })
+        }
+
         return el;
     },
     this.checkBox = function(title) {
