@@ -136,7 +136,8 @@ function RenderingToolKit() {
         var position = data.config.position;
         var heights = data.config.size.height;
         var widths = data.config.size.width;
-        var display = data.config.display;
+        var display = data.config.display ? "block" : "none";
+        console.log(display);
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
@@ -175,7 +176,7 @@ function RenderingToolKit() {
         var position = data.config.position;
         var height = data.config.size.height;
         var width = data.config.size.width;
-        var display = data.config.display;
+        var display = data.config.display ? "block" : "none";
         var bgColor = data.config.backgroundColor;
         var txtColor = data.config.textColor;
         var fontSize = data.config.fontSize;

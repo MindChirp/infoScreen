@@ -62,40 +62,78 @@ function weather(config) {
 
 function time(config) {
     //Create the time widget
-        //Create the weather widget
-        var cont = document.createElement("div");
-        cont.style = `
-            height: 100%;
-            width: 100%;
-            border-radius: 0.25rem;
-            position: relative;
-            overflow: hidden;
-        `;
+    var cont = document.createElement("div");
+    cont.style = `
+        height: 100%;
+        width: 100%;
+        border-radius: 0.25rem;
+        position: relative;
+        overflow: hidden;
+    `;
 
-        var date = new Date();
+    var time;
+    var date = new Date();
+
+    if(config.widgetAttributes.time.showDate) {
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        var year = date.getFullYear();
+
+        time = day + "/" + month + "/" + year;
+
+    } else {
+
+        var showHours = config.widgetAttributes.time.showHours;
+        var showMinutes = config.widgetAttributes.time.showMinutes;
+        var showSeconds = config.widgetAttributes.time.showSeconds;
+
+            
         var hours = (date.getHours() > 9) ? date.getHours() : "0" + date.getHours();
         var minutes = (date.getMinutes() > 9) ? date.getMinutes() : "0" + date.getMinutes();
         var seconds = (date.getSeconds() > 9) ? date.getSeconds() : "0" + date.getSeconds();
-        var time = hours + ":" + minutes + ":" + seconds;
-        var placeholder = document.createElement("h1");
-        placeholder.innerHTML = time;
-        placeholder.style = `
-            height: fit-content;
-            width: fit-content;
-            margin: 0;
-            position: absolute;
-            font-weight: lighter;
-            color: var(--paragraph-color);
-            text-align: center;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            color: ` + config.textColor + `;
-            font-size: ` + config.fontSize + `vh; 
-        `
-        cont.appendChild(placeholder);
+
+        if(showHours && !showMinutes && !showSeconds) {
+            time = hours;
+        } else if(showHours && showMinutes && !showSeconds) {
+            time = hours + ":" + minutes;
+        } else if(showHours && showMinutes && showSeconds) {
+            time = hours + ":" + minutes + ":" + seconds;
+        } else if(showHours && !showMinutes && showSeconds) {
+            time = hours + ":" + seconds;  
+        } else if(!showHours && showMinutes && !showSeconds) {
+            time = minutes;
+        } else if(!showHours && showMinutes && showSeconds) {
+            time = minutes + ":" + seconds;
+        } else if(showHours && showMinutes && showSeconds) {
+            time = hours + ":" + minutes + ":" + seconds;
+        } else if(!showHours && !showMinutes && showSeconds) {
+            time = seconds;
+        } else if(showHours && showMinutes && showSeconds) {
+            time = hours + ":" + minutes + ":" + seconds;
+        } else {
+            time = ""
+        }
+
+    }
+    var placeholder = document.createElement("h1");
+    placeholder.innerHTML = time;
+    placeholder.style = `
+        height: fit-content;
+        width: fit-content;
+        margin: 0;
+        position: absolute;
+        font-weight: lighter;
+        color: var(--paragraph-color);
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        color: ` + config.textColor + `;
+        font-size: ` + config.fontSize + `vh; 
+    `
+    cont.appendChild(placeholder);
     
-        return cont;
+    return cont;
 }
 
 function news(config) {

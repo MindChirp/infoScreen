@@ -1,8 +1,7 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>Timeline elements can be dragged</li>
-        <li>Text widget</li>
-        <li>Fully-fledged file resizing</li>
+        <li>More feature rich properties tabs</li>
+        <li>Date option in the time widget</li>
     </ul>
         <br>
 
@@ -14,10 +13,7 @@
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Opacity option is now a slider</li>
-        <li>Live clock in widgets tab is now removed</li>
-        <li>Clock preview is now showed in viewport</li>
-        <li>When moving an element in the timeline, its corresponding tab will be removed</li>
+        <li>Removed the clock preview from the widgets tab</li>
     </ul>
         <br>
 

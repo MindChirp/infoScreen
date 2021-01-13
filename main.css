@@ -530,6 +530,9 @@ html {
     width: 100%;
     animation: slide-in-left-properties 400ms ease-in-out;
     animation-fill-mode: both;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.5rem;
 }
 
 #main-container #top-layer .properties-pane .container > h1.title {

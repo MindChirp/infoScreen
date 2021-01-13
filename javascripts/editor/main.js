@@ -447,7 +447,7 @@ function contextMenu(ev, el, type) {
                     deleteFile(false, el, ev);
 
                     //Remove the associated tab (if there is one)
-                    removeTab(el);
+                    removeTab(el.getElementsByTagName("p")[0]);
                 });
                 menu.childNodes[1].addEventListener("click", function(e) {
                     openPropertiesTab(el);

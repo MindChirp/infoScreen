@@ -62,6 +62,20 @@ function removeTab(el) {
             }
             
             el.setAttribute("hasTab", "false")    
+
+            /////////////////////////////////////////////////////////////////////////////////
+            //                                                                             //
+            //   THIS IS A SERIOUSLY BAD PRACTICE and should be fixed as soon as possible  //
+            //      I just want it to work right now..                                     //
+            //                                                                             //
+            // GOOD FIX:                                                                   //
+            // --> Remove the role of the p element as a tab manager element               //
+            /////////////////////////////////////////////////////////////////////////////////
+            if(el.getAttribute("type") == "widget") {
+                el.childNodes[0].setAttribute("hasTab", "false")
+            }
+
+            
             x.parentNode.removeChild(x);
             
         }
@@ -274,71 +288,29 @@ function openTab(el) {
     }
 
 
-    switch(type) {
-        case "img": 
-            media = document.createElement("img");
-            media.src = dirName + "/" + elPath;
-            /*timeline.style.backgroundImage = "url('./extraResources/data/files/" + elPath +"')";
-            timeline.style.backgroundRepeat = "repeat";
-            timeline.style.backgroundSize = "auto 100%";*/
-        
-        break;
-        case "widget":
-            previewElement.style.width = "70%";
-            media = document.createElement("div");
-            media.style.overflow = "hidden";
-            media.style.height = "100%";
-            media.style.width = "100%";
-            
-            //Get widget type
-            var type = elPath.split(" ")[0].toLowerCase();
-            //Create widget of that type
-            var widget = createWidget(type, timelineEl.config[0], timelineEl);
-
-            //widget.style.backgroundColor = "var(--main-bg-color)";
-            widget.style.width = "100%";
-            widget.style.height = "100%";
-            //Append widget to the preview wrapper
-            media.appendChild(widget);
-            switch(type) {
-                case "text":
-                    var custom = customisation(timelineEl.config[0]);
-                    wrapper.appendChild(custom);
-                break;
-                case "time": {
-                    var custom = customisation(timelineEl.config[0]);
-                    wrapper.appendChild(custom);
-                }
-            }
-
-        break;
-    }
 
 
 
-    previewElement.appendChild(media);
-    preview.appendChild(previewElement);
+
 
     //Get the timeline element config
     var data = timelineEl.config[0];
 
-    //Initialize the preview image with the timeline element config
-    media.style.opacity = data.opacity;
-    media.style.borderRadius = data.borderRadius+"rem";
-    media.style.boxShadow = data.shadowMultiplier + "px " + data.shadowMultiplier + "px " + 1.3*data.shadowMultiplier + "px 0px rgba(0,0,0,0.75)";
-    media.style.filter = "blur(" + data.blur + "px)";
+
 
 
 
     var inputCont = document.createElement("div");
     cont.appendChild(inputCont);
     inputCont.style = `
-        width: 12.5rem;
+        width: 50%;
         height: fit-content;
+        /*max-height: 16rem;*/
+        overflow-y: auto;
         display: inline-block;
         float: left;
         white-space: normal;
-    `
+    `;
     //Border radius input
     var radius = tabInputs.input("Border radius", "number", "rem");
     //radius.childNodes[1] is the input field
@@ -424,31 +396,161 @@ function openTab(el) {
 
 
     var hide = tabInputs.checkBox("Hide");
-    hide.childNodes[0].childNodes[1].value = true;
+    hide.style.display = "block";
+    hide.childNodes[0].childNodes[1].checked = !data.display;
     hide.childNodes[0].childNodes[1].addEventListener("change", function(e) {
-        if(e.target.isActive) {
-            e.target.isActive = false;
-        } else {
-            e.target.isActive = true;
-        }
-        var value = e.target.isActive;      
-        var setting;
-        switch(value) {
-            case true:
-                setting = "none";
-            break;
-            case false:
-                setting = "block";
-            break;
-        }
+        var value = e.target.checked;      
+        timelineEl.config[0].display = !value;
+        
         //Update the timeline element
-        timelineEl.config[0].display = setting;
-
         refreshViewport(false);
     }); 
 
 
     inputCont.appendChild(hide);
+
+
+
+
+    switch(type) {
+        case "img": 
+            media = document.createElement("img");
+            media.src = dirName + "/" + elPath;
+            /*timeline.style.backgroundImage = "url('./extraResources/data/files/" + elPath +"')";
+            timeline.style.backgroundRepeat = "repeat";
+            timeline.style.backgroundSize = "auto 100%";*/
+        
+        break;
+        case "widget":
+            previewElement.style.width = "70%";
+            media = document.createElement("div");
+            media.style.overflow = "hidden";
+            media.style.height = "100%";
+            media.style.width = "100%";
+            
+            //Get widget type
+            var type = elPath.split(" ")[0].toLowerCase();
+            //Create widget of that type
+            var widget = createWidget(type, timelineEl.config[0], timelineEl);
+
+            //widget.style.backgroundColor = "var(--main-bg-color)";
+            widget.style.width = "100%";
+            widget.style.height = "100%";
+            //Append widget to the preview wrapper
+            media.appendChild(widget);
+            switch(type) {
+                case "text":
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                break;
+                case "time": {
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+
+                    var extra = document.createElement("div");
+                    extra.style = `
+                        width: 100%;
+                        height: fit-content;
+                    `;
+                    extra.className = "time-meta"
+
+
+                    var handleTimeOptionsChange = function(e) {
+                        var value = e.target.checked;
+
+                        var name = e.target.parentNode.getAttribute("name");
+                        
+                        switch(name) {
+                            case "Hours":
+                                data.widgetAttributes.time.showHours = value;
+                            break;
+                            case "Minutes":
+                                data.widgetAttributes.time.showMinutes = value;
+                            break;
+                            case "Seconds":
+                                data.widgetAttributes.time.showSeconds = value;
+                            break;
+                        }
+
+                        //Update the viewport and preview element
+                        // true: refresh the preview as well
+                        refreshViewport(true);
+
+                    }
+
+                    var generateDateOptions = function() {
+                        var el = document.createElement("div");
+                        el.className = "date-options";
+                        el.style = `
+                            height: fit-content;
+                            width: 100%;
+                        `
+                        var format = tabInputs.checkBox("European format");
+                        el.appendChild(format);
+
+                        return el;
+                    }
+
+
+                    var hours = tabInputs.checkBox("Hours")
+                    hours.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showHours;
+                    extra.appendChild(hours);
+                    hours.childNodes[0].childNodes[1].addEventListener("change", handleTimeOptionsChange); 
+                    hours.style.marginTop = "1rem";
+
+                    var minutes = tabInputs.checkBox("Minutes");
+                    minutes.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showMinutes;
+                    extra.appendChild(minutes);
+                    minutes.childNodes[0].childNodes[1].addEventListener("change", handleTimeOptionsChange); 
+                    
+                    var seconds = tabInputs.checkBox("Seconds");
+                    seconds.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showSeconds;
+                    extra.appendChild(seconds);
+                    seconds.childNodes[0].childNodes[1].addEventListener("change", handleTimeOptionsChange); 
+
+
+                    var date = tabInputs.checkBox("Show date");
+                    extra.appendChild(date);
+                    date.style.marginTop = "1rem";
+                    date.childNodes[0].childNodes[1].addEventListener("change", function(e) {
+                        var value = e.target.checked;
+                        data.widgetAttributes.time.showDate = e.target.checked;
+                        var options;
+                        if(value) {
+                            options = generateDateOptions();
+                            extra.appendChild(options);
+                            console.log(options.childNodes[0].childNodes[0].childNodes[1])
+                            options.childNodes[0].childNodes[0].childNodes[1].checked = true;
+                            options.childNodes[0].childNodes[0].childNodes[1].disabled = true;
+
+                        } else {
+                            var el = extra.querySelector(".date-options");
+                            el.parentNode.removeChild(el);
+                        }
+                        // true --> refresh preview as well
+                        refreshViewport(true);
+                    });
+
+                    inputCont.appendChild(extra)
+
+
+                }
+            }
+
+        break;
+    }
+
+
+    previewElement.appendChild(media);
+    preview.appendChild(previewElement);
+
+
+        //Initialize the preview image with the timeline element config
+    media.style.opacity = data.opacity;
+    media.style.borderRadius = data.borderRadius+"rem";
+    media.style.boxShadow = data.shadowMultiplier + "px " + data.shadowMultiplier + "px " + 1.3*data.shadowMultiplier + "px 0px rgba(0,0,0,0.75)";
+    media.style.filter = "blur(" + data.blur + "px)";
+
 }
 
 

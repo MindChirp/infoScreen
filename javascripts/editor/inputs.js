@@ -139,16 +139,13 @@ function TabSystem() {
 
         return el;
     },
-    this.checkBox = function(title) {
+    this.checkBox = function(title, customStyle) {
         var cont = document.createElement("div");
-        cont.style = `
-            width: 100%;
-            height: fit-content;
-            float: left;
-            display: block;
-            margin-top: 0.2rem;
-        `;
+        cont.setAttribute("name", title);
+        var style = customStyle ? customStyle : "width: 100%; height: fit-content; float: left; display: block; margin-top: 0.2rem"; 
+        cont.style = style;
         var el = document.createElement("label");
+        el.setAttribute("name", title);
         el.className = "control control-checkbox";
         el.innerHTML = title;
         var box = document.createElement("input");
