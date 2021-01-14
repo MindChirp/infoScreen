@@ -766,3 +766,18 @@ function appendRipple(el) {
         })
     }
 }
+
+
+
+//Loading wheel
+function loaderWheel() {
+    var el = document.createElement("div");
+        el.setAttribute("class", "lds-roller");
+
+    for(let i = 0; i < 7; i++) {
+        var child = document.createElement("div");
+            el.appendChild(child);
+    }
+
+        return el;
+}

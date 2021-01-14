@@ -146,7 +146,7 @@ function toggleNotificationMenu() {
 //App bar menu handler
 function Appmenu() {
     this.appbar = function(template) {
-
+        document.body.keyCombinations = [];
         var menu = document.createElement("ul");
 
         var x;
@@ -199,6 +199,35 @@ function Appmenu() {
                         `;
                         if(y.click) {
                             el.addEventListener("click", y.click);
+                        }
+
+                        if(y.accelerator) {
+                            //Append accelerator (shortcut)
+                            var components = y.accelerator.split("+");
+                            var criteriaList = {ctrlKey: false, altKey: false, shiftKey: false, letters: [], connectedElement: y};
+                            var x;
+
+                            for(x of components) {
+                                if(x.toLowerCase() == "ctrl") {
+                                    criteriaList.ctrlKey = true;
+                                }
+
+                                else if(x.toLowerCase() == "alt") {
+                                    criteriaList.altKey = true;
+                                }
+
+                                else if(x.toLowerCase() == "shift") {
+                                    criteriaList.shiftKey = true;
+                                }
+
+                                else {
+                                    criteriaList.letters.push("Key" + x.toUpperCase());
+                                }
+                                
+                            }
+
+                            document.body.keyCombinations.push(criteriaList);
+                            
                         }
                         var label = document.createElement("p");
                         label.style = `
@@ -732,7 +761,7 @@ function aboutMenu() {
     funFacts.innerHTML = "Fun Facts";
     menu.appendChild(funFacts);
 
-    var lines = tile("Lines of code", "18000+ (excluding libraries)");
+    var lines = tile("Lines of code", "11200+ (excluding libraries)");
     menu.appendChild(lines);
 
     var commit = tile("First github commit", "8th of July 2019");

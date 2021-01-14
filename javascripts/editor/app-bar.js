@@ -57,6 +57,13 @@ const template = [
 
                     }
                 ]
+            },
+            {
+                label: "Save",
+                accelerator: "Ctrl+S",
+                click: () => {
+                    saveFile();
+                }
             }
         ]
     },
