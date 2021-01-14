@@ -1,5 +1,6 @@
 var appB = require("app-buttons");
 const { ipcMain, ipcRenderer } = require("electron");
+const { aboutMenuItem } = require("electron-util");
 const menuHandler = new Appmenu();
 
 var appButtons = appB.appButtons(document.getElementById("app-bar"), true);
@@ -46,7 +47,7 @@ const template = [
                     {
                         label: "...From PC",
                         accelerator: "Ctrl+O"
-                    }/*,
+                    },
                     {
                         label:"...From chip in brein",
                         accelerator:"Ctrl+B",
@@ -54,7 +55,7 @@ const template = [
                             alert("Opening ur brein...") 
                         }
 
-                    }*/
+                    }
                 ]
             }
         ]
@@ -73,7 +74,11 @@ const template = [
                 label: "divider"
             },
             {
-                label: "About"
+                label: "About",
+                click: () => {
+                    console.log("asd")
+                    aboutMenu();
+                }
             }
         ]
     },
@@ -101,30 +106,14 @@ const template = [
                     {
                         label: "Themes",
                         click: () => {
-                            var menu = fullPageMenu("user");
-                            document.body.appendChild(menu);
-                            menu.style = `
-                                height: 100%;
-                                width: 100%;
-                                top: 0;
-                                left: 0;
-                                z-index: 101;
-                            `;
+                            themeMenu();
                         }
                     },
                     {label: "divider"},
                     {
                         label: "Language",
                         click: () => {
-                            var menu = fullPageMenu("user");
-                            document.body.appendChild(menu);
-                            menu.style = `
-                                height: 100%;
-                                width: 100%;
-                                top: 0;
-                                left: 0;
-                                z-index: 101;
-                            `;
+                            languageMenu();
                         }
                     }
                 ]

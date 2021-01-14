@@ -484,8 +484,10 @@ function openTab(el) {
                         el.style = `
                             height: fit-content;
                             width: 100%;
+                            padding: 0 0 0 2rem;
+                            box-sizing: border-box;
                         `
-                        var format = tabInputs.checkBox("European format");
+                        var format = tabInputs.checkBox("DD/MM/YYYY");
                         el.appendChild(format);
 
                         return el;

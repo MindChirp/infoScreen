@@ -10,6 +10,7 @@ yourBrowserWindow.on("blur", (e) => {
 })
 
 
+const appVersion = require('electron').remote.app.getVersion();
 
 
 

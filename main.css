@@ -391,6 +391,10 @@ html {
     z-index: -1;
 }
 
+.menu .back-button {
+    border-radius: 100rem; /*Create sum of that nice round borders*/
+}
+
 #main-container-wrapper {
     height: 100%;
     width: 100%;

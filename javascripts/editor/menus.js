@@ -197,8 +197,8 @@ function Appmenu() {
                             width: 100%;
                             position: relative; 
                         `;
-                        if(x.click) {
-                            el.addEventListener("click", x.click);
+                        if(y.click) {
+                            el.addEventListener("click", y.click);
                         }
                         var label = document.createElement("p");
                         label.style = `
@@ -427,4 +427,318 @@ function fullPageMenu(type) {
 
     el.appendChild(back);
     return el;
+}
+
+
+
+function themeMenu() {
+    var menu;
+    if(!document.getElementsByClassName("menu")[0]) {
+        menu = fullPageMenu("user");
+        document.body.appendChild(menu);
+        menu.style = `
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 101;
+        `;
+        //Delete the default header
+        menu.childNodes[0].parentNode.removeChild(menu.childNodes[0]);
+    } else {
+        //Menu already exists. Delete it
+        var menus = document.getElementsByClassName("menu");
+        var x;
+
+        for(x of menus) {
+            x.parentNode.removeChild(x);
+        }
+
+        //Call the themeMenu function again, to instantiate a new menu element
+        themeMenu();
+    }
+
+
+    var cont = document.createElement("div");
+    cont.style = `
+        height: fit-content;
+        width: 40%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    `;
+
+    menu.appendChild(cont);
+
+    
+    //Code copied over from the launcher. Oops.
+    var buttons = [];
+    var paths = path.join(__dirname, "internalResources", "images");
+    var light = themes.addCard("Light Theme", paths+"/lighttheme.png");
+    light.deactivated = true;
+    light.style.opacity = 0.2;
+    light.style.cursor = "default";
+    infoOnHover(light, "In the works");
+    cont.appendChild(light);
+    buttons.push(light);
+
+    var dark = themes.addCard("Dark Theme", paths+"/darktheme.png");
+    dark.style.float = "right";
+    cont.appendChild(dark);
+    buttons.push(dark);
+
+
+    //Future easter egg?
+    /*var cancer = themes.addCard("Cancer Theme", "./internalResources/images/cancertheme.png");
+    cont.appendChild(cancer);*/
+
+    var styles = [
+        [`
+            border: solid 2px coral;
+            box-sizing: border-box;
+            height: auto;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+        `],
+        [`
+            border: none;
+            height: auto;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+        `]
+    ]
+
+
+
+    var theme = localStorage.getItem("theme");
+    if(theme == "light") {
+        light.childNodes[0].setAttribute("style", styles[0][0]);
+        dark.childNodes[0].setAttribute("style", styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style", styles[1][0]);
+    } else if(theme=="dark"){
+        dark.childNodes[0].setAttribute("style", styles[0][0]);
+        light.childNodes[0].setAttribute("style", styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style", styles[1][0]);
+
+    } else if(theme=="cancer"){
+        cancer.childNodes[0].setAttribute("style", styles[0][0]);
+    light.childNodes[0].setAttribute("style", styles[1][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
+    }
+
+
+    /////////////////////////////
+    // DEACTIVATED LIGHT THEME //
+    /////////////////////////////
+/*
+light.addEventListener("click", function() {
+    setTheme(0);
+    console.log(styles[0][0])
+    light.childNodes[0].setAttribute("style", styles[0][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
+    //cancer.childNodes[0].setAttribute("style", styles[1][0]);
+})*/
+
+    dark.addEventListener("click", function() {
+        setTheme(1);
+        dark.childNodes[0].setAttribute("style", styles[0][0]);
+        light.childNodes[0].setAttribute("style",  styles[1][0]);
+        //cancer.childNodes[0].setAttribute("style",  styles[1][0]);  
+    })
+
+    /*cancer.addEventListener("click", function() {
+        setTheme(2);
+        cancer.childNodes[0].setAttribute("style", styles[0][0]);
+    light.childNodes[0].setAttribute("style", styles[1][0]);
+    dark.childNodes[0].setAttribute("style", styles[1][0]);
+    })*/
+
+}
+
+
+var themes = {
+    addCard: function(name, path) {
+
+
+        var el = document.createElement("button");
+        el.setAttribute("style", `
+            transform: scale(1);
+            vertical-align: top;
+            width: 40%;
+            height: 15rem;      
+        `);
+
+        el.setAttribute("class", "theme-button");
+
+        var img = document.createElement("img");
+        img.setAttribute("style", `
+            height: auto;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0.5rem;
+        `);
+        img.setAttribute("class", "smooth-shadow");
+        img.setAttribute("src", path);   
+        el.appendChild(img);
+
+        var p = document.createElement("p");
+        p.innerHTML = name;
+        el.appendChild(p);
+        p.setAttribute("style", `
+            width: 100%;
+            text-align: center;
+            height: 1rem;
+            line-height: 1rem;
+            font-size: 1.5rem;
+        `)
+
+        return el;
+
+
+    }
+}
+
+function languageMenu() {
+    var menu;
+    if(!document.getElementsByClassName("menu")[0]) {
+        menu = fullPageMenu("user");
+        document.body.appendChild(menu);
+        menu.style = `
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 101;
+        `;
+        //Delete the default header
+        menu.childNodes[0].parentNode.removeChild(menu.childNodes[0]);
+    } else {
+        //Menu already exists. Delete it
+        var menus = document.getElementsByClassName("menu");
+        var x;
+
+        for(x of menus) {
+            x.parentNode.removeChild(x);
+        }
+
+        //Call the aboutMenu function again, to instantiate a new menu element
+        languageMenu();
+    }
+
+
+}
+
+
+
+
+
+
+function aboutMenu() {
+    var menu;
+    if(!document.getElementsByClassName("menu")[0]) {
+        menu = fullPageMenu("user");
+        document.body.appendChild(menu);
+        menu.style = `
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 101;
+        `;
+        //Delete the default header
+        menu.childNodes[0].parentNode.removeChild(menu.childNodes[0]);
+    } else {
+        //Menu already exists. Delete it
+        var menus = document.getElementsByClassName("menu");
+        var x;
+
+        for(x of menus) {
+            x.parentNode.removeChild(x);
+        }
+
+        //Call the aboutMenu function again, to instantiate a new menu element
+        aboutMenu();
+    }
+
+    menu.style.padding = "3rem";
+    menu.style.boxSizing = "border-box";
+
+    var tile = function(title, meta) {
+        var el = document.createElement("div");
+        el.style = `
+            height: fit-content;
+            width: fit-content;
+            display: inline-block;
+            margin-right: 2rem;
+        `
+
+        var h1 = document.createElement("p");
+        h1.style = `
+            line-height: 1.5rem;
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: lighter;
+            display: block;
+            color: var(--title-color);
+        `;
+        h1.innerHTML = title;
+
+        var p = document.createElement("p");
+        p.style = `
+            margin: 0;
+            font-weight: lighter;
+            line-height: 1.5rem;
+            font-size: 1.5rem;
+            display: block;
+            color: var(--paragraph-color);
+            opacity: 0.5;
+        `;
+        p.innerHTML = meta;
+
+        el.appendChild(h1);
+        el.appendChild(p);
+        return el;
+    }
+
+
+    var ver = tile("Version", appVersion); //As declared on line 13 in main.js
+    menu.appendChild(ver);
+
+    var dev = tile("Developer", "Frikk O. Larsen");
+    menu.appendChild(dev);
+
+    var name = tile("Name", "Infoscreen development edition");
+    menu.appendChild(name);
+
+    var design = tile("Layout and design", "Frikk O. Larsen");
+    menu.appendChild(design);
+    
+    var div = document.createElement("div");
+    div.style.display = "block";
+    menu.appendChild(div);
+    
+    var funFacts = document.createElement("h2");
+    funFacts.style = `
+        color: var(--title-color);
+        margin: 3rem 0 1rem;
+        font-weight: lighter;
+    `
+    funFacts.innerHTML = "Fun Facts";
+    menu.appendChild(funFacts);
+
+    var lines = tile("Lines of code", "18000+ (excluding libraries)");
+    menu.appendChild(lines);
+
+    var commit = tile("First github commit", "8th of July 2019");
+    menu.appendChild(commit);
+
+
+
+
 }

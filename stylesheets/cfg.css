@@ -1,3 +1,15 @@
+.theme-button {
+  height: fit-content;
+  width: fit-content;
+  display: inline-block;
+  cursor: pointer;
+  border-style: none;
+  background-color: transparent;
+  padding: 0;
+  outline: none;
+
+}
+
 .fd-button {
     height: 2.5rem;
     width: fit-content;
