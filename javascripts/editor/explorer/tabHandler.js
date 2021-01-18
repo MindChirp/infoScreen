@@ -40,6 +40,7 @@ function createTab(el, name) {
     cross.appendChild(ico);
     cross.addEventListener("click", function(e) {
         removeTab(e.target.closest(".tab").connectedElement);
+        console.log(e.target.closest(".tab").connectedElement);
     });
 
     infoOnHover(cross, "Close tab");

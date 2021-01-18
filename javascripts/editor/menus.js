@@ -511,11 +511,12 @@ function themeMenu() {
     infoOnHover(light, "In the works");
     cont.appendChild(light);
     buttons.push(light);
-
+    light.ondragstart = (e) => {e.preventDefault()}
     var dark = themes.addCard("Dark Theme", paths+"/darktheme.png");
     dark.style.float = "right";
     cont.appendChild(dark);
     buttons.push(dark);
+    dark.ondragstart = (e) => {e.preventDefault()}
 
 
     //Future easter egg?
@@ -694,9 +695,10 @@ function aboutMenu() {
         //Call the aboutMenu function again, to instantiate a new menu element
         aboutMenu();
     }
-
-    menu.style.padding = "3rem";
-    menu.style.boxSizing = "border-box";
+    if(menu) {
+        menu.style.padding = "3rem";
+        menu.style.boxSizing = "border-box";
+    }
 
     var tile = function(title, meta) {
         var el = document.createElement("div");

@@ -453,7 +453,7 @@ function contextMenu(ev, el, type) {
                     deleteFile(false, el, ev);
 
                     //Remove the associated tab (if there is one)
-                    removeTab(el.getElementsByTagName("p")[0]);
+                    removeTab(el.closest(".scrubber-element"));
                 });
                 menu.childNodes[1].addEventListener("click", function(e) {
                     openPropertiesTab(el);
@@ -484,7 +484,7 @@ function contextMenu(ev, el, type) {
                     deleteFile(false, el, ev);
 
                     //Remove the associated tab (if there is one)
-                    removeTab(el);
+                    removeTab(el.closest(".scrubber-element"));
                 });
 
 

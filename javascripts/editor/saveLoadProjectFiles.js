@@ -17,12 +17,23 @@ function saveFile() {
 
     //If the program is not saving anymore
     if(!saving) {
-        var indicator = saveIndicator();
+        /*I removed the big saving indicator, it was ugly and stuff ugh*/
+        //var indicator = saveIndicator();
+        var pTitle = document.getElementById("project-name");
+        var sIndicator = document.createElement("span");
+        sIndicator.innerHTML = " - Saving";
+        sIndicator.style = `
+            color: var(--paragraph-color);
+            opacity: 0.6;
+        `
+        pTitle.appendChild(sIndicator);
+
         saving = true;
         setTimeout(function() {
-            indicator.parentNode.removeChild(indicator);
-            saving = false;
-        }, 4000)
+            var sIndicator = pTitle.getElementsByTagName("span")[0];
+            sIndicator.parentNode.removeChild(sIndicator);
+                saving = false;
+        }, 2000)
     
     //Create a template
     var date = new Date();
@@ -150,6 +161,9 @@ function saveIndicator() {
 function applyFileInfo(fileInfo) {
     var title = fileInfo.meta.title;
     //Apply the title to the app bar
+    console.log("asdasd")
+    console.log(title)
+    console.log(document.getElementById("project-name"))
     document.getElementById("project-name").innerHTML = title;
 }
 

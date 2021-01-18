@@ -137,7 +137,7 @@ function time(config) {
         }
 
         if(format == "0") {
-            var ampm = hours >= 12 ? 'AM' : 'PM';
+            var ampm = hours >= 12 ? 'PM' : 'AM';
             time = time + " " + ampm;
         }
 

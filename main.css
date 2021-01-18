@@ -45,10 +45,13 @@ html {
     left: 50%;
     transform: translate(-50%);
     width: fit-content;
-    z-index: 103;
+    z-index: 105;
     margin: 0;
     opacity: 0;
-    
+    color: var(--paragraph-color);
+    display: block;
+    animation: fade-in 500ms ease-in-out 3s;
+    animation-fill-mode: both;
 }
 .sub-menu > div {
     border-radius: 0.25rem;
@@ -1168,4 +1171,9 @@ body .context-menu button:disabled:hover {
     0% {transform: translate(-100%); opacity: 0;}
     50%{opacity: 0;}
     100% {transform: translate(0); opacity: 1;}
+}
+
+@keyframes save-project-animation-out {
+    0% {opacity: 1} 
+    100% {opacity: 1; transform: translate(0, 100%)}
 }

@@ -10,6 +10,7 @@
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
         <li>Newly created project won't show up in the recent projects box on launcher</li>
+        <li>Tabs won't be removed when its corresponding timeline element is deleted</li>
     </ul>
         <br>
 
@@ -26,6 +27,7 @@
         <li>Movie file dragging shadows and timeline elements are broken</li>
         <li><em>Maybe fixed: </em>Client occationally signs out on its own</li>
         <li>File-browser content displaying issue</li>
+        <li>AMPM clock shows wrong AM/PM suffix at certain times of day</li>
         <li>The program is hijacked by hyperlinks</li>
         <li>For more issues, visit <a href="https://github.com/MindChirp/infoScreen/issues">github</a></li>
     </ul>
