@@ -33,19 +33,35 @@ function dragFileHandler(el) {
         `);
     } else {
         var src = el.childNodes[0].childNodes[0].getAttribute("src");
+        console.log(el.childNodes[0].childNodes[0])
         var name = el.childNodes[0].childNodes[1].innerHTML;
         var type = el.getAttribute("type");
-
+        console.log(type)
         //Save the information of the dragged element to 
         //localStorage
         localStorage.setItem("dragCache", JSON.stringify([src, name, type]));
-        var img = document.createElement("img");
-        img.setAttribute("src", src);
-        ghost.appendChild(img);
-    
+
+        switch(type) {
+            case "vid":
+                var vid = document.createElement("video");
+                vid.setAttribute("width", "auto");
+                vid.setAttribute("height", "100%");
+                vid.setAttribute("src", src);
+
+                var src = document.createElement("source");
+                src.setAttribute("src", src);
+                src.setAttribute("type", "video/mp4");
+                vid.appendChild(src);
+                ghost.appendChild(vid);
+            break;
+            case "img":
+                var img = document.createElement("img");
+                img.setAttribute("src", src);
+                ghost.appendChild(img);
+                break;
+            }
         var p = document.createElement("p");
         p.innerHTML = name;
-
         ghost.appendChild(p);
     }
 
@@ -98,7 +114,7 @@ function dragFileHandler(el) {
         file.appendChild(settings);*/
         //Get the path, name
         var fileInfo = JSON.parse(localStorage.getItem("dragCache"));
-        if(fileInfo[2] == "img" || fileInfo[2] == "vid") {
+        if(fileInfo[2] == "img") {
             var path = fileInfo[0];
             var img = document.createElement("img");
             img.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
@@ -111,6 +127,26 @@ function dragFileHandler(el) {
             file.setAttribute("type", fileInfo[2]);
             file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
             img.setAttribute("hasTab", "false");
+            file.setAttribute("fileName", fileInfo[1]);
+            infoOnHover(file, fileInfo[1]);
+        } else if(fileInfo[2] == "vid") {
+            var path = fileInfo[0];
+
+            var vid = document.createElement("video");
+            vid.setAttribute("width", "auto");
+            vid.setAttribute("height", "100%");
+            vid.setAttribute("src", path);
+
+            var src = document.createElement("source");
+            src.setAttribute("src", path);
+            src.setAttribute("type", "video/mp4");
+            vid.appendChild(src);
+            
+            file.path = path;
+            file.appendChild(vid);
+            file.setAttribute("type", fileInfo[2]);
+            file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)");
+            vid.setAttribute("hasTab", "false");
             file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {

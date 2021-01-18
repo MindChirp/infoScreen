@@ -21,10 +21,10 @@ function saveFile() {
         //var indicator = saveIndicator();
         var pTitle = document.getElementById("project-name");
         var sIndicator = document.createElement("span");
+        sIndicator.style.animation = "save-span-animation 500ms infinite"
         sIndicator.innerHTML = " - Saving";
         sIndicator.style = `
             color: var(--paragraph-color);
-            opacity: 0.6;
         `
         pTitle.appendChild(sIndicator);
 

@@ -62,7 +62,7 @@ function removeTab(el) {
                 pane.parentNode.removeChild(pane);
             }
             
-            el.setAttribute("hasTab", "false");    
+            el.childNodes[0].setAttribute("hasTab", "false");    
 
             /////////////////////////////////////////////////////////////////////////////////
             //                                                                             //
@@ -270,6 +270,7 @@ function openTab(el) {
 
         var font = tabInputs.select(["Bahnschrift", "Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT"], "Bahnschrift", "Font family", true);
         font.style.width = "10rem";
+        font.getElementsByTagName("select")[0].value = timelineEl.config[0].fontFamily;
         el.appendChild(font);   
         font.getElementsByTagName("select")[0].addEventListener("change", (e) => {
             var value = font.getElementsByTagName("select")[0].value;
@@ -583,6 +584,14 @@ function openTab(el) {
 
 
                 }
+                case "weather": 
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                break;
+                case "news":
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                break;
             }
 
         break;

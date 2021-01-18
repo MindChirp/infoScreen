@@ -38,15 +38,16 @@ const template = [
             },
             {
                 label: "Open...",
-                accelerator: "Ctrl+O",
                 submenu: [
                     {
                         label: "...From server",
-                        accelerator: "Ctrl+O+S"
+                        accelerator: "Ctrl+H",
+                        click: () => {alert("opening from server")}
                     },
                     {
                         label: "...From PC",
-                        accelerator: "Ctrl+O"
+                        accelerator: "Ctrl+O",
+                        click: () => {alert("Opening from PC")}
                     },
                     {
                         label:"...From chip in brein",
@@ -124,6 +125,13 @@ const template = [
                         }
                     }
                 ]
+            },
+            {
+                label:"divider"
+            },
+            {
+                label: "More",
+                click: () => {alert("Opening more settings")}
             }
         ]
     }

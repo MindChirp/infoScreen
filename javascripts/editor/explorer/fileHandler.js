@@ -72,6 +72,7 @@ function fetchFiles(dir, dat) {
                 img = document.createElement("video");
                 img.setAttribute("width", "auto");
                 img.setAttribute("height", "100%");
+                img.setAttribute("src", dir + "/" + x);
                 var src = document.createElement("source");
                 src.setAttribute("src", dir + "/" + x);
                 src.setAttribute("type", "video/mp4");

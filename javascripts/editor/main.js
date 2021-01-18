@@ -438,6 +438,7 @@ function contextMenu(ev, el, type) {
         
         
         var hasTab = el.getAttribute("hasTab");
+        console.log(el)
         switch(type) {
             case 0:
                 menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);

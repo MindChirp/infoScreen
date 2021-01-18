@@ -357,6 +357,38 @@ function appendSubMenu(submenu) {
             label.innerHTML = x.label;
 
             var acc;
+
+            if(x.accelerator) {
+                //Append accelerator (shortcut)
+                var components = x.accelerator.split("+");
+                var criteriaList = {ctrlKey: false, altKey: false, shiftKey: false, letters: [], connectedElement: x};
+                var y;
+
+                for(y of components) {
+                    if(y.toLowerCase() == "ctrl") {
+                        criteriaList.ctrlKey = true;
+                    }
+
+                    else if(y.toLowerCase() == "alt") {
+                        criteriaList.altKey = true;
+                    }
+
+                    else if(y.toLowerCase() == "shift") {
+                        criteriaList.shiftKey = true;
+                    }
+
+                    else {
+                        criteriaList.letters.push("Key" + y.toUpperCase());
+                    }
+                    
+                }
+
+                document.body.keyCombinations.push(criteriaList);
+                
+            }
+
+
+
             if(x.accelerator) {
                 acc = document.createElement("p");
                 acc.innerHTML = x.accelerator;
@@ -764,7 +796,7 @@ function aboutMenu() {
     funFacts.innerHTML = "Fun Facts";
     menu.appendChild(funFacts);
 
-    var lines = tile("Lines of code", "11200+ (excluding libraries)");
+    var lines = tile("Lines of code", "11600+ (excluding libraries)");
     menu.appendChild(lines);
 
     var commit = tile("First github commit", "8th of July 2019");

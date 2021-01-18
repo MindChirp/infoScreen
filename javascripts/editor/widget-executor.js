@@ -228,13 +228,13 @@ function text(config, rootEl) {
         top: 50%;
         transform: translate(-50%,-50%);
         color: ` + config.textColor + `; 
+        font-family: ` + config.fontFamily + `;
         background-color: transparent;
         border: none;
         height: 100%;
         width: 100%;
         resize: none;
         text-align: center;
-        font-family: bahnschrift;
         font-size: ` + config.fontSize + `vh;
     `;
     box.style.pointerEvents = "none";
