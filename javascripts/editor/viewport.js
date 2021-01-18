@@ -180,6 +180,7 @@ function RenderingToolKit() {
         var bgColor = data.config.backgroundColor;
         var txtColor = data.config.textColor;
         var fontSize = data.config.fontSize;
+        var fontFamily = data.config.fontFamily;
         widget.style = ` 
             position: absolute;
             z-index: ` + zIndex + `;
@@ -191,6 +192,7 @@ function RenderingToolKit() {
             width: ` + width + `;
             background-color: ` + bgColor + `;
             color: ` + txtColor + `;
+            font-family: ` + fontFamily + `;
             /*font-size: ` + fontSize + `px;*/
             display: ` + display + `;
 

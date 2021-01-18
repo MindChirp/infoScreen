@@ -1,3 +1,4 @@
+
 var saving = false;
 function saveFile() {
     //Save the current file
@@ -13,16 +14,95 @@ function saveFile() {
 
 
     */
+
+    //If the program is not saving anymore
     if(!saving) {
         var indicator = saveIndicator();
         saving = true;
         setTimeout(function() {
             indicator.parentNode.removeChild(indicator);
             saving = false;
-        }, 5000)
+        }, 4000)
+    
+    //Create a template
+    var date = new Date();
+    var dateTime = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ":" + date.getHours() + ":" + date.getMinutes();
     
     
-    
+    var meta = {
+        meta: {
+            creator: null,
+            created: null,
+            edited: dateTime
+        },
+        times: [],
+        files: []
+        
+    }
+
+
+
+    // Get the columns with any elements in it (i.e. the columns that are active slides)
+    var cols = document.getElementsByClassName("timeline-column");
+
+    var activeColumns = [];
+
+    for(let i = 0; i < cols.length; i++) {
+        var children = cols[i].childNodes;
+        var y;
+        var childFound = false;
+        for(y of children) {
+            if(!childFound) {
+
+                if(y.hasChildNodes()) {
+                    activeColumns.push(i);
+                    childFound = true;
+                }
+            }
+        }
+    }
+
+
+
+    //Get all the files in each column, and store them in objects
+    var files = [];
+
+    var n;
+
+    for(n of activeColumns) {
+        var children = document.getElementsByClassName("timeline-column")[n].childNodes;
+        var time = document.getElementsByClassName("timeline-column")[n].getAttribute("time");
+        var columnData = {columnNo: n, config: {time: time}, content: []};
+        var z;
+        for(z of children) {
+            if(z.hasChildNodes()) {
+                
+                var file = z.childNodes[0];
+                var fName = file.getAttribute("filename");
+
+                var dir;
+                if(isPackaged) {
+                    dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+                } else {
+                    dir = path.join(__dirname, "extraResources", "data", "files");
+                }
+                var data = fs.readFileSync(dir + "/" + fName);
+                var fileInfo = {fileName: fName, config: file.config[0], data: data.toString("base64")}
+                columnData.content.push(fileInfo);
+                
+            }
+        }
+        files.push(columnData);
+
+    }
+
+    meta.files = files;
+
+
+
+
+
+
     
     
     
@@ -61,3 +141,16 @@ function saveIndicator() {
 
     return el;
 }
+
+
+/////////////////////////////////////////////////
+// This function coordinates the file loading. //
+/////////////////////////////////////////////////
+
+function applyFileInfo(fileInfo) {
+    var title = fileInfo.meta.title;
+    //Apply the title to the app bar
+    document.getElementById("project-name").innerHTML = title;
+}
+
+

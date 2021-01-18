@@ -25,15 +25,13 @@ TO MAKE A DRAGGABLE ELEMENT:
         []
         //Etc etc, continue for each file
     }
-    "files:": {
-        [
+    "files": [
             //Defines at which time of day the slideshow files (folders) should be displayed
             {"title": "1", "time": "12:01PM-07:00PM"},
             {"title": "2", "time": "07:01PM-12:00AM"},
             {"title": "3", "time": "12:01AM-12:00PM"}
 
-        ]
-    }
+    ]
 }
 
 OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO

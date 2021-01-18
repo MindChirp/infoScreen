@@ -172,6 +172,58 @@ function TabSystem() {
         <div class="control_indicator"></div>
     </label>*/
 
+    },
+    this.select = function(options, display, title, useOptionsAsNames) {
+        var wrapper = document.createElement("div");
+        wrapper.style = `
+            height: fit-content;
+            width: fit-content;
+            display: block;
+        `
+
+        var el = document.createElement("div");
+        el.className = "select";
+
+        if(title) {
+            var p = document.createElement("p");
+            p.innerHTML = title;
+            p.style = `
+                margin: 0;
+                line-height: 1rem;
+                font-weight: lighter;
+            `;
+            wrapper.appendChild(p);
+        }
+
+        var sel = document.createElement("select");
+
+        var x;
+        var i = 0;
+        for(x of options) {
+            var opt = document.createElement("option");
+            opt.innerHTML = x;
+            if(useOptionsAsNames) {
+                opt.value = x;
+            } else {
+                opt.value = i;
+                i++
+            }
+
+            sel.appendChild(opt);
+        }
+
+        el.appendChild(sel);
+
+        var arr = document.createElement("div");
+        arr.className = "select_arrow";
+
+        el.appendChild(arr);
+        if(display) {
+            sel.value = display;
+        }
+
+        wrapper.appendChild(el);
+        return wrapper;
     }
 
 }

@@ -86,7 +86,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false}}}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");

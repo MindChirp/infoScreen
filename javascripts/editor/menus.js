@@ -705,6 +705,7 @@ function aboutMenu() {
             width: fit-content;
             display: inline-block;
             margin-right: 2rem;
+            margin-top: 1rem;
         `
 
         var h1 = document.createElement("p");
@@ -767,6 +768,28 @@ function aboutMenu() {
     var commit = tile("First github commit", "8th of July 2019");
     menu.appendChild(commit);
 
+    var notFun = document.createElement("h2");
+    notFun.style = `
+        color: var(--title-color);
+        margin: 4rem 0 1rem;
+        font-weight: lighter;
+    `
+    notFun.innerHTML = "Questions and Answers";
+    menu.appendChild(notFun);
+
+    var stdrd = tile("How does this work?", `The program is built on Electron, which utilizes Chromium and Node.js to run a desktop application. <br> 
+        Chromium is a technology used by Google in its Chrome web browser, and allows it to render web pages. <br> 
+        This application uses the same technology to generate info screen slides that are compatible with many different devices. <br>
+        
+    `);
+    menu.appendChild(stdrd)
+
+    var qst1 = tile("Are the slides saved as video files?", `
+        The slides are <em>not</em> saved as video files, in fact they are saved as web pages. <br>
+        They are automatically generated based on what content the user wishes to display on their information screens. <br>
+        To show up to date information on each of the slides, a video file wouldn't suffice, and therefore a live webpage is displayed instead. 
+    `);
+    menu.appendChild(qst1)
 
 
 

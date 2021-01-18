@@ -27,7 +27,6 @@ function createList(arr) {
         holder = document.createElement("div");
         holder.setAttribute("id", "projects-container");
         parent.appendChild(holder);
-        console.log("øioajnsd")
     }
     
 
@@ -36,7 +35,7 @@ function createList(arr) {
         var el = document.createElement("div");
         el.setAttribute("class", "project-item");
         holder.appendChild(el);
-
+        el.fileName = x
         var txt = document.createElement("p");
         txt.innerHTML = x;
         txt.setAttribute("style", `
@@ -59,7 +58,6 @@ function createList(arr) {
         holder.style.paddingRight = "0.33rem"
         document.getElementById("list").style.width = "25.33rem";
 
-        console.log("ouiahsd")
     }
 }
 
@@ -164,7 +162,15 @@ var fileList = {
 
             open.appendChild(ico);
 
-
+            open.onclick = () => {
+                var fileName = el.fileName.toString();
+                try {
+                    ipcRenderer.send("open-main-window", fileName);
+                    ipcRenderer.send("closeLauncher")
+                } catch (error) {
+                    alert(error);
+                }
+            }
 
 
             var del = document.createElement("button");

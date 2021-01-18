@@ -158,6 +158,7 @@ function activateBrowserItem(arg, el) {
         case "edit":
             deactivateOtherPages();
             document.getElementById(arg).style.display = "block";
+            updateEditPage();
         break;
         case "widgets":
             deactivateOtherPages();
@@ -242,6 +243,10 @@ function initScrubber(rows,cols,activeColumn) {
     for(let i = 0; i < cols; i++) {
         var col = document.createElement("div");
         col.setAttribute("class", "timeline-column");
+        //Set up the column config
+        col.config = {
+            customViewingTimes: {enabled: false, times: []}
+        }
         cont.appendChild(col);
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");

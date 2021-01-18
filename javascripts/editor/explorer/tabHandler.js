@@ -61,7 +61,7 @@ function removeTab(el) {
                 pane.parentNode.removeChild(pane);
             }
             
-            el.setAttribute("hasTab", "false")    
+            el.setAttribute("hasTab", "false");    
 
             /////////////////////////////////////////////////////////////////////////////////
             //                                                                             //
@@ -255,6 +255,7 @@ function openTab(el) {
 
         var fontSize = tabInputs.input("Font Size", "number", "vh");
         fontSize.style.display = "block";
+        fontSize.style.marginTop = "1rem";
         fontSize.style.float = "";
         fontSize.childNodes[1].value = config.fontSize;
         fontSize.childNodes[1].placeholder = "0"; 
@@ -264,6 +265,16 @@ function openTab(el) {
         }
 
         el.appendChild(fontSize);
+
+
+        var font = tabInputs.select(["Bahnschrift", "Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT"], "Bahnschrift", "Font family", true);
+        font.style.width = "10rem";
+        el.appendChild(font);   
+        font.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var value = font.getElementsByTagName("select")[0].value;
+            timelineEl.config[0].fontFamily = value;
+            refreshViewport(true);
+        })
 
 
         return el;
@@ -311,6 +322,17 @@ function openTab(el) {
         float: left;
         white-space: normal;
     `;
+
+    var standardSettings = document.createElement("div");
+    standardSettings.style = `
+        height: fit-content;
+        width: 100%;
+        display: block;
+        position: relative;
+    `;
+    standardSettings.className = "standard-tab-settings-container"
+
+    inputCont.appendChild(standardSettings);
     //Border radius input
     var radius = tabInputs.input("Border radius", "number", "rem");
     //radius.childNodes[1] is the input field
@@ -328,7 +350,7 @@ function openTab(el) {
         refreshViewport(false);
     }); 
     radius.style.marginTop = "0.5rem";
-    inputCont.appendChild(radius);
+    standardSettings.appendChild(radius);
 
     var info = createInfoCircle(`
         '<b>rem</b>' is a unit which is adjusted relative 
@@ -356,7 +378,7 @@ function openTab(el) {
     }); 
 
 
-    inputCont.appendChild(opacity);
+    standardSettings.appendChild(opacity);
 
     var shadowSize = tabInputs.slider("Shadow size");
     shadowSize.childNodes[1].max = 20;
@@ -373,7 +395,7 @@ function openTab(el) {
     }); 
 
 
-    inputCont.appendChild(shadowSize);
+    standardSettings.appendChild(shadowSize);
 
     var blur = tabInputs.slider("Blur");
     blur.childNodes[1].max = 20;
@@ -391,7 +413,7 @@ function openTab(el) {
     }); 
 
 
-    inputCont.appendChild(blur);
+    standardSettings.appendChild(blur);
 
 
 
@@ -407,7 +429,7 @@ function openTab(el) {
     }); 
 
 
-    inputCont.appendChild(hide);
+    standardSettings.appendChild(hide);
 
 
 
@@ -450,7 +472,7 @@ function openTab(el) {
                     var extra = document.createElement("div");
                     extra.style = `
                         width: 100%;
-                        height: fit-content;
+                        display: block;
                     `;
                     extra.className = "time-meta"
 
@@ -487,18 +509,40 @@ function openTab(el) {
                             padding: 0 0 0 2rem;
                             box-sizing: border-box;
                         `
-                        var format = tabInputs.checkBox("DD/MM/YYYY");
-                        el.appendChild(format);
+                        var format1 = tabInputs.checkBox("DD/MM/YYYY");
+                        el.appendChild(format1);
+
+                        var format2 = tabInputs.checkBox("MM/DD/YYYY");
+                        el.appendChild(format2)
 
                         return el;
                     }
 
+                    //Time format selector
+                    var timeFormat = tabInputs.select(["AM/PM", "24HRS"], false, "Time format");
+                    timeFormat.style = `
+                        margin: 0;
+                        margin-top: 3.5rem;
+                        width: 10rem;
+                        height: 4rem;
+                        display: block;
+                    `;
+                    var format = data.widgetAttributes.time.timeFormat;
 
-                    var hours = tabInputs.checkBox("Hours")
+                    timeFormat.getElementsByTagName("select")[0].value = format;
+                    timeFormat.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+                        data.widgetAttributes.time.timeFormat = timeFormat.getElementsByTagName("select")[0].value;
+                        refreshViewport(true);
+                    })
+
+
+                    extra.appendChild(timeFormat);
+
+                    var hours = tabInputs.checkBox("Hours");
                     hours.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showHours;
                     extra.appendChild(hours);
                     hours.childNodes[0].childNodes[1].addEventListener("change", handleTimeOptionsChange); 
-                    hours.style.marginTop = "1rem";
+                    hours.style.marginTop = "0rem";
 
                     var minutes = tabInputs.checkBox("Minutes");
                     minutes.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showMinutes;
@@ -524,6 +568,7 @@ function openTab(el) {
                             console.log(options.childNodes[0].childNodes[0].childNodes[1])
                             options.childNodes[0].childNodes[0].childNodes[1].checked = true;
                             options.childNodes[0].childNodes[0].childNodes[1].disabled = true;
+                            options.childNodes[1].childNodes[0].childNodes[1].disabled = true;
 
                         } else {
                             var el = extra.querySelector(".date-options");

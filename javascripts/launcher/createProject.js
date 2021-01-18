@@ -128,7 +128,11 @@ function createProject() {
         templateContainer.appendChild(el);
         if(i == 0) {
             el.setAttribute("class", "template-card standard smooth-shadow");
-            var p = document.createElement("p")
+
+            var img = document.createElement("img");
+            img.src = "./internalResources/images/template1.png";
+            el.appendChild(img);
+            /*var p = document.createElement("p")
             p.innerHTML = "Test template";          
             el.appendChild(p);
             p.setAttribute("style", `
@@ -138,7 +142,7 @@ function createProject() {
                 width: 10rem;
                 text-align: center;
 
-            `);
+            `);*/
 
             el.classList.add("ripple-element");
             appendRipple(el);
@@ -158,6 +162,7 @@ function create(title,author,slides, menu) {
     } else {
         var create = new Promise((resolve, reject) => {
             var result = createFile()
+            console.log(result)
             if(result) {
                 resolve();
             } else {
@@ -167,7 +172,6 @@ function create(title,author,slides, menu) {
         .then(function(result) {
             //Close the menu modal
             menu.parentNode.removeChild(menu);
-            console.log("oiasdoiunasduna");
         })
         .catch(function() {
             project.error("Could not create the project");
@@ -227,39 +231,42 @@ function createFile(template) {
     var year = time.getFullYear();
     var hour = time.getHours();
     var minute = time.getMinutes();
-    var meta = `{
-        "meta":  {
-            "slides": ` + slides + `,
-            "creator": ` + author + `,
-            "created": "` + month + `/` + day + `/` + year + `:` + hour + `:` + minute + `:PM",
-            "edited": "null",
+    var meta = {
+        meta: {
+            slides: slides,
+            creator: author,
+            created: month + "/" + day + "/" + year + ":" + hour + ":" + minute + ":PM",
+            edited: "null",
+            title: title
         },
-    
-        "times": {
-            []
-        }
-        "files:": {
-            [
-    
-            ]
-        }
-    }`
+            times: [],
+            files: []
+        };
 
     var zip = new require("node-zip")();
-    zip.file("meta.json", meta);
+    zip.file("meta.json", JSON.stringify(meta));
     var data = zip.generate({base64:false,compression:'DEFLATE'});
-    try {
-        var dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
-        fs.writeFileSync(path.join(dirPath, title + '.proj'), data, 'binary');
-        initializeProjectList();
-        return true;
-    } catch (error) {
-        try {
-            var dirPath = path.join(__dirname, "extraResources", "data", "programData", "projects");
-            fs.writeFileSync(path.join(dirPath, title + '.proj'), data, 'binary');
-            return true;
-        } catch (error) {
-            return false;
-        }
+
+
+    var dirPath;
+    if(!isPackaged) {
+        dirPath = path.join(__dirname, "extraResources", "data", "programData", "projects");
+    } else {
+        dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
     }
+
+
+        fs.writeFile(path.join(dirPath, title + '.proj'), data, 'binary', (err) => {
+            if(err) {
+                return false;
+            } else {
+                initializeProjectList();
+                return true;
+            }
+        });
+
+        return true;
+
+        
+    
 }

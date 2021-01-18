@@ -56,8 +56,9 @@ function activateColumnNo(no, direction) {
         cols[no].style.backgroundColor = "#23313D";
         renderColumn(no);
     }
-}
 
+    updateEditPage();
+}
 function columnChangeCallBack(mutationList, observer) {
     mutationList.forEach( (mutation) => {
         if(mutation.type == "childList") {

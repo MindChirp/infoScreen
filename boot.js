@@ -103,10 +103,7 @@ function boot() {
 }
 
 
-function openEditor() {
-  if(launcherWin) {
-    
-  }
+function openEditor(fileName) {
     //lage et nytt vindu
     try {
       var { screen } = require("electron");
@@ -126,6 +123,27 @@ function openEditor() {
         transparent: true
       });
 
+
+      var unzipped = [];
+      if(fileName) {
+
+        //Get the file
+        var projectFilePath = path.join(__dirname,"extraResources", "data", "programData", "projects");
+        fs.readFile(projectFilePath + "/" + fileName + ".proj", "binary", (err, data) => {
+          var zip = new require("node-zip")(data, {base64: false, checkCRC32: true});
+
+          var files = ["meta.json"/*, "slides"*/]
+
+          var x;
+
+          for(x of files) {
+            unzipped.push(zip.files[x]);  
+          }
+
+
+
+        })
+      }
       
       programWin.webContents.on("did-finish-load", () => {
 
@@ -136,48 +154,16 @@ function openEditor() {
 
       programHeight1 = height - 100;
       programWidth1= width - 200;
+        console.log(unzipped);
+
+      //Send the file information to the renderer process
+      setTimeout(function() {
+        programWin.webContents.send("opened-file-information", unzipped);
+      }, 300)
+
     })
         
-      /*const template = [
-        {
-          label: 'View',
-          submenu: [
-            {
-              label: "Settings",
-              click: () => {
-                //Open the settings or something blah blah blah
-              }
-            },
-            {
-              label: "Help",
-              click: () => {
-                //Show some help or something
-              }
-            },
-            
-
-          ]
-        },
-        {
-          label: "Application",
-          submenu: [
-            {
-              label: "Quit",
-              click: () => {
-                app.quit();
-              }
-            },
-            {
-              label: "Force reload",
-              accelerator: "CmdOrCtrl+R",
-              click: () => { programWin.reload() }
-            }
-          ]
-        }
-      ]
-
-      const menu = Menu.buildFromTemplate(template);
-      Menu.setApplicationMenu(menu);*/
+    
       /*programWin.setMenu(null); //INCLUDE THIS IN PRODUCTION!!
       */ //openDevTools(); //Exclude in production
       var htmlPath = path.join(__dirname, "home.html");
@@ -204,8 +190,9 @@ ipcMain.on("start-downloading-update", () => {
 })
 
 
-ipcMain.on("open-main-window", (event) => {
-  var open = openEditor();
+ipcMain.on("open-main-window", (event, arg) => {
+  var fileName = arg;
+  var open = openEditor(fileName);
   if(open) {
     event.returnValue = open;
   } else {

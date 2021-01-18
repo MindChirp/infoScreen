@@ -138,3 +138,11 @@ function enableAppBarButtons() {
 
     parent.appendChild(instantiate);
 }
+
+
+
+        // Get all file information on startup
+ipcRenderer.on("opened-file-information", (e, args) => {
+    var fileInfo = JSON.parse(args[0]._data);
+    applyFileInfo(fileInfo);
+})

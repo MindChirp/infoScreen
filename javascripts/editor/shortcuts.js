@@ -6,7 +6,7 @@ document.addEventListener("keydown", function(e) {
     if(e.altKey || e.ctrlKey || e.shiftKey || e.code) {
         var keyCombos = document.body.keyCombinations;
         var x;
-
+        if(keyCombos.length == 0) return;
         for(x of keyCombos) {
             var local = {ctrlKey: false, altKey: false, shiftKey: false, letters: [], connectedElement: x.connectedElement}
             var lCtrl = false;
@@ -31,7 +31,7 @@ document.addEventListener("keydown", function(e) {
                 lLetters.push(e.code);
             }
 
-            if(lCtrl = x.ctrlKey && lShift == x.shiftKey && lAlt == x.altKey && lLetters[0] == x.letters[0]) {
+            if(lCtrl == x.ctrlKey && lShift == x.shiftKey && lAlt == x.altKey && lLetters[0] == x.letters[0]) {
                 //Trigger the corresponding function
                 var funct = x.connectedElement.click;
                 funct();

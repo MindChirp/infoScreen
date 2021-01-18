@@ -4,6 +4,7 @@ function createWidget(type, config, rootEl) {
     el.className = "viewport-image widget";
     el.style = `
         background-color: ` + config.backgroundColor + `;
+        font-family: ` + config.fontFamily + `;
     `;
     switch(type) {
         case "weather":
@@ -82,15 +83,36 @@ function time(config) {
         time = day + "/" + month + "/" + year;
 
     } else {
+        
+        var format = config.widgetAttributes.time.timeFormat;
 
         var showHours = config.widgetAttributes.time.showHours;
         var showMinutes = config.widgetAttributes.time.showMinutes;
         var showSeconds = config.widgetAttributes.time.showSeconds;
 
-            
-        var hours = (date.getHours() > 9) ? date.getHours() : "0" + date.getHours();
-        var minutes = (date.getMinutes() > 9) ? date.getMinutes() : "0" + date.getMinutes();
-        var seconds = (date.getSeconds() > 9) ? date.getSeconds() : "0" + date.getSeconds();
+        var hours;
+        var minutes;
+        var seconds;
+
+        switch(format) {
+            case "0":
+                //AMPM
+                hours = date.getHours();
+                minutes = date.getMinutes();
+                seconds = date.getSeconds();
+                hours = hours % 12;
+                hours = hours ? hours : 12; // the hour '0' should be '12'
+                minutes = minutes < 10 ? '0'+minutes : minutes;
+                seconds = seconds < 10 ? '0'+seconds : seconds;
+            break;
+            case "1":
+                //24HR clock
+                
+                hours = (date.getHours() > 9) ? date.getHours() : "0" + date.getHours();
+                minutes = (date.getMinutes() > 9) ? date.getMinutes() : "0" + date.getMinutes();
+                seconds = (date.getSeconds() > 9) ? date.getSeconds() : "0" + date.getSeconds();
+            break;
+        }
 
         if(showHours && !showMinutes && !showSeconds) {
             time = hours;
@@ -112,6 +134,11 @@ function time(config) {
             time = hours + ":" + minutes + ":" + seconds;
         } else {
             time = ""
+        }
+
+        if(format == "0") {
+            var ampm = hours >= 12 ? 'AM' : 'PM';
+            time = time + " " + ampm;
         }
 
     }
