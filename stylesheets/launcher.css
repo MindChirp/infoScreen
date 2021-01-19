@@ -822,3 +822,39 @@ div.disabled {
   input[type=range]:focus::-ms-fill-upper {
     background: var(--slider-color);;
   }
+
+  #viewport {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(100,100,100);
+  }
+
+  #viewport .content {
+    background-color: black;
+    height: 80%;
+    width: 100%;
+    margin: auto;
+    position: relative;
+  }
+
+
+  #viewport .controls > div {
+    height: fit-content;
+    display: inline-block;
+    float: right;
+    width: fit-content;
+    background-color: var(--main-bg-color);
+    border-radius: 10rem;
+    margin-left: 1rem;
+  }
+
+  #viewport .controls > div button {
+    background-color: transparent;
+    border-style: none;
+    outline: none;
+    display: inline-block;
+    color: white;
+    float: right;
+    cursor: pointer;
+
+  }

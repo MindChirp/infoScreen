@@ -139,7 +139,10 @@ var fileList = {
 
             preview.appendChild(ico);
 
-            
+            preview.onclick = (e) => {
+                var fileName = el.fileName.toString();
+                previewSlideshow(fileName);
+            }
 
             var open = document.createElement("button");
             open.setAttribute("style", `

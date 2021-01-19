@@ -27,14 +27,14 @@
 </head>
 
 <body onresize="calculateLayout()">
-<!--
+
     <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>  
--->
+
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -117,9 +117,9 @@
                     <div class="controls">
                         <input class="fd-slider" type="range" min="0" max="100" step="1" value="0">
                         <div class="action-buttons">
-                            <button><i class="material-icons">play_arrow</i><script>infoOnHover(document.currentScript.parentNode, "Play")</script></button>
-                            <button onclick="activateColumnNo(0, 2)"><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
-                            <button onclick="activateColumnNo(0, 1)"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
+                            <button onclick="renderer.playPauseSlideshow()"class="ripple-element" id="play"><i class="material-icons">play_arrow</i><script>infoOnHover(document.currentScript.parentNode, "Play")</script></button>
+                            <button id="prev" onclick="activateColumnNo(0, 2)" class="ripple-element"><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
+                            <button id="next" onclick="activateColumnNo(0, 1)" class="ripple-element"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
                         </div>
                     </div>
                     <div id="content">
@@ -242,6 +242,16 @@
             loadWidgets();
             enableAppBarButtons();
 
+            //Add ripple on click effect to all the desired elements
+            var buttons = document.getElementsByClassName("ripple-element");
+            var x;
+            for(x of buttons) {
+                console.log(x)
+                appendRipple(x);
+            }
+
+
+
             if(document.getElementById("blocking-loading-pane")) {
                 var introStr = "Loading";
                 //var introStr = generateIntroText();
@@ -252,8 +262,9 @@
            // programLoaded();
             bkgScript();
 
-            /*var el = document.getElementById("viewport").querySelector(".settings-button");
-            infoOnHover(el, "Viewport settings");*/
+            //Set the playing state of the viewport to false
+            document.getElementById("viewport").isPlaying = false;
+
             //effectsWindow.files();
 
             //Get the theme

@@ -255,6 +255,7 @@ function openTab(el) {
         el.appendChild(wr);
 
         var fontSize = tabInputs.input("Font Size", "number", "vh");
+        console.log(fontSize)
         fontSize.style.display = "block";
         fontSize.style.marginTop = "1rem";
         fontSize.style.float = "";
@@ -468,8 +469,7 @@ function openTab(el) {
                     wrapper.appendChild(custom);
                 break;
                 case "time": {
-                    var custom = customisation(timelineEl.config[0]);
-                    wrapper.appendChild(custom);
+
 
                     var extra = document.createElement("div");
                     extra.style = `

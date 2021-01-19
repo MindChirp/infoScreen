@@ -451,6 +451,7 @@ function contextMenu(ev, el, type) {
                 menu.setAttribute("rootElement", el);
                 menu.childNodes[0].addEventListener("click", function(e) {
                     renderer.unrender(el);
+                    console.log(el);
                     deleteFile(false, el, ev);
 
                     //Remove the associated tab (if there is one)
@@ -609,7 +610,7 @@ function deleteFile(fromShortcut, el, event) {
     if(fromShortcut) {
 
     } else {
-        var root = el.parentNode;
+        var root = el.closest(".scrubber-element");
         root.parentNode.removeChild(root);
         setTimeout(function() {
             removeCtxMenu(event);
@@ -741,7 +742,6 @@ function appendRipple(el) {
 
         el.hasRipple = true;
         el.addEventListener("click", function(e) {
-            console.log("ojubasdoijnasd")
             var ripple = document.createElement("div");
             ripple.setAttribute("class", "ripple-effect-circle");
             el.appendChild(ripple);
@@ -767,7 +767,7 @@ function appendRipple(el) {
                 pointer-events: none;
             `;
             setTimeout(function() {
-                //ripple.parentNode.removeChild(ripple);
+                ripple.parentNode.removeChild(ripple);
             }, 500);
         })
     }
@@ -787,3 +787,4 @@ function loaderWheel() {
 
         return el;
 }
+

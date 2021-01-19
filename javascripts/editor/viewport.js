@@ -1,5 +1,8 @@
 const { isPackaged } = require("electron-is-packaged");
 
+var slideshowPlaying = false;
+
+
 const renderer = new RenderingToolKit()
 
 function viewportSettings() {
@@ -245,8 +248,45 @@ function RenderingToolKit() {
             }
         }
         return undefined;
+    },
+    this.playPauseSlideshow = function() {
+        //Check if the slideshow is playing, or if it is paused
+        var viewport = document.getElementById("viewport");
+        var playing = viewport.isPlaying;
+
+        if(playing) {
+            //The program is playing, pause the slideshow
+            slideshowPlaying = false;
+            viewport.isPlaying = false;
+            pauseViewportContent();
+        } else {
+            //The program is not playing, start the slideshow
+            slideshowPlaying = true;
+            viewport.isPlaying = true;
+            playViewportContent();
+        }
     }
 }
+
+
+var playViewportContent = function() {
+    var viewport = document.getElementById("viewport");
+    var controls = viewport.querySelector(".controls");
+    
+    controls.querySelector("#play").childNodes[0].innerHTML = "pause_arrow";
+}
+
+var pauseViewportContent = function() {
+    var viewport = document.getElementById("viewport");
+    var controls = viewport.querySelector(".controls");
+
+    controls.querySelector("#play").childNodes[0].innerHTML = "play_arrow";
+}
+
+
+
+
+
 
 var clickPos = [];
 var draggingElement;

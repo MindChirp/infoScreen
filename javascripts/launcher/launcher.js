@@ -161,7 +161,6 @@ window.onload = function() {
 
     //Add ripple on click effect to all the desired elements
     var buttons = document.getElementsByClassName("ripple-element");
-    console.log(buttons)
     var x;
     for(x of buttons) {
         appendRipple(x);
