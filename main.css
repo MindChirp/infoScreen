@@ -100,6 +100,9 @@ html {
     font-weight: lighter;
 }
 
+
+
+
 .lds-roller {
     display: inline-block;
     position: relative;
@@ -657,6 +660,28 @@ Replaced by a style in inputs.css
 }
 
 #main-container #top-layer #browser .content-container #files {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+#main-container #top-layer #browser .content-container #files #add-files-button {
+    height: 2.5rem;
+    width: 2.5rem;
+    bottom: 1rem;
+    font-size: 1.6rem;
+    font-weight: lighter;
+    right: 1rem;
+    position: absolute;
+    border-radius: 100%;
+    border: none;
+    background: var(--main-bg-color);
+    color: var(--title-color);
+    cursor: pointer;
+    outline: none;
+}
+
+#main-container #top-layer #browser .content-container #files #files-container {
     /*Display grid is in reality set in the main.js script*/
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(10rem,1fr));
@@ -671,17 +696,17 @@ Replaced by a style in inputs.css
     width: 100%;
 }
 
-
-#main-container #top-layer #browser .content-container #files > div {
+/*
+#main-container #top-layer #browser .content-container #files #files-container {
     height: 100%;
     width: 100%;
 
     border-radius: 0.25rem;
     display: inline-block;
     vertical-align: top;
-}
+}*/
 
-#main-container #top-layer #browser .content-container #files > div .content {
+#main-container #top-layer #browser .content-container #files .content {
     height: 100%;
     width: 100%;
     display: grid;
@@ -692,7 +717,7 @@ Replaced by a style in inputs.css
     overflow: hidden;
 }
 
-#main-container #top-layer #browser .content-container #files > div .content p {
+#main-container #top-layer #browser .content-container #files .content p {
     line-height: 1.5rem;
     margin: 0;
     height: 100%;
@@ -700,7 +725,7 @@ Replaced by a style in inputs.css
     text-align: center;
 }
 
-#main-container #top-layer #browser .content-container #files > div .content img, video {
+#main-container #top-layer #browser .content-container #files .content img, video {
     height: 100%;
     width: auto;
     border-radius: 0.25rem;

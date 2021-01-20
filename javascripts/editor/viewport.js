@@ -1,4 +1,3 @@
-const { isPackaged } = require("electron-is-packaged");
 
 var slideshowPlaying = false;
 
@@ -126,10 +125,11 @@ function RenderingToolKit() {
         var zIndex = data.zIndex;
         var name = data.name;
         el.className = "viewport-image";
-        if(!packaged) {
-            el.src = "./extraResources/data/files/" + name;
+        if(!isPackaged) {
+            el.src = "./extraResources/data/files/images/" + name;
+            console.log(el.src);
         } else {
-            el.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", name);
+            el.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
         }
 
         var borderRadius = data.config.borderRadius;

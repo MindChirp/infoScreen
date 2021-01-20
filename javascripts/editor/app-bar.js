@@ -151,6 +151,7 @@ function enableAppBarButtons() {
 
         // Get all file information on startup
 ipcRenderer.on("opened-file-information", (e, args) => {
+    console.log(args);
     var fileInfo = JSON.parse(args[0]._data);
     applyFileInfo(fileInfo);
 })

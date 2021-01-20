@@ -27,14 +27,14 @@
 </head>
 
 <body onresize="calculateLayout()">
-
+<!--
     <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>  
-
+-->
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -91,7 +91,7 @@
                                     <p>Work in progress</p>
                                 </div>
                                 <div id="widgets" style="display: none;"></div>
-                                <div id="files" style="display: none;"></div> <!--Will have dynamically changing content-->
+                                <div id="files" style="display: none;"><button id="add-files-button" onclick="addFiles()" class="smooth-shadow">+</button><div id="files-container"></div></div> <!--Will have dynamically changing content-->
                             </div>
                         </div>
                         <div class="wrapper">

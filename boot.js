@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut, webContents} = require('electron');
 const { openDevTools } = require('electron-debug');
 const { autoUpdater } = require("electron-updater");
+const { isPackaged } = require("electron-is-packaged");
 const fs = require("fs");
 const ipc = require
 const url = require('url');
@@ -128,17 +129,18 @@ function openEditor(fileName) {
       if(fileName) {
 
         //Get the file
-        var projectFilePath = path.join(__dirname,"extraResources", "data", "programData", "projects");
+        var projectFilePath;
+        if(isPackaged) {
+          projectFilePath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
+        } else {
+          projectFilePath = path.join(__dirname, "extraResources", "data", "programData", "projects");
+        }
         fs.readFile(projectFilePath + "/" + fileName + ".proj", "binary", (err, data) => {
           var zip = new require("node-zip")(data, {base64: false, checkCRC32: true});
 
-          var files = ["meta.json"/*, "slides"*/]
+          var files = ["meta.json"]
 
-          var x;
-
-          for(x of files) {
-            unzipped.push(zip.files[x]);  
-          }
+          unzipped.push(zip.files[files[0]]);  
 
 
 
@@ -214,6 +216,24 @@ ipcMain.on("open-pfp-selector", (event) => {
         event.returnValue = "cancelled";
       }
 })
+
+
+ipcMain.on("open-file-selector", (event) => {
+  var file = dialog.showOpenDialog(launcherWin,
+    {
+      filters: [
+        {name: 'Images and videos', extensions: ["jpg", "png", "gif", "mp4"]}
+      ],
+      properties: ['openFile', 'multiSelections']
+    })
+      if(file != undefined) {
+        event.returnValue = file;
+      } else {
+        //The dialog was canceled
+        event.returnValue = "cancelled";
+      }
+})
+
 
 ipcMain.on('get-file-data', function(event) {
   var data = null

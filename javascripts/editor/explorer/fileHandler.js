@@ -1,7 +1,8 @@
-const { fstat } = require("fs");
+const { isPackaged } = require("electron-is-packaged");
 const path = require("path");
+const fsE = require("fs-extra");
 
-var dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+var dir = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
 function loadFilesIntoExplorer() {
     //Read the folder
 
@@ -10,7 +11,8 @@ function loadFilesIntoExplorer() {
             try {
                 fetchFiles(dir, dat);
             } catch (error) {
-                dir = path.join(__dirname, "extraResources", "data", "files");
+                dir = path.join(__dirname, "extraResources", "data", "files",
+                "images");
                 fs.readdir(dir, (err,dat) => {
                     fetchFiles(dir, dat);
                 })
@@ -20,18 +22,18 @@ function loadFilesIntoExplorer() {
 }
 
 function fetchFiles(dir, dat) {
-    var explorer = document.getElementById("browser").querySelector(".content-container").querySelector("#files");
+    var explorer = document.getElementById("browser").querySelector(".content-container").querySelector("#files").querySelector("#files-container");
     var imgTypes = ["png", "jpg", "gif", "bmp"];
     var vidTypes = ["mp4"];
     var x;
     for(x of dat) {
-
+        console.log(x)
 
         //Check if dir is folder or file
         if(!fs.lstatSync(dir + "/" + x).isDirectory()) {
 
 
-            var ext = x.split(".")[x.split(".").length-1]
+            var ext = x.split(".")[x.split(".").length-1];
             var n;
             var isVid = false;
             var isImg = false;
@@ -89,5 +91,27 @@ function fetchFiles(dir, dat) {
             cont.appendChild(p);
         }
         }
+    }
+}
+
+
+function addFiles() {
+    var paths = ipcRenderer.sendSync("open-file-selector");
+    console.log(paths);
+
+    var imgPath;
+    if(isPackaged) {
+        imgPath = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
+    } else {
+        imgPath = path.join(__dirname, "extraResources", "data", "files", "images");
+    }
+
+
+    var x;
+    for(x of paths) {
+        console.log(x)
+        var fileName = x.split("\\")[x.split("\\").length-1];
+        fsE.copySync(x, imgPath + "/" + fileName);
+        
     }
 }

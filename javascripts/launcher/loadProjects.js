@@ -21,6 +21,8 @@ function createList(arr) {
         parent.style.paddingBottom = "0.5rem";
 
     }
+
+    
     var x;
     var holder;
     if(!document.getElementById("projects-container")) {

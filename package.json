@@ -1,6 +1,6 @@
 {
   "name": "infoscreen",
-  "version": "0.0.57",
+  "version": "0.0.58",
   "description": "Infoscreen program",
   "main": "boot.js",
   "dependencies": {
