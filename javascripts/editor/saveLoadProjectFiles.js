@@ -16,6 +16,7 @@ function saveFile() {
     */
 
     //If the program is not saving anymore
+    console.log(saving)
     if(!saving) {
         /*I removed the big saving indicator, it was ugly and stuff ugh*/
         //var indicator = saveIndicator();
@@ -26,111 +27,131 @@ function saveFile() {
         sIndicator.style = `
             color: var(--paragraph-color);
         `
+
         pTitle.appendChild(sIndicator);
 
+
         saving = true;
-        setTimeout(function() {
-            var sIndicator = pTitle.getElementsByTagName("span")[0];
-            sIndicator.parentNode.removeChild(sIndicator);
-                saving = false;
-        }, 2000)
     
-    //Create a template
-    var date = new Date();
-    var dateTime = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ":" + date.getHours() + ":" + date.getMinutes();
-    
-    
-    var meta = {
-        meta: {
-            creator: null,
-            created: null,
-            edited: dateTime
-        },
-        times: [],
-        files: []
+        //Create a template
+        var date = new Date();
+        var dateTime = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ":" + date.getHours() + ":" + date.getMinutes();
         
-    }
+    
+        var meta = {
+            meta: {
+                creator: document.body.projectConfig.creator,
+                created: document.body.projectConfig.created,
+                edited: dateTime,
+                title: document.body.projectConfig.title
+            },
+            fileInfo: {
+
+                times: [],
+                files: []
+            }
+                
+        }
 
 
 
-    // Get the columns with any elements in it (i.e. the columns that are active slides)
-    var cols = document.getElementsByClassName("timeline-column");
+        // Get the columns with any elements in it (i.e. the columns that are active slides)
+        var cols = document.getElementsByClassName("timeline-column");
 
-    var activeColumns = [];
+        var activeColumns = [];
 
-    for(let i = 0; i < cols.length; i++) {
-        var children = cols[i].childNodes;
-        var y;
-        var childFound = false;
-        for(y of children) {
-            if(!childFound) {
+        for(let i = 0; i < cols.length; i++) {
+            var children = cols[i].childNodes;
+            var y;
+            var childFound = false;
+            for(y of children) {
+                if(!childFound) {
 
-                if(y.hasChildNodes()) {
-                    activeColumns.push(i);
-                    childFound = true;
+                    if(y.hasChildNodes()) {
+                        activeColumns.push(i);
+                        childFound = true;
+                    }
                 }
             }
         }
-    }
 
 
 
-    //Get all the files in each column, and store them in objects
-    var files = [];
+        //Get all the files in each column, and store them in objects
+        var files = [];
 
-    var n;
+        var n;
 
-    for(n of activeColumns) {
-        var children = document.getElementsByClassName("timeline-column")[n].childNodes;
-        var time = document.getElementsByClassName("timeline-column")[n].getAttribute("time");
-        var columnData = {columnNo: n, config: {time: time}, content: []};
-        var z;
-        for(z of children) {
-            if(z.hasChildNodes()) {
-                
-                var file = z.childNodes[0];
-                var fName = file.getAttribute("filename");
+        for(n of activeColumns) {
+            var children = document.getElementsByClassName("timeline-column")[n].childNodes;
+            var time = document.getElementsByClassName("timeline-column")[n].getAttribute("time");
+            var columnData = {columnNo: n, config: {time: time}, content: []};
+            var z;
+            var iterator = 0;
+            for(z of children) {
+                if(z.hasChildNodes()) {
+                    
+                    var file = z.childNodes[0];
+                    var fName = file.getAttribute("filename");
 
-                var dir;
-                if(isPackaged) {
-                    dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
-                } else {
-                    dir = path.join(__dirname, "extraResources", "data", "files");
+                    var dir;
+                    if(isPackaged) {
+                        dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+                    } else {
+                        dir = path.join(__dirname, "extraResources", "data", "files");
+                    }
+                    var type = file.getAttribute("type");                
+
+                    if(type == "img" || type == "vid") {
+
+                        var data = fs.readFileSync(dir + "/" + fName);
+                        var zIndex = iterator;
+                        console.log(file.config[0])
+                        var fileInfo = {fileName: fName, type: type, config: file.config[0], zIndex: zIndex, data: data.toString("base64")}
+                        columnData.content.push(fileInfo);
+                        
+                        
+                    } else if(type="widget") {
+                        var fileInfo = {fileName: fName, type: type, config: file.config[0]}
+                        columnData.content.push(fileInfo);
+                        
+                    }
                 }
-                var data = fs.readFileSync(dir + "/" + fName);
-                var fileInfo = {fileName: fName, config: file.config[0], data: data.toString("base64")}
-                columnData.content.push(fileInfo);
-                
+                iterator++
             }
+            files.push(columnData);
+
         }
-        files.push(columnData);
 
-    }
+        meta.fileInfo.files = files;
+        //Zip the meta file
+        setTimeout(function() {
 
-    meta.files = files;
+        var zip = new require("node-zip")();
+        zip.file("meta.json", JSON.stringify(meta));
+        var data = zip.generate({base64: false, compression: "DEFLATE"});
 
 
+        var dirPath;
+        if(!isPackaged) {
+            dirPath = path.join(__dirname, "extraResources", "data", "programData", "projects");
+        } else {
+            dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
+        }
 
+        fs.writeFile(path.join(dirPath, document.body.projectConfig.title + '.proj'), data, 'binary', (err) => {
+            if(err) {
+                return false;
+            } else {
+                var sIndicator = pTitle.getElementsByTagName("span")[0];
+                sIndicator.parentNode.removeChild(sIndicator);
+                saving = false;
+                return true;
 
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+            }
+        });
+        }, 10);
+ 
     }
 }
 
@@ -161,10 +182,7 @@ function saveIndicator() {
 function applyFileInfo(fileInfo) {
     var title = fileInfo.meta.title;
     //Apply the title to the app bar
-    console.log("asdasd")
-    console.log(title)
     console.log(document.getElementById("project-name"))
     document.getElementById("project-name").innerHTML = title;
+    document.body.projectConfig = {title: title, creator: fileInfo.meta.creator, created: fileInfo.meta.created, edited: fileInfo.meta.edited}
 }
-
-

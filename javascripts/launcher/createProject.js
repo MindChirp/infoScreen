@@ -1,4 +1,3 @@
-const { resolveFiles } = require("electron-updater/out/providers/Provider");
 const fs = require("fs-extra");
 
 function createProject() {
@@ -129,10 +128,10 @@ function createProject() {
         if(i == 0) {
             el.setAttribute("class", "template-card standard smooth-shadow");
 
-            var img = document.createElement("img");
+            /*var img = document.createElement("img");
             img.src = "./internalResources/images/template1.png";
-            el.appendChild(img);
-            /*var p = document.createElement("p")
+            el.appendChild(img);*/
+            var p = document.createElement("p")
             p.innerHTML = "Test template";          
             el.appendChild(p);
             p.setAttribute("style", `
@@ -142,7 +141,7 @@ function createProject() {
                 width: 10rem;
                 text-align: center;
 
-            `);*/
+            `);
 
             el.classList.add("ripple-element");
             appendRipple(el);
@@ -239,8 +238,11 @@ function createFile(template) {
             edited: "null",
             title: title
         },
+        fileInfo: {
+
             times: [],
             files: []
+        }
         };
 
     var zip = new require("node-zip")();

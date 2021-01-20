@@ -96,12 +96,23 @@ function previewSlideshow(filename) {
     var buttonsCont = document.createElement("div");
     buttonsCont.className = "button-container smooth-shadow";
 
+    var slideNo = document.createElement("p");
+    slideNo.innerHTML = "0";
+    slideNo.id = "slide-number";
+    slideNo.style = `
+        height: 1.8rem;
+        line-height: 1.8rem;
+        margin: 0;
+        width: 2rem;
+    `
+
     var prev = document.createElement("button");
     prev.onclick="goPrevSlide()";
     var ico = document.createElement("i");
     ico.className = "material-icons";
     ico.innerHTML = "skip_previous";
     prev.appendChild(ico);
+    prev.addEventListener("click", goPrevSlide);
 
     var next = document.createElement("button");
     prev.onclick="goNextSlide()";
@@ -109,8 +120,11 @@ function previewSlideshow(filename) {
     ico.className = "material-icons";
     ico.innerHTML = "skip_next";
     next.appendChild(ico);
+    next.addEventListener("click", goNextSlide);
+    
     buttonsCont.appendChild(next)
     buttonsCont.appendChild(prev);
+    buttonsCont.appendChild(slideNo);
 
     controls.appendChild(buttonsCont)
 
@@ -130,14 +144,14 @@ function readProjectData(filename) {
         dir = path.join(__dirname, "extraResources", "data", "programData", "projects")
     }
     var data = fs.readFileSync(dir + "/" + filename + ".proj", "binary");
-
     var zip = new require("node-zip")(data, {base64: false, checkCRC32: true});
     var files = ["meta.json"];
 
-    var unzippedFiles = zip.files[files[0]]._data;
-    var decodedFiles = JSON.parse(unzippedFiles);
-    console.log(decodedFiles.meta.files)
-    if(!decodedFiles.meta.files) {
+    var unzippedFiles = zip.files[files[0]];
+    var decodedFiles = JSON.parse(unzippedFiles._data);
+
+    //Check if there are any slides in the project
+    if(decodedFiles.fileInfo.files.length == 0) {
         
         //Not edited, no information to show.
         var viewport = document.getElementById("viewport").querySelector(".content");
@@ -154,23 +168,42 @@ function readProjectData(filename) {
             transform: translate(-50%, -50%);
             opacity: 0.8;
         `;
+
+        return;
     }
 
     
+    var slides = [];
+
+    projectData = {slides: decodedFiles.fileInfo.files, author: decodedFiles.meta.creator, edited: decodedFiles.meta.edited, title: decodedFiles.meta.title};
 }
 
 function loadSlide(slideNo) {
     //Read the project data
+    var slide = projectData.slides[slideNo];
+
+    renderColumn(slideNo, slide);
+    document.getElementById("slide-number").innerHTML = crntSlide+1;
 }
 
 
-
+var crntSlide = 0;
 
 
 function goPrevSlide() {
+    var newSlide = crntSlide==0 ? 0 : crntSlide-1; 
+    crntSlide = newSlide; 
+
+    loadSlide(crntSlide);
 
 }
 
 function goNextSlide() {
+
+    var newSlide = crntSlide+1;
+    crntSlide = newSlide; 
+
+    loadSlide(crntSlide);
+
 
 }

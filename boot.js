@@ -154,7 +154,6 @@ function openEditor(fileName) {
 
       programHeight1 = height - 100;
       programWidth1= width - 200;
-        console.log(unzipped);
 
       //Send the file information to the renderer process
       setTimeout(function() {
@@ -209,13 +208,10 @@ ipcMain.on("open-pfp-selector", (event) => {
       properties: ['openFile']
     })
       if(file != undefined) {
-        console.log("yes")
-        console.log(file)
         event.returnValue = file;
       } else {
         //The dialog was canceled
         event.returnValue = "cancelled";
-        console.log(event.returnValue);
       }
 })
 

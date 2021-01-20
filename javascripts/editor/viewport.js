@@ -140,7 +140,7 @@ function RenderingToolKit() {
         var heights = data.config.size.height;
         var widths = data.config.size.width;
         var display = data.config.display ? "block" : "none";
-        console.log(display);
+        
         el.style = `
             z-index: ` + zIndex + `;
             position: absolute;
