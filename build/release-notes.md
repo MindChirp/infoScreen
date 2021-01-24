@@ -1,23 +1,19 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>Added shortcuts <div class="info-circle" metaMessage="Ctrl+O, Ctrl+N">?</div></li>
-        <li>File saving partially implemented <div class="info-circle" metaMessage="Will soon be done.">?</div></li>
+        
+        <li>Video-file rendering added (.mp4)</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>Newly created project won't show up in the recent projects box on launcher</li>
-        <li>Tabs won't be removed when its corresponding timeline element is deleted</li>
-        <li>Properties button in context menu stays grayed out when its corresponding tab is removed</li>
-        <li>Movie file dragging shadows and timeline elements are broken <div class="info-circle" metaMessage="The movie files are however as of yet not being rendered.">?</div></li>
+        <li>None</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Improved a <em>lot</em> of code</li>
-        <li>Moved saving indication from bottom left corner to the top of the screen, next to the project name</li>
+        <li>File saving fully implemented</li>
     </ul>
         <br>
 
@@ -26,7 +22,9 @@
         <li>Profile picture issues in launcher</li>
         <li>File-browser content displaying issue</li>
         <li>AMPM clock shows wrong AM/PM suffix at certain times of day</li>
+        <li>Saving big projects will freeze the program. <div class="info-circle" metaMessage="File encoding architecture must be changed a bit, will be fixed soon">?</div></li>
+        <li>Poor video rendering performance <div class="info-circle" metaMessage="A rendering engine update/improvement is under development">?</div></li>
         <li>The program is hijacked by hyperlinks</li>
-        <li>For more issues, visit <a href="https://github.com/MindChirp/infoScreen/issues">github</a></li>
+        <li>For closed issues, visit <a href="https://github.com/MindChirp/infoScreen/issues">github</a></li>
     </ul>
         <br>

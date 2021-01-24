@@ -130,6 +130,7 @@ function dragFileHandler(el) {
             file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "vid") {
+            file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "50%"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}}];
             var path = fileInfo[0];
 
             var vid = document.createElement("video");

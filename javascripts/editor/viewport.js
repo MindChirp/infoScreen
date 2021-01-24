@@ -210,7 +210,59 @@ function RenderingToolKit() {
 
     },
     this.movie = function(data) {
+        var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
+        var name = data.name;
+        var el = document.createElement("div");
+        el.connectedElement = data.element;
+        el.className = "viewport-image";
+        var vid = document.createElement("video");
+        vid.style = `
+            height: 100%;
+            width: 100%;
+            object-fit: fill;
+        `;
+        var srcEl = document.createElement("source");
 
+        if(!isPackaged) {
+            srcEl.src = "./extraResources/data/files/images/" + name;
+        } else {
+            srcEl.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
+        }
+
+
+        vid.appendChild(srcEl);
+        el.appendChild(vid);
+        var zIndex = data.zIndex;
+        var borderRadius = data.config.borderRadius;
+        var opacity = data.config.opacity;
+        var shadowMultiplier = data.config.shadowMultiplier;
+        var blur = data.config.blur;
+        var position = data.config.position;
+        var heights = data.config.size.height;
+        var widths = data.config.size.width;
+        var display = data.config.display ? "block" : "none";
+        el.style = `
+            z-index: ` + zIndex + `;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: ` + borderRadius + `rem;
+            box-shadow: ` + shadowMultiplier + `px ` + shadowMultiplier + `px ` + 1.3*shadowMultiplier + `px 0px rgba(0,0,0,0.75);
+            opacity: ` + opacity + `;
+            filter: blur(` + blur + `px);
+            height: ` + heights + `;
+            width: ` + widths + `;
+            /*Positioning*/
+            left: ` + position[0] + `px;
+            top: ` + position[1] + `px;
+            display: ` + display + `;
+            overflow: hidden;
+        `;
+
+
+        addResizingBorders(el);
+
+        viewport.appendChild(el);
     },
     this.unrender = function(timeLineFile) {
         //Unrender a passed element from the viewport, if the parent column is
@@ -294,6 +346,15 @@ var viewportDragFileHandler = function(e) {
     draggingElement.style.left = e.offsetX-clickPos[0] + "px";
     draggingElement.style.top = e.offsetY-clickPos[1] + "px";
 }
+
+
+
+
+
+
+
+
+
 
 //Adds resizing borders and move abilities
 function addResizingBorders(el) {
@@ -381,7 +442,7 @@ function addResizingBorders(el) {
             var width = parseInt(window.getComputedStyle(el).width.split("px")[0])*/
             var height = window.getComputedStyle(el).height;
             var width = window.getComputedStyle(el).width;
-
+            console.log(el.connectedElement)
             el.connectedElement.config[0].size.height = height;
             el.connectedElement.config[0].size.width = width; 
         }

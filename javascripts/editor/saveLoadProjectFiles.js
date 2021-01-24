@@ -96,9 +96,9 @@ function saveFile() {
 
                     var dir;
                     if(isPackaged) {
-                        dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+                        dir = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
                     } else {
-                        dir = path.join(__dirname, "extraResources", "data", "files");
+                        dir = path.join(__dirname, "extraResources", "data", "files", "Images");
                     }
                     var type = file.getAttribute("type");                
 

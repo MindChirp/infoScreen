@@ -2,7 +2,12 @@ const { isPackaged } = require("electron-is-packaged");
 const path = require("path");
 const fsE = require("fs-extra");
 
-var dir = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
+var dir;
+if(isPackaged) {
+    dir = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
+} else {
+    dir = path.join(__dirname, "extraResources", "data", "files", "images");
+}
 function loadFilesIntoExplorer() {
     //Read the folder
 
@@ -27,7 +32,6 @@ function fetchFiles(dir, dat) {
     var vidTypes = ["mp4"];
     var x;
     for(x of dat) {
-        console.log(x)
 
         //Check if dir is folder or file
         if(!fs.lstatSync(dir + "/" + x).isDirectory()) {
@@ -97,7 +101,6 @@ function fetchFiles(dir, dat) {
 
 function addFiles() {
     var paths = ipcRenderer.sendSync("open-file-selector");
-    console.log(paths);
 
     var imgPath;
     if(isPackaged) {
@@ -106,12 +109,12 @@ function addFiles() {
         imgPath = path.join(__dirname, "extraResources", "data", "files", "images");
     }
 
-
+    document.getElementById("files").querySelector("#files-container").innerHTML = "";
     var x;
     for(x of paths) {
-        console.log(x)
         var fileName = x.split("\\")[x.split("\\").length-1];
         fsE.copySync(x, imgPath + "/" + fileName);
+        loadFilesIntoExplorer();
         
     }
 }
