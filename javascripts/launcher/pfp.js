@@ -43,11 +43,18 @@ function profilePhoto(parent) {
     var img = document.createElement("img");
     img.setAttribute("id", "img-positioner-image")
     var ext = localStorage.getItem("pfpExtension");
+    var imgPath;
     if(ext == null) {
-        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+        imgPath = path.join(__dirname,"internalResources", "images", "default.png");
     } else {
-        var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+        if(isPackaged) {
+            imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+        } else {
+            imgPath = path.join(__dirname,"extraResources", "data", "programData", "profilePics", "user" + ext);
+            
+        }
     }
+    console.log(imgPath)
     img.src = imgPath;
     img.style.height = "100%";
     img.style.width = "auto";
@@ -77,12 +84,17 @@ function profilePhoto(parent) {
         if(paths != "cancelled") {
 
 
-    var letters = ["A","B","C","D","E","F","G","H","I","J"];
+        var letters = ["A","B","C","D","E","F","G","H","I","J"];
 
 
         var extension = paths[0].split("\\")[paths[0].split("\\").length-1].split(".")[paths[0].split("\\")[paths[0].split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
-        var directory = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics");
+        var directory;
+        if(isPackaged) {
+            directory = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics");
+        } else {
+            directory = path.join(__dirname,"extraResources",  "data", "programData", "profilePics");
+        }
         fs.readdir(directory, (err, files) => {
             if(err) throw err;
             for(const file of files) {
@@ -99,13 +111,25 @@ function profilePhoto(parent) {
             /*fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
                 if(err) throw err;
             });*/
+            var ext = localStorage.getItem("pfpExtension");
+
+            var imgPath;
+            var ext = localStorage.getItem("pfpExtension");
             if(ext == null) {
-                var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+                imgPath = path.join(__dirname,"internalResources", "images", "default.png");
             } else {
-                var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+                if(isPackaged) {
+                    imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+
+                } else {
+                    imgPath = path.join(__dirname,"extraResources", "data", "programData", "profilePics", "user" + ext);
+                    
+                }
             }
             try {
-                fs.copySync(paths[0], imgPath + localStorage.getItem("pfpExtension"));
+                console.log(paths[0])
+                fs.copySync(paths[0], imgPath);
+                console.log(imgPath)
             } catch (error) {
                 console.log("Could not copy profile picture");
                 console.error(error);
@@ -122,11 +146,17 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    console.log(ext)
+                    //console.log(ext)
+                    var imgPath;
                     if(ext == null) {
-                        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+                        imgPath = path.join(__dirname,"internalResources", "images", "default.png");
                     } else {
-                        var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+                        if(isPackaged) {
+                            imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+                
+                        } else {
+                            imgPath = path.join(__dirname,"extraResources", "data", "programData", "profilePics", "user" + ext);                            
+                        }
                     }
                     img.src = imgPath;
                     changeState();
@@ -153,10 +183,11 @@ function profilePhoto(parent) {
             console.log("Could not find or read the profile picture metadata. Retrying..");
             try {
                 var datPath = path.join(__dirname,"extraResources", "data","programData","profilePics","profilePicDat.json");
-                var data = fs.readFileSync(datpath);
+                var data = fs.readFileSync(datPath);
             } catch (error) {
                 console.log("Could not find or read the profile picture metadata.");
                 data = "Some unparsable gibberish";
+                throw error;
             }
         }
         var dat;
@@ -182,7 +213,7 @@ function profilePhoto(parent) {
                 fs.writeFileSync(datPath, dat, (err) => {
                     if(err) throw err;
                 }) 
-            }
+            }       
         }
 
 
@@ -284,7 +315,16 @@ function profilePhoto(parent) {
                     "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
                 }`;
             localStorage.setItem("pfpPos", JSON.stringify([Xpos,Ypos,size]));
-                fs.writeFileSync("./data/programData/profilePics/profilePicDat.json", dat, (err) => {
+            var dir;
+            if(isPackaged){
+                dir = path.join(path.dirname(__dirname), "extraResources","data","programData", "profilePics", "profilePicDat.json")
+
+            } else {
+                dir = path.join(__dirname, "extraResources","data","programData", "profilePics", "profilePicDat.json")
+
+            }
+            
+            fs.writeFileSync(dir, dat, (err) => {
                     if(err) throw err;
                 })
                 changeState();

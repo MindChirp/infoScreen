@@ -81,9 +81,16 @@ window.onload = function() {
             if(ext == null) {
                 var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
             } else {
-                var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                var imgPath;
+
+                if(isPackaged) {
+                    imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                } else {
+                    imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
+
+                }
+                img.src = imgPath;
             }
-            img.src = imgPath;
             
         }
     //If not already set up, set up the localStorage
@@ -314,14 +321,15 @@ function userSettings() {
 
     var signedIn = localStorage.getItem("signedIn");
     if(signedIn == "true" && ext != null) {
-        try {
-            var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+            var imgPath;
+            if(isPackaged) {
+                imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+            } else {
+                imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
+            }
             img.setAttribute("src", imgPath);
 
-        } catch (error) {
-            var imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
-            img.setAttribute("src", imgPath);
-        }
+
         img.setAttribute("style", `
         height: 5rem;
         width: auto;
@@ -689,11 +697,16 @@ function userScreen(info, header, signIn) {
     `);
 
     var img = document.createElement("img");
+    var imgPath
     var ext = localStorage.getItem("pfpExtension");
     if(ext == null) {
-        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+        imgPath = path.join(__dirname,"internalResources", "images", "default.png");
     } else {
-        var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        if(isPackaged) {
+            imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        } else {
+            imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        }
     }
     img.setAttribute("src", imgPath);
     pfp.appendChild(img);
@@ -893,7 +906,12 @@ function changeState() {
         var Ypos = pos[1];
         var size = pos[2];
         img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-        var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        var imgPath;
+        if(isPackaged) {
+            imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        } else {
+            imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+        }
         img.setAttribute("src", imgPath);
 
         //Enable all buttons

@@ -201,6 +201,11 @@ function Appmenu() {
                             el.addEventListener("click", y.click);
                         }
 
+                        if(y.disabled) {
+                            el.classList.add("off");
+
+                        }
+
                         if(y.accelerator) {
                             //Append accelerator (shortcut)
                             var components = y.accelerator.split("+");
@@ -340,6 +345,9 @@ function appendSubMenu(submenu) {
             `;
             if(x.click) {
                 el.addEventListener("click", x.click);
+            }
+            if(x.disabled) {
+                el.classList.add("off");
             }
             var label = document.createElement("p");
             label.style = `
