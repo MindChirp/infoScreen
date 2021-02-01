@@ -62,3 +62,7 @@ typings/
 
 # dist folder
 dist/
+
+# data folders
+extraResources/data/files/images/
+extraResources/data/programData/projects/

@@ -58,6 +58,9 @@ window.onload = function() {
         //Light theme is disabled, so if by any odd chance localStorage is
         //messed up, dark theme will be selected no matter what
         setTheme(1);
+
+        //DISABLED
+        /*
         if(localStorage.getItem("theme") == "light") {
             setTheme(0);
         } else if(localStorage.getItem("theme") == "dark") {
@@ -65,6 +68,7 @@ window.onload = function() {
         } else {
             setTheme(2);
         }
+        */
     }
         if(signedIn == true) {
             var ext = localStorage.getItem("pfpExtension");
@@ -74,7 +78,11 @@ window.onload = function() {
             var size = pos[2];
             var img = document.getElementById("profile-photo-image");
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-            var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+            if(ext == null) {
+                var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+            } else {
+                var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+            }
             img.src = imgPath;
             
         }
@@ -303,9 +311,9 @@ function userSettings() {
 
 
     var ext = localStorage.getItem("pfpExtension");
+
     var signedIn = localStorage.getItem("signedIn");
-    
-    if(signedIn == "true") {
+    if(signedIn == "true" && ext != null) {
         try {
             var imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
             img.setAttribute("src", imgPath);
@@ -319,6 +327,7 @@ function userSettings() {
         width: auto;
         `);        
     } else {
+        //User is either not signed in, or there is no profile picture data stored
         var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
         img.setAttribute("src",imgPath)
         img.setAttribute("style", `
@@ -681,7 +690,11 @@ function userScreen(info, header, signIn) {
 
     var img = document.createElement("img");
     var ext = localStorage.getItem("pfpExtension");
-    var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+    if(ext == null) {
+        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+    } else {
+        var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+    }
     img.setAttribute("src", imgPath);
     pfp.appendChild(img);
     img.setAttribute("style", `

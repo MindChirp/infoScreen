@@ -1,3 +1,4 @@
+const { silly } = require("electron-log");
 
 var saving = false;
 function saveFile() {
@@ -16,45 +17,63 @@ function saveFile() {
     */
 
     //If the program is not saving anymore
-    console.log(saving)
     if(!saving) {
         /*I removed the big saving indicator, it was ugly and stuff ugh*/
         //var indicator = saveIndicator();
         var pTitle = document.getElementById("project-name");
         var sIndicator = document.createElement("span");
         sIndicator.style.animation = "save-span-animation 500ms infinite"
-        sIndicator.innerHTML = " - Saving";
+
+        if(document.body.devMode) {
+            sIndicator.innerHTML = " - Cannot save, in developer mode";
+            setTimeout(() => {
+                sIndicator.parentNode.removeChild(sIndicator);
+                saving = false;
+            }, 4000)
+        } else {
+            sIndicator.innerHTML = " - Saving";
+        }
+
         sIndicator.style = `
             color: var(--paragraph-color);
-        `
+            opacity: 0.5;
+        `;
 
         pTitle.appendChild(sIndicator);
 
-
         saving = true;
-    
+
+        if(document.body.devMode) return;
+
         //Create a template
         var date = new Date();
         var dateTime = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ":" + date.getHours() + ":" + date.getMinutes();
         
     
-        var meta = {
-            meta: {
-                creator: document.body.projectConfig.creator,
-                created: document.body.projectConfig.created,
-                edited: dateTime,
-                title: document.body.projectConfig.title
-            },
-            fileInfo: {
-
-                times: [],
-                files: []
+        var meta;
+        
+        try {
+            
+            meta = {
+                meta: {
+                    creator: document.body.projectConfig.creator,
+                    created: document.body.projectConfig.created,
+                    edited: dateTime,
+                    title: document.body.projectConfig.title
+                },
+                fileInfo: {
+    
+                    times: [],
+                    files: []
+                }
+                    
             }
-                
+
+        } catch (error) {
+            console.log(error);
         }
 
-
-
+        if(meta == undefined) return;
         // Get the columns with any elements in it (i.e. the columns that are active slides)
         var cols = document.getElementsByClassName("timeline-column");
 
@@ -96,9 +115,9 @@ function saveFile() {
 
                     var dir;
                     if(isPackaged) {
-                        dir = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+                        dir = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
                     } else {
-                        dir = path.join(__dirname, "extraResources", "data", "files");
+                        dir = path.join(__dirname, "extraResources", "data", "files", "Images");
                     }
                     var type = file.getAttribute("type");                
 
@@ -106,7 +125,6 @@ function saveFile() {
 
                         var data = fs.readFileSync(dir + "/" + fName);
                         var zIndex = iterator;
-                        console.log(file.config[0])
                         var fileInfo = {fileName: fName, type: type, config: file.config[0], zIndex: zIndex, data: data.toString("base64")}
                         columnData.content.push(fileInfo);
                         
@@ -182,7 +200,6 @@ function saveIndicator() {
 function applyFileInfo(fileInfo) {
     var title = fileInfo.meta.title;
     //Apply the title to the app bar
-    console.log(document.getElementById("project-name"))
     document.getElementById("project-name").innerHTML = title;
     document.body.projectConfig = {title: title, creator: fileInfo.meta.creator, created: fileInfo.meta.created, edited: fileInfo.meta.edited}
 }

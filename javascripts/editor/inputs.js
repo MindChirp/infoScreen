@@ -176,7 +176,7 @@ function TabSystem() {
     this.select = function(options, display, title, useOptionsAsNames) {
         var wrapper = document.createElement("div");
         wrapper.style = `
-            height: fit-content;
+            height: 5rem;
             width: fit-content;
             display: block;
         `
@@ -191,6 +191,7 @@ function TabSystem() {
                 margin: 0;
                 line-height: 1rem;
                 font-weight: lighter;
+                height: 1rem;
             `;
             wrapper.appendChild(p);
         }

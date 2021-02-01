@@ -1,5 +1,5 @@
 var appB = require("app-buttons");
-const { ipcMain, ipcRenderer } = require("electron");
+const { ipcMain } = require("electron");
 const { aboutMenuItem } = require("electron-util");
 const menuHandler = new Appmenu();
 
@@ -34,7 +34,8 @@ const template = [
             {
                 label: "New",
                 accelerator: "Ctrl+N",
-                click: () => {}
+                click: () => {},
+                disabled: true
             },
             {
                 label: "Open...",
@@ -42,13 +43,15 @@ const template = [
                     {
                         label: "...From server",
                         accelerator: "Ctrl+H",
-                        click: () => {alert("opening from server")}
+                        click: () => {alert("opening from server")},
+                        disabled: true
                     },
                     {
                         label: "...From PC",
                         accelerator: "Ctrl+O",
-                        click: () => {alert("Opening from PC")}
-                    },
+                        click: () => {alert("Opening from PC")},
+                        disabled: true
+                    }/*,
                     {
                         label:"...From chip in brein",
                         accelerator:"Ctrl+B",
@@ -56,7 +59,7 @@ const template = [
                             alert("Opening ur brein...") 
                         }
 
-                    }
+                    }*/
                 ]
             },
             {
@@ -65,18 +68,22 @@ const template = [
                 click: () => {
                     saveFile();
                 }
+            },
+            {label: "divider"},
+            {
+                label: "File info",
+                click: ()=>{
+                    showFileInfo();
+                }
             }
         ]
     },
     {
         label: "Help",
-        submenu: [
+        submenu: [   
             {
-                label: "Check for Updates"
-            },
-            {label: "divider"},          
-            {
-                label: "Report Issue"
+                label: "Report Issue",
+                disabled: true
             },
             {
                 label: "divider"
@@ -86,6 +93,13 @@ const template = [
                 click: () => {
                     console.log("asd")
                     aboutMenu();
+                }
+            },
+            {label: "divider"},
+            {
+                label: "Keybinds",
+                click: () => {
+                    showKeybinds();
                 }
             }
         ]
@@ -97,14 +111,20 @@ const template = [
                 label: "Network...",
                 submenu: [
                     {
-                        label: "Server Connection"
+                        label: "Server Connection",
+                        disabled: true,
+                        click: () => {
+                            serverConnectionMenu();
+                        }
                     },
                     {
-                        label: "Screen Setup"
+                        label: "Screen Setup",
+                        disabled: true
                     },
                     {label: "divider"},
                     {
                         label: "Advanced",
+                        disabled: true
                     }
                 ]
             },
@@ -131,7 +151,29 @@ const template = [
             },
             {
                 label: "More",
-                click: () => {alert("Opening more settings")}
+                click: () => {alert("Opening more settings")},
+                disabled: true
+            }
+        ]
+    },
+    {
+        label: "Window",
+        submenu: [
+            {
+                label: "Check for Updates",
+                disabled: true
+            },
+            {label: "divider"},       
+            {
+                label: "Open launcher",
+                accelerator: "Ctrl+L",
+                click: () => {
+                    relaunchLauncher();
+                }
+            },
+            {
+                label: "Exit",
+                click: () => {ipcRenderer.send("close", true)}
             }
         ]
     }
@@ -151,7 +193,18 @@ function enableAppBarButtons() {
 
         // Get all file information on startup
 ipcRenderer.on("opened-file-information", (e, args) => {
-    console.log(args);
-    var fileInfo = JSON.parse(args[0]._data);
-    applyFileInfo(fileInfo);
+    if(args[0][0]) {
+
+        var fileInfo = JSON.parse(args[0][0]._data);
+        applyFileInfo(fileInfo);
+   
+    }
+
+
+
+    if(args[1] == true) {
+        document.body.devMode = true;
+    } else {
+        document.body.devMode = false;
+    }
 })

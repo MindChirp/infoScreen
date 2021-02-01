@@ -9,6 +9,7 @@ body {
     font-family: bahnschrift;
     user-select: none;
     background-color: var(--main-bg-color);
+    animation: fade-in 300ms ease-in-out;
 }
 
 body p, i {
@@ -24,18 +25,21 @@ html {
     overflow-x: hidden;
 }
 
+
+
 :root {
-    --main-bg-color: white;
-    --main-button-color: #E8E0D9;
-    --secondary-button-color: #d9cbbf;
-    --title-color: black;
-    --secondary-color: #E8E0D9;
-    --paragraph-color: rgb(50,50,50);
-    --slider-color: #4da0ff;
+    --main-bg-color: #171F26;
+    --main-button-color: #1B2630;
+    --secondary-button-color: #121a21;
+    --title-color: white;
+    --secondary-color: rgb(15, 20, 25);
+    --paragraph-color: rgb(220,220,220);
+    --slider-color: #0075ff;
     --slider-disabled-color: #a3ceff;
     --dark-shade: rgb(50,50,50);
     --light-shade: rgb(150,150,150);
   }
+
 
   .ripple-element {
     overflow: hidden;
@@ -80,7 +84,7 @@ html {
     left: 0;
     animation: loading-pane 500ms ease-in-out 2s;
     z-index: 100;
-    background-color: var(--main-bg-color);
+    background-color: #171f26;
     animation-fill-mode: forwards;
 }
 
@@ -350,7 +354,7 @@ Replaced by a style in inputs.css
     height: 26px;
     width: 100%;
     display: grid;
-    grid-template-columns: 15rem auto 150px;
+    grid-template-columns: 20rem auto 150px;
     grid-template-rows: 100%;
     background-color: var(--main-bg-color);
     z-index: 102;
@@ -364,6 +368,12 @@ Replaced by a style in inputs.css
     width: 100%;
     white-space: nowrap;
     box-sizing: border-box;
+}
+
+#app-bar #menu .button.off { /*Disable app-bar menu items*/
+    opacity: 0.5;
+    pointer-events: none;
+
 }
 
 #app-bar .app-bar-menu-container li,ul, .icon {
@@ -497,7 +507,7 @@ Replaced by a style in inputs.css
     margin: 0;
     margin-left: 0.5rem;
     font-weight: lighter;
-    opacity: 0.2;
+    opacity: 0.3;
     color: var(--paragraph-color);
 }
 
@@ -520,6 +530,7 @@ Replaced by a style in inputs.css
     max-height: 2rem;
     height: 100%;
     width: fit-content;
+    overflow: hidden;
     min-width: 2rem;
     background-color: var(--secondary-color);
     border-radius: 1rem;
@@ -543,7 +554,7 @@ Replaced by a style in inputs.css
     animation: properties-slide-in 400ms ease-in-out;
     z-index: 5;
     border-radius: 0.5rem 0.5rem 0 0;
-    padding: 1rem;
+    padding: 1rem 1rem 0 1rem;
     box-sizing: border-box;
 }
 
@@ -555,7 +566,17 @@ Replaced by a style in inputs.css
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 0.5rem;
+    position: relative;
 }
+
+#main-container #top-layer .properties-pane .container > div {
+    position: relative;
+}
+
+#main-container #top-layer .properties-pane .container > div > * {
+    position: initial;
+}
+
 
 #main-container #top-layer .properties-pane .container::-webkit-scrollbar-track {
     background-color: var(--secondary-button-color);
@@ -618,13 +639,13 @@ Replaced by a style in inputs.css
     border-radius: 0.25rem;
 }
 
-.browser-tab-container #empty {
-    animation: fade-in 200ms ease-in-out;
-    animation-fill-mode: both;
-}
+
 
 #main-container #top-layer #browser .wrapper:last-of-type .tab p {
     width: fit-content; 
+    max-width: 10rem;
+    overflow: hidden;
+    white-space: nowrap;
     font-size: 0.9rem;
     margin: 0;
     display: inline-block;
@@ -962,6 +983,79 @@ Replaced by a style in inputs.css
 #main-container #top-layer #viewport .settings-bar .content p {
     margin: 0;
 }
+
+
+#main-container #top-layer #viewport #content .positioner {
+    height: 0.4rem;
+    width: 0.4rem;
+    background-color: white;
+    border-radius: 100%;
+    border: 0.15rem solid rgb(120,120,120);
+    position: absolute;
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(1) {
+    left: 0;
+    transform: translate(-50%,-50%);
+    top: 0;
+    cursor: nw-resize;
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(2) {
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 0;
+    cursor: n-resize;
+
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(3) {
+    right: 0;
+    transform: translate(50%, -50%);
+    top: 0;
+    cursor: ne-resize;
+
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(4) {
+    left: 0;
+    transform: translate(-50%, -50%);
+    top:50%;
+    cursor: w-resize;
+    
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(5) {
+    left: 0;
+    transform: translate(-50%, 50%);
+    bottom: 0;
+    cursor: ne-resize;
+
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(6) {
+    left: 50%;
+    transform: translate(-50%, 50%);
+    bottom: 0;
+    cursor: n-resize;
+
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(7) {
+    right: 0;
+    transform: translate(50%, 50%);
+    bottom: 0;
+    cursor: nw-resize;
+
+}
+
+#main-container #top-layer #viewport #content .positioner:nth-of-type(8) {
+    right: 0;
+    transform: translate(50%, 50%);
+    bottom: 50%;
+    cursor: e-resize;
+}
+
 
 #main-container #bottom-layer {
     height: auto;

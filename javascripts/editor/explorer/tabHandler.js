@@ -40,18 +40,16 @@ function createTab(el, name) {
     cross.appendChild(ico);
     cross.addEventListener("click", function(e) {
         removeTab(e.target.closest(".tab").connectedElement);
-        console.log(e.target.closest(".tab").connectedElement);
     });
 
     infoOnHover(cross, "Close tab");
 
     document.getElementsByClassName("browser-tab-container")[0].appendChild(tab);
-    openTab(tab);
+    //openTab(tab);
     return tab;
 }
 
 function removeTab(el) {
-    console.log(el)
     var tabs = document.getElementsByClassName("tab");
     var x;
     for(x of tabs) {
@@ -85,7 +83,7 @@ function removeTab(el) {
     if(container.innerHTML.length == 0) {
         var p = document.createElement("p");
         p.setAttribute("id", "empty");
-        p.innerHTML = "Click on an element's properties to create a tab";
+        p.innerHTML = "No open tabs";
         container.appendChild(p);
     }
 
@@ -179,9 +177,9 @@ function openTab(el) {
 
     var dirName; 
     if(isPackaged) {
-        dirName = path.join(path.dirname(__dirname), "extraResources", "data", "files");
+        dirName = path.join(path.dirname(__dirname), "extraResources", "data", "files", "images");
     } else {
-        dirName = path.join(__dirname, "extraResources", "data", "files");
+        dirName = path.join(__dirname, "extraResources", "data", "files", "images");
     }
     var previewElement = document.createElement("div");
     var type = timelineEl.getAttribute("type");
@@ -255,7 +253,6 @@ function openTab(el) {
         el.appendChild(wr);
 
         var fontSize = tabInputs.input("Font Size", "number", "vh");
-        console.log(fontSize)
         fontSize.style.display = "block";
         fontSize.style.marginTop = "1rem";
         fontSize.style.float = "";
@@ -320,7 +317,6 @@ function openTab(el) {
         width: 50%;
         height: fit-content;
         /*max-height: 16rem;*/
-        overflow-y: auto;
         display: inline-block;
         float: left;
         white-space: normal;
@@ -332,6 +328,7 @@ function openTab(el) {
         width: 100%;
         display: block;
         position: relative;
+        overflow-y: none;
     `;
     standardSettings.className = "standard-tab-settings-container"
 
@@ -434,6 +431,38 @@ function openTab(el) {
 
     standardSettings.appendChild(hide);
 
+    var sizeType = tabInputs.select(["Screen size", "Pixels"], false, "Size type");
+    sizeType.style = `
+        margin: 0;
+        width: 10rem;
+        height: 4rem;
+        display: block;
+        transform: translateY(2rem);
+    `;
+    var typeOfSize = timelineEl.config[0].sizeType;
+    sizeType.getElementsByTagName("select")[0].value = typeOfSize;
+    sizeType.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+        timelineEl.config[0].sizeType = sizeType.getElementsByTagName("select")[0].value;
+        refreshViewport(true);
+    })
+
+
+    standardSettings.appendChild(sizeType);
+
+
+    var aspR = tabInputs.checkBox("Keep Aspect Ratio");
+    aspR.style.display = "block";
+    aspR.childNodes[0].childNodes[1].checked = data.keepAspectRatio;
+    aspR.childNodes[0].childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.checked;      
+        timelineEl.config[0].keepAspectRatio = value;
+        
+        //Update the timeline element
+        refreshViewport(false);
+    }); 
+
+
+    standardSettings.appendChild(aspR);
 
 
 
@@ -475,6 +504,7 @@ function openTab(el) {
                     extra.style = `
                         width: 100%;
                         display: block;
+                        margin-top: 10rem;
                     `;
                     extra.className = "time-meta"
 
@@ -530,7 +560,7 @@ function openTab(el) {
                         display: block;
                     `;
                     var format = data.widgetAttributes.time.timeFormat;
-
+                    console.log(format)
                     timeFormat.getElementsByTagName("select")[0].value = format;
                     timeFormat.getElementsByTagName("select")[0].addEventListener("change", (e) => {
                         data.widgetAttributes.time.timeFormat = timeFormat.getElementsByTagName("select")[0].value;
@@ -567,7 +597,6 @@ function openTab(el) {
                         if(value) {
                             options = generateDateOptions();
                             extra.appendChild(options);
-                            console.log(options.childNodes[0].childNodes[0].childNodes[1])
                             options.childNodes[0].childNodes[0].childNodes[1].checked = true;
                             options.childNodes[0].childNodes[0].childNodes[1].disabled = true;
                             options.childNodes[1].childNodes[0].childNodes[1].disabled = true;
@@ -594,6 +623,12 @@ function openTab(el) {
                 break;
             }
 
+        break;
+        case "vid": 
+            media = document.createElement("video");
+            var srcEl = document.createElement("source");
+            media.appendChild(srcEl);
+            srcEl.src = dirName + "/" + elPath;
         break;
     }
 

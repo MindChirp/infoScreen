@@ -1,4 +1,4 @@
-const { remote } = require("electron");
+const { remote, ipcRenderer } = require("electron");
 const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
 const { darkMode } = require("electron-util");
 yourBrowserWindow.on("blur", (e) => {
@@ -438,7 +438,6 @@ function contextMenu(ev, el, type) {
         
         
         var hasTab = el.getAttribute("hasTab");
-        console.log(el)
         switch(type) {
             case 0:
                 menu = createCtxMenu([["Undo", "Ctrl+Z", "undo()"], ["Redo", "Ctrl+Y", "redo()"]]);
@@ -451,7 +450,6 @@ function contextMenu(ev, el, type) {
                 menu.setAttribute("rootElement", el);
                 menu.childNodes[0].addEventListener("click", function(e) {
                     renderer.unrender(el);
-                    console.log(el);
                     deleteFile(false, el, ev);
 
                     //Remove the associated tab (if there is one)
@@ -611,6 +609,10 @@ function deleteFile(fromShortcut, el, event) {
 
     } else {
         var root = el.closest(".scrubber-element");
+        //The viewport controls might be opaque because the deleted element
+        //is selected. Fix it.
+        document.querySelector('#viewport > div.controls').style.opacity = "1";
+        document.querySelector('#viewport > div.controls').style.pointerEvents = "";
         root.parentNode.removeChild(root);
         setTimeout(function() {
             removeCtxMenu(event);
@@ -747,7 +749,6 @@ function appendRipple(el) {
             el.appendChild(ripple);
 
             var elStyle = window.getComputedStyle(el);
-            console.log(e);
             var elHeight = elStyle.height;
             var elWidth = elStyle.width;
             var x = e.layerX + "px";
@@ -788,3 +789,24 @@ function loaderWheel() {
         return el;
 }
 
+
+
+
+function relaunchLauncher() {
+    ipcRenderer.sendSync("relaunch-launcher");
+}
+
+
+
+function sendConsoleWarn() {
+    if(isPackaged) {
+        setTimeout(function() {
+            console.clear();
+            console.log("%cStop!", "font-size: 3rem; color: red; text-stroke: 1px black;");
+            console.log("%cThis is meant for developers only! Don't type anything stupid into the box below", "font-family: bahnschrift; font-size: 1rem;");
+        }, 10000)
+    } else {
+            console.clear();
+            console.log("%cDeveloper Console", "font-size: 3rem; color: red;   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;");
+    }
+}

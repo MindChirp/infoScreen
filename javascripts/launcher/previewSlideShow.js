@@ -137,6 +137,7 @@ function previewSlideshow(filename) {
 
 //Load the project file
 function readProjectData(filename) {
+    console.clear();
     var dir;
     if(isPackaged) {
         dir = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects")
@@ -149,7 +150,6 @@ function readProjectData(filename) {
 
     var unzippedFiles = zip.files[files[0]];
     var decodedFiles = JSON.parse(unzippedFiles._data);
-
     //Check if there are any slides in the project
     if(decodedFiles.fileInfo.files.length == 0) {
         

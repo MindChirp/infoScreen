@@ -33,10 +33,8 @@ function dragFileHandler(el) {
         `);
     } else {
         var src = el.childNodes[0].childNodes[0].getAttribute("src");
-        console.log(el.childNodes[0].childNodes[0])
         var name = el.childNodes[0].childNodes[1].innerHTML;
         var type = el.getAttribute("type");
-        console.log(type)
         //Save the information of the dragged element to 
         //localStorage
         localStorage.setItem("dragCache", JSON.stringify([src, name, type]));
@@ -66,7 +64,6 @@ function dragFileHandler(el) {
     }
 
 
-
     document.addEventListener("mousemove", handleMouseMove);
 
 
@@ -77,24 +74,65 @@ function dragFileHandler(el) {
 
         //Get the element which the mouse has been let go over
         var el = e.target;
+        if(!el.closest(".timeline-column") && el.closest(".container").getAttribute("name") != "viewport-content") return;
 
         //Remove the column highlight
-        var col = el.closest(".timeline-column");
-        if(col != undefined && col.getAttribute("displaying") != "true") {
-            col.style.backgroundColor = "transparent";
-        }
-        if(col.getAttribute("displaying") == "true") {
-            col.style.backgroundColor = "#23313D";
+        var col;
+        var onViewport = false;
+        if(el.closest(".timeline-column")) {
+            var col = el.closest(".timeline-column");
+            if(col != undefined && col.getAttribute("displaying") != "true") {
+                col.style.backgroundColor = "transparent";
+            }
+            if(col.getAttribute("displaying") == "true") {
+                col.style.backgroundColor = "#23313D";
+            }
+        } else if(el.closest(".container").getAttribute("name") == "viewport-content") {
+            if(el.closest(".container").getAttribute("droppable") == null) return; 
+
+            if(el.closest(".container").getAttribute("name") == "viewport-content") {
+                //element has been dragged to the viewport
+                onViewport = true;
+    
+            }
         }
 
-        if(el.getAttribute("droppable") == null) return; 
+        
+
+
         var file = document.createElement("div");
         file.setAttribute("class", "scrubber-element");
         file.setAttribute("onclick", "clickScrubberElement(this)");
-        file.setAttribute("hasTab", "false");
+        file.setAttribute("hasTab", "true");
         file.setAttribute("style", "opacity: 1");
         file.setAttribute("onmousedown", "dragFileInTimeline(this)");
-        el.appendChild(file);
+
+        if(!onViewport) {
+            //If the file is dropped in the timeline, append the file there
+            el.appendChild(file);
+        } else {
+            //If the file is dropped in the viewport, append the file to the timeline
+            //Get an appropriate column
+            var column = document.getElementsByClassName("timeline-column");
+            var index = renderer.renderedColumn()
+            
+            //Get the appropriate row (the first empty)
+            var rows = column[index].getElementsByClassName("timeline-row");
+            var x;
+            var foundRow = false;
+            for(x of rows) {
+                if(foundRow == false) {
+                    if(!x.hasChildNodes()) {
+                        x.appendChild(file);                        
+                        foundRow = true;
+                    }
+                }
+            }
+            if(!foundRow) {
+                //No empty rows found. Don't do anything, i guess..
+                
+            }
+        }
         
         //Define the default settings for the timeline element
         //This will be used later to load in the tab 
@@ -102,7 +140,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "auto"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10 + "px",10 + "px"], size: {height: "30%", width: "auto"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}, sizeType: 0, keepAspectRatio: true}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -126,10 +164,11 @@ function dragFileHandler(el) {
             file.appendChild(img);
             file.setAttribute("type", fileInfo[2]);
             file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)")
-            img.setAttribute("hasTab", "false");
+            img.setAttribute("hasTab", "true");
             file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "vid") {
+            file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10,10], size: {height: "30%", width: "50%"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}}];
             var path = fileInfo[0];
 
             var vid = document.createElement("video");
@@ -146,7 +185,7 @@ function dragFileHandler(el) {
             file.appendChild(vid);
             file.setAttribute("type", fileInfo[2]);
             file.setAttribute("oncontextmenu", "contextMenu(event, this, 1)");
-            vid.setAttribute("hasTab", "false");
+            vid.setAttribute("hasTab", "true");
             file.setAttribute("fileName", fileInfo[1]);
             infoOnHover(file, fileInfo[1]);
         } else if(fileInfo[2] == "widget") {
@@ -168,7 +207,7 @@ function dragFileHandler(el) {
                 margin: 0;
                 font-weight: lighter;
             `);
-            p.setAttribute("hasTab", "false");
+            p.setAttribute("hasTab", "true");
             file.appendChild(p);
             infoOnHover(file, "Widget");
             switch(fileInfo[0]) {
@@ -192,6 +231,8 @@ function dragFileHandler(el) {
                 break;
             }
         }
+        openPropertiesTab(file);
+
     }, {once:true});
 }
 

@@ -43,7 +43,11 @@ function profilePhoto(parent) {
     var img = document.createElement("img");
     img.setAttribute("id", "img-positioner-image")
     var ext = localStorage.getItem("pfpExtension");
-    var imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+    if(ext == null) {
+        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+    } else {
+        var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+    }
     img.src = imgPath;
     img.style.height = "100%";
     img.style.width = "auto";
@@ -95,7 +99,11 @@ function profilePhoto(parent) {
             /*fs.createReadStream(path[0]).pipe(fs.createWriteStream('./data/programData/profilePics/user' +localStorage.getItem("pfpExtension")), (err) => {
                 if(err) throw err;
             });*/
-            var imgPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "profilePics", "user");
+            if(ext == null) {
+                var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+            } else {
+                var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+            }
             try {
                 fs.copySync(paths[0], imgPath + localStorage.getItem("pfpExtension"));
             } catch (error) {
@@ -114,7 +122,12 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+                    console.log(ext)
+                    if(ext == null) {
+                        var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+                    } else {
+                        var imgPath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "profilePics", "user" + ext);
+                    }
                     img.src = imgPath;
                     changeState();
                     img.style.height = "100%";
