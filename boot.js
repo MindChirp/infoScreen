@@ -279,6 +279,11 @@ ipcMain.on("show-changelog", function(e) {
   launcherWin.webContents.send("update-handler", [{newUpdate: true, installed: false, checking: false, error: false, noUpdate: false, info: {version: "0.0.39", releaseNotes: releaseNotes}}])
 })
 
+ipcMain.on("relaunch-launcher", () => {
+  boot();
+  programWin.close();
+})
+
 
 //Fyr av funksjon 'boot' når loading er ferdigstilt.
 app.on('ready', () => {

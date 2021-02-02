@@ -193,12 +193,17 @@ function enableAppBarButtons() {
 
         // Get all file information on startup
 ipcRenderer.on("opened-file-information", (e, args) => {
-    if(args[0][0]) {
+    console.log(args[0])
 
-        var fileInfo = JSON.parse(args[0][0]._data);
+    //If there is no file information, enter developer mode
+    //Program is launched with the developer button
+    if(!args[0]) {document.body.devMode = true; return};
+
+
+        var fileInfo = JSON.parse(args[0]._data);
+
         applyFileInfo(fileInfo);
    
-    }
 
 
 

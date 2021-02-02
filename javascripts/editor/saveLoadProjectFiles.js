@@ -199,6 +199,7 @@ function saveIndicator() {
 
 function applyFileInfo(fileInfo) {
     var title = fileInfo.meta.title;
+    console.log(fileInfo);
     //Apply the title to the app bar
     document.getElementById("project-name").innerHTML = title;
     document.body.projectConfig = {title: title, creator: fileInfo.meta.creator, created: fileInfo.meta.created, edited: fileInfo.meta.edited}
