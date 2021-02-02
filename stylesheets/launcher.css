@@ -13,7 +13,8 @@ body {
     overflow: hidden;
     user-select: none;
     background-color: transparent;
-  
+    animation: fade-in 300ms ease-in-out;
+    animation-fill-mode: both;
   }
 
 
@@ -42,7 +43,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-  /*:root {
+  :root {
     --main-bg-color: #171F26;
     --main-button-color: #1B2630;
     --secondary-button-color: #121a21;
@@ -50,9 +51,9 @@ input::-webkit-inner-spin-button {
     --secondary-color: rgb(15, 20, 25);
     --paragraph-color: rgb(220,220,220);
     --slider-color: #0075ff;
-  }*/
+  }
 
-  :root {
+  /*:root {
     --main-bg-color: white;
     --main-button-color: #E8E0D9;
     --secondary-button-color: #d9cbbf;
@@ -60,7 +61,7 @@ input::-webkit-inner-spin-button {
     --secondary-color: #E8E0D9;
     --paragraph-color: rgb(50,50,50);
     --slider-color: #4da0ff;
-  }
+  }*/
 
 
 .info-circle {
