@@ -563,10 +563,14 @@ function addResizingBorders(el) {
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: nw-resize");
 
+            
+            var height = el.style.height.split("px")[0];
+            var width = el.style.width.split("px")[0];
+            var percents = convertPxToPercent([width, height]);
 
 
-            el.connectedElement.config[0].size.height = element.style.height;
-            el.connectedElement.config[0].size.width = element.style.width;
+            el.connectedElement.config[0].size.width = percents[0] + "%";
+            el.connectedElement.config[0].size.height = percents[1] + "%";
         }
 
         document.body.addEventListener("mousemove", handleMove);

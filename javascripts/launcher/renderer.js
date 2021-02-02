@@ -82,8 +82,8 @@ function RenderingToolKit() {
             height: ` + heights + `;
             width: ` + widths + `;
             /*Positioning*/
-            left: ` + position[0] + `px;
-            top: ` + position[1] + `px;
+            left: ` + position[0] + `;
+            top: ` + position[1] + `;
             display: ` + display + `;
         `;
 
@@ -128,8 +128,8 @@ function RenderingToolKit() {
             display: ` + display + `;
 
             /*Positioning*/
-            left: ` + position[0] + `px;
-            top: ` + position[1] + `px;
+            left: ` + position[0] + `;
+            top: ` + position[1] + `;
         `;
 
         viewport.appendChild(widget);
@@ -170,8 +170,8 @@ function RenderingToolKit() {
             height: ` + heights + `;
             width: ` + widths + `;
             /*Positioning*/
-            left: ` + position[0] + `px;
-            top: ` + position[1] + `px;
+            left: ` + position[0] + `;
+            top: ` + position[1] + `;
             display: ` + display + `;
             overflow: hidden;
         `;

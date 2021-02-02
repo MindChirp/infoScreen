@@ -21,6 +21,9 @@ function dragFileHandler(el) {
             case "text":
                 p.innerHTML = "Text";
             break;
+            case "script":
+                p.innerHTML = "Script";
+            break;
         }
         ghost.appendChild(p);
         p.setAttribute("style", `
@@ -140,7 +143,7 @@ function dragFileHandler(el) {
         var opacity = "1";
         var shadowMultiplier = 0;
         var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10 + "px",10 + "px"], size: {height: "30%", width: "auto"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}, sizeType: 0, keepAspectRatio: true}];
+        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10 + "px",10 + "px"], size: {height: "30%", width: "30%"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}, sizeType: 0, keepAspectRatio: true}];
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -229,6 +232,9 @@ function dragFileHandler(el) {
                     p.innerHTML = "Text";
                     file.setAttribute("fileName", "Text Widget");
                 break;
+                case "script":
+                    p.innerHTML = "Script";
+                    file.setAttribute("fileName", "Script Widget");
             }
         }
         openPropertiesTab(file);

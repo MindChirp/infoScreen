@@ -22,6 +22,11 @@ function createWidget(type, config, rootEl) {
         case "text":
             var widgetContent = text(config, rootEl);
             el.appendChild(widgetContent);
+        break;
+        case "script":
+            var widgetContent = Script(config);
+            el.appendChild(widgetContent);
+        break;
     }
     
     return el;
@@ -252,4 +257,39 @@ function text(config, rootEl) {
         e.target.childNodes[0].focus();   
     })
     return cont;
+}
+
+function Script(config) {
+    //Create the weather widget
+    var cont = document.createElement("div");
+    cont.setAttribute("style", `
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        overflow: hidden;
+    `);
+
+    var placeholder = document.createElement("h1");
+    placeholder.innerHTML = "Script placeholder";
+    placeholder.style = `
+        height: fit-content;
+        width: fit-content;
+        margin: 0;
+        position: absolute;
+        font-weight: lighter;
+        color: var(--paragraph-color);
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        color: ` + config.textColor + `;
+        font-size: ` + config.fontSize + `vh; 
+    `
+    cont.appendChild(placeholder);
+    
+
+    return cont;
+
 }

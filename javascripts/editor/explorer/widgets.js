@@ -94,6 +94,31 @@ function loadWidgets() {
     el.appendChild(h1);
     cont.appendChild(el);
 
+
+
+
+     //script widget
+     var el = document.createElement("div");
+     el.setAttribute("class", "explorer-widget");
+     el.setAttribute("onmousedown", "dragFileHandler(this)")
+     var h1 = document.createElement("h1");
+     h1.innerHTML = "Script";
+     h1.setAttribute("style", `
+         height: 100%;
+         width: fit-content;
+         padding: 0 0.1rem;
+         margin: 0;
+         margin-left: 50%;
+         transform: translate(-50%);
+         text-align: left;
+         line-height: 6rem;
+         font-weight: lighter;
+     `);
+     el.setAttribute("type", "widget");
+     el.setAttribute("name", "script");
+     el.appendChild(h1);
+     cont.appendChild(el);
+
 }
 
 function updateClockWidgets() {

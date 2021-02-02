@@ -158,13 +158,38 @@ function profilePhoto(parent) {
                             imgPath = path.join(__dirname,"extraResources", "data", "programData", "profilePics", "user" + ext);                            
                         }
                     }
+
                     img.src = imgPath;
+                    img.style.animation = "fade-in 300ms ease-in-out";
                     changeState();
                     img.style.height = "100%";
                     img.style.width = "auto";
                     img.style.marginLeft = "50%";   
                     img.style.transform = "translateX(-50%)";
                     imgCont.appendChild(img);
+
+
+                    //Change the menu title pfp
+                    var newPfp = document.createElement("img");
+                    newPfp.style = `
+                        position: absolute; 
+                        height: 80px; 
+                        width: auto; 
+                        margin-left: 50%; 
+                        transform: translateX(-50%) translateY(0%) scale(1.1);
+                    `
+                    newPfp.src = imgPath;
+
+                    var pfpCont = document.getElementsByClassName("profile-header")[0].querySelector("#pfp");
+                    pfpCont.getElementsByTagName("img")[0].style.animation = "old-pfp-out 300ms ease-in-out";
+                    pfpCont.getElementsByTagName("img")[0].style.animationFillMode = "both";
+                    setTimeout(() => {
+                        pfpCont.getElementsByTagName("img")[0].parentNode.removeChild(pfpCont.getElementsByTagName("img")[0]);
+                    }, 300)
+                    pfpCont.appendChild(newPfp);
+                    newPfp.style.animation = "new-pfp-in 300ms ease-in-out";
+                    newPfp.style.animationFillMode = "both";
+                    console.log(pfpCont)
         }, 100);
     }
         });
@@ -187,7 +212,6 @@ function profilePhoto(parent) {
             } catch (error) {
                 console.log("Could not find or read the profile picture metadata.");
                 data = "Some unparsable gibberish";
-                throw error;
             }
         }
         var dat;
@@ -313,21 +337,24 @@ function profilePhoto(parent) {
             save.addEventListener("click", function() {
                 var dat = `{
                     "positioning": [` + Xpos + `,` + Ypos + `,` + size + `]
-                }`;
-            localStorage.setItem("pfpPos", JSON.stringify([Xpos,Ypos,size]));
-            var dir;
-            if(isPackaged){
-                dir = path.join(path.dirname(__dirname), "extraResources","data","programData", "profilePics", "profilePicDat.json")
+                    }`;
+                localStorage.setItem("pfpPos", JSON.stringify([Xpos,Ypos,size]));
+                var dir;
+                if(isPackaged){
+                    dir = path.join(path.dirname(__dirname), "extraResources","data","programData", "profilePics", "profilePicDat.json");
 
-            } else {
-                dir = path.join(__dirname, "extraResources","data","programData", "profilePics", "profilePicDat.json")
-
-            }
-            
-            fs.writeFileSync(dir, dat, (err) => {
+                } else {
+                    dir = path.join(__dirname, "extraResources","data","programData", "profilePics", "profilePicDat.json");
+                }
+                
+                fs.writeFileSync(dir, dat, (err) => {
                     if(err) throw err;
                 })
                 changeState();
+
+                var newPfpImage = document.getElementsByClassName("profile-header")[0].querySelector("#pfp").getElementsByTagName("img")[0];
+                console.log(size)
+                newPfpImage.style.transform = "translate(" + Xpos + "%,"+ Ypos + "%) scale("+size+")";
             })
 
 
