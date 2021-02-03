@@ -431,7 +431,7 @@ function openTab(el) {
 
     standardSettings.appendChild(hide);
 
-    var sizeType = tabInputs.select(["Screen size", "Pixels"], false, "Size type");
+    var sizeType = tabInputs.select(["Screen size", "Pixels"], false);
     sizeType.style = `
         margin: 0;
         width: 10rem;
@@ -513,7 +513,6 @@ function openTab(el) {
                         var value = e.target.checked;
 
                         var name = e.target.parentNode.getAttribute("name");
-                        
                         switch(name) {
                             case "Hours":
                                 data.widgetAttributes.time.showHours = value;
@@ -621,15 +620,42 @@ function openTab(el) {
                     var custom = customisation(timelineEl.config[0]);
                     wrapper.appendChild(custom);
                 break;
+                case "script":
+                    var custom = customisation(timelineEl.config[0]);
+                    wrapper.appendChild(custom);
+                    //Create script edit button
+
+                    var p = document.createElement("p");
+                    p.innerHTML = "Script properties";
+                    wrapper.appendChild(p);
+                    p.style = `
+                        margin: 1rem 0 0.5rem 0.5rem;
+                        font-weight: lighter;
+                        color: var(--paragraph-color);
+                    `
+
+                    var butt = document.createElement("button");
+                    butt.innerHTML = "Edit Script";
+                    butt.className = "fd-button important"
+                    butt.style.marginLeft = "0.5rem";
+                    infoOnHover(butt, "Edit the script of the selected element")
+                    wrapper.appendChild(butt);
+
+                    butt.onclick = function() {
+                        editScript(timelineEl);
+                    }
+                break;
             }
 
-        break;
-        case "vid": 
-            media = document.createElement("video");
-            var srcEl = document.createElement("source");
-            media.appendChild(srcEl);
-            srcEl.src = dirName + "/" + elPath;
-        break;
+                break;
+
+                case "vid": 
+                    media = document.createElement("video");
+                    var srcEl = document.createElement("source");
+                    media.appendChild(srcEl);
+                    srcEl.src = dirName + "/" + elPath;
+                break;
+
     }
 
 

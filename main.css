@@ -1063,6 +1063,8 @@ Replaced by a style in inputs.css
     box-sizing: border-box;
     width: 98%;
     margin: 0 auto;
+    position: relative;
+    overflow: hidden;
 }
 
 #main-container #bottom-layer #timeline {
@@ -1175,7 +1177,103 @@ Replaced by a style in inputs.css
     border-radius: 0.25rem;
     margin-left: 50%;
     transform: translate(-50%);
+    position: relative;
 }
+
+#bottom-layer .script-container .script-editor {
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    background-color: var(--secondary-color);
+    animation: pop-in 300ms ease-in-out; 
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#bottom-layer .script-container .script-editor > .top-bar > h1 {
+    margin: 0 0 0 0.5rem;
+    color: var(--title-color);
+    font-weight: lighter;
+    display: inline-block;
+    float: left;
+    vertical-align: top;
+}
+
+
+#bottom-layer .script-container .script-editor > .top-bar {
+    height: 2rem;
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--secondary-color);
+    z-index: 101;
+}
+
+#bottom-layer .script-container .script-editor > .top-bar .top-bar-button {
+    height: 2rem;
+    width: 2rem;
+    display: inline-block;
+    padding: 0;
+}
+
+#bottom-layer .script-container .script-editor > .top-bar .top-bar-button:first-of-type {
+    margin-left: 1rem;
+}
+
+#bottom-layer .script-container .script-editor > .top-bar .top-bar-button  i{
+    width: 2rem;
+    line-height: 2rem;
+}
+
+#bottom-layer .script-container .script-editor .top-bar .close-button {
+    height: 2rem;
+    width: 2rem;
+    padding: 0;
+    display: inline-block;
+    float: right;
+    background: transparent;
+    vertical-align: top;
+    margin-right: 1rem;
+}
+
+#bottom-layer .script-container .script-editor .top-bar .close-button:hover {
+    background: transparent;
+}
+
+#bottom-layer .script-container .script-editor .top-bar .close-button i {
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+}
+
+#bottom-layer .script-container .script-editor textarea {
+    height: 80%;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--secondary-button-color);
+    border-radius: 0.25rem;
+    border: none;
+    resize: none;
+    outline: none;
+    color: var(--paragraph-color);
+    z-index: 100;
+}
+
+#bottom-layer .script-container {
+    height: 100%;
+    padding-bottom: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
 
 body .file-dropdown-menu {
     min-height: 2rem;
