@@ -62,7 +62,8 @@ function boot() {
   launcherWin = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
-      webSecurity: true
+      webSecurity: true,
+      enableRemoteModule: true
     },
     width: 850,
     hasShadow: true,
@@ -113,7 +114,9 @@ function openEditor(fileName) {
 
       programWin = new BrowserWindow({
         webPreferences: {
-          nodeIntegration: true
+          nodeIntegration: true,
+          enableRemoteModule: true
+
         },
         width: width,
         height: height,
@@ -121,7 +124,8 @@ function openEditor(fileName) {
         minWidth: 1026,
         minHeight:963,
         frame: false,
-        transparent: true
+        transparent: false,
+        backgroundColor: "#171F26"
       });
 
 
@@ -208,13 +212,13 @@ ipcMain.on("open-pfp-selector", (event) => {
         {name: 'Images', extensions: ["jpg", "png", "gif"]}
       ],
       properties: ['openFile']
-    })
-      if(file != undefined) {
-        event.returnValue = file;
+    }).then(result => {
+      if(!result.canceled) {
+        event.returnValue = JSON.stringify({fileName: result.filePaths});
       } else {
-        //The dialog was canceled
-        event.returnValue = "cancelled";
+        event.returnValue = JSON.stringify({fileName: "canceled"})
       }
+    })
 })
 
 
@@ -225,13 +229,13 @@ ipcMain.on("open-file-selector", (event) => {
         {name: 'Images and videos', extensions: ["jpg", "png", "gif", "mp4"]}
       ],
       properties: ['openFile', 'multiSelections']
-    })
-      if(file != undefined) {
-        event.returnValue = file;
+    }).then(result => {
+      if(!result.canceled) {
+        event.returnValue = JSON.stringify({filePaths: result.filePaths});
       } else {
-        //The dialog was canceled
-        event.returnValue = "cancelled";
+        event.returnValue = JSON.stringify({filePaths: "canceled"});
       }
+    })
 })
 
 
@@ -241,7 +245,7 @@ ipcMain.on('get-file-data', function(event) {
     var openFilePath = process.argv[1]
     data = openFilePath
   }
-  event.returnValue = data;
+  event.returnValue = JSON.stringify({data: data});
 })
 
 //Check for app-bar button presses

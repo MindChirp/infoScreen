@@ -403,6 +403,8 @@ function dragFileInTimeline(el) {
             
             //Apend the cloned node to the timeline
             e.target.appendChild(newFile);
+
+            
             /////////////////////////////////////////////////////////////////////////////////
             //                                                                             //
             //   THIS IS A SERIOUSLY BAD PRACTICE and should be fixed as soon as possible  //

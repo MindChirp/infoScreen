@@ -1343,9 +1343,7 @@ setTimeout(function() {
 }, 1000)*/
 
 function showChangeLog() {
-    ipcRenderer.send("show-changelog", (error) => {
-        if(error) throw error;
-    });
+    ipcRenderer.send("show-changelog");
 }
 
 if(!isPackaged) {

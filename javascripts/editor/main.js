@@ -1,4 +1,5 @@
 const { remote, ipcRenderer } = require("electron");
+console.log(remote);
 const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
 const { darkMode } = require("electron-util");
 yourBrowserWindow.on("blur", (e) => {
@@ -806,7 +807,6 @@ function sendConsoleWarn() {
             console.log("%cThis is meant for developers only! Don't type anything stupid into the box below", "font-family: bahnschrift; font-size: 1rem;");
         }, 10000)
     } else {
-            console.clear();
             console.log("%cDeveloper Console", "font-size: 3rem; color: red;   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;");
     }
 }

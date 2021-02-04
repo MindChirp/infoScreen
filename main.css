@@ -8,7 +8,7 @@ body {
     cursor: default;
     font-family: bahnschrift;
     user-select: none;
-    background-color: var(--main-bg-color);
+    background-color: #171F26;
     animation: fade-in 300ms ease-in-out;
 }
 
@@ -36,10 +36,24 @@ html {
     --paragraph-color: rgb(220,220,220);
     --slider-color: #0075ff;
     --slider-disabled-color: #a3ceff;
-    --dark-shade: rgb(50,50,50);
-    --light-shade: rgb(150,150,150);
+    --dark-shade: rgb(8,8,8);
+    --light-shade: rgb(150, 150, 150);
   }
+/*
+  :root {
+    --main-bg-color: white;
+    --main-button-color: #E8E0D9;
+    --secondary-button-color: #d9cbbf;
+    --title-color: black;
+    --secondary-color: #E8E0D9;
+    --paragraph-color: rgb(50,50,50);
+    --slider-color: #4da0ff;
+    --slider-disabled-color: #a3ceff;
+    --slider-disabled-color: #a3ceff;
+    --light-shade: rgb(150,150,150);
 
+  }
+*/
 
   .ripple-element {
     overflow: hidden;
@@ -65,7 +79,7 @@ html {
     opacity: 0;
     color: var(--paragraph-color);
     display: block;
-    animation: fade-in 500ms ease-in-out 3s;
+    animation: fade-in 500ms ease-in-out 0.5s;
     animation-fill-mode: both;
 }
 .sub-menu > div {
@@ -82,7 +96,7 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-    animation: loading-pane 500ms ease-in-out 2s;
+    animation: loading-pane 500ms ease-in-out 1s;
     z-index: 100;
     background-color: #171f26;
     animation-fill-mode: forwards;
@@ -771,7 +785,7 @@ Replaced by a style in inputs.css
 #main-container #top-layer #browser .content-container #widgets .explorer-widget {
     height: 100%;
     width: 100%;
-    background-color: var(--light-shade);
+    background-color: var(--dark-shade);
     border-radius: 0.25rem;
     overflow: hidden;
 }

@@ -271,8 +271,9 @@ function Script(config) {
         overflow: hidden;
     `);
 
+    var ascii = require("ascii-faces")
     var placeholder = document.createElement("h1");
-    placeholder.innerHTML = "Script placeholder";
+    placeholder.innerHTML = ascii();
     placeholder.style = `
         height: fit-content;
         width: fit-content;

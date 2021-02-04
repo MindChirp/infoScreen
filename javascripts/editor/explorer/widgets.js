@@ -18,6 +18,8 @@ function loadWidgets() {
         text-align: center;
         line-height: 6rem;
         font-weight: lighter;
+        color: var(--title-color);
+
         /*animation: fade-in 300ms ease-in-out 0.5s;
         animation-fill-mode: backwards;*/
     `);
@@ -43,6 +45,8 @@ function loadWidgets() {
         text-align: left;
         line-height: 6rem;
         font-weight: lighter;
+        color: var(--title-color);
+
     `);
     el.setAttribute("type", "widget");
     el.setAttribute("name", "weather");
@@ -65,6 +69,8 @@ function loadWidgets() {
         text-align: left;
         line-height: 6rem;
         font-weight: lighter;
+        color: var(--title-color);
+
     `);
     el.setAttribute("type", "widget");
     el.setAttribute("name", "news");
@@ -88,6 +94,8 @@ function loadWidgets() {
         text-align: left;
         line-height: 6rem;
         font-weight: lighter;
+        color: var(--title-color);
+
     `);
     el.setAttribute("type", "widget");
     el.setAttribute("name", "text");
@@ -113,6 +121,7 @@ function loadWidgets() {
          text-align: left;
          line-height: 6rem;
          font-weight: lighter;
+         color: var(--title-color);
      `);
      el.setAttribute("type", "widget");
      el.setAttribute("name", "script");

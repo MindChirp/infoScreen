@@ -3,6 +3,7 @@ const { fstat, fdatasync } = require("fs");
 const { settings } = require("cluster");
 const { isFunction } = require("util");
 const path = require("path");
+const { newUrlFromBase } = require("electron-updater");
 function profilePhoto(parent) {
 
     if(document.getElementById("settings-wrapper")) {
@@ -80,9 +81,8 @@ function profilePhoto(parent) {
     selImg.style.display = "block";
 
     selImg.addEventListener("click", function() {
-        var paths = ipcRenderer.sendSync("open-pfp-selector");
-        if(paths != "cancelled") {
-
+        var paths = JSON.parse(ipcRenderer.sendSync("open-pfp-selector")).fileName;
+        if(paths != "canceled") {
 
         var letters = ["A","B","C","D","E","F","G","H","I","J"];
 
@@ -182,7 +182,6 @@ function profilePhoto(parent) {
 
                     var pfpCont = document.getElementsByClassName("profile-header")[0].querySelector("#pfp");
                     pfpCont.getElementsByTagName("img")[0].style.animation = "old-pfp-out 300ms ease-in-out";
-                    pfpCont.getElementsByTagName("img")[0].style.animationFillMode = "both";
                     setTimeout(() => {
                         pfpCont.getElementsByTagName("img")[0].parentNode.removeChild(pfpCont.getElementsByTagName("img")[0]);
                     }, 300)
@@ -353,7 +352,8 @@ function profilePhoto(parent) {
                 changeState();
 
                 var newPfpImage = document.getElementsByClassName("profile-header")[0].querySelector("#pfp").getElementsByTagName("img")[0];
-                console.log(size)
+                newPfpImage.style.animationFillMode = "none"; //Need to disable animation-fill-mode. If not, the pfp cannot be repositioned (because animation-fill-mode: both; prevents it.)
+                console.log(Xpos, Ypos, size);
                 newPfpImage.style.transform = "translate(" + Xpos + "%,"+ Ypos + "%) scale("+size+")";
             })
 

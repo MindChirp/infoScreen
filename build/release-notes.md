@@ -2,6 +2,8 @@
     <ul>
         
         <li>Video-file rendering added (.mp4)</li>
+        <li>New script widget</li>
+        <li>Script widget code editor</li>
     </ul>
         <br>
 
@@ -13,7 +15,8 @@
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>File saving fully implemented</li>
+        <li>Changes in the code saving system, different screen sizes should now be better supported</li>
+        <li><strong>UwU</strong> New color picker</li>
     </ul>
         <br>
 

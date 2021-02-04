@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="./stylesheets/cfg.css">
     <link rel="stylesheet" href="./stylesheets/inputs.css">
     <link rel="stylesheet" href="./stylesheets/viewport.css">
+    <script src="./javascripts/editor/menus.js"></script>
+
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="./javascripts/editor/inputs.js"></script>   
     <script src="./javascripts/editor/main.js"></script>   
@@ -27,15 +29,15 @@
 
 </head>
 
-<body onresize="calculateLayout()">
-<!--
+<body>
+
     <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>  
--->
+
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -204,7 +206,6 @@
     </div>
 
 
-    <script src="./javascripts/editor/menus.js"></script>
     <script src="./javascripts/editor/background-scripts.js" async defer></script>
     <script src="./javascripts/editor/app-bar.js"></script>
     <script src="./javascripts/editor/notrification-handler.js" async defer></script>   
@@ -223,7 +224,7 @@
             //Get the width and height of the timeline element to calculate the 
             //nescessary amount of rows and columns to cover the entire
             //element
-
+            document.body.setAttribute("onresize", "calculateLayout()")
             calculateLayoutOnStartup();
 
             sendConsoleWarn();
@@ -239,8 +240,14 @@
 
             //Select column 0 by default
             initScrubber(NoRows,NoCols, 0);
+            setTimeout(() => {
+                document.querySelector("#timeline > div.sub-container > div.scrubber").scrollLeft = 0;
+                document.querySelector("#timeline > div.sub-container > div.scrubber").scrollTop = 0;
+            }, 100);
+            
             loadFilesIntoExplorer();
             loadWidgets();
+
             enableAppBarButtons();
 
             //Add ripple on click effect to all the desired elements
