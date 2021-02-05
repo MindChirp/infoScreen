@@ -120,6 +120,12 @@ function calculateLayout() {
     /////////////////////////////////////////////////////////////////
     calculateViewportSize();
 
+    ////////////////////////////////////
+    // Set the heights of the browser //
+    ////////////////////////////////////
+    var browser = document.querySelector("#top-layer > div.browser-container.smooth-shadow")
+    browser.style.maxHeight = topLayerHeight + "px";
+    document.querySelector("#browser > div:nth-child(1) > div.content-container").style.maxHeight = topLayerHeight-2.5*16 + "px";
 }
 
 function calculateLayoutOnStartup() {
@@ -150,7 +156,12 @@ function calculateLayoutOnStartup() {
     /////////////////////////////////////////////////////////////////
     calculateViewportSize();
 
-
+    ////////////////////////////////////
+    // Set the heights of the browser //
+    ////////////////////////////////////
+    var browser = document.querySelector("#top-layer > div.browser-container.smooth-shadow")
+    browser.style.maxHeight = topLayerHeight + "px";
+    document.querySelector("#browser > div:nth-child(1) > div.content-container").style.maxHeight = topLayerHeight-2.5*16 + "px";
 
 }
 

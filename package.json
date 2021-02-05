@@ -1,9 +1,10 @@
 {
   "name": "infoscreen",
-  "version": "0.0.63",
+  "version": "0.0.64",
   "description": "Infoscreen program",
   "main": "boot.js",
   "dependencies": {
+    "@octokit/core": "^3.2.5",
     "app-buttons": "^1.3.1",
     "ascii-faces": "^1.1.0",
     "electron-context-menu": "^2.3.0",

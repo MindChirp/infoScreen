@@ -194,6 +194,9 @@ function editScript(el) {
 <script>
     //Start coding something!
 </script>
+
+
+    Disclaimer: The script widget is not working yet. Typing scripts into this field won't make the widget do anything.
             `;
         } else {
             field.value = el.config.widgetAttributes.script.scriptContents;

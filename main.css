@@ -484,7 +484,8 @@ Replaced by a style in inputs.css
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-rows: auto 2.5rem;
+    grid-template-rows: 1fr 2.5rem;
+    min-height: 0;
     grid-template-columns: 100%;
     background-color: var(--secondary-color);
     border-radius: 0.5rem;
@@ -717,6 +718,7 @@ Replaced by a style in inputs.css
     color: var(--title-color);
     cursor: pointer;
     outline: none;
+    z-index: 100;
 }
 
 #main-container #top-layer #browser .content-container #files #files-container {

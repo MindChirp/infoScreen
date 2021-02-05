@@ -83,7 +83,10 @@ const template = [
         submenu: [   
             {
                 label: "Report Issue",
-                disabled: true
+                accelerator: "Ctrl+I",
+                click: () => {
+                    reportIssueMenu();
+                }
             },
             {
                 label: "divider"
