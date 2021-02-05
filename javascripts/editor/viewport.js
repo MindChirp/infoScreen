@@ -93,7 +93,7 @@ function renderColumn(col) {
 
             var zIndex = i+1;
             //Push each element in the column to the indexation array with all the nescessary information
-            indexes.push([{type: type, name: name, zIndex: zIndex, element: x, config: x.config[0]}])
+            indexes.push([{type: type, name: name, zIndex: zIndex, element: x, config: x.config}])
         }
     }
 
@@ -192,6 +192,7 @@ function RenderingToolKit() {
         var width = data.config.size.width;
         var display = data.config.display ? "block" : "none";
         var bgColor = data.config.backgroundColor;
+        var bgOpacity = data.config.backgroundOpacity;
         var txtColor = data.config.textColor;
         var fontSize = data.config.fontSize;
         var fontFamily = data.config.fontFamily;
@@ -204,7 +205,7 @@ function RenderingToolKit() {
             filter: blur(` + blur + `px);
             height: ` + height + `;
             width: ` + width + `;
-            background-color: ` + bgColor + `;
+            background-color: ` + bgColor + bgOpacity + `;
             color: ` + txtColor + `;
             font-family: ` + fontFamily + `;
             /*font-size: ` + fontSize + `px;*/
@@ -512,8 +513,9 @@ function addResizingBorders(el) {
             var yPos = el.style.top.split("px")[0];
             var percents = convertPxToPercent([xPos, yPos]);
 
-            el.connectedElement.config[0].position[0] = percents[0] + "%";
-            el.connectedElement.config[0].position[1] = percents[1] + "%";
+            el.connectedElement.config.position[0] = percents[0] + "%";
+            el.connectedElement.config.position[1] = percents[1] + "%";
+
             var newPos = [el.style.left, el.style.top];
             if(oldPos[0] == newPos[0] && oldPos[1] == newPos[1]) {
                 //Element has not been moved, show the resize borders instead
@@ -569,8 +571,8 @@ function addResizingBorders(el) {
             var percents = convertPxToPercent([width, height]);
 
 
-            el.connectedElement.config[0].size.width = percents[0] + "%";
-            el.connectedElement.config[0].size.height = percents[1] + "%";
+            el.connectedElement.config.size.width = percents[0] + "%";
+            el.connectedElement.config.size.height = percents[1] + "%";
         }
 
         document.body.addEventListener("mousemove", handleMove);
@@ -608,8 +610,8 @@ function addResizingBorders(el) {
             document.body.style.cursor = "default";
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: w-resize");
-            el.connectedElement.config[0].size.height = element.style.height;
-            el.connectedElement.config[0].size.width = element.style.width;
+            el.connectedElement.config.size.height = element.style.height;
+            el.connectedElement.config.size.width = element.style.width;
         }
 
         document.body.addEventListener("mousemove", handleMove);
@@ -646,9 +648,8 @@ function addResizingBorders(el) {
             document.body.style.cursor = "default";
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: n-resize");
-            el.connectedElement.config[0].size.height = element.style.height;
-            el.connectedElement.config[0].size.width = element.style.width;
-
+            el.connectedElement.config.size.height = element.style.height;
+            el.connectedElement.config.size.width = element.style.width;
         }
 
         document.body.addEventListener("mousemove", handleMove);

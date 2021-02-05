@@ -1,6 +1,6 @@
 const { createWriteStream } = require("fs");
 const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
-const { profile } = require("console");
+const { profile, exception } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged")
@@ -8,7 +8,6 @@ if(env != "development") {
     var devButton = document.getElementById("developer-start");
     devButton.parentNode.removeChild(devButton);
 }
-
 
 const ipc = require("electron").ipcRenderer;
 const { format } = require("path");

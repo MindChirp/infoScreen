@@ -77,6 +77,7 @@ function dragFileHandler(el) {
 
         //Get the element which the mouse has been let go over
         var el = e.target;
+        if(!el.closest(".container")) return;
         if(!el.closest(".timeline-column") && el.closest(".container").getAttribute("name") != "viewport-content") return;
 
         //Remove the column highlight
@@ -92,7 +93,6 @@ function dragFileHandler(el) {
             }
         } else if(el.closest(".container").getAttribute("name") == "viewport-content") {
             if(el.closest(".container").getAttribute("droppable") == null) return; 
-
             if(el.closest(".container").getAttribute("name") == "viewport-content") {
                 //element has been dragged to the viewport
                 onViewport = true;
@@ -137,13 +137,68 @@ function dragFileHandler(el) {
             }
         }
         
-        //Define the default settings for the timeline element
-        //This will be used later to load in the tab 
-        var borderRadius = "0.25";
-        var opacity = "1";
-        var shadowMultiplier = 0;
-        var blur = 0;
-        file.config = [{borderRadius: borderRadius, opacity: opacity, shadowMultiplier: shadowMultiplier, blur: blur, position: [10 + "px",10 + "px"], size: {height: "30%", width: "30%"}, display: true, backgroundColor: "#ffffff", textColor: "#000000", fontSize: 4, fontFamily: "Bahnschrift", widgetAttributes: {time: {showHours: true, showMinutes: true, showSeconds: true, showDate: false, timeFormat: "1"}}, sizeType: 0, keepAspectRatio: true}];
+
+
+
+
+
+        var template = 
+        {
+            borderRadius: "0.25", 
+            opacity: "1", 
+            shadowMultiplier: 0, 
+            blur: 0, 
+            position: [10 + "px",10 + "px"], 
+            size: {height: "30%", width: "30%"}, 
+            display: true, 
+            backgroundColor: "#ffffff",
+            backgroundOpacity: "FF",
+            textColor: "#000000", 
+            fontSize: 4, 
+            fontFamily: "Bahnschrift", 
+            widgetAttributes: 
+            {
+                time: 
+                    {
+                        showHours: true, 
+                        showMinutes: true, 
+                        showSeconds: true, 
+                        showDate: false, 
+                        timeFormat: "1"
+                    },
+                script: 
+                    {
+                        hasScript: false,
+                        scriptContents: ""
+                    }
+            }, 
+            sizeType: 0,
+            keepAspectRatio: true
+        };
+
+
+
+
+
+
+
+
+
+
+        /*
+        var path = require("path");
+        var { fileDataTemplate } = require(path.resolve( __dirname, "./javascripts/editor/definitions.js"));
+        
+        var template = fileDataTemplate.template;
+        */
+
+        file.config = template; //As defined in definitions.js @ 1 <-- NO! It's defined above
+
+        // FIGURE OUT A WAY TO USE MODULE IMPORTS TO GET A NEW TEMPLATE
+        // WITHOUT INTERTWINING THE TEMPLATE VALUES FOR ALL ELEMENTS
+
+        
+
         /*var settings = document.createElement("div");
         settings.setAttribute("class", "settings-button smooth-shadow");
         settings.setAttribute("onclick", "fileDropdownMenu(this)");
@@ -153,6 +208,9 @@ function dragFileHandler(el) {
         i.innerHTML = "more_vert";
         settings.appendChild(i);    
         file.appendChild(settings);*/
+        //^^ this was an unnescessary menu appended to every timeline element.
+
+
         //Get the path, name
         var fileInfo = JSON.parse(localStorage.getItem("dragCache"));
         if(fileInfo[2] == "img") {
@@ -194,7 +252,7 @@ function dragFileHandler(el) {
         } else if(fileInfo[2] == "widget") {
 
             //Set a widget width other than "auto"
-            file.config[0].size.width = "50%"; 
+            file.config.size.width = "50%"; 
 
             var p = document.createElement("p");
             p.setAttribute("oncontextmenu", "contextMenu(event, this, 2)")

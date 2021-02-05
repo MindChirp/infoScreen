@@ -15,7 +15,6 @@ const appVersion = require('electron').remote.app.getVersion();
 
 
 
-
 yourBrowserWindow.on("focus", (e) => {
     var appBar = document.getElementById("app-bar");
     appBar.style.opacity = 1;
@@ -528,7 +527,6 @@ function createCtxMenu(bts) {
         desc.setAttribute("class", "key-bind");
         b.appendChild(desc);
         desc.innerHTML = x[1];
-
         b.setAttribute("onclick", x[2]);
     }
 

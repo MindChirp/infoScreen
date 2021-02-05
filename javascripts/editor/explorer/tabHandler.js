@@ -210,7 +210,7 @@ function openTab(el) {
         col.value = value;
         
         col.onchange = function(e) {
-            timelineEl.config[0].backgroundColor = e.target.value; 
+            timelineEl.config.backgroundColor = e.target.value; 
             refreshViewport(true);
         }
 
@@ -240,7 +240,7 @@ function openTab(el) {
         txtCol.value = value;
 
         txtCol.onchange = function(e) {
-            timelineEl.config[0].textColor = e.target.value; 
+            timelineEl.config.textColor = e.target.value; 
             refreshViewport(true);
         }
 
@@ -252,6 +252,29 @@ function openTab(el) {
         wr.appendChild(txtCol);
         el.appendChild(wr);
 
+        var opacity = tabInputs.slider("Background opacity", true);
+        var slider = opacity.getElementsByTagName("input")[0];
+        slider.setAttribute("max", "1");
+        slider.setAttribute("min", "0");
+        slider.setAttribute("step", "0.05");
+        slider.setAttribute("value", "1");
+        
+        var event = new Event("change");
+        slider.dispatchEvent(event) //Update the slider value text
+
+        slider.addEventListener("change", (e) => {
+            var val = e.target.value*255;
+            //Convert opacity to hex, but first multiply by 100 (because... hex opacity formatting..)
+            var hexString = Math.round(val).toString(16);
+            var something = Math.round(val);
+            //Set the background color opacity attribute
+            timelineEl.config.backgroundOpacity = hexString;
+            refreshViewport(true);
+
+        })
+
+        el.appendChild(opacity);
+
         var fontSize = tabInputs.input("Font Size", "number", "vh");
         fontSize.style.display = "block";
         fontSize.style.marginTop = "1rem";
@@ -259,7 +282,7 @@ function openTab(el) {
         fontSize.childNodes[1].value = config.fontSize;
         fontSize.childNodes[1].placeholder = "0"; 
         fontSize.onchange = function(e) {
-            timelineEl.config[0].fontSize = e.target.value; 
+            timelineEl.config.fontSize = e.target.value; 
             refreshViewport(true);
         }
 
@@ -268,11 +291,13 @@ function openTab(el) {
 
         var font = tabInputs.select(["Bahnschrift", "Arial", "Verdana", "Helvetica", "Tahoma", "Trebuchet MS", "Times New Roman", "Georgia", "Garamond", "Courier New", "Brush Script MT"], "Bahnschrift", "Font family", true);
         font.style.width = "10rem";
-        font.getElementsByTagName("select")[0].value = timelineEl.config[0].fontFamily;
+        font.style.height = "4rem";
+        var select = font.getElementsByTagName("select")[0];
+        select.value = timelineEl.config.fontFamily;
         el.appendChild(font);   
-        font.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+        select.addEventListener("change", (e) => {
             var value = font.getElementsByTagName("select")[0].value;
-            timelineEl.config[0].fontFamily = value;
+            timelineEl.config.fontFamily = value;
             refreshViewport(true);
         })
 
@@ -290,7 +315,7 @@ function openTab(el) {
         }
 
         if(refreshPreview) {
-            var widget = createWidget(type,timelineEl.config[0], timelineEl);
+            var widget = createWidget(type,timelineEl.config, timelineEl);
             widget.style.width = "100%";
             widget.style.height = "100%";
             media.innerHTML = "";
@@ -305,7 +330,7 @@ function openTab(el) {
 
 
     //Get the timeline element config
-    var data = timelineEl.config[0];
+    var data = timelineEl.config;
 
 
 
@@ -345,7 +370,7 @@ function openTab(el) {
         }
         media.style.borderRadius = value + "rem";
         //Update the timeline element
-        timelineEl.config[0].borderRadius = value;
+        timelineEl.config.borderRadius = value;
 
         refreshViewport(false);
     }); 
@@ -372,7 +397,7 @@ function openTab(el) {
         }
         media.style.opacity = value;
         //Update the timeline element
-        timelineEl.config[0].opacity = value;
+        timelineEl.config.opacity = value;
 
         refreshViewport(false);
     }); 
@@ -389,7 +414,7 @@ function openTab(el) {
         var value = e.target.value;
         media.style.boxShadow = value + "px " + value + "px " + 1.3*value + "px 0px rgba(0,0,0,0.75)";
         //Update the timeline element
-        timelineEl.config[0].shadowMultiplier = value;
+        timelineEl.config.shadowMultiplier = value;
 
         refreshViewport(false);
     }); 
@@ -407,7 +432,7 @@ function openTab(el) {
         var value = e.target.value;
         media.style.filter = "blur(" + value+"px)";
         //Update the timeline element
-        timelineEl.config[0].blur = value;
+        timelineEl.config.blur = value;
 
         refreshViewport(false);
     }); 
@@ -422,7 +447,7 @@ function openTab(el) {
     hide.childNodes[0].childNodes[1].checked = !data.display;
     hide.childNodes[0].childNodes[1].addEventListener("change", function(e) {
         var value = e.target.checked;      
-        timelineEl.config[0].display = !value;
+        timelineEl.config.display = !value;
         
         //Update the timeline element
         refreshViewport(false);
@@ -433,16 +458,17 @@ function openTab(el) {
 
     var sizeType = tabInputs.select(["Screen size", "Pixels"], false);
     sizeType.style = `
-        margin: 0;
-        width: 10rem;
-        height: 4rem;
-        display: block;
-        transform: translateY(2rem);
+        display: contents;
     `;
-    var typeOfSize = timelineEl.config[0].sizeType;
+
+    sizeType.childNodes[0].style = `
+        width: 80%;
+    `
+
+    var typeOfSize = timelineEl.config.sizeType;
     sizeType.getElementsByTagName("select")[0].value = typeOfSize;
     sizeType.getElementsByTagName("select")[0].addEventListener("change", (e) => {
-        timelineEl.config[0].sizeType = sizeType.getElementsByTagName("select")[0].value;
+        timelineEl.config.sizeType = sizeType.getElementsByTagName("select")[0].value;
         refreshViewport(true);
     })
 
@@ -455,7 +481,7 @@ function openTab(el) {
     aspR.childNodes[0].childNodes[1].checked = data.keepAspectRatio;
     aspR.childNodes[0].childNodes[1].addEventListener("change", function(e) {
         var value = e.target.checked;      
-        timelineEl.config[0].keepAspectRatio = value;
+        timelineEl.config.keepAspectRatio = value;
         
         //Update the timeline element
         refreshViewport(false);
@@ -485,7 +511,7 @@ function openTab(el) {
             //Get widget type
             var type = elPath.split(" ")[0].toLowerCase();
             //Create widget of that type
-            var widget = createWidget(type, timelineEl.config[0], timelineEl);
+            var widget = createWidget(type, timelineEl.config, timelineEl);
 
             //widget.style.backgroundColor = "var(--main-bg-color)";
             widget.style.width = "100%";
@@ -494,7 +520,7 @@ function openTab(el) {
             media.appendChild(widget);
             switch(type) {
                 case "text":
-                    var custom = customisation(timelineEl.config[0]);
+                    var custom = customisation(timelineEl.config);
                     wrapper.appendChild(custom);
                 break;
                 case "time": {
@@ -613,15 +639,15 @@ function openTab(el) {
 
                 }
                 case "weather": 
-                    var custom = customisation(timelineEl.config[0]);
+                    var custom = customisation(timelineEl.config);
                     wrapper.appendChild(custom);
                 break;
                 case "news":
-                    var custom = customisation(timelineEl.config[0]);
+                    var custom = customisation(timelineEl.config);
                     wrapper.appendChild(custom);
                 break;
                 case "script":
-                    var custom = customisation(timelineEl.config[0]);
+                    var custom = customisation(timelineEl.config);
                     wrapper.appendChild(custom);
                     //Create script edit button
 
@@ -644,6 +670,17 @@ function openTab(el) {
                     butt.onclick = function() {
                         editScript(timelineEl);
                     }
+
+                    var rerun = document.createElement("button");
+                    rerun.innerHTML = "Rerun script";
+                    rerun.className = "fd-button important"
+                    rerun.style.marginLeft = "0.5rem";
+                    infoOnHover(rerun, "Reinitializes the script");
+                    rerun.disabled = true;
+                    wrapper.appendChild(rerun);
+
+                    
+
                 break;
             }
 

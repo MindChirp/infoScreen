@@ -125,12 +125,12 @@ function saveFile() {
 
                         var data = fs.readFileSync(dir + "/" + fName);
                         var zIndex = iterator;
-                        var fileInfo = {fileName: fName, type: type, config: file.config[0], zIndex: zIndex, data: data.toString("base64")}
+                        var fileInfo = {fileName: fName, type: type, config: file.config, zIndex: zIndex, data: data.toString("base64")}
                         columnData.content.push(fileInfo);
                         
                         
                     } else if(type="widget") {
-                        var fileInfo = {fileName: fName, type: type, config: file.config[0]}
+                        var fileInfo = {fileName: fName, type: type, config: file.config}
                         columnData.content.push(fileInfo);
                         
                     }

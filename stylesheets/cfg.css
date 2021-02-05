@@ -32,6 +32,11 @@
     cursor: pointer;
 }
 
+.fd-button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .fd-button.important {
     background-color: rgba(15,20,25,1);   
 }
@@ -367,7 +372,8 @@ input[type=range].fd-slider::-ms-thumb {
   height: fit-content;
   width: fit-content;
   float: right;
-  color: var(--dark-shade);
+  color: var(--paragraph-color);
+  opacity: 0.3;
 }
 
 .context-menu button:hover {

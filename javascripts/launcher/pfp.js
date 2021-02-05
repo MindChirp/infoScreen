@@ -55,7 +55,6 @@ function profilePhoto(parent) {
             
         }
     }
-    console.log(imgPath)
     img.src = imgPath;
     img.style.height = "100%";
     img.style.width = "auto";
@@ -127,9 +126,7 @@ function profilePhoto(parent) {
                 }
             }
             try {
-                console.log(paths[0])
                 fs.copySync(paths[0], imgPath);
-                console.log(imgPath)
             } catch (error) {
                 console.log("Could not copy profile picture");
                 console.error(error);
@@ -146,7 +143,6 @@ function profilePhoto(parent) {
 
 
                     var ext = localStorage.getItem("pfpExtension");
-                    //console.log(ext)
                     var imgPath;
                     if(ext == null) {
                         imgPath = path.join(__dirname,"internalResources", "images", "default.png");
@@ -188,7 +184,6 @@ function profilePhoto(parent) {
                     pfpCont.appendChild(newPfp);
                     newPfp.style.animation = "new-pfp-in 300ms ease-in-out";
                     newPfp.style.animationFillMode = "both";
-                    console.log(pfpCont)
         }, 100);
     }
         });
@@ -353,7 +348,6 @@ function profilePhoto(parent) {
 
                 var newPfpImage = document.getElementsByClassName("profile-header")[0].querySelector("#pfp").getElementsByTagName("img")[0];
                 newPfpImage.style.animationFillMode = "none"; //Need to disable animation-fill-mode. If not, the pfp cannot be repositioned (because animation-fill-mode: both; prevents it.)
-                console.log(Xpos, Ypos, size);
                 newPfpImage.style.transform = "translate(" + Xpos + "%,"+ Ypos + "%) scale("+size+")";
             })
 

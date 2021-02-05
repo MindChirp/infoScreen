@@ -2,8 +2,10 @@
 function createWidget(type, config, rootEl) {
     var el = document.createElement("div");
     el.className = "viewport-image widget";
+    var bgColor = config.backgroundColor;
+    var bgOpacity = config.backgroundOpacity;
     el.style = `
-        background-color: ` + config.backgroundColor + `;
+        background-color: ` + bgColor + bgOpacity + `;
         font-family: ` + config.fontFamily + `;
     `;
     switch(type) {
@@ -245,7 +247,7 @@ function text(config, rootEl) {
     box.style.pointerEvents = "none";
     box.addEventListener("change", function(e) {
         var value = e.target.value;
-        rootEl.config[0].value = value;
+        rootEl.config.value = value;
 
         if(renderer.isRendered(rootEl)) {
             renderColumn(renderer.renderedColumn());
@@ -273,7 +275,7 @@ function Script(config) {
 
     var ascii = require("ascii-faces")
     var placeholder = document.createElement("h1");
-    placeholder.innerHTML = ascii();
+    placeholder.innerHTML = "Edit this element's script to display something <br>" + ascii();
     placeholder.style = `
         height: fit-content;
         width: fit-content;
@@ -286,7 +288,7 @@ function Script(config) {
         top: 50%;
         transform: translate(-50%,-50%);
         color: ` + config.textColor + `;
-        font-size: ` + config.fontSize + `vh; 
+        font-size: 2rem; 
     `
     cont.appendChild(placeholder);
     

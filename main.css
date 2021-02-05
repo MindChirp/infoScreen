@@ -247,6 +247,10 @@ html {
     min-height: 10rem;
 }
 
+.standard-tab-settings-container > * {
+    display: block;
+}
+
 /*
 
 Replaced by a style in inputs.css
@@ -580,7 +584,6 @@ Replaced by a style in inputs.css
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 0.5rem;
-    position: relative;
 }
 
 #main-container #top-layer .properties-pane .container > div {
@@ -1261,20 +1264,14 @@ Replaced by a style in inputs.css
     text-align: center;
 }
 
-#bottom-layer .script-container .script-editor textarea {
+#bottom-layer .script-container .script-editor .edit-field {
     height: 80%;
     width: 100%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--secondary-button-color);
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     border: none;
-    resize: none;
     outline: none;
-    color: var(--paragraph-color);
     z-index: 100;
+    overflow: hidden;
 }
 
 #bottom-layer .script-container {
@@ -1286,6 +1283,10 @@ Replaced by a style in inputs.css
     top: 0;
     left: 0;
     z-index: 100;
+}
+#bottom-layer > div.script-container > div > div.edit-field > table > tr > td:nth-child(2) > textarea {
+    outline: none;
+    height: 23.5rem;
 }
 
 
