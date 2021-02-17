@@ -109,6 +109,7 @@ function RenderingToolKit() {
         var width = data.config.size.width;
         var display = data.config.display ? "block" : "none";
         var bgColor = data.config.backgroundColor;
+        var bgOpacity = data.config.backgroundOpacity;
         var txtColor = data.config.textColor;
         var fontSize = data.config.fontSize;
         var fontFamily = data.config.fontFamily;
@@ -121,7 +122,7 @@ function RenderingToolKit() {
             filter: blur(` + blur + `px);
             height: ` + height + `;
             width: ` + width + `;
-            background-color: ` + bgColor + `;
+            background-color: ` + bgColor + bgOpacity + `;
             color: ` + txtColor + `;
             font-family: ` + fontFamily + `;
             /*font-size: ` + fontSize + `px;*/
@@ -317,6 +318,11 @@ function createWidget(type, config, rootEl) {
         case "text":
             var widgetContent = text(config, rootEl);
             el.appendChild(widgetContent);
+        break;
+        case "script":
+            var widgetContent = Script(config);
+            el.appendChild(widgetContent);
+        break;
     }
     
     return el;
@@ -539,4 +545,52 @@ function text(config, rootEl) {
     box.style.pointerEvents = "none";
     cont.appendChild(box);
     return cont;
+}
+
+function Script(config) {
+    //Create the weather widget
+    var cont = document.createElement("div");
+    cont.setAttribute("style", `
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        overflow: hidden;
+    `);
+
+
+    if(config.widgetAttributes.script.htmlContents) {
+        cont.innerHTML = config.widgetAttributes.script.htmlContents;
+        if(config.widgetAttributes.script.styleContents) {
+            cont.innerHTML = cont.innerHTML + `
+                <style>` + config.widgetAttributes.script.styleContents + `</style>
+            `
+        }
+        return cont;
+    }
+
+
+    var ascii = require("ascii-faces")
+    var placeholder = document.createElement("h1");
+    placeholder.innerHTML = "Edit this element's script to display something <br>" + ascii();
+    placeholder.style = `
+        height: fit-content;
+        width: fit-content;
+        margin: 0;
+        position: absolute;
+        font-weight: lighter;
+        color: var(--paragraph-color);
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        color: ` + config.textColor + `;
+        font-size: 2rem; 
+    `
+    cont.appendChild(placeholder);
+    
+
+    return cont;
+
 }

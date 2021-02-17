@@ -440,7 +440,25 @@ function openTab(el) {
 
     standardSettings.appendChild(blur);
 
+    var id = tabInputs.input("Identification", "text");
+    id.childNodes[1].value = "";
+    id.style = `
+        float: left;
+    `
+    id.childNodes[1].placeholder = "...";
+    id.childNodes[1].style.width = "10rem";
+    standardSettings.appendChild(id);
+    id.childNodes[1].addEventListener("change", function(e) {
+        var value = e.target.value;
+        if(e.target.value == "") {
+            value = null;
+        }
+        //Update the timeline element
+        timelineEl.config.identification = value+""; //Transform it into a string
+        refreshViewport(false);
 
+    }); 
+    id.childNodes[1].value = timelineEl.config.identification;
 
     var hide = tabInputs.checkBox("Hide");
     hide.style.display = "block";
@@ -458,7 +476,8 @@ function openTab(el) {
 
     var sizeType = tabInputs.select(["Screen size", "Pixels"], false);
     sizeType.style = `
-        display: contents;
+       /* display: contents;*/
+       clear: left;
     `;
 
     sizeType.childNodes[0].style = `

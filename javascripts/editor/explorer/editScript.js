@@ -1,3 +1,5 @@
+const { TouchBarSlider } = require("electron");
+
 function editScript(el) {
     if(!el.isEditing) {
         el.isEditing = true;
@@ -37,6 +39,7 @@ function editScript(el) {
         docs.className = "top-bar-button fd-button important";
         topBar.appendChild(docs);
         infoOnHover(docs, "Documentation");
+        docs.onclick = toggleDocs;
 
         var save = document.createElement("button");
         var ico = document.createElement("i");
@@ -49,18 +52,43 @@ function editScript(el) {
         save.addEventListener("click", (e) => {
             //Get the script, and save it to the element
             try {
-                var ta = document.querySelector("#bottom-layer > div.script-container > div > div.edit-field > table > tr > td:nth-child(2) > textarea")
-                el.config.widgetAttributes.script.scriptContents = ta.value; 
-                if(ta.value.trim().length > 0) {
-                    el.config.widgetAttributes.script.hasScript = true;
-                } else {
-                    el.config.widgetAttributes.script.hasScript = false;
-                }
+                var ta = document.querySelector("#bottom-layer > div.script-container > div").getElementsByClassName("edit-field");
+
+                el.config.widgetAttributes.script.scriptContents = ta[2].getElementsByTagName("textarea")[0].value;
+                el.config.widgetAttributes.script.htmlContents = ta[0].getElementsByTagName("textarea")[0].value; 
+                el.config.widgetAttributes.script.styleContents = ta[1].getElementsByTagName("textarea")[0].value; 
+                el.config.widgetAttributes.script.hasScript = true;
             } catch (error) {
                 alert("Could not save the script");
             }
         })
 
+        var run = document.createElement("button");
+        var ico = document.createElement("i");
+        ico.className = "material-icons";
+        ico.innerHTML = "play_arrow";
+        run.appendChild(ico);
+        run.className = "top-bar-button fd-button important";
+        topBar.appendChild(run);
+        infoOnHover(run, "Run");
+        run.addEventListener("click", () => {
+
+            var texts = editor.getElementsByTagName("textarea");
+            var script = texts[2].value;
+            var html = texts[0].value;
+            var style = texts[1].value;
+            runScript(script, html, style, el);
+        })
+
+        var cons = document.createElement("button");
+        var ico = document.createElement("i");
+        ico.className = "material-icons";
+        ico.innerHTML = "article";
+        cons.appendChild(ico);
+        cons.className = "top-bar-button fd-button important";
+        topBar.appendChild(cons);
+        infoOnHover(cons, "Console");
+        cons.onclick = toggleConsole;
 
         
         var del = document.createElement("button");
@@ -177,29 +205,33 @@ function editScript(el) {
 
 
         //Create the text editing field
+        var split = document.createElement("div");
+        split.className = "editor-split";
+        document.querySelector("#bottom-layer > div.script-container > div.script-editor").appendChild(split);
+        var htmlfield = TextAreaLineNumbersWithCanvas();
+        htmlfield.value = "<!--HTML-->";
 
-        var field = TextAreaLineNumbersWithCanvas();
+        var stylefield = TextAreaLineNumbersWithCanvas();
+        stylefield.value = "/*CSS*/";
+
+        var jsfield = TextAreaLineNumbersWithCanvas();
+        jsfield.value = `//JS
+const t = new ApiTools();
+t.localFetch("ss").shadowSize("10");`;
         //field.classList.add("edit-field")
-        if(!el.config.widgetAttributes.script.hasScript && el.config.widgetAttributes.script.scriptContents.length == 0) {
+        var contents = el.config.widgetAttributes.script;
+        console.log(contents)
+        if(contents.scriptContents.length == 0 && contents.htmlContents.length == 0 && contents.styleContents.length == 0) {
             //If there is no scripts attached to the element, show a boilerplate
-            field.value = `<html>
-    <!--Start scripting something!-->
-</html>
-            
-<style>
-    /*Start styling something!*/
-            
-</style>
-            
-<script>
-    //Start coding something!
-</script>
-
-
-    Disclaimer: The script widget is not working yet. Typing scripts into this field won't make the widget do anything.
-            `;
+            jsfield.value = `//JS
+const t = new ApiTools();
+t.localFetch("ss").shadowSize("10");`;
+            htmlfield.value = "<!--HTML-->";
+            stylefield.value = "/*CSS*/";
         } else {
-            field.value = el.config.widgetAttributes.script.scriptContents;
+            jsfield.value = contents.scriptContents;
+            htmlfield.value = contents.htmlContents;
+            stylefield.value = contents.styleContents;
         }
 
     }
@@ -304,9 +336,375 @@ var cssTable = 'padding:0px 0px 0px 0px!important; margin:0px 0px 0px 0px!import
       ta.onmousemove  = function(ev){ if (this.mouseisdown) this.paintLineNumbers(); };
       
 /////.script-container .script-editor
-    document.querySelector("#bottom-layer > div.script-container > div").appendChild(div);
+    document.querySelector("#bottom-layer > div.script-container > div > div.editor-split").appendChild(div);
     div.classList.add("edit-field");
     // make sure it's painted
 	ta.paintLineNumbers();
     return ta;
 };
+
+
+function toggleConsole() {
+
+    if(document.getElementById("script-console")) {
+        var el = document.getElementById("script-console");
+        el.parentNode.removeChild(el);
+        return; 
+    }
+    var el = floatingBox();
+    el.id = "script-console";
+
+    var view = el.querySelector(".view");
+    
+    pStyle = "margin: 0; line-height: 1rem; width: 100%; text-align: left; color: #41FF00; font-family: 'Courier New', monospace;"
+
+    var p = document.createElement("p");
+    p.innerHTML = "> CONSOLE READY.";
+    p.style = pStyle;
+    view.appendChild(p);
+
+    var p = document.createElement("p");
+    p.innerHTML = "> NOTE: alert() is disabled in a running slideshow.";
+    p.style = pStyle;
+    view.appendChild(p);
+
+}
+
+
+function toggleDocs() {
+ 
+    if(document.getElementById("documentation-console")) {
+        var el = document.getElementById("documentation-console");
+        el.parentNode.removeChild(el);
+        return; 
+    }
+    var el = floatingBox();
+    el.id = "documentation-console";
+    var p = document.createElement("h1");
+    p.innerHTML = "Documentation";
+    p.style = `
+        margin: 0 0 0.5rem;
+        font-weight: lighter;
+        
+    `
+
+    var view = el.querySelector(".view");
+    view.appendChild(p);
+
+    view.style = `
+        background-color: white;
+        color: black;
+        font-family: bahnschrift;
+    `
+
+
+    /*
+    col.childNodes[1].childNodes[0].appendChild(createCollapsible("Changing slides programmatically", "const toolKit = new ApiTools()<br><br>toolKit.nextSlide() //(or: toolKit.prevSlide())"))
+    col.childNodes[1].childNodes[0].appendChild(createCollapsible("Communicating with the infoScreen server", "The infoScreen server is usually hosted by the user itself. To gain access to the server, one must know its ip-address.<br><br>var xhr = new XMLHttpRequest()<br>xhr.open('POST', *ip-address*)<br>xhr.send(*authentication data*);<br><br>Continue by following the standard XMLHttpRequest procedures."))
+    col.childNodes[1].childNodes[0].appendChild(createCollapsible("Slide manipulation", "You can edit other elements while they are being displayed with a script widget."))
+    */
+
+    //scrDocs
+    var { scrDocs } = require(path.join(__dirname, "internalResources", "scriptDocs", "script-widget"));
+    
+    var addDropDown = (dat) => {
+        var folder = createCollapsible(dat.label);
+        
+        if(dat.content) {
+            var y;
+
+            for(y of dat.content) {
+                if(y.string) {
+                    var p = document.createElement("p");
+                    p.innerHTML = y.string;
+                    p.style = `
+                        color: black;
+                    `
+                    folder.childNodes[1].childNodes[0].appendChild(p);
+                } else if(y.menu) {
+                    var dropDown = addDropDown(y.menu);
+                    folder.childNodes[1].childNodes[0].appendChild(dropDown);
+                } else if(y.code) {
+                    var code = document.createElement("div");
+                    code.style = `
+                        height: fit-content;
+                        min-width: 20rem;
+                        width: fit-content;
+                        background-color: black;
+                        color: white;
+                        border-radius: 0.25rem;
+                    `;
+                    code.classList.add("smooth-shadow");
+
+                    var p = document.createElement("p");
+                    p.innerHTML = y.code;
+                    p.style = `
+                        margin: 0;
+                        color: #41FF00; 
+                        font-family: 'Courier New', monospace;
+                    `;
+                    code.appendChild(p);
+                    folder.childNodes[1].childNodes[0].appendChild(code);
+                }
+            }
+        }
+
+        
+        return folder;
+    }
+
+    var x;
+    for(x of scrDocs.menus) {
+        var folder = createCollapsible(x.label);
+        view.appendChild(folder);
+
+        if(x.content) {
+            var y;
+            for(y of x.content) {
+                if(y.string) {
+                    //If string
+                    var p = document.createElement("div");
+                    p.innerHTML = y.string;
+                    folder.childNodes[1].childNodes[0].appendChild(p);
+                } else if(y.menu) {
+                    var dropDown = addDropDown(y.menu);
+                    folder.childNodes[1].childNodes[0].appendChild(dropDown);
+                } else if(y.code) {
+                    var code = document.createElement("div");
+                    code.style = `
+                        height: fit-content;
+                        min-width: 20rem;
+                        width: fit-content;
+                        background-color: black;
+                        color: white;
+                        border-radius: 0.25rem;
+                    `;
+                    code.classList.add("smooth-shadow");
+
+                    var p = document.createElement("p");
+                    p.innerHTML = y.code;
+                    p.style = `
+                        margin: 0;
+                        color: #41FF00; 
+                        font-family: 'Courier New', monospace;
+                    `;
+                    code.appendChild(p);
+                    folder.childNodes[1].childNodes[0].appendChild(code);
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+var createCollapsible = function(title, contentText) {
+    var cont = document.createElement("div");
+
+    var el = document.createElement("button");
+    el.className = "documentation-collapsible";
+    if(title) {el.innerHTML = title};
+    cont.appendChild(el);
+    el.addEventListener("click", (e) => {
+        var content = e.target.nextElementSibling;
+        if(content.style.maxHeight) {
+            content.style.maxHeight = null;
+        } else {
+            //Get all the preceeding folding menus, and update their heights, as well
+            var drops = document.getElementsByClassName("foldable-content");
+            var x;
+            for(x of drops) {
+                if(x.contains(content)){
+                    //check if the element is not itself
+                    if(x != content) {
+                            x.style.maxHeight = x.scrollHeight + content.scrollHeight + "px";
+                    };
+                }
+            }
+
+
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
+      /*  if(content.style.display == "block") {content.style.display = "none"}
+        else {content.style.display = "block"};*/
+
+
+    })
+
+
+    var fold = document.createElement("div");
+    fold.className = "foldable-content";
+    cont.appendChild(fold);
+
+    var wr = document.createElement("div");
+
+    if(contentText) {
+        var content = document.createElement("span");
+        content.innerHTML = contentText;
+        wr.appendChild(content);
+
+    };
+    fold.appendChild(wr);
+    return cont;
+}
+
+
+
+
+
+
+var ConsoleUtil = function() {
+    this.log = function(string) {
+        //Get the console
+        if(!document.getElementById("script-console")) return
+
+        var console = document.getElementById("script-console");
+        var p = document.createElement("p");
+        pStyle = "margin: 0; line-height: 1rem; width: 100%; text-align: left; color: #41FF00; font-family: 'Courier New', monospace;"
+        p.style = pStyle;
+        p.innerHTML = '> ' + strip(string);
+        console.querySelector(".view").appendChild(p);
+    },
+    this.clear = function() {
+        var console = document.getElementById("script-console");
+        console.querySelector(".view").innerHTML = "";
+    }
+}
+
+
+var localIndex = {slide: null, content: []};
+
+var ApiTools = function() {
+    this.selectSlide = function(no) {
+        console.log("Rendering slide number " + no);
+        activateColumnNo(no);
+    },
+    this.selectedSlide = function() {
+        return renderer.renderedColumn();
+    },
+    this.nextSlide = function() {
+        var slideNo = renderer.renderedColumn();
+        activateColumnNo(slideNo+1);
+    },
+    this.prevSlide = function() {
+        var slideNo = renderer.renderedColumn();
+        if(slideNo == 0) throw new RangeError("Cannot render for values less than 0");
+        activateColumnNo(slideNo-1);
+    },
+    this.localFetch = function(id) {
+        var slideNo = renderer.renderedColumn();
+        //Get the columns
+        var cols = document.getElementsByClassName("timeline-column")[slideNo];
+        var indexedSlide = localIndex.slide;
+        if(indexedSlide == slideNo) {
+            var content = localIndex.content;
+            for(let m = 0; m < content.length; m++) {
+                if(content[m].id == id) {
+                    return content[m];        
+                }
+            }
+            return undefined
+        } else {
+            localIndex = {slide: slideNo, content: []};
+
+            for(x of cols.childNodes) {
+                if(!x.querySelector(".scrubber-element")) return;
+                localIndex.content.push({id: x.querySelector(".scrubber-element").config.identification, element: x.querySelector(".scrubber-element"), backgroundColor: function(col) {
+                    console.log(this.element)
+                    this.element.config.backgroundColor = col;
+                    refreshSlide();
+                },
+                borderRadius: function(rad) {
+                    console.log(this.element)
+                    this.element.config.borderRadius = rad;
+                    refreshSlide();
+                },
+
+                blur: function(blur) {
+                    this.element.config.blur = blur;
+                    refreshSlide();
+
+                },
+
+                opacity: function(opac) {
+                    this.element.config.opacity = opac;
+                    refreshSlide();
+
+                },
+
+                fontFamily: function(font) {
+                    this.element.config.fontFamily = font;
+                    refreshSlide();
+
+                },
+
+                color: function(col) {
+                    this.element.config.textColor = col;
+                    refreshSlide();
+
+                },
+
+                shadowSize: function(size) {
+                    console.log(this.element);
+                    this.element.config.shadowMultiplier = size;
+                    refreshSlide();
+
+                }
+            });
+            }
+
+            var x;
+            var content = localIndex.content;
+            for(x of content) {
+                if(x.id == id) {
+                    return x;
+                }
+            }
+                return undefined;
+        }
+
+        
+    }
+}
+
+
+function refreshSlide() {
+    //Refresh current slide
+    var slide = renderer.renderedColumn();
+    activateColumnNo(slide);
+}
+
+
+function runScript(scr, html, style, element) { //origin is the script widget origin slide
+    
+    var origin = element.config.slideNumber;
+    var console = new ConsoleUtil();
+    var alert = (string) => {
+        console.log('ALERT: ' +string);
+    }    
+
+    var renderColumn;
+    var activateColumnNo;
+    var RenderingToolKit;
+    var renderer;
+    var localIndex;
+
+    html.replace("<script>", "<!--");
+    html.replace("</script>", "-->");
+    element.config.widgetAttributes.script.htmlContents = html;
+    element.config.widgetAttributes.script.styleContents = style;
+    refreshSlide();
+
+
+    //Run code
+    try {
+        var ex = new Function(scr);
+        return(ex());
+    } catch (error) {
+        console.log(error);
+    }
+
+}

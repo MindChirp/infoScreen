@@ -273,6 +273,18 @@ function Script(config) {
         overflow: hidden;
     `);
 
+
+    if(config.widgetAttributes.script.htmlContents) {
+        cont.innerHTML = config.widgetAttributes.script.htmlContents;
+        if(config.widgetAttributes.script.styleContents) {
+            cont.innerHTML = cont.innerHTML + `
+                <style>` + config.widgetAttributes.script.styleContents + `</style>
+            `
+        }
+        return cont;
+    }
+
+
     var ascii = require("ascii-faces")
     var placeholder = document.createElement("h1");
     placeholder.innerHTML = "Edit this element's script to display something <br>" + ascii();

@@ -51,7 +51,7 @@ const template = [
                         accelerator: "Ctrl+O",
                         click: () => {alert("Opening from PC")},
                         disabled: true
-                    }/*,
+                    },
                     {
                         label:"...From chip in brein",
                         accelerator:"Ctrl+B",
@@ -59,7 +59,7 @@ const template = [
                             alert("Opening ur brein...") 
                         }
 
-                    }*/
+                    }
                 ]
             },
             {
@@ -94,7 +94,6 @@ const template = [
             {
                 label: "About",
                 click: () => {
-                    console.log("asd")
                     aboutMenu();
                 }
             },
@@ -196,7 +195,6 @@ function enableAppBarButtons() {
 
         // Get all file information on startup
 ipcRenderer.on("opened-file-information", (e, args) => {
-    console.log(args[0])
 
     //If there is no file information, enter developer mode
     //Program is launched with the developer button

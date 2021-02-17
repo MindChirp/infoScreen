@@ -24,6 +24,7 @@
         <li>AMPM clock shows wrong AM/PM suffix at certain times of day</li>
         <li>Saving big projects will freeze the program. <div class="info-circle" metaMessage="File encoding architecture must be changed a bit, will be fixed soon">?</div></li>
         <li>Poor video rendering performance <div class="info-circle" metaMessage="A rendering engine update/improvement is under development">?</div></li>
+        <li>Special characters in a slideshow is incorrectly formatted</li>
         <li>The program is hijacked by hyperlinks</li>
         <li>For closed issues, visit <a href="https://github.com/MindChirp/infoScreen/issues">github</a></li>
     </ul>

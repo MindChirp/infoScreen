@@ -51,7 +51,6 @@ function activateColumnNo(no, direction) {
 
             }
         }
-        console.log(cols[no])
         cols[no].setAttribute("displaying", "true");
         cols[no].style.backgroundColor = "#23313D";
         renderColumn(no);

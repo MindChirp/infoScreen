@@ -1,4 +1,4 @@
-function dragFileHandler(el) {
+  function dragFileHandler(el) {
     var ghost = document.createElement("div");
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
@@ -77,7 +77,7 @@ function dragFileHandler(el) {
 
         //Get the element which the mouse has been let go over
         var el = e.target;
-        if(!el.closest(".container")) return;
+        if(!el.closest(".container") && !el.closest(".timeline-column")) return;
         if(!el.closest(".timeline-column") && el.closest(".container").getAttribute("name") != "viewport-content") return;
 
         //Remove the column highlight
@@ -92,14 +92,13 @@ function dragFileHandler(el) {
                 col.style.backgroundColor = "#23313D";
             }
         } else if(el.closest(".container").getAttribute("name") == "viewport-content") {
-            if(el.closest(".container").getAttribute("droppable") == null) return; 
-            if(el.closest(".container").getAttribute("name") == "viewport-content") {
-                //element has been dragged to the viewport
-                onViewport = true;
-    
-            }
-        }
+            if(el.closest(".container").getAttribute("droppable") == null) return 
 
+                if(el.closest(".container").getAttribute("name") == "viewport-content") {
+                    //element has been dragged to the viewport
+                    onViewport = true;
+                }
+        }
         
 
 
@@ -156,6 +155,8 @@ function dragFileHandler(el) {
             textColor: "#000000", 
             fontSize: 4, 
             fontFamily: "Bahnschrift", 
+            identification: null,
+            slideNumber: null,
             widgetAttributes: 
             {
                 time: 
@@ -169,7 +170,9 @@ function dragFileHandler(el) {
                 script: 
                     {
                         hasScript: false,
-                        scriptContents: ""
+                        scriptContents: "",
+                        htmlContents: "",
+                        styleContents: ""
                     }
             }, 
             sizeType: 0,
@@ -462,7 +465,16 @@ function dragFileInTimeline(el) {
             //Apend the cloned node to the timeline
             e.target.appendChild(newFile);
 
-            
+            //Get the column number
+            var m;
+            var cols = document.getElementsByClassName("timeline-column");
+            for(let i = 0; i < cols.length; i++) {
+                if(m == e.target.closest(".timeline-column")) {
+                    newFile.config.slideNumber = i;
+                    console.log(i);
+                }
+            }
+
             /////////////////////////////////////////////////////////////////////////////////
             //                                                                             //
             //   THIS IS A SERIOUSLY BAD PRACTICE and should be fixed as soon as possible  //

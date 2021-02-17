@@ -6,6 +6,7 @@ document.addEventListener("keydown", function(e) {
     if(e.altKey || e.ctrlKey || e.shiftKey || e.code) {
         var keyCombos = document.body.keyCombinations;
         var x;
+        if(!keyCombos) return;
         if(keyCombos.length == 0) return;
         for(x of keyCombos) {
             var local = {ctrlKey: false, altKey: false, shiftKey: false, letters: [], connectedElement: x.connectedElement}

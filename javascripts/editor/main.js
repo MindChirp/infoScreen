@@ -1,7 +1,5 @@
 const { remote, ipcRenderer } = require("electron");
-console.log(remote);
 const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
-const { darkMode } = require("electron-util");
 yourBrowserWindow.on("blur", (e) => {
     removeCtxMenu("unfocus");
     var appBar = document.getElementById("app-bar");
@@ -807,4 +805,137 @@ function sendConsoleWarn() {
     } else {
             console.log("%cDeveloper Console", "font-size: 3rem; color: red;   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;");
     }
+}
+
+function floatingBox() {
+    var el = document.createElement("div");
+    el.className = "floating-box smooth-shadow";
+    document.body.appendChild(el);
+
+    var top = document.createElement("div");
+    top.className = "top-bar";
+
+    var handle = document.createElement("div");
+    handle.className = "drag-handle";
+    top.appendChild(handle);
+
+    el.appendChild(top);
+
+    var settings = document.createElement("button");
+    var ico = document.createElement("i");
+    ico.style.fontSize = "1rem";
+    ico.className = "material-icons";
+    ico.innerHTML = "settings";
+    settings.appendChild(ico);
+    settings.className = "close-button";
+    infoOnHover(settings, "Settings");
+    settings.onmousedown = (e) => {
+        e.stopPropagation();
+    }
+
+    var toggleSettings = (e) => {
+        var pane = e.target.closest(".floating-box").querySelector(".settings-pane");
+        if(!pane.displaying) {
+            pane.style.display = "block";
+            pane.displaying = true;
+        } else {
+            pane.style.display = "none";
+            pane.displaying = false;
+        }
+    }
+
+
+
+    settings.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleSettings(e);
+    });
+    
+    var cross = document.createElement("button");
+    var ico = document.createElement("i");
+    ico.className = "material-icons";
+    ico.innerHTML = "close";
+    cross.className = "close-button";
+    cross.appendChild(ico);
+    infoOnHover(cross, "Close")
+    cross.onmousedown = (e) => {
+        e.stopPropagation();
+    }
+    cross.addEventListener("click", (e) => {
+        var cons = e.target.closest(".floating-box");
+        cons.parentNode.removeChild(cons);
+    })
+    
+    top.appendChild(cross);
+    top.appendChild(settings);
+
+    var sPane = document.createElement("div");
+    sPane.className = "settings-pane";
+    el.appendChild(sPane);
+
+    var opac = tabInputs.slider("Opacity", true);
+    var sl = opac.getElementsByTagName("input")[0];
+    sl.max = 1;
+    sl.step = 0.05;
+    sl.min = 0.5;
+
+    sl.addEventListener("change", (e) => {
+        //Update console opacity
+        e.target.closest(".floating-box").style.opacity = e.target.value;
+    })
+    sPane.appendChild(opac);
+
+    var pEv = tabInputs.checkBox("Disable interactivity");
+    sPane.appendChild(pEv);
+    
+    pEv.querySelector("input").addEventListener("change", (e) => {
+        var val = e.target.checked;
+        var type = val ? "none" : "initial";
+        e.target.closest(".floating-box").querySelector(".view").style.pointerEvents = type;
+    })
+    pEv.querySelector("input").checked = false;
+
+    var view = document.createElement("div");
+    view.className = "view";
+    el.appendChild(view);
+
+    //Enable box moving
+
+    var offset = {x: 0, y: 0}
+    var handleUp = function(e) {
+        document.body.removeEventListener("mousemove", handleMove);
+        document.body.removeEventListener("mouseup", handleUp);
+
+        if(parseInt(el.style.top.split("px")[0]) < 40) {
+            el.style.top = "2rem";
+        }
+
+    }
+
+    var handleMove = function(e) {
+            var pointerX = e.clientX;
+            var pointerY = e.clientY;
+            //var cons = document.getElementById("console");
+            el.style.top = parseInt(pointerY-offset.y) + "px";
+            el.style.left = parseInt(pointerX-offset.x) + "px";
+            el.style.transform = "translate(0,0)";
+    }
+    
+    var handleDown = function(e) {
+        var x = e.offsetX;
+        var y = e.offsetY;
+        offset.x = x;
+        offset.y = y;
+
+        document.body.addEventListener("mousemove", handleMove);
+        document.body.addEventListener("mouseup", handleUp);
+    }
+
+    top.addEventListener("mousedown", handleDown);
+    return el;
+}
+
+function strip(string) {
+    let doc = new DOMParser().parseFromString(string, 'text/html');
+    return doc.body.textContent || "Denied: HTML content not allowed in the console.";
 }

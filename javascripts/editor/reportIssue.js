@@ -175,7 +175,7 @@ function sendIssue(data) {
     }
 
 
-    const octokit = new Octokit({auth: "e5163bcdd3a362b3e9ee67d7386ea9e1dd370a4f"})
+    const octokit = new Octokit({auth: "8715de30c9a01505ea6a4feb4447f9f48c4e4981"})
     var response = octokit.request("POST /repos/{owner}/{repo}/issues", {
         owner: 'MindChirp',
         repo: 'infoScreen',
