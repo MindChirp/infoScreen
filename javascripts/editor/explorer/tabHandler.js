@@ -549,7 +549,7 @@ function openTab(el) {
                     extra.style = `
                         width: 100%;
                         display: block;
-                        margin-top: 10rem;
+                        margin-top: 1rem;
                     `;
                     extra.className = "time-meta"
 

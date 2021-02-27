@@ -723,7 +723,7 @@ Replaced by a style in inputs.css
     color: var(--title-color);
     cursor: pointer;
     outline: none;
-    z-index: 50;
+    z-index: 4;
 }
 
 #main-container #top-layer #browser .content-container #files #files-container {
@@ -767,11 +767,15 @@ Replaced by a style in inputs.css
     margin: 0;
     height: 100%;
     width: 100%;
+    max-width: 10rem;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
     text-align: center;
 }
 
 #main-container #top-layer #browser .content-container #files .content img, video {
-    height: 100%;
+    height: 4rem;
     width: auto;
     border-radius: 0.25rem;
     margin-left: 50%;
@@ -884,6 +888,10 @@ Replaced by a style in inputs.css
   height: fit-content;
   width: fit-content;
   z-index: 5;
+  background-color: rgba(29, 39, 48,1);
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 0rem 0 0 1rem;
 }
 
 #main-container #top-layer #viewport .controls input {
@@ -907,7 +915,7 @@ Replaced by a style in inputs.css
 }
 
 #main-container #top-layer #viewport .controls .action-buttons {
-  height: 2rem;
+  height: 2.006rem;
   width: fit-content;
   display: inline-block;
   float: right;
@@ -1023,6 +1031,9 @@ Replaced by a style in inputs.css
     transform: translate(-50%,-50%);
     top: 0;
     cursor: nw-resize;
+    opacity: 0.2;
+
+    pointer-events: none;
 }
 
 #main-container #top-layer #viewport #content .positioner:nth-of-type(2) {
@@ -1030,6 +1041,9 @@ Replaced by a style in inputs.css
     transform: translate(-50%, -50%);
     top: 0;
     cursor: n-resize;
+    opacity: 0.2;
+
+    pointer-events: none;
 
 }
 
@@ -1038,6 +1052,10 @@ Replaced by a style in inputs.css
     transform: translate(50%, -50%);
     top: 0;
     cursor: ne-resize;
+    opacity: 0.2;
+
+    pointer-events: none;
+
 
 }
 
@@ -1046,6 +1064,9 @@ Replaced by a style in inputs.css
     transform: translate(-50%, -50%);
     top:50%;
     cursor: w-resize;
+    opacity: 0.2;
+
+    pointer-events: none;
     
 }
 
@@ -1054,6 +1075,8 @@ Replaced by a style in inputs.css
     transform: translate(-50%, 50%);
     bottom: 0;
     cursor: ne-resize;
+    opacity: 0.2;
+    pointer-events: none;
 
 }
 

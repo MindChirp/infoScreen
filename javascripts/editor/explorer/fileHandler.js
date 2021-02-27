@@ -100,7 +100,7 @@ function fetchFiles(dir, dat) {
 
 
 function addFiles() {
-    var paths = ipcRenderer.sendSync("open-file-selector");
+    var paths = JSON.parse(ipcRenderer.sendSync("open-file-selector")).filePaths;
 
     var imgPath;
     if(isPackaged) {
@@ -114,7 +114,8 @@ function addFiles() {
     for(x of paths) {
         var fileName = x.split("\\")[x.split("\\").length-1];
         fsE.copySync(x, imgPath + "/" + fileName);
-        loadFilesIntoExplorer();
         
     }
+    loadFilesIntoExplorer();
+
 }

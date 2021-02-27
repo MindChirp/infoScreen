@@ -121,6 +121,24 @@ function RenderingToolKit() {
         var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
         //Render image to the viewport
         var el = document.createElement("div");
+
+        var id;
+        if(data.config.identification) {
+            id = document.createElement("p");
+            id.style = `
+                height: fit-content;
+                width: fit-content;
+                position: absolute;
+                bottom: 0.5rem; 
+                left: 0.5rem;
+                font-weight: lighter;
+                margin: 0;
+                z-index: 2;
+            `;
+            id.innerHTML = data.config.identification;
+            el.appendChild(id);
+        }
+
         var img = document.createElement("img");
         el.appendChild(img);
         el.connectedElement = data.element;

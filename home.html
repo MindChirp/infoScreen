@@ -31,14 +31,14 @@
 </head>
 
 <body>
-<!--
+
     <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>  
--->
+
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -120,7 +120,7 @@
                 <div id="viewport" class="smooth-shadow">
                     <div class="controls">
                         <input class="fd-slider" type="range" min="0" max="100" step="1" value="0">
-                        <div class="action-buttons">
+                        <div class="action-buttons smooth-shadow">
                             <button onclick="renderer.playPauseSlideshow()"class="ripple-element" id="play"><i class="material-icons">play_arrow</i><script>infoOnHover(document.currentScript.parentNode, "Play")</script></button>
                             <button id="prev" onclick="activateColumnNo(0, 2)" class="ripple-element"><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
                             <button id="next" onclick="activateColumnNo(0, 1)" class="ripple-element"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
@@ -162,6 +162,7 @@
                             </script>
 
                             <script>
+                                /*
                                 var script = document.currentScript;
                                 var opts = ["Yes", "No", "Yes", "Maybe", ":))"];
                                 var menu = fsinputs.dropdown(opts);
@@ -171,6 +172,7 @@
                                 script.parentNode.appendChild(p);
 
                                 script.parentNode.appendChild(menu);
+                                */
                             </script>
 
                         </div>

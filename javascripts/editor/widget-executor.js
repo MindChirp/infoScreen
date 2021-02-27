@@ -181,8 +181,9 @@ function news(config) {
             position: relative;
             overflow: hidden;
         `;
+        
         var placeholder = document.createElement("h1");
-        placeholder.innerHTML = "news placeholder";
+        placeholder.innerHTML = "News placeholder";
         placeholder.style = `
             height: fit-content;
             width: fit-content;
@@ -273,7 +274,6 @@ function Script(config) {
         overflow: hidden;
     `);
 
-
     if(config.widgetAttributes.script.htmlContents) {
         cont.innerHTML = config.widgetAttributes.script.htmlContents;
         if(config.widgetAttributes.script.styleContents) {
@@ -285,12 +285,16 @@ function Script(config) {
     }
 
 
-    var ascii = require("ascii-faces")
+    //var ascii = require("ascii-faces")
     var placeholder = document.createElement("h1");
-    placeholder.innerHTML = "Edit this element's script to display something <br>" + ascii();
+    placeholder.innerHTML = "This element is empty<br><span style='color: rgb(100,100,100); font-size: 1rem; line-height: 1rem; margin: 0;'>Edit its script to display something</span>"
+    if(config.identification) {
+        placeholder.innerHTML = placeholder.innerHTML + "<br><span style='font-size: 1rem;'>ID: " + config.identification + "</span>";
+    }
     placeholder.style = `
         height: fit-content;
         width: fit-content;
+        line-height: 1.5rem;
         margin: 0;
         position: absolute;
         font-weight: lighter;
@@ -301,6 +305,7 @@ function Script(config) {
         transform: translate(-50%,-50%);
         color: ` + config.textColor + `;
         font-size: 2rem; 
+        opacity: 0.5;
     `
     cont.appendChild(placeholder);
     
