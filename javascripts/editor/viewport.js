@@ -134,6 +134,10 @@ function RenderingToolKit() {
                 font-weight: lighter;
                 margin: 0;
                 z-index: 2;
+                background-color: white;
+                padding: 0 0.5rem;
+                color: black;
+                border-radius: 0.25rem;
             `;
             id.innerHTML = data.config.identification;
             el.appendChild(id);
@@ -145,24 +149,39 @@ function RenderingToolKit() {
         var zIndex = data.zIndex;
         var name = data.name;
         el.className = "viewport-image";
+
+
+        //Create an element to get the proper aspect ratio from
+        var asp = document.createElement("img");
+
         if(!isPackaged) {
             img.src = "./extraResources/data/files/images/" + name;
+            asp.src = "./extraResources/data/files/images/" + name;
         } else {
             img.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
+            asp.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
         }
+
+        var Awidth = asp.width;
+        var Aheight = asp.height;
+        
+        var aspectRatio = Awidth/Aheight;
+
 
         var borderRadius = data.config.borderRadius;
         var opacity = data.config.opacity;
         var shadowMultiplier = data.config.shadowMultiplier;
         var blur = data.config.blur;
         var position = data.config.position;
-        var heights = data.config.size.height;
         var widths = data.config.size.width;
+        var heights = parseInt(widths.split("px")[0])/aspectRatio;
         var display = data.config.display ? "block" : "none";
         
         img.style = `
             height: 100%;
             width: 100%;
+            height: 100%;
+
             border-radius: ` + borderRadius + `rem;
             
         `;
@@ -399,6 +418,9 @@ function addResizingBorders(el) {
     //Listen for mouse click
 
 
+    var pos;
+    var leftT;
+    var topT;
 
     var enableBorders = () => {
         setTimeout(() => {
@@ -455,6 +477,7 @@ function addResizingBorders(el) {
 
 
 
+
         //Hide the viewport controls
         var controls = document.querySelector('#viewport > div.controls');
         controls.style.transition = "300ms all ease-in-out";
@@ -472,10 +495,51 @@ function addResizingBorders(el) {
         }, 100)
 
 
+
+        if(el.connectedElement.config.position[0].includes("%") || el.connectedElement.config.position[1].includes("%")) {
+            pos = convertPercentToPx([parseInt(el.connectedElement.config.position[0].split("%")[0]),parseInt(el.connectedElement.config.position[1].split("%")[0])]);
+        } else {
+            pos = [parseInt(el.connectedElement.config.position[0].split("px")[0]), parseInt(el.connectedElement.config.position[1].split("px")[0])];
+        }
+    
+        leftT = parseInt(pos[0]);
+        topT = parseInt(pos[1]);
+
+
+
+        document.body.addEventListener("keydown", handleArrowMove);
+        document.body.addEventListener("keyup", handleArrowMoveRelease);
+
+
     }, 10)
         
     }
 
+
+    var handleArrowMove = (e) => {
+        var c = e.keyCode;
+        if(c == 37) /*left*/ {
+            el.style.left = leftT - 1 + "px";
+            leftT--;
+        } else if(c == 38) /*Up*/ {
+            el.style.top = topT - 1 + "px";
+            topT--;
+        } else if(c == 39) /*Right*/ {
+            el.style.left = leftT + 1 + "px";
+            leftT++;
+        } else if(c == 40) /*Down*/ {
+            el.style.top = topT + 1 + "px";
+            topT++;
+        }
+    }
+
+    var handleArrowMoveRelease = (e) => {
+        var xPos = el.style.left.split("px")[0];
+        var yPos = el.style.top.split("px")[0];
+        var percents = convertPxToPercent([xPos, yPos]);
+        el.connectedElement.config.position[0] = percents[0] + "%";
+        el.connectedElement.config.position[1] = percents[1] + "%";
+    }
 
     var disableBorder = (e) => {
         if(e.target.closest(".viewport-image") != el) {
@@ -488,7 +552,13 @@ function addResizingBorders(el) {
             controls.style.pointerEvents = "";
 
         }
+        document.body.removeEventListener("keydown", handleArrowMove);
+        document.body.removeEventListener("keyup", handleArrowMoveRelease);
+        
     } 
+
+
+
 
 
 
@@ -562,16 +632,70 @@ function addResizingBorders(el) {
         dot.style.cursor = "crosshair";
         border.style.opacity = "0";
 
+        var aspR;
+        var keepAsp = false;
+
+        var handleKeyDown = function(e) {
+            if(e.keyCode == 16) /*Shift*/ {
+                keepAsp = true;
+            }
+        }
+
+        var handleKeyUp = function(e) {
+            if(e.keyCode == 16) /*Shift*/ {
+                keepAsp = false;
+            }
+        }
+
+        document.body.addEventListener("keydown", handleKeyDown);
+        document.body.addEventListener("keyup", handleKeyUp);
+
+        if(element.getElementsByTagName("img")[0]) {
+
+            var img = element.getElementsByTagName("img")[0]
+
+            var proxy = document.createElement("img");
+            proxy.src = img.src;
+
+            var height = proxy.height;
+            var width = proxy.width;
+
+            aspR = (width/height).toFixed(2); 
+            
+        } else {
+            var stl = window.getComputedStyle(element);
+            var height = parseInt(stl.height.split("px")[0]);
+            var width = parseInt(stl.width.split("px")[0]);
+
+            aspR = (width/height).toFixed(2);
+        }
+
+
+
         var properties = {bottom: false, right: false}
         var handleMove = (e) => {
             //Figure out wether mouse is on bottom or right side of element
             var rightEdge = parseInt(element.style.left.split("px")[0]) + parseInt(window.getComputedStyle(element).width.split("px")[0]);        
+            
             if(element.getElementsByTagName("img")[0]) {
-                element.getElementsByTagName("img")[0].style.width = "100%";
+                var img = element.getElementsByTagName("img")[0]
+                img.style.width = "100%";
+                
+                
             }
-            trackedHeight = trackedHeight + e.movementY;
-            trackedWidth = trackedWidth + e.movementX;
 
+            if(trackedHeight > 20 || e.movementY>0) {
+                trackedHeight = trackedHeight + e.movementY;
+            }
+            
+            if(trackedWidth > 20 || e.movementX>0) {
+                if(keepAsp) {
+                    trackedWidth = trackedHeight * aspR;
+                } else {
+                    trackedWidth = trackedWidth + e.movementX;
+                }
+            }
+            
             element.style.height = trackedHeight + "px";
             element.style.width = trackedWidth + "px";
         }
@@ -583,6 +707,8 @@ function addResizingBorders(el) {
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: nw-resize");
 
+            document.body.removeEventListener("keydown", handleKeyDown);
+            document.body.removeEventListener("keyup", handleKeyUp);
             
             var height = el.style.height.split("px")[0];
             var width = el.style.width.split("px")[0];
@@ -691,6 +817,13 @@ function convertPxToPercent([x,y]) {
 
     return [xP.toFixed(2), yP.toFixed(2)]; //Return only numbers rounded to two decimal places
 
+}
+
+function convertPercentToPx([x,y]) {
+    var viewport = document.querySelector('#content > div');
+    var xWidth = parseInt(window.getComputedStyle(viewport).width.split("px")[0]);
+    var yHeight = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
+    return [(x*xWidth/100).toFixed(5), (y*yHeight/100).toFixed(5)];
 }
 
 

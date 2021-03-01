@@ -20,8 +20,8 @@ function bkgScript() {
 
 
 
-    var maxW = parseInt(w.split("px")[0]-64);
-    var maxH = parseInt(h.split("px")[0]-64);
+    var maxW = parseInt(w.split("px")[0]);
+    var maxH = parseInt(h.split("px")[0]);
     path.querySelector(".sub-container").querySelector(".scrubber").style.width = maxW + "px";
     path.querySelector(".sub-container").querySelector(".scrubber").style.maxHeight = maxH + "px";
 
@@ -92,11 +92,12 @@ function calculateLayout() {
     //Triggers every time the window is resized
 
     //Get window size, calculate 98% of its width
+    /*
     var winWidth = window.innerWidth;
     var parentWidth = (winWidth*98)/100;
     var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
-    document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
-
+    document.getElementById("timeline").style.gridTemplateColumns = parentWide;
+    */
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // Set the height of the #main-container, and thus keep the program properly dispayed //
@@ -132,9 +133,11 @@ function calculateLayoutOnStartup() {
     ///////////////////////////////////////////
     // Set the correct width of the timeline //
     ///////////////////////////////////////////
+    /*
     var parentWidth = parseInt(window.getComputedStyle(document.getElementById("bottom-layer")).width.split("px")[0]);
     var timeLineWidth = parentWidth-64; //64 == width of the side-bar of the timeline
     document.getElementById("timeline").style.gridTemplateColumns = "4rem " + timeLineWidth + "px";
+    */
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // Set the height of the #main-container, and thus keep the program properly dispayed //

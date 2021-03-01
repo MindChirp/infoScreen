@@ -1,21 +1,21 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-            <li>Line count on code editor</li>
+            <li>Hold shift to keep the original aspect ratio of an element when resizing</li>
+            <li>Overlayed Ids of elements in the viewport</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>File-browser content displaying issue</li>
-        <li>Profile picture issues in launcher</li>
-        <li>Performance fixes</li>
+        <li>File browser content displaying issue</li>
+        <li>Launcher preview viewport misalignment</li>
+        <li>Image sizing issue in viewport when adding an image</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Changes in the code saving system, different screen sizes should now be better supported</li>
-        <li><strong>UwU</strong> New color picker</li>
+        <li>Redesigned the timeline</li>
     </ul>
         <br>
 

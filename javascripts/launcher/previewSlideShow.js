@@ -56,6 +56,10 @@ function menuPane(type) {
 function previewSlideshow(filename) {
     //console.log(menu());
     var menu = menuPane("user");
+    menu.style = `
+        display: grid;
+        grid-template-rows: 10rem auto;
+    `
     var header = menu.childNodes[0];
     header.style.position = "relative";
 

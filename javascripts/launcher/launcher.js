@@ -12,7 +12,7 @@ if(env != "development") {
 const ipc = require("electron").ipcRenderer;
 const { format } = require("path");
 function launchProgram() {
-    var val = ipc.sendSync("open-main-window");
+    var val = ipc.sendSync("open-main-window", {developerLaunch: true});
     if(val) {
         var window = remote.getCurrentWindow();
         window.close();

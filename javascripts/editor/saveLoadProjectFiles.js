@@ -24,6 +24,19 @@ function saveFile() {
         var sIndicator = document.createElement("span");
         sIndicator.style.animation = "save-span-animation 500ms infinite"
 
+        if(document.body.corruptFile) {
+            saving = true;
+            //The file has been marked as possibly corrupt..
+            var original = pTitle.innerHTML;
+            pTitle.innerHTML = "Error - <span style='opacity: 0.5;'>This file has been flagged as corrupt. It will not be saved as a precaution. </span>"
+            setTimeout(() => {
+                pTitle.innerHTML = original;
+                saving = false;
+            }, 5000);
+            return;
+        }
+
+
         if(document.body.devMode) {
             sIndicator.innerHTML = " - Cannot save, in developer mode";
             setTimeout(() => {

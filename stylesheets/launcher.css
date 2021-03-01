@@ -832,7 +832,7 @@ div.disabled {
 
   #viewport .content {
     background-color: black;
-    height: 80%;
+    height: 100%;
     width: 100%;
     margin: auto;
     position: relative;

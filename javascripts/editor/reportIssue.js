@@ -115,6 +115,7 @@ function reportIssueMenu() {
 
     var report = document.createElement("button");
     report.className = "fd-button important smooth-shadow";
+    report.disabled = true;
     report.innerHTML = "Report issue";
     menu.appendChild(report)
     report.style = `
@@ -140,6 +141,9 @@ function reportIssueMenu() {
         sendIssue({title: title, body: meta, label: label});
     })
 
+    var wut = document.createElement("p");
+    wut.innerHTML = "Issue reporting from within the program has been temporarily disabled.";
+    menu.appendChild(wut);
 
     //How to report an issue
     var a = document.createElement("p");

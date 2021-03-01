@@ -1,3 +1,4 @@
+const { DIR_TARGET } = require("electron-builder");
 
 function createWidget(type, config, rootEl) {
     var el = document.createElement("div");
@@ -29,6 +30,9 @@ function createWidget(type, config, rootEl) {
             var widgetContent = Script(config);
             el.appendChild(widgetContent);
         break;
+        case "progress": 
+        var widgetContent = Progress(config);
+        el.appendChild(widgetContent);
     }
     
     return el;
@@ -309,6 +313,60 @@ function Script(config) {
     `
     cont.appendChild(placeholder);
     
+
+    return cont;
+
+}
+
+
+
+
+function Progress(config) {
+    //Create the weather widget
+    var cont = document.createElement("div");
+    cont.setAttribute("style", `
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        pointer-events: none;
+        overflow: hidden;
+    `);
+    
+    var dots = document.createElement("div");
+    dots.style = `
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: fit-content;
+        width: fit-content;
+    `;
+    cont.appendChild(dots)
+    //Get all columns with content
+    var cols = document.getElementsByClassName("timeline-column");
+    var x;
+
+    var contentCols = [];
+
+    for(x of cols) {
+        if(x.getElementsByClassName("scrubber-element")[0]) {
+            contentCols.push(x);
+        }
+    }
+
+    
+    //Get the rendered column
+    var rendCol = renderer.renderedColumn();
+    console.log(rendCol)
+    for(let i = 0; i < contentCols.length; i++) {
+        var dot = document.createElement("div");
+        if(rendCol == i) {
+            dot.classList.add("active");
+        }
+        dot.classList.add("progression-dot");
+        dots.appendChild(dot);
+    }
 
     return cont;
 

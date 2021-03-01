@@ -130,7 +130,7 @@ function openEditor(fileName) {
 
 
       var unzipped = [];
-      if(fileName) {
+      if(fileName && !fileName.developerLaunch) {
 
         //Get the file
         var projectFilePath;
@@ -149,6 +149,9 @@ function openEditor(fileName) {
 
 
         })
+      } else if(fileName.developerLaunch) {
+        //Program is launched from the developer launch button. 
+        unzipped[0] = true;
       }
       
       programWin.webContents.on("did-finish-load", () => {

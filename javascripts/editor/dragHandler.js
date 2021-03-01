@@ -1,10 +1,17 @@
+  
+  //This global variable is accessed by other files such as selectHandler.js
+  //to check if a file is being dragged or not 
+  var draggingState = {toTimeline: false, inTimeline: false};
+  
   function dragFileHandler(el) {
+    draggingState.toTimeline = true;
     var ghost = document.createElement("div");
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
-
+    console.log(el)
     if(el.getAttribute("type") == "widget") {
         var widgetType = el.getAttribute("name");
+        console.log(widgetType);
         var type = el.getAttribute("type");
         localStorage.setItem("dragCache", JSON.stringify([widgetType, name, type]));
         var p = document.createElement("p");
@@ -23,6 +30,9 @@
             break;
             case "script":
                 p.innerHTML = "Script";
+            break;
+            case "progress":
+                p.innerHTML = "Progress";
             break;
         }
         ghost.appendChild(p);
@@ -72,6 +82,7 @@
 
     //Handle when the file is let go
     document.body.addEventListener("mouseup", function(e) {
+        draggingState.toTimeline = false;
         document.removeEventListener("mousemove", handleMouseMove);
         ghost.parentNode.removeChild(ghost);
 
@@ -148,7 +159,7 @@
             shadowMultiplier: 0, 
             blur: 0, 
             position: [10 + "px",10 + "px"], 
-            size: {height: "30%", width: "30%"}, 
+            size: {height: "30%", width: "200px"}, 
             display: true, 
             backgroundColor: "#ffffff",
             backgroundOpacity: "FF",
@@ -296,6 +307,11 @@
                 case "script":
                     p.innerHTML = "Script";
                     file.setAttribute("fileName", "Script Widget");
+                break;
+                case "progress": 
+                    p.innerHTML = "Progress";
+                    file.setAttribute("fileName", "Progress Widget");
+                break;
             }
         }
         openPropertiesTab(file);
@@ -314,6 +330,7 @@ function handleMouseMove(e) {
 
 
 function dragFileInTimeline(el) {
+    draggingState.inTimeline = true;
     var dragStatus = {hasDragged: false};
     var ghost;
 
@@ -367,6 +384,12 @@ function dragFileInTimeline(el) {
                 case "text":
                     p.innerHTML = "Text";
                 break;
+                case "script":
+                    p.innerHTML = "Script";
+                break;
+                case "progress":
+                    p.innerHTML = "Progress";
+                break;
             }
     
             p.style = `
@@ -402,6 +425,8 @@ function dragFileInTimeline(el) {
 
     //Check if the mouse has been let go
     var mouseUpHandler = function(e) {
+        draggingState.inTimeline = false;
+
         document.body.removeEventListener("mouseup", mouseUpHandler);
         document.body.removeEventListener("mousemove", handleMouseMove)
         if(document.getElementsByClassName("timeline-file-ghost")[0]) {
@@ -428,7 +453,7 @@ function dragFileInTimeline(el) {
         //var ghost
         var x = e.clientX;
         var y = e.clientY;
-        ghost.classList.add("smooth-shadow");
+        //ghost.classList.add("smooth-shadow");
         ghost.style.transform = "translate(-50%, -50%)";
         ghost.style.left = x + "px";
         ghost.style.top = y + "px";

@@ -701,6 +701,10 @@ function openTab(el) {
                     
 
                 break;
+                case "progress":
+                    var custom = customisation(timelineEl.config);
+                    wrapper.appendChild(custom);
+                break;
             }
 
                 break;
