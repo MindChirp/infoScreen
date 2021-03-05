@@ -47,11 +47,11 @@ bar.addEventListener("mousedown", function(e) {
 
     //Update the progress bar if it is only clicked, and not dragged
     setTimeout(function() {
-        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value/10 + "%, var(--slider-color)), color-stop(" + e.target.value/10 + "%, var(--slider-disabled-color)))";
     }, 10)
 });
 bar.addEventListener("change", function(e) {
-    e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+    e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value/10 + "%, var(--slider-color)), color-stop(" + e.target.value/10 + "%, var(--slider-disabled-color)))";
 })
 bar.addEventListener("mouseup", function(e) {
     mouseDownOnProgressBar = false;
@@ -59,7 +59,7 @@ bar.addEventListener("mouseup", function(e) {
 bar.addEventListener("mousemove", function(e) {
     if(mouseDownOnProgressBar) {
         //Update the progress bar if it is only dragged, and not clicked
-        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value + "%, var(--slider-color)), color-stop(" + e.target.value + "%, var(--slider-disabled-color)))";
+        e.target.style.backgroundImage = "-webkit-gradient(linear, left top, right top, color-stop(" + e.target.value/10 + "%, var(--slider-color)), color-stop(" + e.target.value/10 + "%, var(--slider-disabled-color)))";
     }
 });
 
@@ -121,26 +121,42 @@ function RenderingToolKit() {
         var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
         //Render image to the viewport
         var el = document.createElement("div");
-
+        var metaCont = document.createElement("div");
+        metaCont.style = `
+            position: absolute;
+            height: fit-content;
+            width: fit-content;
+            bottom: 0.5rem;
+            left: 0.5rem;
+        `;
+        el.appendChild(metaCont);
         var id;
-        if(data.config.identification) {
+        var metaStyle = `
+            height: fit-content;
+            width: fit-content;
+            opacity: 0.7;
+            display: inline-block;
+            font-weight: lighter;
+            font-size: 0.6rem;
+            margin: 0;
+            z-index: 2;
+            background-color: white;
+            padding: 0 0.5rem;
+            color: black;
+            border-radius: 0.25rem;
+        `
+        if(data.config.identification != null) {
             id = document.createElement("p");
-            id.style = `
-                height: fit-content;
-                width: fit-content;
-                position: absolute;
-                bottom: 0.5rem; 
-                left: 0.5rem;
-                font-weight: lighter;
-                margin: 0;
-                z-index: 2;
-                background-color: white;
-                padding: 0 0.5rem;
-                color: black;
-                border-radius: 0.25rem;
-            `;
+            id.style = metaStyle
             id.innerHTML = data.config.identification;
-            el.appendChild(id);
+            metaCont.appendChild(id);
+        }
+
+        if(!data.config.keepAspectRatio) {
+            aspMsg = document.createElement("p");
+            aspMsg.style = metaStyle
+            aspMsg.innerHTML = "Aspect ratio unlocked";
+            metaCont.appendChild(aspMsg);
         }
 
         var img = document.createElement("img");
@@ -165,8 +181,31 @@ function RenderingToolKit() {
         var Awidth = asp.width;
         var Aheight = asp.height;
         
+        var keepAsp = data.config.keepAspectRatio;
         var aspectRatio = Awidth/Aheight;
 
+        var xEdge = data.config.edgeAnchors.x;
+        var yEdge = data.config.edgeAnchors.y;
+        
+        var left;
+        var right;
+        var top;
+        var bottom;
+        if(xEdge == "left") {
+            left = data.config.position[0];
+            right = "auto";
+        } else {
+            left = "auto";
+            right = data.config.position[0];
+        }
+
+        if(yEdge == "top") {
+            top = data.config.position[1];
+            bottom = "auto";
+        } else {
+            top = "auto";
+            bottom = data.config.position[1];
+        }
 
         var borderRadius = data.config.borderRadius;
         var opacity = data.config.opacity;
@@ -174,7 +213,12 @@ function RenderingToolKit() {
         var blur = data.config.blur;
         var position = data.config.position;
         var widths = data.config.size.width;
-        var heights = parseInt(widths.split("px")[0])/aspectRatio;
+        var heights;
+        if(keepAsp) {
+            heights = parseInt(widths.split("px")[0])/aspectRatio;
+        } else {
+            heights = data.config.size.height;
+        }
         var display = data.config.display ? "block" : "none";
         
         img.style = `
@@ -199,12 +243,15 @@ function RenderingToolKit() {
             height: ` + heights + `;
             width: ` + widths + `;
             /*Positioning*/
-            left: ` + position[0] + `;
-            top: ` + position[1] + `;
+            left: ` + left + `;
+            top: ` + top + `;
+            right: ` + right + `;
+            bottom: ` + bottom + `;
             display: ` + display + `;
             cursor: grab;
 
         `;
+
 
         viewport.appendChild(el);
         addResizingBorders(el);
@@ -368,12 +415,52 @@ function RenderingToolKit() {
     }
 }
 
+var playInterval;
 
 var playViewportContent = function() {
     var viewport = document.getElementById("viewport");
     var controls = viewport.querySelector(".controls");
-    
+
+    var seconds;
+    var updateTimer = () => {
+        //Get the column settings
+        var cols = document.getElementsByClassName("timeline-column");
+        var index = renderer.renderedColumn();
+        var time = cols[index].getAttribute("time");
+        var secs = time.split(":")[1];
+        var mins = time.split(":")[0];
+
+        //Translate everything into seconds
+        var totalSecs = parseInt(secs) + parseInt(mins)*60;
+        clearInterval(playInterval);
+        seconds = totalSecs;
+        activateInterval();
+    }
+
+    updateTimer();
+
     controls.querySelector("#play").childNodes[0].innerHTML = "pause_arrow";
+
+    var event = new Event("change");
+    var progBar = document.querySelector("#viewport > div.controls > input");
+    var i = progBar.value;
+
+
+    function activateInterval() {
+        playInterval = setInterval(()=> {
+            i = parseInt(progBar.value) + 1;
+            progBar.value = i;
+            progBar.dispatchEvent(event);
+            if(i==1000) {
+                //End of slide reached, go over to the next one
+                activateColumnNo(null, 1);
+                updateTimer();
+                console.log("asdasd");
+                progBar.value = 0;
+            }
+        }, seconds);
+    }
+
 }
 
 var pauseViewportContent = function() {
@@ -381,6 +468,7 @@ var pauseViewportContent = function() {
     var controls = viewport.querySelector(".controls");
 
     controls.querySelector("#play").childNodes[0].innerHTML = "play_arrow";
+    clearInterval(playInterval);
 }
 
 
@@ -825,7 +913,4 @@ function convertPercentToPx([x,y]) {
     var yHeight = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
     return [(x*xWidth/100).toFixed(5), (y*yHeight/100).toFixed(5)];
 }
-
-
-
 

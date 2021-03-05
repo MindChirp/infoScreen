@@ -838,7 +838,9 @@ div.disabled {
     position: relative;
   }
 
-
+  #viewport .controls {
+    z-index: 1000000;
+  }
   #viewport .controls > div {
     height: fit-content;
     display: inline-block;

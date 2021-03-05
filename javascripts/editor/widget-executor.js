@@ -218,9 +218,7 @@ function text(config, rootEl) {
         overflow: hidden;
     `;
 
-    cont.addEventListener("resize", function(e) {
-        console.log(e);
-    })
+
     var box = document.createElement("textarea");
     if(config.value) {
         box.value = config.value;
@@ -358,7 +356,6 @@ function Progress(config) {
     
     //Get the rendered column
     var rendCol = renderer.renderedColumn();
-    console.log(rendCol)
     for(let i = 0; i < contentCols.length; i++) {
         var dot = document.createElement("div");
         if(rendCol == i) {

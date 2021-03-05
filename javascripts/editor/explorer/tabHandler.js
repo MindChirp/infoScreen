@@ -1,3 +1,4 @@
+const { TouchBarScrubber } = require("electron");
 
 //var path = require("path");
 const tabInputs = new TabSystem();
@@ -474,28 +475,8 @@ function openTab(el) {
 
     standardSettings.appendChild(hide);
 
-    var sizeType = tabInputs.select(["Screen size", "Pixels"], false);
-    sizeType.style = `
-       /* display: contents;*/
-       clear: left;
-    `;
 
-    sizeType.childNodes[0].style = `
-        width: 80%;
-    `
-
-    var typeOfSize = timelineEl.config.sizeType;
-    sizeType.getElementsByTagName("select")[0].value = typeOfSize;
-    sizeType.getElementsByTagName("select")[0].addEventListener("change", (e) => {
-        timelineEl.config.sizeType = sizeType.getElementsByTagName("select")[0].value;
-        refreshViewport(true);
-    })
-
-
-    standardSettings.appendChild(sizeType);
-
-
-    var aspR = tabInputs.checkBox("Keep Aspect Ratio");
+    var aspR = tabInputs.checkBox("Lock aspect ratio");
     aspR.style.display = "block";
     aspR.childNodes[0].childNodes[1].checked = data.keepAspectRatio;
     aspR.childNodes[0].childNodes[1].addEventListener("change", function(e) {
@@ -507,9 +488,301 @@ function openTab(el) {
     }); 
 
 
-    standardSettings.appendChild(aspR);
+    standardSettings.appendChild(aspR);    
 
 
+    var units = ["px", "%", "rem", "vh", "vw"];
+
+    var returnCorrespondingNumber = (unit) => {
+        for(let i = 0; i < units.length; i++) {
+            if(units[i] == unit) {
+                return i;
+            }
+        }
+
+        switch(unit) {
+            case "left":
+                return 0;
+            break;
+            case "right":
+                return 1;
+            break;
+            case "top":
+                return 0;
+            break;
+            case "bottom":
+                return 1;
+            break;
+        }
+    }
+
+    var createPositioningContainer = () => {
+        if(document.getElementsByClassName("tab-position-container")[0]) {
+            var el = document.getElementsByClassName("tab-position-container")[0];
+            el.parentNode.removeChild(el);
+        }
+
+            //Get the sizing and transform properties of the element
+        var regexN = /[0-9]/g;
+        var regexC = /[^\d.-]/g;
+
+        var config = timelineEl.config;
+        var fileDat = {
+            height: {value: config.size.height.replace(regexC,''), unit: config.size.height.replaceAll(regexN,'').replace(/\./g, "")},
+            width: {value: config.size.width.replace(regexC,''), unit: config.size.width.replace(regexN,'').replace(/\./g, "")},
+            x: {value: config.position[0].replace(regexC,''), unit: config.position[0].replace(regexN, '').replace(/\./g, ""), edge: config.edgeAnchors.x},
+            y: {value: config.position[1].replace(regexC,''), unit: config.position[1].replace(regexN, '').replace(/\./g, ""),  edge: config.edgeAnchors.y}
+        }
+
+
+        var x = document.createElement("div");
+        x.className = "tab-position-container";
+
+        var pos = tabInputs.input("X", "number");
+        pos.getElementsByTagName("input")[0].value = fileDat.x.value;
+        pos.getElementsByTagName("input")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.position[0] = val + units[e.target.parentNode.getElementsByClassName("unit")[1].getElementsByTagName("select")[0].value];
+            refreshViewport();
+        })
+        pos.className = "value"
+        x.appendChild(pos);
+        var selUnit = returnCorrespondingNumber(fileDat.x.unit);
+        var unit = tabInputs.select(units, selUnit);
+        unit.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.position[0] = e.target.closest(".value").getElementsByTagName("input")[0].value + units[val];
+            refreshViewport();
+            
+        })
+        unit.className = "unit";
+        unit.style.width = "4rem";
+        unit.style.height = "2rem";
+        var edge = tabInputs.select(["Left", "Right"], returnCorrespondingNumber(fileDat.x.edge));
+        edge.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            var edges = ["left", "right"];
+            timelineEl.config.edgeAnchors.x = edges[val];
+            refreshViewport();
+        })
+        edge.className = "unit";
+        edge.style.width = "6rem";
+        edge.style.height = "2rem";
+        pos.appendChild(edge);
+        pos.appendChild(unit);
+
+
+        standardSettings.appendChild(x);
+
+        var pos = tabInputs.input("Y", "number");
+        pos.getElementsByTagName("input")[0].value = fileDat.y.value;
+        pos.getElementsByTagName("input")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.position[1] = val + units[e.target.parentNode.getElementsByClassName("unit")[1].getElementsByTagName("select")[0].value];
+            refreshViewport();
+            
+        });
+        pos.className = "value"
+        x.appendChild(pos);
+        var selUnit = returnCorrespondingNumber(fileDat.y.unit);
+        var unit = tabInputs.select(units, selUnit);
+        unit.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.position[1] = e.target.closest(".value").getElementsByTagName("input")[0].value + units[val];
+            refreshViewport();
+            
+        })
+        unit.className = "unit";
+        unit.style.width = "4rem";
+        unit.style.height = "2rem";
+        var edge = tabInputs.select(["Top", "Bottom"], returnCorrespondingNumber(fileDat.y.edge));
+        edge.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            var edges = ["top", "bottom"];
+            timelineEl.config.edgeAnchors.y = edges[val];
+            refreshViewport();
+        })
+        edge.className = "unit";
+        edge.style.width = "6rem";
+        edge.style.height = "2rem";
+        pos.appendChild(edge);
+        pos.appendChild(unit);
+
+        var height = tabInputs.input("Height", "number");
+        height.getElementsByTagName("input")[0].value = fileDat.height.value;
+        height.getElementsByTagName("input")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.size.height = val + units[e.target.parentNode.getElementsByClassName("unit")[0].getElementsByTagName("select")[0].value];
+            refreshViewport();
+        });
+        height.className = "value"
+        x.appendChild(height);
+        var selUnit = returnCorrespondingNumber(fileDat.height.unit);
+        var unit = tabInputs.select(units, selUnit);
+        unit.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.size.height = e.target.closest(".value").getElementsByTagName("input")[0].value + units[val];
+            refreshViewport();
+            
+        })
+        height.appendChild(unit);
+        unit.className = "unit";
+        unit.style.width = "4rem";
+        unit.style.height = "2rem";
+
+        var width = tabInputs.input("Width", "number");
+        width.getElementsByTagName("input")[0].value = fileDat.width.value;
+        width.getElementsByTagName("input")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.size.width = val + units[e.target.parentNode.getElementsByClassName("unit")[0].getElementsByTagName("select")[0].value];
+            refreshViewport();
+        });
+        width.className = "value"
+        x.appendChild(width);
+        var selUnit = returnCorrespondingNumber(fileDat.width.unit);
+        var unit = tabInputs.select(units, selUnit);
+        unit.getElementsByTagName("select")[0].addEventListener("change", (e) => {
+            var val = e.target.value;
+            timelineEl.config.size.width = e.target.closest(".value").getElementsByTagName("input")[0].value + units[val];
+            refreshViewport();
+        })
+        unit.className = "unit";
+        width.appendChild(unit);
+        unit.className = "unit";
+        unit.style.width = "4rem";
+        unit.style.height = "2rem";
+
+        var bStyle = `
+            float: left;
+            clear: left;
+            display: block;
+            background: none;
+            border: 2px solid var(--slider-color);
+            border-radius: 0.25rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            height: fit-content;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+        `
+        var copyPos = document.createElement("button");
+        copyPos.innerHTML = "Copy position";
+        copyPos.style = bStyle;
+        copyPos.style.marginTop = "1rem";
+        x.appendChild(copyPos)
+        copyPos.onclick = (e) => {
+            var regexN = /[0-9]./g;
+            var regexC = /[^\d.-]/g;
+            var config = timelineEl.config;
+            fileAttributes.definedInSession = true;
+            fileAttributes.x = {value: config.position[0].replace(regexC,''), unit: config.position[0].replace(regexN, '').replace(/\./g, ""), edge: config.edgeAnchors.x};
+            fileAttributes.y = {value: config.position[1].replace(regexC,''), unit: config.position[1].replace(regexN, '').replace(/\./g, ""),  edge: config.edgeAnchors.y};
+            /*fileDat = {
+                height: {value: config.size.height.replace(regexC,''), unit: config.size.height.replace(regexN,'')},
+                width: {value: config.size.width.replace(regexC,''), unit: config.size.width.replace(regexN,'')},
+                x: {value: config.position[0].replace(regexC,''), unit: config.position[0].replace(regexN, ''), edge: config.edgeAnchors.x},
+                y: {value: config.position[1].replace(regexC,''), unit: config.position[1].replace(regexN, ''),  edge: config.edgeAnchors.y}
+            }*/
+            tabMsg("Copied position");
+        }
+
+        var copySize = document.createElement("button");
+        copySize.innerHTML = "Copy size";
+        copySize.style = bStyle;
+        x.appendChild(copySize)
+        copySize.onclick = (e) => {
+            var regexN = /[0-9]/g;
+            var regexC = /[^\d.-]/g;
+            var config = timelineEl.config;
+            fileAttributes.height = {value: config.size.height.replace(regexC,''), unit: config.size.height.replace(regexN,'').replace(/\./g, "")};
+            fileAttributes.width = {value: config.size.width.replace(regexC,''), unit: config.size.width.replace(regexN,'').replace(/\./g, "")};
+            fileAttributes.definedInSession = true;
+            tabMsg("Copied size");
+            
+        }
+
+        var copyAll = document.createElement("button");
+        copyAll.innerHTML = "Copy all";
+        copyAll.style = bStyle;
+        x.appendChild(copyAll)
+
+
+        copyAll.onclick = (e) => {
+            var regexN = /[0-9]/g;
+            var regexC = /[^\d.-]/g;
+            var config = timelineEl.config;
+            fileAttributes = {
+                definedInSession: true,
+                height: {value: config.size.height.replace(regexC,''), unit: config.size.height.replace(regexN,'').replace(/\./g, "")},
+                width: {value: config.size.width.replace(regexC,''), unit: config.size.width.replace(regexN,'').replace(/\./g, "")},
+                x: {value: config.position[0].replace(regexC,''), unit: config.position[0].replace(regexN, '').replace(/\./g, ""), edge: config.edgeAnchors.x},
+                y: {value: config.position[1].replace(regexC,''), unit: config.position[1].replace(regexN, '').replace(/\./g, ""),  edge: config.edgeAnchors.y}
+            }
+            tabMsg("Copied all properties");
+
+        }
+
+        var paste1 = document.createElement("button");
+        paste1.innerHTML = "Paste all";
+        paste1.style = bStyle;
+        paste1.style.marginTop = "1rem";
+        x.appendChild(paste1)
+        paste1.onclick = (e) => {
+            //Paste all the values from the fileAttributes clipboard
+            var height = fileAttributes.height.value + fileAttributes.height.unit;
+            var width = fileAttributes.width.value + fileAttributes.width.unit;
+
+            var x = fileAttributes.x.value + fileAttributes.x.unit;
+            var edg1 = fileAttributes.x.edge;
+            var y = fileAttributes.y.value + fileAttributes.y.unit;
+            var edg2 = fileAttributes.y.edge;
+
+            timelineEl.config.position = [x, y];
+            timelineEl.config.edgeAnchors = {x: edg1, y: edg2};
+
+            timelineEl.config.size = {height: height, width: width};
+            createPositioningContainer();
+            refreshViewport();
+        }
+
+        var paste2 = document.createElement("button");
+        paste2.innerHTML = "Paste position";
+        paste2.style = bStyle;
+        x.appendChild(paste2)
+        paste2.onclick = (e) => {
+            //Paste all the position values from the fileAttributes clipboard
+            var x = fileAttributes.x.value + fileAttributes.x.unit;
+            var edg1 = fileAttributes.x.edge;
+            var y = fileAttributes.y.value + fileAttributes.y.unit;
+            var edg2 = fileAttributes.y.edge;
+
+            timelineEl.config.position = [x, y];
+            timelineEl.config.edgeAnchors = {x: edg1, y: edg2};
+            
+            createPositioningContainer();
+            refreshViewport();
+        }
+
+        var paste3 = document.createElement("button");
+        paste3.innerHTML = "Paste size";
+        paste3.style = bStyle;
+        x.appendChild(paste3)
+        paste3.onclick = (e) => {
+            //Paste all the values from the fileAttributes clipboard
+            var height = fileAttributes.height.value + fileAttributes.height.unit;
+            var width = fileAttributes.width.value + fileAttributes.width.unit;
+
+            timelineEl.config.size = {height: height, width: width};
+            
+            createPositioningContainer();
+            refreshViewport();
+        }
+
+    }
+    createPositioningContainer();
+    
 
     switch(type) {
         case "img": 
@@ -618,7 +891,7 @@ function openTab(el) {
                     hours.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showHours;
                     extra.appendChild(hours);
                     hours.childNodes[0].childNodes[1].addEventListener("change", handleTimeOptionsChange); 
-                    hours.style.marginTop = "0rem";
+                    hours.style.marginTop = "3rem";
 
                     var minutes = tabInputs.checkBox("Minutes");
                     minutes.childNodes[0].childNodes[1].checked = data.widgetAttributes.time.showMinutes;
@@ -749,4 +1022,30 @@ function closeOpenTab() {
             removeTab(x.connectedElement);
         }
     }
+}
+
+
+function tabMsg(msg) {
+    var el = document.createElement("div");
+    el.className = "tab-notification smooth-shadow";
+    var olds = document.getElementsByClassName("tab-notification");
+    if(olds.length > 0) {
+        var x;
+        for(x of olds) {
+            x.parentNode.removeChild(x);
+        }
+    }
+    var text = document.createElement("p");
+    text.innerHTML = msg;
+    el.appendChild(text);
+    var cont = document.getElementsByClassName("properties-pane")[0];
+    cont.appendChild(el);
+    setTimeout(() => {
+        try {
+            el.parentNode.removeChild(el);
+        } catch (error) {
+            //Oopsies, the element doesn't exist anymore.
+            //TOO BAD!
+        }
+    }, 3000)
 }

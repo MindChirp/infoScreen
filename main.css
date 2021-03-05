@@ -242,6 +242,32 @@ html {
     font-size: 1rem;
 }
 
+#edit .transition-card {
+    height: 7rem;
+    width: fit-content;
+    min-width: 7rem;
+    border-radius: 0.5rem;
+    background-color: var(--secondaty-button-color);
+    border: 1px var(--main-bg-color) solid;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 1rem;
+    transition: 100ms all ease-in-out;
+    box-sizing: border-box;
+}
+
+#edit .transition-card.selected {
+    border: 2px var(--slider-color) solid;
+    transform: scale(1.1);
+}
+
+#edit .transition-card.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .standard-tab-settings-container {
     position: relative;
     min-height: 10rem;
@@ -584,6 +610,30 @@ Replaced by a style in inputs.css
     box-sizing: border-box;
 }
 
+#main-container #top-layer .properties-pane .tab-notification {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: var(--secondary-button-color);
+    animation: tab-notification-pop-in 300ms ease-out;
+    animation-fill-mode: both;
+    height: fit-content;
+    width: fit-content;
+    max-width: 20rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+#main-container #top-layer .properties-pane .tab-notification p {
+    margin: 0;
+}
+
+@keyframes tab-notification-pop-in {
+    0% {transform: translate(-50%, 110%)};
+    100% {transform: translate(-50%, 0)};
+}
+
 #main-container #top-layer .properties-pane .container {
     height: 100%;
     width: 100%;
@@ -664,7 +714,30 @@ Replaced by a style in inputs.css
     border-radius: 0.25rem;
 }
 
+#main-container #top-layer .properties-pane .tab-position-container {
+    height: fit-content;
+    width: fit-content;
+    float: left;
+    margin-top: 0.5rem;
+}
 
+#main-container #top-layer .properties-pane .tab-position-container div.value {
+    clear: left;
+}
+
+#main-container #top-layer .properties-pane .tab-position-container div.unit {
+    display: inline-block;
+    float: right;
+    height: 2rem;
+    margin-left: 0.5rem;
+    height: 2rem;
+    width: 4rem;
+    
+}
+#main-container #top-layer .properties-pane .tab-position-container div.unit select {
+    height: 2rem;
+    padding: 0.4rem 0 0.4rem 0.2rem;
+}
 
 #main-container #top-layer #browser .wrapper:last-of-type .tab p {
     width: fit-content; 
@@ -1194,6 +1267,17 @@ Replaced by a style in inputs.css
     border-radius: 0.25rem;
     position: relative;
     scroll-snap-align: start;
+    transition: 70ms all ease-out;
+    z-index: 1;
+}
+
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row.selected {
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.75);
+    opacity: 1;
+    transform: scale(0.9);
+    z-index: 2;
 }
 
 
@@ -1211,9 +1295,8 @@ Replaced by a style in inputs.css
     background-color: var(--main-bg-color);
     border-radius: 0.25rem;
     /*transition: all 200ms ease-in-out;*/
-    opacity: 1;
     overflow: hidden;
-    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.1);
 }
 
 

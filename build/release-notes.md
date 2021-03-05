@@ -1,21 +1,26 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-            <li>Hold shift to keep the original aspect ratio of an element when resizing</li>
-            <li>Overlayed Ids of elements in the viewport</li>
+        <li>Timeline selection</li>
+        <li>Timeline shift-selection</li>
+        <li>Viewport play/pause functionality</li>
+        <li>Slide transition options in the edit menu</li>
+        <li>Delete selected file from shortcut (Delete button)</li>
+        <li>Editable element transform and size properties in each element tab</li>
+        <li>Copy properties button in element tabs</li>
+        <li>Paste properties button in element tabs</li>
+        <li>Adjust element position with keyboard arrows<div class="info-circle" metaMessage="This feature is a bit buggy. Use with caution">?</div>
+        <li>Shift dragging element in timeline<div class="info-circle" metaMessage="Will duplicate the dragged file to the space below the cursor">?</div></li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>File browser content displaying issue</li>
-        <li>Launcher preview viewport misalignment</li>
-        <li>Image sizing issue in viewport when adding an image</li>
+        <li>None</li>
     </ul>
         <br>
-
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Redesigned the timeline</li>
+        <li>None</li>
     </ul>
         <br>
 

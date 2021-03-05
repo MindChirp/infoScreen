@@ -274,13 +274,18 @@ function initScrubber(rows,cols,activeColumn) {
         //Create rows
         for(let k = 0; k < rows; k++) {
             var row = document.createElement("div");
-            if(k % 2 != 0) {
+            /*if(k % 2 != 0) {
                 row.setAttribute("version", "B");
             } else {
                 row.setAttribute("version", "A");
-            }   
+            }*/
             row.setAttribute("class", "timeline-row");
             row.setAttribute("droppable", "");
+            row.onclick = (e) => {
+                //Trigger the box selection code
+                selectCell(e.target.closest(".timeline-row"));   
+            }
+            row.selected = false;
             row.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
             //row.setAttribute("onmouseenter", "highlightColumn(this, true)");
             //row.setAttribute("onmouseleave", "highlightColumn(this, false)");
@@ -603,7 +608,20 @@ function clickScrubberElement(el) {
 
 function deleteFile(fromShortcut, el, event) {
     if(fromShortcut) {
-
+        //Get all the selected elements
+        var els = document.getElementsByClassName("timeline-row selected");
+        var x;
+        for(x of els) {
+            if(x.querySelector(".scrubber-element")) {
+                var el = x.querySelector(".scrubber-element");
+                renderer.unrender(el);
+                removeTab(el);
+                el.parentNode.removeChild(el);
+                document.querySelector('#viewport > div.controls').style.opacity = "1";
+                document.querySelector('#viewport > div.controls').style.pointerEvents = "";
+            }
+        }
+        unselectAllCells();
     } else {
         var root = el.closest(".scrubber-element");
         //The viewport controls might be opaque because the deleted element
@@ -614,7 +632,8 @@ function deleteFile(fromShortcut, el, event) {
         setTimeout(function() {
             removeCtxMenu(event);
         //Should there be a timeout for the context menu to dissapear?
-        })
+        });
+        unselectAllCells();
     }
 }
 
@@ -709,6 +728,11 @@ function addFieldsToScrubber(amnt) {
         for(var l = 0; l < parseInt(rows[0].childNodes.length-1); l++) {
             var r = document.createElement("div");
             r.setAttribute("class", "timeline-row");
+            r.onclick = (e) => {
+                //Trigger the box selection code
+                selectCell(e.target.closest(".timeline-row"));   
+            }
+            r.selected = false;
             r.setAttribute("droppable", "");
             r.setAttribute("oncontextmenu", "contextMenu(event, this, 0)")
             c.appendChild(r);

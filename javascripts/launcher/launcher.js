@@ -811,6 +811,9 @@ function userScreen(info, header, signIn) {
 
     var privacy = createSettingsButton();
     privacy.innerHTML = "Privacy";
+    privacy.addEventListener("click", function() {
+        privacyMenu(content);
+    });
 
     var themes = createSettingsButton();
     themes.innerHTML = "Themes";
@@ -1251,7 +1254,7 @@ function appendReleaseNotes(rN, menu) {
         margin: 1rem 0 0 1rem;
     `
     menu.appendChild(p);
-
+    menu.style.overflowY = "auto";
 
     //Find any interactive elements, and give them interactivity
     

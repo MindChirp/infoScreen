@@ -1,5 +1,6 @@
 const { openDevTools } = require("electron-debug");
-
+var globalKeyPresses = {ctrlKey: false, altKey: false, shiftKey: false, letters: []}
+var globalKeyPressesTemplate = {ctrlKey: false, altKey: false, shiftKey: false, letters: []};
 document.addEventListener("keydown", function(e) {
     //Check for all of the combinations defined with the ctrl-key
     //Handle app-bar shortcuts
@@ -14,22 +15,28 @@ document.addEventListener("keydown", function(e) {
             var lShift = false;
             var lAlt = false;
             var lLetters = [];
+            globalKeyPresses = globalKeyPressesTemplate; //Reset the keypress tracker for every button click
 
+            globalKeyPresses = [];
             if(e.altKey) {
                 lAlt = true;
+                globalKeyPresses.altKey = true;
             }
 
             if(e.ctrlKey) {
                 lCtrl = true;
+                globalKeyPresses.ctrlKey = true;
+
             }
 
             if(e.shiftKey) {
                 lShift = true;
+                globalKeyPresses.shiftKey = true;
             }
             
             if(e.code != "CapsLock" && e.code != "ControlLeft" && e.code != "ShiftLeft" && e.code != "AltLeft") {
-                
                 lLetters.push(e.code);
+                globalKeyPresses.push(e.code);
             }
 
             if(lCtrl == x.ctrlKey && lShift == x.shiftKey && lAlt == x.altKey && lLetters[0] == x.letters[0]) {
@@ -68,4 +75,20 @@ document.addEventListener("keydown", function(e) {
         }
     } 
 
+    if(e.code == "Escape") {
+        unselectAllCells();
+    }
+
+    if(e.code == "Delete") {
+        //Delete files if there are any
+        deleteFile(true, null, null);
+    }
+
+
+
+
+});
+
+document.addEventListener("keyup", () => {
+    globalKeyPresses = globalKeyPressesTemplate;
 })

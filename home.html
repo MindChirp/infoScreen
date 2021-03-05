@@ -28,6 +28,7 @@
     <script src="./javascripts/editor/explorer/editScript.js"></script>   
     <script src="./javascripts/editor/saveLoadProjectFiles.js"></script>   
     <script src="./javascripts/editor/selectHandler.js"></script>   
+    <script src="./javascripts/editor/clipboard.js"></script>   
 
 </head>
 
@@ -125,7 +126,7 @@
                             <button id="prev" onclick="activateColumnNo(0, 2)" class="ripple-element"><i class="material-icons">skip_previous</i><script>infoOnHover(document.currentScript.parentNode, "Previous slide")</script></button>
                             <button id="next" onclick="activateColumnNo(0, 1)" class="ripple-element"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
                         </div>
-                        <input class="fd-slider" type="range" min="0" max="100" step="1" value="0">
+                        <input class="fd-slider" type="range" min="0" max="1000" step="1" value="0">
                     </div>
                     <div id="content">
                         <div class="container" droppable name="viewport-content"></div>

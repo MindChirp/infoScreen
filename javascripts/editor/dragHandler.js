@@ -8,7 +8,6 @@
     var ghost = document.createElement("div");
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
-    console.log(el)
     if(el.getAttribute("type") == "widget") {
         var widgetType = el.getAttribute("name");
         console.log(widgetType);
@@ -146,10 +145,6 @@
                 
             }
         }
-        
-
-
-
 
 
         var template = 
@@ -159,6 +154,7 @@
             shadowMultiplier: 0, 
             blur: 0, 
             position: [10 + "px",10 + "px"], 
+            edgeAnchors: {x: "left", y: "top"},
             size: {height: "30%", width: "200px"}, 
             display: true, 
             backgroundColor: "#ffffff",
@@ -431,14 +427,24 @@ function dragFileInTimeline(el) {
         document.body.removeEventListener("mousemove", handleMouseMove)
         if(document.getElementsByClassName("timeline-file-ghost")[0]) {
 
-            injectFile(e);
             
             //Remove any dragging ghosts, if there is any (Should at most be only one)
             var ghosts = document.getElementsByClassName("timeline-file-ghost");
             var x;
             for(x of ghosts) {
+                if(globalKeyPresses.shiftKey && !globalKeyPresses.altKey && !globalKeyPresses.ctrlKey) {
+            
+                } else {
+                    if(e.target.closest(".timeline-row") && !e.target.closest(".timeline-row").hasChildNodes()) {
+                        //Need to check for empty slot before deleting old file
+                        x.connectedElement.parentNode.removeChild(x.connectedElement);
+                    }
+                }
                 x.parentNode.removeChild(x);
             }
+
+            //Important to add files AFTER deleting the old file (see above)
+            injectFile(e);
 
         }
 
@@ -458,6 +464,13 @@ function dragFileInTimeline(el) {
         ghost.style.left = x + "px";
         ghost.style.top = y + "px";
 
+        if(globalKeyPresses.shiftKey && !globalKeyPresses.altKey && !globalKeyPresses.ctrlKey) {
+            //Trigger the fill shortcut
+            var target = e.target.closest(".timeline-row");
+            if(!target.hasChildNodes()) {
+                injectFile(e);
+            }
+        }
     }
 
 
@@ -510,7 +523,6 @@ function dragFileInTimeline(el) {
             /////////////////////////////////////////////////////////////////////////////////
 
 
-            timelineFile.parentNode.removeChild(timelineFile);
             
             //If there is an image, disable its default dragging properties
             if(newFile.getElementsByTagName("img")[0]) {

@@ -19,6 +19,9 @@ function highlightColumn(el, entered) {
     }
 }
 
+
+
+//This is the main way to display a slide
 function activateColumnNo(no, direction) {
     //no        --> column number
     //direction --> 1: next
@@ -92,4 +95,143 @@ function columnChangeCallBack(mutationList, observer) {
         }
         }
     })
+}
+
+
+function selectCell(el) {
+    var unselect = (el) => {
+        el.style.backgroundColor = "transparent";
+        el.selected = false;
+        el.classList.remove("selected");
+    }
+    var select = (el, options) => {
+        el.style.backgroundColor = "rgba(18, 26, 33,1)";
+        el.selected = true;
+        el.classList.add("selected");
+        el.style.boxShadow = "";
+        if(options) {
+            if(options.multiple) {
+                //el.style.boxShadow = "none";
+            }
+        }
+    }
+
+
+        
+    if(!el.selected) {
+        select(el);
+    } else {
+        unselect(el)
+    }
+
+    //Shift select logic
+    if(globalKeyPresses.shiftKey && !globalKeyPresses.ctrlKey & !globalKeyPresses.altKey) {
+        if(!el.selected) {
+            select(el);
+        }
+        
+        //Get the first selected element
+        var sels = document.getElementsByClassName("timeline-row selected");
+        var firstAnchor = sels[0];
+        var secondAnchor = sels[1];
+
+        //Get the layer of each file
+        var ind1;
+        var ind2;
+
+
+        var col1 = firstAnchor.closest(".timeline-column");
+        var col2 = secondAnchor.closest(".timeline-column");
+
+
+        if(col1 == col2) {
+            unselect(secondAnchor);
+            return;
+        }
+
+        for(let i = 0; i < col1.childNodes.length; i++) {
+            if(col1.childNodes[i] == firstAnchor) {
+                ind1 = i;
+                break
+            }
+        }
+
+        for(let i = 0; i < col2.childNodes.length; i++) {
+            if(col2.childNodes[i] == secondAnchor) {
+                ind2 = i;
+                break
+            }
+        }
+
+        if(ind1 != ind2) {
+            unselect(el);
+            return;
+        }
+        
+
+
+        //Get all the columns in between
+        var cols = document.getElementsByClassName("timeline-column");
+
+        //Get the slide number of both columns
+        var slide1;
+        var slide2;
+
+        for(let i = 0; i < cols.length; i++) {
+            if(cols[i] == col1) {
+                slide1 = i;
+            }
+        }
+
+        for(let i = 0; i < cols.length; i++) {
+            if(cols[i] == col2) {
+                slide2 = i;
+            }
+        }
+
+        //Iterate through the columns
+        for(let i = slide1; i < slide2; i++) {
+            select(cols[i].childNodes[ind1], {multiple: true});
+        }
+
+    } else {
+        var sels = document.getElementsByClassName("timeline-row selected");
+        var x;
+        var arr = [];
+        for(x of sels) {
+            if(x != el) {
+                arr.push(x);
+            }
+        }
+
+        var x;
+        for(x of arr) {
+            unselect(x)
+        } 
+
+    }
+
+}
+
+
+function unselectAllCells() {
+    var unselect = (el) => {
+        el.style.backgroundColor = "transparent";
+        el.selected = false;
+        el.classList.remove("selected");
+    }
+
+    var sels = document.getElementsByClassName("timeline-row selected");
+    var x;
+    var arr = [];
+    for(x of sels) {
+        if(x != el) {
+            arr.push(x);
+        }
+    }
+
+    var x;
+    for(x of arr) {
+        unselect(x)
+    } 
 }

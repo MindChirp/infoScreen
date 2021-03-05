@@ -9,40 +9,51 @@ On selection start, when moving the cursor diagonally up to the right, the selec
 will be inverted, but if you flip the box once, it will work again.
 I will find a fix for this shit later i guess..
 
+THIS IS FIXED ^^ 
 
 */
 var selectProperties = {anchor: {x:0, y:0}, mirrored: {x: false, y: false}};
 
+
+
 function enableSelecting() {
+    //Temporarily disabled, might be deprecated and removed later who knows
+    /*
     document.body.addEventListener("mousedown", function(e) {
     //Get the mousedown coordinates
     var x = e.x;
     var y = e.y;
-        console.log(e)
         if(e.target.closest(".scrubber") && !draggingState.toTimeline && !draggingState.inTimeline) {
             selectProperties.anchor.x = x;
             selectProperties.anchor.y = y;
             activateTimelineSelection();
         }
     });
+    */
 }
-
+var oldSelectorWidth = 1;
+var oldSelectorHeight = 1;
 function activateTimelineSelection() {
     document.body.addEventListener("mousemove", handleSelectionMove);
     document.body.addEventListener("mouseup", handleSelectionEnd);
-    var selectionBox = document.createElement("div");
-    selectionBox.id = "selection-box";
-    selectionBox.style.left = selectProperties.anchor.x-1.5 + "px";
-    selectionBox.style.top = selectProperties.anchor.y-1.5 + "px";
-    selectionBox.style.height = "3px";
-    selectionBox.style.width = "3px";
-    document.body.appendChild(selectionBox);
+
+    oldSelectorHeight = 1;
+    oldSelectorWidth = 1;
+    selectProperties.mirrored = {x: false, y: false};
 }   
 
-var oldSelectorWidth = 10;
-var oldSelectorHeight = 10;
+
 
 var handleSelectionMove = (e) => {
+    if(!document.getElementById("selection-box")) {
+        var selectionBox = document.createElement("div");
+        selectionBox.id = "selection-box";
+        selectionBox.style.left = selectProperties.anchor.x + "px";
+        selectionBox.style.top = selectProperties.anchor.y + "px";
+        selectionBox.style.height = "0px";
+        selectionBox.style.width = "0px";
+        document.body.appendChild(selectionBox);
+    }
     var box = document.getElementById("selection-box");
     var h = parseInt(box.style.height.split("px")[0]);
     var w = parseInt(box.style.width.split("px")[0]);
@@ -52,7 +63,6 @@ var handleSelectionMove = (e) => {
 
     var wishedWidth = mX-selectProperties.anchor.x;
     var wishedHeight = mY-selectProperties.anchor.y;
-
     //console.log(wishedHeight/Math.abs(wishedHeight),oldSelectorHeight/Math.abs(oldSelectorHeight))
     if(wishedHeight != 0) {
 
@@ -91,6 +101,7 @@ var handleSelectionMove = (e) => {
         oldSelectorWidth = wishedWidth;
     }
 
+
     box.style.height = Math.abs(wishedHeight) + "px";
     box.style.width = Math.abs(wishedWidth) + "px";
 }
@@ -98,6 +109,8 @@ var handleSelectionMove = (e) => {
 var handleSelectionEnd = (e) => {
     document.body.removeEventListener("mousemove", handleSelectionMove);
     document.body.removeEventListener("mouseup", handleSelectionEnd);
-    var box = document.getElementById("selection-box");
-    box.parentNode.removeChild(box)
+    if(document.getElementById("selection-box")) {
+        var box = document.getElementById("selection-box");
+        box.parentNode.removeChild(box)
+    }
 }
