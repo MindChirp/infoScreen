@@ -30,7 +30,16 @@
                 <button id="open-server" class="smooth-shadow  ripple-element" disabled><i class="material-icons">dns</i> <p>From server</p></button>
                 <button id="live-edit" onclick="liveEdit()" class="smooth-shadow ripple-element"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow ripple-element" onclick="launchProgram()"><i class="material-icons">flag</i> <p>Developer start</p></button>
-                <button id="developer-start" class="smooth-shadow ripple-element" onclick="exitProgram()"><i class="material-icons">exit_to_app</i> <p>Quit</p></button>
+                <div id="user-container">
+                    <button id="pfp" class="smooth-shadow" onclick="userSettings()">
+                        <img src="./internalResources/images/default.png" id="profile-photo-image">
+                        <canvas id="user-canvas" height="48px" width="48px">
+    
+                        </canvas>
+                    </button>
+    
+    
+                </div>
 
             </div>
 
@@ -38,16 +47,9 @@
             <div id="list" class="smooth-shadow">
                 <p style="margin-left: 1rem; margin-right: 1rem; line-height: 2.5rem; height: 2.5rem; color: rgb(150,150,150);">No recent projects</p>
             </div>
-            <div id="user-container">
-                <button id="pfp" class="smooth-shadow" onclick="userSettings()">
-                    <img src="./internalResources/images/default.png" id="profile-photo-image">
-                    <canvas id="user-canvas" height="56px" width="56px">
+<!--asdasdsaddsd-->
+        <button id="quit-button" class="smooth-shadow ripple-element" onclick="exitProgram()"><i class="material-icons">exit_to_app</i> <p>Quit</p></button>
 
-                    </canvas>
-                </button>
-
-
-            </div>
         </div>
         <script src="./javascripts/launcher/userInfo.js" async defer></script>
         <script src="./javascripts/launcher/menus.js"></script>

@@ -165,7 +165,7 @@ input::-webkit-inner-spin-button {
 }
 
 
-#actions-container button {
+#actions-container button:not(#pfp), #quit-button {
     height: 3rem;
     width: fit-content;
     padding: 0 1rem;
@@ -179,6 +179,12 @@ input::-webkit-inner-spin-button {
     margin-right: 0.7rem;
 }
 
+#quit-button {
+  position: absolute;
+  bottom: 1rem;
+  left: 1.5rem;
+}
+
 #actions-container button:disabled {
     cursor: default;
     opacity: 0.5;
@@ -186,7 +192,7 @@ input::-webkit-inner-spin-button {
 
 }
 
-#actions-container button i, p {
+#actions-container button i, p,  #quit-button i, p {
     display: inline-block;
     line-height: 3rem;
     color: var(--paragraph-color);
@@ -362,16 +368,16 @@ input::-webkit-inner-spin-button {
 
 
 #user-container {
-    height: 3.5rem;
+    height: 3rem;
+    padding: 0;
     width: fit-content;
-    position: absolute;
-    z-index: 2;
-    bottom: 1rem;
-    left: 1.5rem;
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 1.5rem;
 }
 
 #user-container #pfp #profile-photo-image {
-    height: 3.5rem;
+    height: 3rem;
     width: auto;
     margin-left: 50%;
     transform: translateX(-50%); 
@@ -389,8 +395,8 @@ input::-webkit-inner-spin-button {
 
 #pfp {
     position: relative;
-    height: 3.5rem;
-    width: 3.5rem;
+    height: 3rem;
+    width: 3rem;
     white-space: nowrap;
     overflow: hidden;
     padding: 0;
