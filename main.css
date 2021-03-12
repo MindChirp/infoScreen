@@ -211,6 +211,7 @@ html {
 #edit {
     padding: 1rem;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 #edit p {
@@ -254,6 +255,7 @@ html {
     cursor: pointer;
     display: inline-block;
     margin-right: 1rem;
+    margin-bottom: 1rem;
     transition: 100ms all ease-in-out;
     box-sizing: border-box;
 }
@@ -407,7 +409,7 @@ Replaced by a style in inputs.css
     display: grid;
     grid-template-columns: 20rem auto 150px;
     grid-template-rows: 100%;
-    background-color: var(--main-bg-color);
+    background-color: var(--secondary-color);
     z-index: 102;
 }
 
@@ -438,6 +440,7 @@ Replaced by a style in inputs.css
     margin-right: 0.3rem;
     height: fit-content;
     margin-left: 0.7rem;
+    transform: translate(0, 0.2rem);
 }
 
 #app-bar .app-bar-menu-container img {
@@ -971,13 +974,50 @@ Replaced by a style in inputs.css
 }
 
 #main-container #top-layer #viewport .controls input {
-    float: right;
     display: inline-block;
     width: 20rem;
     background: none;
     background-image: -webkit-gradient(linear, left top, right top, color-stop(0%, var(--slider-color)), color-stop(0%, var(--slider-disabled-color)));
     margin: 0.8rem 0;
   }
+
+  #main-container #top-layer #viewport .controls button#fullscreen {
+    background-color: transparent;
+    border: none;
+    float: right;
+    margin-left: 0.5rem;
+    height: 2.006rem;
+    width: 2.006rem;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+  }
+
+  #main-container #top-layer #viewport .controls button#fullscreen i {
+      line-height: 2.006rem;
+      font-size: 1.3rem;
+  }
+
+  #main-container #top-layer #viewport .controls button#fullscreen::after {
+    content: ".";
+    position: absolute; 
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%) scale(0.8);
+    z-index: -1;
+    height: 2.006rem;
+    width: 2.006rem;
+    background-color: transparent;
+    border-radius: 10rem;
+    transition: all 100ms ease-out;
+    background: var(--secondary-button-color);
+    opacity: 0;
+  }
+
+  #main-container #top-layer #viewport .controls button#fullscreen:hover::after {
+    transform: translate(-50%,-50%) scale(0.95);
+    opacity: 1;
+}
 
 #main-container #top-layer #viewport .controls input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
@@ -1560,6 +1600,58 @@ body .file-dropdown-menu {
     box-sizing: border-box;
     border-radius: 0.25rem;
 }
+
+.menu-collapsible {
+    background-color: transparent;
+    border-width: 0 0 1px 0;
+    width: 100%;
+    border-color: var(--slider-color);
+    height: fit-content;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    color: var(--paragraph-color);
+}
+
+.foldable-content {
+    max-height: 0;
+    /*display: none;*/
+    transition: max-height 300ms ease-out;
+    overflow: hidden;
+    background-color:var(--secondary-button-color);
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 0 0 0.25rem 0.25rem;
+    border: solid var(--slider-color);
+    border-width: 0 1px 1px 1px;
+    box-sizing: border-box;
+    transition: all 200ms ease-in-out;
+}
+
+.foldable-content:hover {
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.foldable-content > div {
+    height: 100%;
+    padding: 1rem 1rem 0 1rem;
+}
+
+.foldable-content > div::after {
+    height: 0px;
+    line-height: 0px;
+    content: ".";
+    opacity: 0;
+
+}
+
+.foldable-content > div * {
+    font-weight: lighter;
+}
+
+
 body .context-menu {
     z-index: 104;       
 }

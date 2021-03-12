@@ -1,5 +1,15 @@
 const { silly } = require("electron-log");
 
+function clearIndicator() {
+    setTimeout(() => {
+
+        var title = document.getElementById("project-name");
+        var el = title.querySelector("span");
+        el.parentNode.removeChild(el);
+    }, 5000);
+}
+
+
 var saving = false;
 function saveFile() {
     //Save the current file
@@ -138,7 +148,15 @@ function saveFile() {
 
                         var data = fs.readFileSync(dir + "/" + fName);
                         var zIndex = iterator;
-                        var fileInfo = {fileName: fName, type: type, config: file.config, zIndex: zIndex, data: data.toString("base64")}
+                        var fileInfo;
+                        try {
+                            fileInfo = {fileName: fName, type: type, config: file.config, zIndex: zIndex, data: data.toString("base64")}
+                        } catch (error) {
+                            sIndicator.innerHTML = " - Could not save, a file is too big";
+                            clearIndicator();
+                            saving = false;
+                            return;
+                        }
                         columnData.content.push(fileInfo);
                         
                         

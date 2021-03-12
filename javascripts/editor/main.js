@@ -4,8 +4,11 @@ yourBrowserWindow.on("blur", (e) => {
     removeCtxMenu("unfocus");
     var appBar = document.getElementById("app-bar");
     appBar.style.opacity = 0.5;
-    
-    document.getElementById("project-name").style.opacity = 0.5;
+    try {
+        document.getElementById("project-name").style.opacity = 0.5;
+    } catch (error) {
+        //Could not dim the app bar
+    }
 })
 
 
@@ -35,7 +38,7 @@ document.addEventListener("click", function(e) {
 
 
 
-})
+});
 
 document.addEventListener("mousedown", function(e) {
     //Check if any prompts are open

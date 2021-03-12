@@ -320,7 +320,7 @@ function Script(config) {
 
 
 function Progress(config) {
-    //Create the weather widget
+    //Create the progress widget
     var cont = document.createElement("div");
     cont.setAttribute("style", `
         height: 100%;
@@ -342,21 +342,12 @@ function Progress(config) {
     `;
     cont.appendChild(dots)
     //Get all columns with content
-    var cols = document.getElementsByClassName("timeline-column");
-    var x;
-
-    var contentCols = [];
-
-    for(x of cols) {
-        if(x.getElementsByClassName("scrubber-element")[0]) {
-            contentCols.push(x);
-        }
-    }
+    var length = renderer.numberOfColumns();
 
     
     //Get the rendered column
     var rendCol = renderer.renderedColumn();
-    for(let i = 0; i < contentCols.length; i++) {
+    for(let i = 0; i < length; i++) {
         var dot = document.createElement("div");
         if(rendCol == i) {
             dot.classList.add("active");

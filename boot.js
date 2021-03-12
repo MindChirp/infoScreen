@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut, webContents} = require('electron');
+const {app, BrowserWindow, ipcMain, dialog, Menu, globalShortcut, webContents, screen} = require('electron');
 const { openDevTools } = require('electron-debug');
 const { autoUpdater } = require("electron-updater");
 const { isPackaged } = require("electron-is-packaged");
@@ -188,6 +188,74 @@ function openEditor(fileName) {
 
 }
 
+var fullScreenWindow;
+async function openFullscreenWindow(extDisplay) {
+  var { screen } = require("electron");
+  var {width, height} = screen.getPrimaryDisplay().workAreaSize;
+
+  if (extDisplay) {
+      fullScreenWindow = new BrowserWindow({
+      x: extDisplay.bounds.x,
+      y: extDisplay.bounds.y,
+      webPreferences: {
+
+        nodeIntegration: true,
+        enableRemoteModule: true
+  
+      },
+      width: width,
+      height: height,
+      hasShadow: true,
+      minWidth: 1026,
+      minHeight:963,
+      frame: false,
+      transparent: true,
+      fullscreen: true
+    })
+  } else {
+    
+        fullScreenWindow = new BrowserWindow({
+        webPreferences: {
+    
+          nodeIntegration: true,
+          enableRemoteModule: true
+    
+        },
+        width: width,
+        height: height,
+        hasShadow: true,
+        minWidth: 1026,
+        minHeight:963,
+        frame: false,
+        transparent: true,
+        fullscreen: true
+      });
+
+  }
+
+
+  var htmlPath = path.join(__dirname, "fullscreen.html");
+  fullScreenWindow.loadURL(url.format({
+    pathname: htmlPath,
+    slashes: true
+  }))
+}
+
+
+ipcMain.on("fullscreen-slideshow", (event) => {
+    var displays = screen.getAllDisplays()
+    var externalDisplay = displays.find((display) => {
+      return display.bounds.x !== 0 || display.bounds.y !== 0
+    })
+
+    openFullscreenWindow(externalDisplay);
+    fullScreenWindow.webContents.on("did-finish-load", async () => {
+        console.log("WINDOW LOADED");
+        event.returnValue = "OK";
+    });
+
+
+}) 
 
 ipcMain.on("apply-update", () => {
   autoUpdater.quitAndInstall();
@@ -253,7 +321,8 @@ ipcMain.on('get-file-data', function(event) {
 
 //Check for app-bar button presses
 ipcMain.on("minimize", function(e) {
-  programWin.minimize();
+  var win = e.sender.getOwnerBrowserWindow();
+  win.minimize();
 })
 
   //programWidth
@@ -262,17 +331,20 @@ ipcMain.on("minimize", function(e) {
   //programWidth1;
   var state = 0;
 ipcMain.on("restore", function(e) {
+  var win = e.sender.getOwnerBrowserWindow();
   if(state == 0) {
-    programWin.unmaximize();
+    win.unmaximize();
     state = 1;
   } else {
-    programWin.maximize();
+    win.maximize();
     state = 0;
   }
 })
 
 ipcMain.on("close", function(e) {
-  programWin.close();
+  var win = e.sender.getOwnerBrowserWindow();
+  win.close();
+  
 })
 ipcMain.on("closeLauncher", function(e) {
   launcherWin.close();
@@ -289,6 +361,27 @@ ipcMain.on("show-changelog", function(e) {
 ipcMain.on("relaunch-launcher", () => {
   boot();
   programWin.close();
+})
+
+ipcMain.on("inter-renderer-communication", (event, arg) => {
+  var senderName = arg.routingInformation.forwardingName;
+  console.log(fullScreenWindow);
+  if(fullScreenWindow) {
+    try {
+      if(fullScreenWindow.webContents) {
+        fullScreenWindow.webContents.send(senderName, arg.forwardingInformation);
+        event.returnValue = "OK"
+      } else {
+        event.returnValue = "Did not work";
+      }
+      
+    } catch (error) {
+      event.returnValue = "Could not forward information";
+    }
+  } else {
+    event.returnValue = "Did not work";
+  }
+
 })
 
 

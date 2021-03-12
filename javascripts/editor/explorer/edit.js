@@ -1,5 +1,3 @@
-const { logMessageWithTransports } = require("electron-log");
-const { ensureLink } = require("fs-extra");
 
 const updateEditPage = function() {
     //Disable script is the pane isnt rendered

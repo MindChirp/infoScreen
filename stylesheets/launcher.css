@@ -13,6 +13,10 @@ body {
     overflow: hidden;
     user-select: none;
     background-color: transparent;
+
+  }
+
+  body.fade-in {
     animation: fade-in 300ms ease-in-out;
     animation-fill-mode: both;
   }
@@ -47,6 +51,7 @@ input::-webkit-inner-spin-button {
     --main-bg-color: #171F26;
     --main-button-color: #1B2630;
     --secondary-button-color: #121a21;
+    --dark-secondary-button-color: #070b0e;
     --title-color: white;
     --secondary-color: rgb(15, 20, 25);
     --paragraph-color: rgb(220,220,220);
@@ -145,12 +150,18 @@ input::-webkit-inner-spin-button {
 #main-title {
     color: var(--title-color);
     font-weight: lighter;
+    width: fit-content;
+    margin-right: 0;
+    margin-bottom: 0;
+    display: inline-block;
+    float: left;
 }
 
 #actions-container {
     height: fit-content;
     width: fit-content;
     z-index: 1;
+    margin-top: 0.5rem;
 }
 
 
@@ -190,23 +201,23 @@ input::-webkit-inner-spin-button {
 
 #list {
     height: fit-content;
-    max-height: 10rem;
-    overflow-y: hidden;
+    max-height: 17.5rem;
+    overflow-y: auto;
     min-height: 1.7rem;
     border-radius: 0.5rem;
-    width: 25rem;
+    width: fit-content;
     background-color: var(--secondary-color);
     line-height: 2rem;
     color: var(--paragraph-color);
     font-weight: lighter;
     padding-left: 0.33rem;
+    padding-right: 0.33rem;
 }
 
 
 #list #projects-container {
   height: fit-content;
-  max-height: 10rem;
-  width: 25rem;
+  width: 40rem;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
 }
@@ -223,14 +234,25 @@ input::-webkit-inner-spin-button {
 
 
 #list .project-item {
-  height: 2.5rem;
+  height: fit-content;
+  min-height: 2.5rem;
   width: 100%;
   display: block;
+  position: relative;
   background-color: transparent;
   transition: all 0ms ease-in-out;
   vertical-align: top;
   cursor: pointer;
   border-radius: 0.25rem;
+}
+
+#list .project-item .description {
+  margin: auto;
+  display: inline-block;
+  float: right;
+  color: rgba(255,255,255,0.2);
+  margin-right: 1rem;
+  font-size: 1rem;
 }
 
 #list .project-item:hover {
@@ -244,6 +266,47 @@ input::-webkit-inner-spin-button {
   font-size: 1.5em;
   line-height: 2.5rem;
   margin-left: 1rem;
+  animation: fade-in 100ms ease-out;
+}
+
+
+#list .project-item .menu-box::before {
+  height:2px;
+  width: 6rem;
+  left: 50%;
+  background-color: white;
+  content: ".";
+  position: absolute;
+  transform: translate(-50%, 0);
+  top: -0rem;
+  color: transparent;
+  animation: top-menu-bar 200ms ease-out 0.5s both;
+  border-radius: 0.5rem;
+}
+
+#list .project-item .menu-box::after {
+  height: 2px;
+  width: 6rem;
+  left: 50%;
+  background-color: white;
+  content: ".";
+  position: absolute;
+  transform: translate(-50%, 0);
+  bottom: -0rem;
+  color: transparent;
+  animation: bottom-menu-bar 200ms ease-out 0.5s both;
+  border-radius: 0.5rem;
+
+}
+
+@keyframes top-menu-bar {
+  0%{opacity: 0; transform: translate(-50%,0.5rem);}
+  100%{opacity: 1; transform: translate(-50%,0);}
+}
+
+@keyframes bottom-menu-bar {
+  0%{opacity: 0; transform: translate(-50%,-0.5rem);}
+  100%{opacity: 1; transform: translate(-50%,0);}
 }
 
 
@@ -300,10 +363,11 @@ input::-webkit-inner-spin-button {
 
 #user-container {
     height: 3.5rem;
-    width: 7rem;
-    transform: translateY(20%);
-    position: relative;
+    width: fit-content;
+    position: absolute;
     z-index: 2;
+    bottom: 1rem;
+    left: 1.5rem;
 }
 
 #user-container #pfp #profile-photo-image {
@@ -339,18 +403,6 @@ input::-webkit-inner-spin-button {
     display: inline-block;
 }
 
-#notifications-button {
-  height: 2rem;
-  width: 2rem;
-  background: none;
-  border: none;
-  outline: none;
-  vertical-align: top;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translate(0, -50%);
-}
 
 #notifications-button i {
   font-size: 2rem;
@@ -489,11 +541,23 @@ div.disabled {
   opacity: 0.5;
 }
 
+#notifications-cont {
+  height: fit-content;
+  width: fit-content;
+  margin-left: 1rem;
+  vertical-align: top;
+  display: inline-block;
+  position: relative;
+}
+
 
 #notifications-button {
+  background: none;
+  border: none;
+  outline: none;
+  margin-top: 1rem;
   cursor: pointer;
   width: fit-content;
-  float: right;
   padding: 0;
   border-radius: 100%;
   height: 3rem;
@@ -508,13 +572,14 @@ div.disabled {
   border-radius: 0.25rem;
   position: absolute;
   right: 0;
-  transform: translate(105%);
   top: 1rem;
+  transform: translate(105%);
   padding: 0.5rem;
   box-sizing: border-box;
   animation: fade-in 150ms ease-in-out;
   max-height: 20.9rem;
   overflow-y: auto;
+  z-index: 100;
 }
 
 #notifications-pane > p {
@@ -586,6 +651,11 @@ div.disabled {
 @keyframes fade-in {
     0% {opacity: 0;}
     100% {opacity: 1;}
+}
+
+@keyframes fade-out {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
 }
 
 @keyframes pop-in {
@@ -871,4 +941,14 @@ div.disabled {
 @keyframes new-pfp-in {
     0%{transform: translate(-50%,-100%); opacity: 0;}
     100%{transform: translate(-50%,0);opacity: 1;}
+}
+
+@keyframes slide-in-more-settings {
+  0%{height: 0rem; opacity: 0; transform: scale(0.99);}
+  100%{height: 7rem; opacity: 1; transform: scale(1);}
+}
+
+@keyframes slide-out-more-settings {
+  0%{height: 7rem; opacity: 1;}
+  100%{height:0.5rem; opacity: 0.1;}
 }

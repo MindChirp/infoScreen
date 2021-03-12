@@ -62,6 +62,12 @@ document.addEventListener("click", function(e) {
             el.style.display = "none";
         }
     }
+
+
+    if(document.getElementsByClassName("menu-box")[0]) {
+        var el = document.getElementsByClassName("menu-box")[0];
+        removeFileMenu(el);
+    }
     
 })
 

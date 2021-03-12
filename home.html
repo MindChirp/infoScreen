@@ -29,18 +29,19 @@
     <script src="./javascripts/editor/saveLoadProjectFiles.js"></script>   
     <script src="./javascripts/editor/selectHandler.js"></script>   
     <script src="./javascripts/editor/clipboard.js"></script>   
+    <script src="./javascripts/editor/generalSettings.js"></script>   
 
 </head>
 
-<body>
-<!--
+<body class="fade-in">
+
     <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>  
--->
+
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -94,7 +95,7 @@
                                         <script>infoBox(document.currentScript.parentNode.childNodes[3], "Clear all of the elements in the selected column")</script>
 
                                     </div>-->
-                                    <p>Work in progress</p>
+                                    <p>Oopsies. It seems like this content couldn't load</p>
                                 </div>
                                 <div id="widgets" style="display: none;"></div>
                                 <div id="files" style="display: none;"><button id="add-files-button" onclick="addFiles()" class="smooth-shadow">+</button><div id="files-container"></div></div> <!--Will have dynamically changing content-->
@@ -127,6 +128,7 @@
                             <button id="next" onclick="activateColumnNo(0, 1)" class="ripple-element"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
                         </div>
                         <input class="fd-slider" type="range" min="0" max="1000" step="1" value="0">
+                        <button id="fullscreen" onclick="showFullscreenView()" class="ripple-element"><i class="material-icons">launch</i><script>infoOnHover(document.currentScript.parentNode, "Fullscreen")</script></button>
                     </div>
                     <div id="content">
                         <div class="container" droppable name="viewport-content"></div>

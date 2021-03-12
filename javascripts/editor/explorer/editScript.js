@@ -701,8 +701,9 @@ function runScript(scr, html, style, element) { //origin is the script widget or
 
     //Run code
     try {
-        var ex = new Function(scr);
-        return(ex());
+        eval(scr);
+        /*var ex = new Function(scr);
+        return(ex());*/
     } catch (error) {
         console.log(error);
     }

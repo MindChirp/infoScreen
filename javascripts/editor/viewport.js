@@ -72,6 +72,10 @@ bar.addEventListener("mousemove", function(e) {
 function renderColumn(col) {
     //console.log("RENDERING COLUMN " + parseInt(col + 1));
     //Get the rows
+
+    //Update the second monitor as well
+    updateFullscreenView()
+
     var viewport = document.getElementById("viewport").querySelector("#content").querySelector(".container");
     viewport.innerHTML = "";
     var rows = document.getElementsByClassName("timeline-column")[col].childNodes;
@@ -412,6 +416,19 @@ function RenderingToolKit() {
             viewport.isPlaying = true;
             playViewportContent();
         }
+    },
+    this.numberOfColumns = function() {
+        var cols = document.getElementsByClassName("timeline-column");
+        var x;
+    
+        var contentCols = [];
+    
+        for(x of cols) {
+            if(x.getElementsByClassName("scrubber-element")[0]) {
+                contentCols.push(x);
+            }
+        }
+        return contentCols.length;
     }
 }
 
@@ -461,6 +478,9 @@ var playViewportContent = function() {
         }, seconds);
     }
 
+    var data = {routingInformation: {forwardingName: "slide-active"}, forwardingInformation: {timestamp: "00:00"}}
+    var response = ipcRenderer.sendSync("inter-renderer-communication", data);
+
 }
 
 var pauseViewportContent = function() {
@@ -469,6 +489,9 @@ var pauseViewportContent = function() {
 
     controls.querySelector("#play").childNodes[0].innerHTML = "play_arrow";
     clearInterval(playInterval);
+
+    var data = {routingInformation: {forwardingName: "slide-unactive"}, forwardingInformation: {timestamp: "00:00"}}
+    var response = ipcRenderer.sendSync("inter-renderer-communication", data);
 }
 
 
@@ -627,6 +650,7 @@ function addResizingBorders(el) {
         var percents = convertPxToPercent([xPos, yPos]);
         el.connectedElement.config.position[0] = percents[0] + "%";
         el.connectedElement.config.position[1] = percents[1] + "%";
+
     }
 
     var disableBorder = (e) => {
@@ -697,6 +721,9 @@ function addResizingBorders(el) {
                 //Element has not been moved, show the resize borders instead
                 enableBorders();
             }
+
+            updateFullscreenView();
+
         }
 
         document.body.addEventListener("mouseup", mouseUp);
@@ -802,9 +829,11 @@ function addResizingBorders(el) {
             var width = el.style.width.split("px")[0];
             var percents = convertPxToPercent([width, height]);
 
-
             el.connectedElement.config.size.width = percents[0] + "%";
             el.connectedElement.config.size.height = percents[1] + "%";
+
+            updateFullscreenView();
+
         }
 
         document.body.addEventListener("mousemove", handleMove);
@@ -842,8 +871,14 @@ function addResizingBorders(el) {
             document.body.style.cursor = "default";
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: w-resize");
-            el.connectedElement.config.size.height = element.style.height;
-            el.connectedElement.config.size.width = element.style.width;
+            var height = el.style.height.split("px")[0];
+            var width = el.style.width.split("px")[0];
+            var percents = convertPxToPercent([width, height]);
+
+            el.connectedElement.config.size.width = percents[0] + "%";
+            el.connectedElement.config.size.height = percents[1] + "%";
+            updateFullscreenView();
+
         }
 
         document.body.addEventListener("mousemove", handleMove);
@@ -880,8 +915,15 @@ function addResizingBorders(el) {
             document.body.style.cursor = "default";
             border.style.opacity = "1"
             dot.setAttribute("style", "cursor: n-resize");
-            el.connectedElement.config.size.height = element.style.height;
-            el.connectedElement.config.size.width = element.style.width;
+
+            var height = el.style.height.split("px")[0];
+            var width = el.style.width.split("px")[0];
+            var percents = convertPxToPercent([width, height]);
+
+            el.connectedElement.config.size.width = percents[0] + "%";
+            el.connectedElement.config.size.height = percents[1] + "%";
+            updateFullscreenView();
+
         }
 
         document.body.addEventListener("mousemove", handleMove);
@@ -914,3 +956,67 @@ function convertPercentToPx([x,y]) {
     return [(x*xWidth/100).toFixed(5), (y*yHeight/100).toFixed(5)];
 }
 
+
+
+
+// AIAIAI Use some goddamn promises, mister!
+//I need to fix this the day I learn to be a better programmer..
+//I'm putting this up as an issue on github. The program freezes when the
+//"fullscreen" button is pressed
+function showFullscreenView() {
+    //The name says it all, doesn't it?
+    var result = ipcRenderer.sendSync("fullscreen-slideshow");
+    console.log(result)
+    if(result == "OK") {
+        console.log("oiasodniasd")
+        var data = {routingInformation: {forwardingName: "fullscreen-view"}, forwardingInformation: "aribasddiuujiads"};
+        var res1 = ipcRenderer.sendSync("inter-renderer-communication", data);
+        setTimeout(() => {
+            updateFullscreenView();
+        })
+    } else {
+        console.log("Could not open fullscreen view: " + result);
+    }
+
+    //Coomunicate the data from the slideshow to the window
+}
+
+
+function updateFullscreenView() {    
+    var col = {number: null, slideshowLength: null, content: []};
+
+    //Get the currently rendered column
+    var colNo = renderer.renderedColumn();
+    col.number = colNo;
+    
+    var length = renderer.numberOfColumns();
+    col.slideshowLength = length;
+
+    var column = document.getElementsByClassName("timeline-column")[colNo];
+
+    for(let i = 0; i < column.childNodes.length; i++) {
+        var child = column.childNodes[i];
+        if(child.childNodes.length > 0) {
+            //There is an element here
+            var el = child.querySelector(".scrubber-element");
+            var file = {
+                config: null,
+                category: null,
+                name: null,
+                src: null,
+                index: null
+            }
+            file.index = i;
+            file.config = el.config;
+            file.category = el.getAttribute("type");
+            file.name = el.getAttribute("name");
+            file.src = el.getAttribute("filename");
+            col.content.push(file);
+        }
+
+        
+    }
+    //The slide info has been gathered, time to send it away..
+    var data = {routingInformation: {forwardingName: "slide-data"}, forwardingInformation: col};
+    var res = ipcRenderer.sendSync("inter-renderer-communication", data);
+}

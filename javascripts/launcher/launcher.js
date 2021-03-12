@@ -137,7 +137,7 @@ window.onload = function() {
 
     } else if(signedIn == "true") {
         var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
-        title.innerHTML = title.innerHTML + ", " + name;
+        title.innerHTML = title.innerHTML + ", " + name + ".";
     }
 
 
@@ -321,6 +321,7 @@ function userSettings() {
     var signedIn = localStorage.getItem("signedIn");
     if(signedIn == "true" && ext != null) {
             var imgPath;
+            console.log(ext);
             if(isPackaged) {
                 imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
             } else {
@@ -910,9 +911,17 @@ function changeState() {
         img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
         var imgPath;
         if(isPackaged) {
-            imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+            if(ext == null) {
+                imgPath = path.join(path.dirname(__dirname),"internalResources", "images", "default.png");
+            } else {
+                imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+            }
         } else {
-            imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+            if(ext == null) {
+                imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+            } else {
+                imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+            }
         }
         img.setAttribute("src", imgPath);
 
@@ -1247,14 +1256,25 @@ function appendReleaseNotes(rN, menu) {
     h1.innerHTML = "Release Notes";
     header.appendChild(h1);
 
+    var cont = document.createElement("div");
+    cont.style = `
+        width: 100%;
+        height: fit-content;
+        max-height: 490px;
+        overflow-y: auto;
+    `
     var p = document.createElement("p");
     p.innerHTML = rN;
     p.style = `
         line-height: 1rem;
         margin: 1rem 0 0 1rem;
     `
-    menu.appendChild(p);
-    menu.style.overflowY = "auto";
+    cont.appendChild(p);
+    menu.appendChild(cont)
+
+    menu.querySelector(".back-button").style.right = "1rem";
+    menu.querySelector(".back-button").style.left = "auto";
+    //menu.style.overflowY = "auto";
 
     //Find any interactive elements, and give them interactivity
     

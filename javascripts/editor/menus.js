@@ -140,6 +140,57 @@ function toggleNotificationMenu() {
 
 
 
+function dropdownMenu(title, contentText) {
+        var cont = document.createElement("div");
+    
+        var el = document.createElement("button");
+        el.className = "menu-collapsible smooth-shadow-bottom";
+        if(title) {el.innerHTML = title};
+        cont.appendChild(el);
+        el.addEventListener("click", (e) => {
+            var content = e.target.nextElementSibling;
+            if(content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                //Get all the preceeding folding menus, and update their heights, as well
+                var drops = document.getElementsByClassName("foldable-content");
+                var x;
+                for(x of drops) {
+                    if(x.contains(content)){
+                        //check if the element is not itself
+                        if(x != content) {
+                                x.style.maxHeight = x.scrollHeight + content.scrollHeight + "px";
+                        };
+                    }
+                }
+    
+    
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+          /*  if(content.style.display == "block") {content.style.display = "none"}
+            else {content.style.display = "block"};*/
+    
+            
+        })
+
+    
+    
+        var fold = document.createElement("div");
+        fold.className = "foldable-content";
+        cont.appendChild(fold);
+    
+        var wr = document.createElement("div");
+    
+        if(contentText) {
+            var content = document.createElement("span");
+            content.innerHTML = contentText;
+            wr.appendChild(content);
+    
+        };
+        fold.appendChild(wr);
+        return cont;
+}
+
 
 
 
@@ -466,7 +517,7 @@ function fullPageMenu(type) {
     var back = document.createElement("button");
     back.setAttribute("class", "fd-button smooth-shadow back-button");
     back.setAttribute("style", `
-        position: absolute;
+        position: fixed;
         bottom: 1rem;
         left: 1rem;
         height: 3rem;
@@ -478,7 +529,7 @@ function fullPageMenu(type) {
 
     back.addEventListener("click", function() {
         el.parentNode.removeChild(el);
-        if(document.getElementsByClassName("information-popup")) {
+        if(document.getElementsByClassName("information-popup")[0]) {
             document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
         }
     })
@@ -832,6 +883,86 @@ function aboutMenu() {
         To show up to date information on each of the slides, a video file wouldn't suffice, and therefore a live webpage is displayed instead. 
     `);
     menu.appendChild(qst1)
+
+
+
+}
+
+
+
+function generalSettings() {
+    var menu;
+    if(!document.getElementsByClassName("menu")[0]) {
+        menu = fullPageMenu("user");
+        document.body.appendChild(menu);
+        menu.style = `
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 101;
+        `;
+        //Delete the default header
+        menu.childNodes[0].parentNode.removeChild(menu.childNodes[0]);
+    } else {
+        //Menu already exists. Delete it
+        var menus = document.getElementsByClassName("menu");
+        var x;
+
+        for(x of menus) {
+            x.parentNode.removeChild(x);
+        }
+
+        //Call the aboutMenu function again, to instantiate a new menu element
+        generalSettings();
+    }
+    if(menu) {
+        menu.style.padding = "3rem";
+        menu.style.boxSizing = "border-box";
+        menu.style.overflow = "auto";
+    }
+    var tile = function(title, meta) {
+        var el = document.createElement("div");
+        el.style = `
+            height: fit-content;
+            width: fit-content;
+            display: inline-block;
+            margin-right: 2rem;
+            margin-top: 1rem;
+        `
+
+        var h1 = document.createElement("p");
+        h1.style = `
+            line-height: 1.5rem;
+            font-size: 1.5rem;
+            margin: 0;
+            font-weight: lighter;
+            display: block;
+            color: var(--title-color);
+        `;
+        h1.innerHTML = title;
+
+        var p = document.createElement("p");
+        p.style = `
+            margin: 0;
+            font-weight: lighter;
+            line-height: 1.5rem;
+            font-size: 1.5rem;
+            display: block;
+            color: var(--paragraph-color);
+            opacity: 0.5;
+        `;
+        p.innerHTML = meta;
+
+        el.appendChild(h1);
+        el.appendChild(p);
+        return el;
+    }
+
+    var settings = moreSettings();
+    if(menu) {
+        menu.appendChild(settings);
+    }
 
 
 

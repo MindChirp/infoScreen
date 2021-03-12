@@ -9,23 +9,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="./stylesheets/launcher.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
     </head>
     <body>
         <div id="content">
             <div id="drag-bar"></div>
-            <div id="user-container">
-                <button id="pfp" class="smooth-shadow" onclick="userSettings()">
-                    <img src="./internalResources/images/default.png" id="profile-photo-image">
-                    <canvas id="user-canvas" height="56px" width="56px">
 
-                    </canvas>
-                </button>
-
+            <div id="notifications-cont">
                 <button id="notifications-button" class="ripple-element" onclick="toggleNotificationsPane()"><i class="material-icons">notifications_none</i></button>
                 <div id="notifications-pane" class="smooth-shadow" style="display: none">
                     <p class="nothingToShow">Nothing to show</p>
                 </div>
             </div>
+
+
             <h1 id="main-title">Loading</h1> <!--Insert user name here-->
             <div id="actions-container">
                 <button id="new-project" onclick="createProject()" class="smooth-shadow ripple-element"><i class="material-icons">add</i> <p>Create</p></button>
@@ -39,7 +36,17 @@
 
             <h1 class="title" style="margin: 3rem 0 0.5rem;">Your Projects</h1>
             <div id="list" class="smooth-shadow">
-                <p style="margin-left: 1rem; line-height: 2.5rem; height: 2.5rem; color: rgb(150,150,150);">No recent projects</p>
+                <p style="margin-left: 1rem; margin-right: 1rem; line-height: 2.5rem; height: 2.5rem; color: rgb(150,150,150);">No recent projects</p>
+            </div>
+            <div id="user-container">
+                <button id="pfp" class="smooth-shadow" onclick="userSettings()">
+                    <img src="./internalResources/images/default.png" id="profile-photo-image">
+                    <canvas id="user-canvas" height="56px" width="56px">
+
+                    </canvas>
+                </button>
+
+
             </div>
         </div>
         <script src="./javascripts/launcher/userInfo.js" async defer></script>

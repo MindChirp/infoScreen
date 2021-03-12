@@ -2,7 +2,7 @@ var appB = require("app-buttons");
 const { ipcMain } = require("electron");
 const { aboutMenuItem } = require("electron-util");
 const menuHandler = new Appmenu();
-
+console.log(document.getElementById("app-bar"))
 var appButtons = appB.appButtons(document.getElementById("app-bar"), true);
 appButtons.style.opacity = "0.7";
 var children = appButtons.childNodes;
@@ -153,8 +153,9 @@ const template = [
             },
             {
                 label: "More",
-                click: () => {alert("Opening more settings")},
-                disabled: true
+                click: () => {generalSettings()},
+                accelerator: "Ctrl+Alt+S",
+                disabled: false
             }
         ]
     },

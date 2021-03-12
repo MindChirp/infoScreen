@@ -77,11 +77,23 @@ document.addEventListener("keydown", function(e) {
 
     if(e.code == "Escape") {
         unselectAllCells();
+        //Unselect viewport stuff
+        var border = document.getElementsByClassName("resizing-border-container")
+        if(border) {
+            var x;
+            for(x of border) {
+                x.parentNode.removeChild(x);
+            }
+        }
     }
 
     if(e.code == "Delete") {
         //Delete files if there are any
         deleteFile(true, null, null);
+    }
+
+    if(e.code == "KeyL") {
+        updateFullscreenView();
     }
 
 

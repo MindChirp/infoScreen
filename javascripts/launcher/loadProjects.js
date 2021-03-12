@@ -42,15 +42,24 @@ function createList(arr) {
         txt.innerHTML = x;
         txt.setAttribute("style", `
             display: inline-block;
-        `)
-        el.appendChild(txt);
+        `);
+        el.state = "closed";
+        //el.setAttribute("onmouseenter", "fileList.hover(this)");
+        el.setAttribute("onclick", "fileList.click(this)");
+        //el.setAttribute("onmouseleave", "fileList.leave(this)");
 
-        el.setAttribute("onmouseenter", "fileList.hover(this)");
+        var desc = document.createElement("p");
+        desc.className = "description";
+        desc.innerHTML = "No description";
 
-        el.setAttribute("onmouseleave", "fileList.leave(this)");
-
+        var wr = document.createElement("div");
+        wr.className = "wrapper";
+        wr.appendChild(txt);
+        wr.appendChild(desc);
+        el.appendChild(wr);
     }
 
+    /*
     var hasVerticalScrollbar = holder.scrollHeight > holder.clientHeight;
     if(hasVerticalScrollbar) {
         holder.style.paddingRight = "0";
@@ -61,6 +70,7 @@ function createList(arr) {
         document.getElementById("list").style.width = "25.33rem";
 
     }
+*/
 }
 
 function loadInDevMode() {
@@ -212,11 +222,150 @@ var fileList = {
 
     },
 
+    click: function(el) {
+        var hasMenu = el.querySelector(".menu-box");
+        if(!hasMenu) {
+            setTimeout(()=>{
+                el.style.transition = "all 200ms ease-out";
+                el.style.margin = "1rem 0";
+                var menu = document.createElement("div");
+                menu.className = "menu-box smooth-shadow";
+                menu.style = `
+                background-color: var(--dark-secondary-button-color);
+                width: 80%;
+                margin: auto;
+                    overflow: hidden;
+                    height: 0;
+                    border-radius: 0.3rem;
+                    animation: slide-in-more-settings 300ms ease-in-out both;
+                    position: relative;
+                `;
+                el.state == "opened";
+                
+                el.appendChild(menu);
+                
+                var open = document.createElement("button");
+                var ico = document.createElement("i");
+                ico.className = "material-icons";
+                ico.innerHTML = "folder";
+                open.appendChild(ico);
+                infoOnHover(open, "Open project");
+                menu.appendChild(open);
+                open.style = `
+                display: inline-block;
+                height: 100%;
+                width: 33%;
+                float: left;
+                padding: 1rem;
+                background: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                `
+                ico.style = `
+                    color: var(--paragraph-color);
+                    font-size: 3rem;
+                `;
+
+                
+                open.onclick = () => {
+                    var fileName = el.fileName.toString();
+                    try {
+                        ipcRenderer.send("open-main-window", fileName);
+                        ipcRenderer.send("closeLauncher")
+                    } catch (error) {
+                        alert(error);
+                    }
+                }
+
+                var preview = document.createElement("button");
+                var ico = document.createElement("i");
+                ico.className = "material-icons";
+                ico.innerHTML = "remove_red_eye";
+                preview.appendChild(ico);
+                infoOnHover(preview, "Preview project");
+                menu.appendChild(preview);
+                preview.style = `
+                display: inline-block;
+                height: 100%;
+                width: 33%;
+                float: left;
+                padding: 1rem;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                outline: none;
+                `
+                ico.style = `
+                    color: var(--paragraph-color);
+                    font-size: 3rem;
+                `;
+                preview.onclick = (e) => {
+                    var fileName = el.fileName.toString();
+                    previewSlideshow(fileName);
+                }
+
+                var deleteFile = document.createElement("button");
+                var ico = document.createElement("i");
+                ico.className = "material-icons";
+                ico.innerHTML = "delete";
+                deleteFile.appendChild(ico);
+                infoOnHover(deleteFile, "Delete project");
+                menu.appendChild(deleteFile);
+                deleteFile.style = `
+                display: inline-block;
+                height: 100%;
+                width: 33%;
+                float: left;
+                padding: 1rem;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                outline: none;
+                `
+                ico.style = `
+                    color: var(--paragraph-color);
+                    font-size: 3rem;
+                `;
+
+                setTimeout(()=>{
+
+                    var title = el.querySelector(".wrapper");
+                    title.style.display = "none";
+                    
+                });
+
+            }, 100)
+
+        } else {
+            var menu = el.querySelector(".menu-box");
+            if(menu) {
+                removeFileMenu(menu);
+            }
+        }
+    },
+
     leave: function(el) {
         el.childNodes[1].parentNode.removeChild(el.childNodes[1]);
     },
+     
+
 
     delete: function(el) {
+
+    }
+}
+
+function removeFileMenu(el) {
+    if(el) {
+        el.style.animation = "slide-out-more-settings 100ms ease-out both";
+        setTimeout(()=>{
+            if(el.parentNode) {
+                el.parentNode.childNodes[0].style.display = "initial";
+                el.parentNode.style.margin = "0 0";
+                el.parentNode.removeChild(el);
+            }
+        }, 100)
 
     }
 }

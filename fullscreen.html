@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="./stylesheets/cfg.css">
+        <link rel="stylesheet" href="./stylesheets/fullscreen.css">
+        <link rel="stylesheet" href="./stylesheets/inputs.css">
+        <link rel="stylesheet" href="./stylesheets/viewport.css">
+        
+        <script src="./javascripts/editor/main.js"></script>   
+        <script src="./javascripts/editor/timeline.js"></script>  
+        <script src="./javascripts/editor/widget-executor.js"></script>   
+        <script src="./javascripts/fullscreen view/main.js"></script>
+        <script src="./javascripts/fullscreen view/renderer.js"></script>
+    </head>
+    <body style="background-color: black;">
+        <div id="app-bar-container">
+            <div id="app-bar" class="fullscreen">
+                <div class="app-bar-menu-container">
+                    <div class="icon">
+                        <img src="./internalResources/images/icon.png">
+                    </div>
+    
+                </div>
+                <div id="drag-region"></div>
+                <!--
+                <div id="app-bar-dropdown-menus">
+                    <div class="options" style="margin-left: 1rem;"><h1>File</h1></div>
+                    <div class="options"><h1>Help</h1></div>
+                    <div class="options"><h1>Contact</h1></div>
+                </div>-->
+            </div>
+        </div>
+
+
+        <div id="viewport">
+
+
+
+            
+        </div>
+
+
+        <div id="mid-positioner-text"><div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            <div class="text">It seems like there was an issue loading the content</div>
+        </div>
+
+            <script src="./javascripts/editor/menus.js"></script>
+            <script src="./javascripts/editor/app-bar.js"></script>
+
+
+            <script>     
+                window.onload = function () {                    
+                    //slide the app bar out of view (with a delay)
+                    setTimeout(() => {
+                        slideOutAppBar();
+                    }, 700);
+
+                    setUpWindow();
+
+
+                    document.body.meta = {
+                        playing: false,
+                        timestamp: "00:00",
+                        slideNumber: undefined,
+                        numberOfColumns: undefined
+                    }
+                }
+            </script>
+        </div>
+    </body>
+</html>
