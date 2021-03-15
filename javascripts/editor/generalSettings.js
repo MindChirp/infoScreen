@@ -1,4 +1,6 @@
-function moreSettings() {
+
+
+async function moreSettings() {
     var cont = document.createElement("div");
     
     var title = document.createElement("h1");
@@ -9,10 +11,25 @@ function moreSettings() {
         font-family: bahnschrift;
         font-weight: lighter;
         margin-top: 1rem;
-    `;
+        margin-bottom: 0rem;
+        `;
+
+
 
     cont.appendChild(title);
     
+    var subTitle = document.createElement("p");
+    subTitle.innerHTML = "Changes are only saved when pressing the back button";
+    subTitle.style = `
+        margin-top: 0;
+        font-weight: lighter;
+        opacity: 0.7;
+        color: var(--paragraph-color);
+        margin-bottom: 3rem;
+    `
+    cont.appendChild(subTitle);
+
+
     var dev = devSettings();
     cont.appendChild(dev);
 
@@ -31,7 +48,11 @@ function moreSettings() {
     cont.appendChild(usrAndOrg);
     setTimeout(()=> {
         extendDropDown(usrAndOrg);
-    }, 100)
+    }, 100);
+
+
+
+
     return cont;
 
 }
@@ -48,40 +69,75 @@ function extendDropDown(el) {
 
 var devSettings = () => {
     var collaps = dropdownMenu("Developer Settings");
-    collaps.style.width = "50%";
+    collaps.style.width = "90%";
 
     var menu = collaps.querySelector(".foldable-content").childNodes[0];
-    
+    menu.classList.add("devSettings");
     var devFeatures = tabInputs.checkBox("Enable experimental features");
+    devFeatures.getElementsByTagName("input")[0].setAttribute("name", "experimentalFeatures");
     menu.appendChild(devFeatures);
     
     var devMode = tabInputs.checkBox("Log extra information");
+    devMode.getElementsByTagName("input")[0].setAttribute("name", "logExtraInformation");
     menu.appendChild(devMode);
 
     var viewport = tabInputs.checkBox("Enable alternative rendering engine");
+    viewport.getElementsByTagName("label")[0].style.width = "fit-content";
+    viewport.getElementsByTagName("label")[0].style.display = "inline-block";
+    viewport.getElementsByTagName("input")[0].setAttribute("name", "enableAltRenderer");
+    viewport.getElementsByTagName("input")[0].disabled = true;
+    var cir = createInfoCircle(`Not ready for developer testing yet`);
+    viewport.appendChild(cir);
     menu.appendChild(viewport);
 
     var alternativeSaving = tabInputs.checkBox("Enable alternate saving system");
+    alternativeSaving.getElementsByTagName("input")[0].setAttribute("name", "enableAltSavingSystem");
+    alternativeSaving.getElementsByTagName("input")[0].disabled = true;
+    alternativeSaving.getElementsByTagName("label")[0].style.display = "inline-block";
+    var cir = createInfoCircle(`Not ready for developer testing yet`);
+    alternativeSaving.appendChild(cir);
     menu.appendChild(alternativeSaving);
 
     return collaps;
 }
 
+
+function setSettingsState(parent, name, value) {
+    var el = document.getElementsByName(name)[0];
+    var x;
+    if(!el) return;
+    var type = el.tagName;
+    switch(type.toLowerCase()) {
+        case "input":
+            var cat = el.getAttribute("type");
+            if(cat == "checkbox") {
+                el.checked = value;
+            }
+        break;
+    }
+}
+
+
+
 var updates = () => {
     var collaps = dropdownMenu("Updates");
-    collaps.style.width = "50%";
+    collaps.style.width = "90%";
     collaps.style.marginTop = "1rem";
 
     var menu = collaps.querySelector(".foldable-content").childNodes[0];
+    menu.classList.add("updates");
 
     var autoupdate = tabInputs.checkBox("Enable auto-updates");
+    autoupdate.getElementsByTagName("input")[0].setAttribute("name", "autoUpdates");
     menu.appendChild(autoupdate);
 
     var searchForUpdate = tabInputs.checkBox("Automatically search for updates");
+    searchForUpdate.getElementsByTagName("input")[0].setAttribute("name", "autoUpdateSearch");
     menu.appendChild(searchForUpdate);
 
-    var searchForUpdate = tabInputs.checkBox("Auto-restart after update");
-    menu.appendChild(searchForUpdate);
+    var restartForUpdate = tabInputs.checkBox("Auto-restart after update");
+    restartForUpdate.getElementsByTagName("input")[0].setAttribute("name", "autoRestartOnUpdate");
+    menu.appendChild(restartForUpdate);
 
     return collaps;
     
@@ -89,15 +145,18 @@ var updates = () => {
 
 var fileSettings = () => {
     var collaps = dropdownMenu("File");
-    collaps.style.width = "50%";
+    collaps.style.width = "90%";
     collaps.style.marginTop = "1rem";
 
     var menu = collaps.querySelector(".foldable-content").childNodes[0];
+    menu.classList.add("file");
 
     var overwriteCorrupt = tabInputs.checkBox("Overwrite corrupt files");
+    overwriteCorrupt.getElementsByTagName("input")[0].setAttribute("name", "overwriteCorruptFiles");
     menu.appendChild(overwriteCorrupt);
 
     var displayName = tabInputs.checkBox("Display file name in application bar");
+    displayName.getElementsByTagName("input")[0].setAttribute("name", "displayNameInAppBar");
     menu.appendChild(displayName);
 
     return collaps;
@@ -105,10 +164,11 @@ var fileSettings = () => {
 
 var userAndOrg = () => {
     var collaps = dropdownMenu("User and Organisation");
-    collaps.style.width = "50%";
+    collaps.style.width = "90%";
     collaps.style.marginTop = "1rem";
 
     var menu = collaps.querySelector(".foldable-content").childNodes[0];
+    menu.classList.add("usrAndOrg");
 
     var user = document.createElement("div");
     user.style = `

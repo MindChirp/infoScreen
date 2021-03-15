@@ -227,13 +227,12 @@ var fileList = {
         if(!hasMenu) {
             setTimeout(()=>{
                 el.style.transition = "all 200ms ease-out";
-                el.style.margin = "1rem 0";
                 var menu = document.createElement("div");
                 menu.className = "menu-box smooth-shadow";
                 menu.style = `
-                background-color: var(--dark-secondary-button-color);
-                width: 80%;
-                margin: auto;
+                    background-color: var(--dark-secondary-button-color);
+                    width: 80%;
+                    margin: auto;
                     overflow: hidden;
                     height: 0;
                     border-radius: 0.3rem;
@@ -253,10 +252,10 @@ var fileList = {
                 menu.appendChild(open);
                 open.style = `
                 display: inline-block;
-                height: 100%;
+                height: 2.5rem;
                 width: 33%;
                 float: left;
-                padding: 1rem;
+                padding: auto;
                 background: transparent;
                 border: none;
                 outline: none;
@@ -264,7 +263,8 @@ var fileList = {
                 `
                 ico.style = `
                     color: var(--paragraph-color);
-                    font-size: 3rem;
+                    font-size: 1.5rem;
+
                 `;
 
                 
@@ -287,10 +287,10 @@ var fileList = {
                 menu.appendChild(preview);
                 preview.style = `
                 display: inline-block;
-                height: 100%;
+                height: 2.5rem;
                 width: 33%;
                 float: left;
-                padding: 1rem;
+                padding: auto;
                 background: transparent;
                 border: none;
                 cursor: pointer;
@@ -298,7 +298,8 @@ var fileList = {
                 `
                 ico.style = `
                     color: var(--paragraph-color);
-                    font-size: 3rem;
+                    font-size: 1.5rem;
+
                 `;
                 preview.onclick = (e) => {
                     var fileName = el.fileName.toString();
@@ -314,10 +315,10 @@ var fileList = {
                 menu.appendChild(deleteFile);
                 deleteFile.style = `
                 display: inline-block;
-                height: 100%;
+                height: 2.5rem;
                 width: 33%;
                 float: left;
-                padding: 1rem;
+                padding: auto;
                 background: transparent;
                 border: none;
                 cursor: pointer;
@@ -325,7 +326,7 @@ var fileList = {
                 `
                 ico.style = `
                     color: var(--paragraph-color);
-                    font-size: 3rem;
+                    font-size: 1.5rem;
                 `;
 
                 setTimeout(()=>{
@@ -358,11 +359,10 @@ var fileList = {
 
 function removeFileMenu(el) {
     if(el) {
-        el.style.animation = "slide-out-more-settings 100ms ease-out both";
+        el.style.animation = "slide-out-more-settings 200ms ease-out both";
         setTimeout(()=>{
             if(el.parentNode) {
                 el.parentNode.childNodes[0].style.display = "initial";
-                el.parentNode.style.margin = "0 0";
                 el.parentNode.removeChild(el);
             }
         }, 100)

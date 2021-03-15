@@ -1,4 +1,3 @@
-const { DIR_TARGET } = require("electron-builder");
 
 function createWidget(type, config, rootEl) {
     var el = document.createElement("div");

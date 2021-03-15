@@ -52,10 +52,14 @@ document.addEventListener("keydown", function(e) {
     if(e.ctrlKey) {
         switch(e.code) {
             case "KeyZ":
-                undo();
+                if(!preventUndoOrRedo) {
+                    undo();
+                }
             break;
             case "KeyY":
-                redo();
+                if(!preventUndoOrRedo) {
+                    redo();
+                }
             break;
             case "KeyP":
                 //Properties shortcut

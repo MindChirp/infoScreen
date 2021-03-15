@@ -1,7 +1,7 @@
 
 function generalMenu() {
     var parent = menus.tools.setup("General");
-
+    console.log(settings);
     var openFiles = document.createElement("button");
     openFiles.setAttribute("style", `
         display: inline-block;

@@ -241,6 +241,7 @@ input::-webkit-inner-spin-button {
 
 #list .project-item {
   height: fit-content;
+  max-height: 2.5rem;
   min-height: 2.5rem;
   width: 100%;
   display: block;
@@ -275,7 +276,7 @@ input::-webkit-inner-spin-button {
   animation: fade-in 100ms ease-out;
 }
 
-
+/*
 #list .project-item .menu-box::before {
   height:2px;
   width: 6rem;
@@ -304,7 +305,7 @@ input::-webkit-inner-spin-button {
   border-radius: 0.5rem;
 
 }
-
+*/
 @keyframes top-menu-bar {
   0%{opacity: 0; transform: translate(-50%,0.5rem);}
   100%{opacity: 1; transform: translate(-50%,0);}
@@ -372,7 +373,7 @@ input::-webkit-inner-spin-button {
     padding: 0;
     width: fit-content;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: bottom;
     margin-left: 1.5rem;
 }
 
@@ -386,7 +387,7 @@ input::-webkit-inner-spin-button {
 }
 
 #user-container #pfp canvas {
-  position: relative;
+    position: relative;
     z-index: 4;
     animation: rotate 300ms ease-in-out;
     transition: all 400ms ease-in-out;
@@ -950,11 +951,13 @@ div.disabled {
 }
 
 @keyframes slide-in-more-settings {
-  0%{height: 0rem; opacity: 0; transform: scale(0.99);}
-  100%{height: 7rem; opacity: 1; transform: scale(1);}
+  0%{height: 2.5rem; opacity: 0; transform: scale(0.8) translateY(0%);}
+  50%{height: 2.5rem; opacity: 1; transform: scale(0.8) translateY(0%);}
+  60%{height: 2.5rem; opacity: 1; transform: scale(0.8) translateY(0%);}
+  100%{height: 2.5rem; opacity: 1; transform: scale(1) translateY(0%);}
 }
 
 @keyframes slide-out-more-settings {
-  0%{height: 7rem; opacity: 1;}
-  100%{height:0.5rem; opacity: 0.1;}
+  0%{height: 2.5rem; opacity: 1; transform: scale(1) translateY(0%);}
+  100%{height: 2.5rem; opacity: 0; transform: scale(0.8) translateY(0%);}
 }

@@ -500,7 +500,7 @@ function appendSubMenu(submenu) {
 
 
 
-function fullPageMenu(type) {     
+function fullPageMenu(type, listenForClose) {     
     var el = document.createElement("div");
     el.setAttribute("class", "menu");
     document.body.appendChild(el);
@@ -526,13 +526,15 @@ function fullPageMenu(type) {
     `);
 
     infoOnHover(back, "Go back");
+    if(listenForClose != false) {
 
-    back.addEventListener("click", function() {
-        el.parentNode.removeChild(el);
-        if(document.getElementsByClassName("information-popup")[0]) {
-            document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
-        }
-    })
+        back.addEventListener("click", function() {
+            el.parentNode.removeChild(el);
+            if(document.getElementsByClassName("information-popup")[0]) {
+                document.getElementsByClassName("information-popup")[0].parentNode.removeChild(document.getElementsByClassName("information-popup")[0])
+            }
+        })
+    }
 
     var ico = document.createElement("i");
     ico.setAttribute("class", "material-icons");
@@ -890,7 +892,7 @@ function aboutMenu() {
 
 
 
-function generalSettings() {
+async function generalSettings() {
     var menu;
     if(!document.getElementsByClassName("menu")[0]) {
         menu = fullPageMenu("user");
@@ -959,9 +961,88 @@ function generalSettings() {
         return el;
     }
 
-    var settings = moreSettings();
+    var settings = await moreSettings();
     if(menu) {
         menu.appendChild(settings);
+        
+        //Get the settings data
+        var settings;
+        var readFile = util.promisify(fs.readFile);
+
+        function getSettings() {
+            return readFile(settingsDirectory, "utf8")
+        }
+
+        await getSettings().then((data, error)=>{
+            if(error) throw error;
+            settings = JSON.parse(data);
+        })
+
+        var cats = Object.entries(settings);
+        var x;
+        for(x of cats) {
+            var name = x[0];
+            var el = menu.querySelector("." + name);
+
+            var entries = Object.entries(x[1]);
+            
+            var y;
+            for(y of entries) {
+                //Set the settings
+                setSettingsState(el, y[0], y[1]);
+            }
+        }
+        
+        var handleSettingsClose = (e) => {
+            var menu = e.target.closest(".menu");
+            var dropDowns = menu.getElementsByClassName("foldable-content");
+            var z;
+
+            var settings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
+
+            var holderObj = {
+
+            };
+
+            var cats = menu.getElementsByClassName("foldable-content");
+            var x;
+            for(x of cats) {
+                var catName = x.childNodes[0].getAttribute("class");
+                Object.defineProperty(holderObj, catName, {
+                    value: {},
+                    enumerable: true
+                });
+
+                
+
+                var inputs = x.childNodes;
+                var n;
+                for(n of inputs) {
+                    var children = n.childNodes;
+                    var k;
+                    for(k of children) {
+
+                        if(k.getElementsByTagName("input")[0]) {
+                            var el = k.getElementsByTagName("input")[0];
+                            var name = el.getAttribute("name");
+                            Object.defineProperty(holderObj[catName], name, {
+                                value: el.checked,
+                                enumerable: true
+                            })
+                        }
+                    }
+                }
+                
+            }
+
+            fs.writeFile(settingsDirectory, JSON.stringify(holderObj, null, 4),(err)=>{
+                if(err) throw err;
+            })
+
+
+        }
+
+        menu.querySelector(".back-button").addEventListener("click", handleSettingsClose);
     }
 
 

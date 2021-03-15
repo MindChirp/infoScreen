@@ -1,0 +1,18 @@
+{
+    "devSettings": {
+        "experimentalFeatures": true,
+        "logExtraInformation": false,
+        "enableAltRenderer": false,
+        "enableAltSavingSystem": false
+    },
+    "updates": {
+        "autoUpdates": true,
+        "autoUpdateSearch": true,
+        "autoRestartOnUpdate": false
+    },
+    "file": {
+        "overwriteCorruptFiles": false,
+        "displayNameInAppBar": true
+    },
+    "usrAndOrg": {}
+}

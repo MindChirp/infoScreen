@@ -122,6 +122,10 @@
         if(!onViewport) {
             //If the file is dropped in the timeline, append the file there
             el.appendChild(file);
+
+            //Inject the action to the undo clipboard
+            var clip = {type: "file", action: "add", config: file.config, connectedElement: file, parent: el};
+            undoClipboard.push(clip);
         } else {
             //If the file is dropped in the viewport, append the file to the timeline
             //Get an appropriate column
@@ -135,7 +139,10 @@
             for(x of rows) {
                 if(foundRow == false) {
                     if(!x.hasChildNodes()) {
-                        x.appendChild(file);                        
+                        x.appendChild(file);  
+                        //Inject the action to the undo clipboard
+                        var clip = {type: "file", action: "add", config: file.config, connectedElement: file, parent: x};
+                        undoClipboard.push(clip);                      
                         foundRow = true;
                     }
                 }
@@ -219,7 +226,6 @@
         settings.appendChild(i);    
         file.appendChild(settings);*/
         //^^ this was an unnescessary menu appended to every timeline element.
-
 
         //Get the path, name
         var fileInfo = JSON.parse(localStorage.getItem("dragCache"));

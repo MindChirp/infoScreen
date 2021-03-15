@@ -1,6 +1,6 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>Fullscreen view added</li>
+        <li>Functioning settings page</li>
     </ul>
         <br>
 
@@ -13,7 +13,7 @@
     <ul>
         <li>Bigger "your projects" list view in launcher</li>
         <li>Big action buttons when pressing a list entry in the list view</li>
-        
+        <li>Timeline file dragging animation change</li>
     </ul>
         <br>
 

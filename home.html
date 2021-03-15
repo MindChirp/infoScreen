@@ -231,6 +231,9 @@
             //Get the width and height of the timeline element to calculate the 
             //nescessary amount of rows and columns to cover the entire
             //element
+
+            genericStartupFunction();
+
             document.body.setAttribute("onresize", "calculateLayout()")
             calculateLayoutOnStartup();
             enableSelecting();
@@ -264,7 +267,7 @@
                 appendRipple(x);
             }
 
-
+            
 
             if(document.getElementById("blocking-loading-pane")) {
                 var introStr = "Loading";

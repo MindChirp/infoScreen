@@ -397,9 +397,10 @@ Replaced by a style in inputs.css
     box-sizing: border-box;
     overflow: hidden;
     pointer-events: none;
-    animation: fade-in 200ms ease-out;
+    animation: timeline-file-drag-start 100ms ease-out;
     box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.75);
 }
+
 
 
 #app-bar {
@@ -409,7 +410,7 @@ Replaced by a style in inputs.css
     display: grid;
     grid-template-columns: 20rem auto 150px;
     grid-template-rows: 100%;
-    background-color: var(--secondary-color);
+    background-color: transparent;
     z-index: 102;
 }
 
@@ -1800,4 +1801,7 @@ body .context-menu button:disabled:hover {
     border-radius: 0.25rem;
 }
 
-
+@keyframes timeline-file-drag-start {
+    0%{transform: scale(0.3) translate(-50%, -50%); opacity: 1;}
+    100%{transform: scale(1) translate(-50%, -50%); opacity: 1;}
+}

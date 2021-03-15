@@ -1,5 +1,22 @@
 const { remote, ipcRenderer } = require("electron");
+const { fstat } = require("fs-extra");
 const [yourBrowserWindow] = remote.BrowserWindow.getAllWindows();
+const util = require("util");
+var globalSettings;
+var settingsDirectory;
+var preventUndoOrRedo = false;
+
+
+function genericStartupFunction() {
+    if(isPackaged) {
+        settingsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "generalSettings.json");
+    } else {
+        settingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "generalSettings.json");
+    }
+    globalSettings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
+}
+
+
 yourBrowserWindow.on("blur", (e) => {
     removeCtxMenu("unfocus");
     var appBar = document.getElementById("app-bar");
@@ -619,6 +636,10 @@ function deleteFile(fromShortcut, el, event) {
                 var el = x.querySelector(".scrubber-element");
                 renderer.unrender(el);
                 removeTab(el);
+
+                var clip = {type: "file", action: "delete", config: el.config, connectedElement: el, parent: el.parentNode};
+                undoClipboard.push(clip);
+
                 el.parentNode.removeChild(el);
                 document.querySelector('#viewport > div.controls').style.opacity = "1";
                 document.querySelector('#viewport > div.controls').style.pointerEvents = "";
@@ -631,6 +652,10 @@ function deleteFile(fromShortcut, el, event) {
         //is selected. Fix it.
         document.querySelector('#viewport > div.controls').style.opacity = "1";
         document.querySelector('#viewport > div.controls').style.pointerEvents = "";
+
+        var clip = {type: "file", action: "delete", config: root.config, connectedElement: root, parent: root.parentNode};
+        undoClipboard.push(clip);
+
         root.parentNode.removeChild(root);
         setTimeout(function() {
             removeCtxMenu(event);
@@ -828,6 +853,7 @@ function sendConsoleWarn() {
             console.clear();
             console.log("%cStop!", "font-size: 3rem; color: red; text-stroke: 1px black;");
             console.log("%cThis is meant for developers only! Don't type anything stupid into the box below", "font-family: bahnschrift; font-size: 1rem;");
+            console.log("%cIf you know what you are doing, consider contributing to the project @ https://github.com/MindChirp/infoScreen", "font-family: bahnschrift; font-size: 1rem;");
         }, 10000)
     } else {
             console.log("%cDeveloper Console", "font-size: 3rem; color: red;   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;");

@@ -1,4 +1,3 @@
-const { silly } = require("electron-log");
 
 function clearIndicator() {
     setTimeout(() => {
@@ -229,8 +228,22 @@ function saveIndicator() {
 /////////////////////////////////////////////////
 
 function applyFileInfo(fileInfo) {
-    var title = fileInfo.meta.title;
-    //Apply the title to the app bar
-    document.getElementById("project-name").innerHTML = title;
-    document.body.projectConfig = {title: title, creator: fileInfo.meta.creator, created: fileInfo.meta.created, edited: fileInfo.meta.edited}
+        
+        var title = fileInfo.meta.title;
+        
+        if(globalSettings) {
+
+            //Globalsettings, as defined on the first few lines in main.js
+            if(globalSettings.file.displayNameInAppBar) {
+                document.getElementById("project-name").innerHTML = title;
+            } else {
+                document.getElementById("project-name").innerHTML = "InfoScreen - Editing";
+            }
+        } else {
+            document.getElementById("project-name").innerHTML = title + " - Could not load settings";
+
+        }
+        
+        //Apply the title to the app bar
+        document.body.projectConfig = {title: title, creator: fileInfo.meta.creator, created: fileInfo.meta.created, edited: fileInfo.meta.edited}
 }
