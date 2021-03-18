@@ -22,6 +22,17 @@ function liveEdit() {
     p.style.color = "var(--paragraph-color)";
     wrapper.appendChild(p);
 
+    var p = document.createElement("p");
+    p.innerHTML = "There are no active slideshows";
+    p.style = `
+        color: var(--paragraph-color);
+        display: block;
+        line-height: 0;
+        opacity: 0.3;
+    `;
+    wrapper.appendChild(p);
+
+    /*
     var carousel = document.createElement("div");
     carousel.setAttribute("style", `
         height: 9rem;
@@ -43,5 +54,5 @@ function liveEdit() {
         el.style.scrollSnapAlign = "start";
         carousel.appendChild(el);
     }
-
+*/
 }

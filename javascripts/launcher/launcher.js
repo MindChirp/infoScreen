@@ -40,7 +40,7 @@ var firstTime = null;
 
 window.onload = function() {
     //load all the projects to the plrojects list
-    initializeProjectList()
+    initializeProjectList();
 
     const htmlEl = document.getElementsByTagName('html')[0];
 
@@ -70,7 +70,15 @@ window.onload = function() {
         */
     }
         if(signedIn == true) {
+
+            //Check for dev mode
             var ext = localStorage.getItem("pfpExtension");
+            var dev = JSON.parse(localStorage.getItem("userInfo"))[1][0].developer;
+            if(dev == 1) {
+                document.body.developerMode = true;
+                enableDevMode();
+            }
+
             var pos = JSON.parse(localStorage.getItem("pfpPos"));
             var Xpos = pos[0];
             var Ypos = pos[1];
@@ -393,6 +401,7 @@ function userSettings() {
             left: 50%;
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
+            animation: fade-in 300ms ease-out 0.2s both;
         `)
 
 
@@ -404,8 +413,8 @@ function userSettings() {
         usrName.setAttribute("placeholder", "Email");
         usrName.style.backgroundColor = "var(--main-button-color)";
         usrName.style.color = "var(--title-color)";
-        //TEMPORARY
-        usrName.value = "frikk44@gmail.com";
+
+
         setTimeout(function() {
             usrName.focus();
 
@@ -415,8 +424,8 @@ function userSettings() {
         pswrd.setAttribute("placeholder", "Password");
         pswrd.style.backgroundColor = "var(--main-button-color)";
         pswrd.style.color = "var(--paragraph-color)";
-        //TEMPORARY
-        pswrd.value = "frikkern123";
+
+
         form.appendChild(usrName);
         form.appendChild(pswrd);
 
@@ -436,7 +445,7 @@ function userSettings() {
             color: var(--paragraph-color);
         `);
         var p = pEl();
-        p.innerHTML = "Sign in ";
+        p.innerHTML = "Sign in";
         p.setAttribute("style", `
             line-height: 2.3rem;
             color: var(--paragraph-color);
@@ -472,9 +481,10 @@ function userSettings() {
         cont.appendChild(devSignIn);
         devSignIn.setAttribute("onclick", "developerSignIn()");
 
-        logIn.addEventListener("click", function(event) {
-            event.preventDefault(); 
 
+
+        var signInClient = (e)=> {
+            e.preventDefault(); 
             if(pswrd.value.trim().length == 0 || usrName.value.trim().length == 0) {
                 logIn.style.animation = "wrong-shake 100ms 3";
                 setTimeout(function() {
@@ -496,7 +506,6 @@ function userSettings() {
             logIn.innerHTML = "";
             logIn.appendChild(wheel);
             logIn.disabled = true;
-            
 
             //Make server request
 
@@ -538,7 +547,17 @@ function userSettings() {
 
                                 //Update the main launcher screen to reflect the localStorage values
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
-                                console.log(JSON.stringify(dat));
+
+
+                                //If the user is a developer, enable the developer mode!
+                                if(dat[1][0].developer == 1) {
+                                    document.body.developerMode = true;
+                                    enableDevMode();
+                                } else {
+                                    document.body.developerMode = false;
+                                }
+
+
                                 userScreen(dat, header, true);
                                 changeState();
 
@@ -550,12 +569,45 @@ function userSettings() {
                         loginForm.style.animation = "wrong-shake 100ms 3";
                     }
 
+                } else {
+                    //The request didn't complete successfully.
+                    logIn.style = `
+                        width: 6.7rem;
+                        height: 2.3rem;
+                        transition: all 300ms ease-in-out;
+                        display: inline-block;
+                        padding: 0 1rem;
+                        overflow: hidden;
+                    `;
+                    logIn.innerHTML = "";
+
+                    var ico = document.createElement("i");
+                    ico.className = "material-icons";
+                    ico.innerHTML = "login";
+                    logIn.appendChild(ico)
+                    ico.style = `
+                        line-height: 2.3rem;
+                        color: var(--paragraph-color);
+                    `
+
+
+                    var p = document.createElement("p");
+                    p.innerHTML = "Sign in";
+                    logIn.appendChild(p);
+                    p.style = `  
+                        line-height: 2.3rem;
+                        color: var(--paragraph-color);
+                        margin-left: 0.5rem;
+                    `;
+                    logIn.disabled = false;
                 }
             }
 
 
-        })
+        }
 
+
+        logIn.addEventListener("click", signInClient);
 
         register.addEventListener("click", function(e) {
             var form = document.createElement("form");
@@ -600,6 +652,41 @@ function userSettings() {
                 line-height: 2.3rem;
                 color: var(--paragraph-color);
             `);
+
+
+            var cross = document.createElement("button");
+            cross.style = `
+                background: none;
+                border: none;
+                height: 2.3rem;
+                width: fit-content;
+                line-height: 2.3rem;
+                vertical-align: top;
+                color: white;
+                margin-left: 0.5rem;
+                cursor: pointer;
+                outline: none;
+            `;
+
+            //infoOnHover(cross, "Go back");
+            var crossIcon = document.createElement("i");
+            crossIcon.innerHTML = "close";
+            crossIcon.className = "material-icons";
+            cross.appendChild(crossIcon);
+            crossIcon.style = `
+                line-height: 2.3rem;
+                font-size: 1.3rem;
+                opacity: 0.5;
+            `;
+
+            cross.addEventListener("click", (e)=>{
+                e.preventDefault();
+                var parent = e.target.closest(".login-form");
+                parent.parentNode.removeChild(parent);
+                document.getElementsByClassName("login-form")[0].style.display = "initial";
+                
+            })
+
             var text = pEl();
             text.innerHTML = "Register ";
             text.setAttribute("style", `
@@ -610,11 +697,72 @@ function userSettings() {
             register.appendChild(ico);
             register.appendChild(text); 
             
-            register.addEventListener("click", function(e) {
+            register.addEventListener("click", function(e) {        
                 e.preventDefault();
 
-                if(pass.value == pass1.value) {
+                if(pass.value == pass1.value && pass.value.trim().length > 6) {
                     //Do some stuff with the server to create a new user...
+
+
+                    var usrName = name.value;
+                    var mail = email.value;
+                    var password = pass.value;
+                    
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "https://shrouded-wave-54128.herokuapp.com/register");
+
+                    var formData = new FormData();
+                    formData.append("user", usrName);
+                    formData.append("password", password);
+                    formData.append("email", mail);
+                    
+                    xhr.send(formData);
+
+                    xhr.onreadystatechange = function() {
+                        if(this.status == 200 && this.readyState == 4) {
+                            //Successful request
+                            var dat = JSON.parse(this.responseText);
+                            console.log(dat);
+                            if(dat[0] == "OK") {
+                                //All is good :)
+
+                                //Make the user sign in
+                                var parent = e.target.closest(".login-form");
+                                parent.parentNode.removeChild(parent);
+                                document.getElementsByClassName("login-form")[0].style.display = "initial";
+                            } else {
+                                console.log(dat);
+                            }
+                        }
+                    }
+
+
+                } else {
+                    if(!document.getElementById("warning")) {
+
+                        var t = document.createElement("p");
+                        t.id ="warning";
+                        t.innerHTML = "The passwords must be matching, and have a length of more than 6 characters.";
+                        t.style = `
+                            animation: fade-in 200ms ease-out both;
+                            line-height: 1rem;
+                            width: fit-content;
+                            max-width: 30rem;
+                            text-align: center;
+                            position: absolute;
+                            bottom: 50%;
+                            left: 50%;
+                            background: var(--secondary-color);
+                            padding: 1rem;
+                            border-radius: 0.25rem;
+                            transform: translate(-50%, -50%);
+                        `;
+                        t.className = "smooth-shadow";
+                        document.getElementById("login-container").appendChild(t);
+                        setTimeout(()=>{
+                            t.parentNode.removeChild(t);
+                        }, 5000);
+                    }
                 }
 
             })
@@ -629,14 +777,18 @@ function userSettings() {
             form.appendChild(p3);
             form.appendChild(pass1);
             form.appendChild(register);
+            form.appendChild(cross);
             var parent = document.getElementsByClassName("login-form")[0].parentNode;
-            document.getElementsByClassName("login-form")[0].parentNode.removeChild(document.getElementsByClassName("login-form")[0])
+            
+            document.getElementsByClassName("login-form")[0].style.display = "none";
+            //document.getElementsByClassName("login-form")[0].parentNode.removeChild(document.getElementsByClassName("login-form")[0])
 
 
 
 
 
             parent.appendChild(form);
+            form.style.animation = "fade-in 300ms ease-out 0.1s both";
         })
 
         field.appendChild(form);
@@ -746,7 +898,7 @@ function userScreen(info, header, signIn) {
         h1.innerHTML = "You're not signed in";
     } else {
         if(info) {
-            h1.innerHTML = info[1][0].name
+            h1.innerHTML = info[1][0].name;
         }
     }
     h1.setAttribute("style", `
@@ -1370,4 +1522,33 @@ function showChangeLog() {
 
 if(!isPackaged) {
     showChangeLog();
+}
+
+function enableDevMode() {
+
+    var startDevving = () => {
+        document.getElementById("developer-start").style.display = "initial";
+        var p = document.createElement("p");
+        p.style = `
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            margin: 0;
+            height: fit-content;
+            padding: 0.5rem;
+            line-height: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 0.25rem;
+        `;
+        p.innerHTML = "DEVELOPER MODE";
+        document.body.appendChild(p);
+    }
+
+    if(document.body.developerMode) {
+        startDevving();
+    } else {
+        var error = new Error("Cannot start developer mode when the user isn't a developer");
+        console.log(error);
+    }
+
 }

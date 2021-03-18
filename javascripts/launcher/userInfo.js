@@ -29,7 +29,7 @@ function userInfo(parent) {
     var el = textCont("License", "Standard (Developer/Tester)");
     wrapper.appendChild(el)
 
-    var el = textCont("First Seen", userData.creationDate);
+    var el = textCont("First Seen", userData.date);
     wrapper.appendChild(el)
 
     /*var pass =  userData.password;
