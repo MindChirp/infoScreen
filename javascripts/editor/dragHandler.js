@@ -160,9 +160,9 @@
             opacity: "1", 
             shadowMultiplier: 0, 
             blur: 0, 
-            position: [10 + "px",10 + "px"], 
+            position: [1 + "%", 1 + "%"], 
             edgeAnchors: {x: "left", y: "top"},
-            size: {height: "30%", width: "200px"}, 
+            size: {height: "30%", width: "30%"}, 
             display: true, 
             backgroundColor: "#ffffff",
             backgroundOpacity: "FF",
@@ -190,7 +190,7 @@
                     }
             }, 
             sizeType: 0,
-            keepAspectRatio: true
+            keepAspectRatio: false
         };
 
 

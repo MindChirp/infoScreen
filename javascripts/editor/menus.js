@@ -1,5 +1,6 @@
         const { EALREADY } = require("constants");
 const fs = require("fs");
+const { kill } = require("process");
 
 
 //Code for the effects ribbon-menu
@@ -1047,4 +1048,69 @@ async function generalSettings() {
 
 
 
+}
+
+
+function modalWindow(title, p, icon) {
+    return new Promise(resolve=>{
+
+        var el = document.createElement("div");
+        el.id="fp-modal";
+        
+        var bg = document.createElement("div");
+        bg.className = "background";
+        bg.addEventListener("click", (e)=>{
+            killModal();
+        })
+        var cont = document.createElement("div");
+        cont.className = "foreground";
+        
+        el.appendChild(bg);
+        el.appendChild(cont);
+
+        if(icon) {
+            var ico = document.createElement("i");
+            ico.className = "material-icons icon";
+            ico.innerHTML = icon;
+            cont.appendChild(ico);
+            cont.style.padding = "0.5rem";
+        }
+        var t = document.createElement("p");
+        t.innerHTML = title;
+        t.className = "title";
+        
+        var para = document.createElement("p");
+        para.innerHTML = p;
+        
+        cont.appendChild(t);
+        cont.appendChild(para);
+        
+        document.body.appendChild(el);
+
+        var buttCont = document.createElement("div");
+        buttCont.className = "buttons-container";
+        cont.appendChild(buttCont);
+
+        //Create a function to gracefully delete the modal window
+        buttCont.kill = ()=> {
+            killModal();
+        }
+
+        var killModal = ()=>{
+            var prnt = el;
+            prnt.style.animation = "";
+            var newEl = el.cloneNode(true);
+            prnt.parentNode.replaceChild(newEl, prnt);
+            newEl.querySelector(".background").style.animation = "fade-out 150ms ease-in-out";
+            newEl.querySelector(".background").style.animationFillMode = "both";
+            newEl.style.animation = "fly-out 300ms ease-in-out";
+
+            setTimeout(()=>{
+                newEl.parentNode.removeChild(newEl);
+            }, 250)
+        }
+
+        //Resolve the beautiful promise <3 (Yeah i like the name too :P)
+        resolve(buttCont);
+    });
 }

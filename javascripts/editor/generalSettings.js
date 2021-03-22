@@ -1,5 +1,3 @@
-
-
 async function moreSettings() {
     var cont = document.createElement("div");
     
@@ -37,18 +35,18 @@ async function moreSettings() {
     cont.appendChild(update);
     setTimeout(()=> {
         extendDropDown(update);
-    }, 100)
+    }, 200)
 
     var file = fileSettings();
     cont.appendChild(file);
     setTimeout(()=> {
         extendDropDown(file);
-    }, 100)
+    }, 200)
     var usrAndOrg = userAndOrg();
     cont.appendChild(usrAndOrg);
     setTimeout(()=> {
         extendDropDown(usrAndOrg);
-    }, 100);
+    }, 200);
 
 
 
@@ -192,22 +190,27 @@ var userAndOrg = () => {
         border-radius: 100%;
         background-color: var(--main-bg-color);
         display: inline-block;
+        overflow: hidden;
     `;
     user.appendChild(pfp);
 
-    var ico = document.createElement("i");
-    ico.className = "material-icons";
-    ico.innerHTML = "person_outline";
-    pfp.appendChild(ico);
-    ico.style = `
-        line-height: 10rem;
+    var img = document.createElement("img");
+
+    var path = require("path");
+
+    var path = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "pfpThumb.json");
+    
+    fs.readFile(path, (err, data) => {
+        if(err) throw err;
+        img.src = JSON.parse(data).data;
+    })
+
+    img.style = `
+        height: 100%;
         width: 100%;
-        text-align: center;
-        color: var(--title-color);
-        font-size: 7rem;
-        opacity: 0.8;
-        font-weight: lighter;
-    `;
+        transform: scale(1.05);
+    `
+    pfp.appendChild(img);
 
     var userDat = JSON.parse(localStorage.getItem("userInfo"))[1][0]
     var userName = userDat.name;
@@ -277,6 +280,46 @@ var userAndOrg = () => {
     signOut.innerHTML = "Sign Out";
     signOut.className = "fd-button important smooth-shadow";
     act.querySelector(".content").appendChild(signOut);
+    signOut.addEventListener("click", async ()=>{
+        var modal = await modalWindow("This will sign you out and open the launcher without saving.", "This action cannot be undone. Are you sure?", "error");
+        var ok = document.createElement("button");
+        ok.innerHTML = "Yes";
+        modal.appendChild(ok);
+        ok.addEventListener("click", ()=>{
+            //Sign out of the program 
+            signOutProgram();
+        });
+
+        var no = document.createElement("button");
+        no.innerHTML = "Cancel";
+        no.className = "important";
+        modal.appendChild(no);
+        no.addEventListener("click", ()=>{
+            modal.kill();
+        })
+    });
+
+
+
+
+    var changeMail = document.createElement("button");
+    changeMail.innerHTML = "Change email";
+    changeMail.style.marginLeft = "1rem";
+    changeMail.className = "fd-button important smooth-shadow";
+    act.querySelector(".content").appendChild(changeMail);
+
+    var changePassword = document.createElement("button");
+    changePassword.innerHTML = "Change password";
+    changePassword.style.marginLeft = "1rem";
+    changePassword.className = "fd-button important smooth-shadow";
+    act.querySelector(".content").appendChild(changePassword);
+
+    var changeName = document.createElement("button");
+    changeName.innerHTML = "Change name";
+    changeName.style.marginLeft = "1rem";
+    changeName.className = "fd-button important smooth-shadow";
+    act.querySelector(".content").appendChild(changeName);
+
 
     var org = section("Organisation")
 

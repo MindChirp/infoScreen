@@ -1,7 +1,3 @@
-    <h2 style="margin: 0; color: red;">You cannot sign in with the current version. Install the new update now.</h2>
-    <br>
-    <br>
-    
     <h2 style="margin: 0">New features</h2>
     <ul>
         <li>Functioning settings page</li>
@@ -11,6 +7,7 @@
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
         <li>Fixed program freeze and error popup when pressing play after closing fullscreen view</li>
+        <li>Moving element with arrows in viewport is buggy</li>
     </ul>
         <br>
     <h2 style="margin: 0">Changes</h2>
@@ -29,7 +26,6 @@
         <li>Poor video rendering performance <div class="info-circle" metaMessage="A rendering engine update/improvement is under development">?</div></li>
         <li>Special characters in a slideshow is incorrectly formatted</li>
         <li>Shift dragging file in timeline causes viewport blackout</li>
-        <li>Moving element with arrows in viewport is buggy</li>
         <li>The program is hijacked by hyperlinks</li>
         <li>For closed issues, visit <a href="https://github.com/MindChirp/infoScreen/issues">github</a></li>
     </ul>

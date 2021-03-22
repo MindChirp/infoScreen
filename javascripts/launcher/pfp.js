@@ -156,6 +156,53 @@ function profilePhoto(parent) {
                     }
 
                     img.src = imgPath;
+
+                    function call() {
+
+                        setTimeout(()=>{
+                            
+                            const htmlCanv = require("html2canvas")
+                            htmlCanv(document.querySelector("#pfp")).then(canvas => {
+
+                               /* document.body.appendChild(canvas);
+                                canvas.style = `
+                                    height: 50%;
+                                    width: auto;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                    z-index: 1000;
+                                `*/
+                                var data = canvas.toDataURL();
+                                //Write this file to the profilePics folder
+                                var imgPath;
+                                console.log(data);
+                                if(isPackaged) {
+                                    imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "pfpThumb.json");
+                                } else {
+                                    imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "pfpThumb.json");
+                    
+                                }
+                                
+                                var obj = {
+                                    data: data
+                                }
+                    
+                                fs.writeFile(imgPath, JSON.stringify(obj), "utf8", (err) =>{
+                                    if(err) throw err;
+                                    console.log("Saved the thumb image");
+                                });
+                            });
+                            
+                        }, 300);
+                        
+                        
+                    }
+                    
+                    call();
+
+
                     img.style.animation = "fade-in 300ms ease-in-out";
                     changeState();
                     img.style.height = "100%";
@@ -349,6 +396,51 @@ function profilePhoto(parent) {
                 var newPfpImage = document.getElementsByClassName("profile-header")[0].querySelector("#pfp").getElementsByTagName("img")[0];
                 newPfpImage.style.animationFillMode = "none"; //Need to disable animation-fill-mode. If not, the pfp cannot be repositioned (because animation-fill-mode: both; prevents it.)
                 newPfpImage.style.transform = "translate(" + Xpos + "%,"+ Ypos + "%) scale("+size+")";
+            
+                function call() {
+
+                    setTimeout(()=>{
+                        
+                        const htmlCanv = require("html2canvas")
+                        htmlCanv(document.querySelector("#pfp")).then(canvas => {
+
+                           /* document.body.appendChild(canvas);
+                            canvas.style = `
+                                height: 50%;
+                                width: auto;
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                z-index: 1000;
+                            `*/
+                            var data = canvas.toDataURL();
+                            //Write this file to the profilePics folder
+                            var imgPath;
+                            console.log(data);
+                            if(isPackaged) {
+                                imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "pfpThumb.json");
+                            } else {
+                                imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "pfpThumb.json");
+                
+                            }
+                            
+                            var obj = {
+                                data: data
+                            }
+                
+                            fs.writeFile(imgPath, JSON.stringify(obj), "utf8", (err) =>{
+                                if(err) throw err;
+                                console.log("Saved the thumb image");
+                            });
+                        });
+                        
+                    }, 300);
+                    
+                    
+                }
+                call();
+            
             })
 
 

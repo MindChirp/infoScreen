@@ -1,6 +1,6 @@
 {
   "name": "infoscreen",
-  "version": "0.1.71",
+  "version": "0.1.72",
   "description": "Infoscreen program",
   "main": "boot.js",
   "dependencies": {
@@ -17,6 +17,7 @@
     "electron-util": "^0.14.2",
     "fs": "0.0.1-security",
     "fs-extra": "^9.0.1",
+    "html2canvas": "^1.0.0-rc.7",
     "node-zip": "^1.1.1"
   },
   "devDependencies": {

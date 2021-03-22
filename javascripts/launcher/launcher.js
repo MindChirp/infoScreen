@@ -1,9 +1,10 @@
 const { createWriteStream } = require("fs");
-const { SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION } = require("constants");
 const { profile, exception } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
-const { isPackaged } = require("electron-is-packaged")
+const { isPackaged } = require("electron-is-packaged");
+const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
+
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
     devButton.parentNode.removeChild(devButton);
@@ -11,6 +12,7 @@ if(env != "development") {
 
 const ipc = require("electron").ipcRenderer;
 const { format } = require("path");
+const { resolve } = require("path");
 function launchProgram() {
     var val = ipc.sendSync("open-main-window", {developerLaunch: true});
     if(val) {
@@ -511,7 +513,7 @@ function userSettings() {
 
             var xhr = new XMLHttpRequest();
             //xhr.open("POST", "http://80.213.230.181:3000/auth");
-            xhr.open("POST", "https://shrouded-wave-54128.herokuapp.com/auth");
+            xhr.open("POST", serverAddress + "/auth");
             
             var pass = pswrd.value;
             var usrname = usrName.value;
@@ -564,9 +566,12 @@ function userSettings() {
                             }, 300)
 
                         }, 500);
-                    } else {
+                    } else if(dat[0] == "INCORRECT") {
                         var loginForm = document.getElementsByClassName("login-form")[0];
                         loginForm.style.animation = "wrong-shake 100ms 3";
+                    } else if(dat[0] == "USER ALREADY SIGNED IN") {
+                        alert("Whoah, slow down. The request has been cancelled.");
+                        return;
                     }
 
                 } else {
@@ -978,7 +983,16 @@ function userScreen(info, header, signIn) {
     aboutButt.innerHTML = "About";
     aboutButt.addEventListener("click", function() {
         about(content);
-    })
+    });
+
+    var feedBackLog;
+    if(document.body.developerMode) {
+        feedBackLog = createSettingsButton();
+        feedBackLog.innerHTML = "Feedback log";
+        feedBackLog.addEventListener("click", ()=>{
+            fetchFeedBackLog(content);
+        });
+    }
     content.appendChild(signOut);
     content.appendChild(changePfp);
     content.appendChild(subscription);
@@ -988,6 +1002,9 @@ function userScreen(info, header, signIn) {
     content.appendChild(privacy);
     content.appendChild(themes);
     content.appendChild(aboutButt);
+    if(feedBackLog) {
+        content.appendChild(feedBackLog);
+    }
 }
 
 
@@ -1551,4 +1568,141 @@ function enableDevMode() {
         console.log(error);
     }
 
+}
+
+function fetchFeedBackLog(parent){
+
+
+    //Create the menu in the launcher
+    if(document.getElementById("settings-wrapper")) {
+        var el = document.getElementById("settings-wrapper");
+        if(el.getAttribute("name") == "feedback-log") {
+            return;
+        }
+        el.parentNode.removeChild(el);
+    }
+    
+    
+    if(!document.getElementById("divider-line")) {
+        var div = divider();
+        parent.appendChild(div);
+    }
+    
+    
+    var wrapper = document.createElement("div");
+    wrapper.setAttribute("id", "settings-wrapper");
+    wrapper.setAttribute("name", "feedback-log");
+    
+    parent.appendChild(wrapper);
+    
+    //Create the list
+    var box = document.createElement("div");
+    box.style = `
+        height: fit-content;
+        min-height: 7rem;
+        width: 70%;
+        margin: auto;
+        background-color: var(--secondary-button-color);
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        position: relative;
+    `;
+    box.className = "feedback-list";
+
+    var loaderCont = document.createElement("div");
+    loaderCont.style = `
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.7);
+        height: 5rem;
+        width: 5rem;
+    `;
+
+    var loader = loaderWheel();
+    loader.style.verticalAlign = "top";
+    loaderCont.appendChild(loader);
+    box.appendChild(loaderCont);    
+
+    wrapper.appendChild(box);
+
+    //Reach out to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", serverAddress + "/feedBackLogs");
+    xhr.send();
+    xhr.onreadystatechange = async function() {
+        if(this.readyState == 4 && this.status == 200) {
+            //Successful request
+            console.log("OK")
+            var res;
+            try {
+                res = JSON.parse(this.responseText);
+            } catch (error) {
+
+            }
+            console.log(res);
+            loaderCont.style.animation = "fade-out 200ms ease-in-out";
+            setTimeout(()=>{
+                try {
+                    loaderCont.parentNode.removeChild(loaderCont);
+                } catch (error) {
+                    
+                }
+                
+                var entries = res[1];
+                var x;
+                
+                for(x of entries) {
+                    var el = createFeedbackEntry(x.subject, x.email, x.body);
+                    box.appendChild(el);
+                }
+
+
+            }, 200);
+        } else if (this.readyState == 4 && this.status != 200){
+            var res = JSON.parse(this.responseText);
+            loaderCont.style.animation = "fade-out 200ms ease-in-out";
+            var x = await sleep(200)
+            try {
+                loaderCont.parentNode.removeChild(loaderCont);
+            } catch (error) {
+                
+            }
+                        
+            var p = document.createElement("p");
+            p.innerHTML = res[0] + ": " + res[1];
+
+            box.appendChild(p);
+        }
+    }
+}
+
+function createFeedbackEntry(title, email, body) {
+    var el = document.createElement("div");
+    el.className = "entry";
+    var t = document.createElement("p");
+    t.className = "title";
+    t.innerHTML = title;
+
+    var e = document.createElement("p");
+    e.className = "email";
+    e.innerHTML = email;
+
+    var b = document.createElement("p");
+    b.className = "body";
+    b.innerHTML = body;
+
+    el.appendChild(t);
+    el.appendChild(e);
+    el.appendChild(b);
+
+    return el;
+}
+
+function sleep(interval) {
+    return new Promise (resolve=> {
+        setTimeout(()=>{
+            resolve("yes");
+        }, interval);
+    });
 }

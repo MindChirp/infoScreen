@@ -89,6 +89,15 @@ document.addEventListener("keydown", function(e) {
                 x.parentNode.removeChild(x);
             }
         }
+
+        //Try to close all menus
+        var menus = document.getElementsByClassName("menu");
+        if(menus[0]) {
+            var x;
+            for(x of menus) {
+                x.parentNode.removeChild(x);
+            }
+        }
     }
 
     if(e.code == "Delete") {

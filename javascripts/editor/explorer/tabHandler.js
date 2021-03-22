@@ -522,7 +522,7 @@ function openTab(el) {
             el.parentNode.removeChild(el);
         }
 
-            //Get the sizing and transform properties of the element
+        //Get the sizing and transform properties of the element
         var regexN = /[0-9]/g;
         var regexC = /[^\d.-]/g;
 

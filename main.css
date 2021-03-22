@@ -38,6 +38,7 @@ html {
     --slider-disabled-color: #a3ceff;
     --dark-shade: rgb(8,8,8);
     --light-shade: rgb(150, 150, 150);
+    font-size: 16px;
   }
 /*
   :root {
@@ -65,7 +66,6 @@ html {
     100%{height: 20rem; width: 20rem; opacity: 0;}
   }
   
-
 #project-name {
     position: absolute;
     top: 0.2rem;
@@ -208,6 +208,145 @@ html {
     }
   }
   
+#fp-modal {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: fade-in 200ms ease-out;
+    z-index: 1000;
+    animation-fill-mode: both;
+    overflow: hidden;
+}
+
+#fp-modal .background {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+
+#fp-modal .foreground {
+    height: fit-content;
+    min-height: 10rem;
+    width: fit-content;
+    min-width: 30rem;
+    max-width: 50rem;
+    background-color: var(--main-bg-color);
+    border-radius: 0.25rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    box-sizing: border-box;
+}
+
+#fp-modal .foreground p:not(.title) {
+    margin: 0.5rem 0 0 0;
+    font-weight: lighter;
+    opacity: 0.6;
+
+}
+
+#fp-modal .foreground .icon {
+    font-size: 3rem;
+    height: fit-content;
+    display: block;
+    width: fit-content;
+    position: relative;
+    z-index: 1000;
+    margin-bottom: 0.5rem;
+    transition: 250ms all cubic-bezier(0.42, 0, 0.44, 1.51);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+#fp-modal .foreground .icon:active::after {
+    animation: punch-icon 250ms cubic-bezier(0.42, 0, 0.44, 1.51);
+    animation-fill-mode: both;
+}
+
+@keyframes fly-out {
+    100%{transform: scale(0); opacity: 0;}
+}
+
+@keyframes punch-icon {
+    50%{transform: scale(1)}
+    100%{transform: scale(1.4)}
+}
+
+#fp-modal .foreground .icon:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+#fp-modal .foreground .icon::after {
+    background-color: var(--secondary-button-color);
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 100%;
+    transform: scale(1.1);
+    content: "";
+    z-index: -1;
+    transition: all 250ms cubic-bezier(0.42, 0, 0.44, 1.51);
+}
+
+#fp-modal .foreground .icon:hover::after {
+    transform: scale(1.4);
+    box-shadow: 0px 10px 21px -5px rgba(0,0,0,0.75);
+}
+
+#fp-modal .foreground .title {
+    font-weight: lighter;
+    margin: 0;
+}
+
+#fp-modal .foreground .buttons-container {
+    position: relative;
+    float: right;
+    margin-top: 1rem;
+    height: fit-content;
+    width: fit-content;
+}
+
+#fp-modal .foreground .buttons-container button {
+    height: fit-content;
+    padding: 0.5rem 1.5rem;
+    width: fit-content;
+    background-color: var(--secondary-button-color);
+    border-radius: 0.25rem;
+    border: none;
+    color: var(--paragraph-color);
+    margin-right: 1rem;
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    font-family: bahnschrift;
+    opacity: 0.7;
+    transition: 200ms all cubic-bezier(0.42, 0, 0.44, 1.51);
+    line-height: 1em;
+    outline: none;
+    letter-spacing: 0.1em;
+}
+
+#fp-modal .foreground .buttons-container button:hover {
+    opacity: 1;
+    background-color: var(--dark-shade);
+    transform: scale(1.05);
+}
+
+#fp-modal .foreground .buttons-container button.important {
+    background-color: var(--dark-shade);
+    border: solid var(--slider-color) 1px;
+}
+
 #edit {
     padding: 1rem;
     box-sizing: border-box;
@@ -410,7 +549,7 @@ Replaced by a style in inputs.css
     display: grid;
     grid-template-columns: 20rem auto 150px;
     grid-template-rows: 100%;
-    background-color: transparent;
+    background-color: var(--main-bg-color);
     z-index: 102;
 }
 

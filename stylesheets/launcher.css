@@ -88,6 +88,18 @@ input::-webkit-inner-spin-button {
   overflow: hidden;
   height: fit-content;
   width: 100%;
+  overflow-y: auto;
+  max-height: 30.625rem;
+}
+
+.settings-content::-webkit-scrollbar {
+  width: 35px;
+
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+  border-radius: 0.25rem;
+  background-color: white;
 }
 
 .fd-button {
@@ -938,6 +950,46 @@ div.disabled {
     float: right;
     cursor: pointer;
 
+  }
+
+  .feedback-list {
+
+  }
+
+  .feedback-list .entry {
+    height: fit-content;
+    width: 100%;
+    padding: 0.25rem 0.25rem;
+    box-sizing: border-box;
+  }
+
+  .feedback-list .entry:hover {
+    background-color: var(--main-button-color);
+    border-radius: 0.25rem;
+  }
+
+  .feedback-list .entry p {
+    margin: 0;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    max-width: 30%;
+
+  }
+
+  .feedback-list .entry p.title {
+    font-weight: bold;
+  }
+
+  .feedback-list .entry p:not(.title) {
+    margin-left: 1rem;
+  }
+
+  .feedback-list .entry p:nth-of-type(2) {
+    margin-left: 1rem;
+  }
+
+  .feedback-list .entry p:last-of-type {
+    float: right;
   }
 
   @keyframes old-pfp-out {

@@ -1,3 +1,4 @@
+const { ensureLink } = require("fs-extra");
 
 var slideshowPlaying = false;
 
@@ -472,7 +473,6 @@ var playViewportContent = function() {
                 //End of slide reached, go over to the next one
                 activateColumnNo(null, 1);
                 updateTimer();
-                console.log("asdasd");
                 progBar.value = 0;
             }
         }, seconds);
@@ -595,7 +595,7 @@ function addResizingBorders(el) {
         controls.style.opacity = 0.1;
         controls.style.pointerEvents = "none";
 
-
+        
 
         rBottom.addEventListener("mousedown", r1);
         mRight.addEventListener("mousedown", r2);
@@ -606,16 +606,34 @@ function addResizingBorders(el) {
         }, 100)
 
 
+        //Convert different values over to px only
+        var units = [
+            "px",
+            "%",
+            "rem"
+        ];
 
-        if(el.connectedElement.config.position[0].includes("%") || el.connectedElement.config.position[1].includes("%")) {
-            pos = convertPercentToPx([parseInt(el.connectedElement.config.position[0].split("%")[0]),parseInt(el.connectedElement.config.position[1].split("%")[0])]);
-        } else {
-            pos = [parseInt(el.connectedElement.config.position[0].split("px")[0]), parseInt(el.connectedElement.config.position[1].split("px")[0])];
+        console.log(el.connectedElement.config.position);
+
+        var xInPx;
+        var yInPx;
+        for(let i = 0; i < units.length; i++) {
+            var posX = el.connectedElement.config.position[0];
+            var posY = el.connectedElement.config.position[1];
+            if(posX.includes(units[i])) {
+                var x = posX.split(units[i])[0];
+                xInPx = convertToPixels([x, 0], units[i])[0];
+            }
+            if(posY.includes(units[i])) {
+                var y = posY.split(units[i])[0];
+                yInPx = convertToPixels([0, y], units[i])[1];
+            }
         }
-    
+
+        pos = [xInPx, yInPx];
+        console.log(pos)
         leftT = parseInt(pos[0]);
         topT = parseInt(pos[1]);
-
 
 
         document.body.addEventListener("keydown", handleArrowMove);
@@ -628,6 +646,7 @@ function addResizingBorders(el) {
 
 
     var handleArrowMove = (e) => {
+
         var c = e.keyCode;
         if(c == 37) /*left*/ {
             el.style.left = leftT - 1 + "px";
@@ -645,12 +664,97 @@ function addResizingBorders(el) {
     }
 
     var handleArrowMoveRelease = (e) => {
-        var xPos = el.style.left.split("px")[0];
-        var yPos = el.style.top.split("px")[0];
-        var percents = convertPxToPercent([xPos, yPos]);
-        el.connectedElement.config.position[0] = percents[0] + "%";
-        el.connectedElement.config.position[1] = percents[1] + "%";
+        var regexN = /[0-9]/g;
+        var regexC = /[^\d.-]/g;
+        
+        var xPos = el.style.left;
+        var yPos = el.style.top; //These values can be of any type, really.
+        
+        var unitX = xPos.replaceAll(regexN,'').replace(/\./g, "");
+        var unitY = yPos.replaceAll(regexN,'').replace(/\./g, "");
+        
+        var targetUnitX = el.connectedElement.config.position[0].replaceAll(regexN,'').replace(/\./g, "")
+        var targetUnitY = el.connectedElement.config.position[1].replaceAll(regexN,'').replace(/\./g, "")
 
+        var valX = xPos.replace(regexC,'');
+        var valY = yPos.replace(regexC,'');
+
+        //Treat each axis independently
+        var corrPosX = convertToTargetUnit([valX, 0], unitX, targetUnitX)[0];
+        var corrPosY = convertToTargetUnit([0, valY], unitY, targetUnitY)[1];
+        
+
+        el.connectedElement.config.position[0] = corrPosX + targetUnitX;
+        el.connectedElement.config.position[1] = corrPosY + targetUnitY;
+
+        //Update the fullscreen view if it is displayed
+        updateFullscreenView();
+    }
+
+
+    function convertToTargetUnit([x,y], unit, targetUnit) {
+        var px = (values) => {
+            switch(unit) {
+                case "px":
+                    return values;
+                break;
+                case "%":
+                    return convertPercentToPx([values]);
+                break;
+                case "rem":
+                    return [values[0]*16, values[1]*16];
+                break;
+                default:
+                    return new Error("No target unit matches");
+            }
+        }
+        var percent = (values) => {
+            switch(unit) {
+                case "px":
+                    return convertPxToPercent(values);
+                break;
+                case "%":
+                    return values;
+                break;
+                case "rem":
+                    var pxs = convertPercentToPx(values);
+                    return [pxs[0]*16, pxs[1]*16];
+                break;
+                default:
+                    return new Error("No target unit matches");
+            }
+        }
+
+        var rem = (values) => {
+            switch(unit) {
+                case "px":
+                    return [values[0]/16, values[1]/16];
+                break;
+                case "%":
+                    var pxs = convertPercentToPx(values);
+                    return [pxs[0]*16, pxs[1]*16];
+                break;
+                case "rem":
+                    return values;
+                break;
+                default:
+                    return new Error("No target unit matches");
+            }
+        }
+
+        switch(targetUnit) {
+            case "px":
+                return px([x,y]);
+            break;
+            case "%":
+                return percent([x,y]);
+            break;
+            case "rem":
+                return rem([x,y]);
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
     }
 
     var disableBorder = (e) => {
@@ -708,13 +812,34 @@ function addResizingBorders(el) {
             for(x of vEls) {
                 x.style.pointerEvents = "";
             }
+            
 
-            var xPos = el.style.left.split("px")[0];
-            var yPos = el.style.top.split("px")[0];
-            var percents = convertPxToPercent([xPos, yPos]);
+            //The target types for each axis
+            var regexN = /[0-9]/g;
+            var regexC = /[^\d.-]/g;
 
-            el.connectedElement.config.position[0] = percents[0] + "%";
-            el.connectedElement.config.position[1] = percents[1] + "%";
+            var targetUnitX = el.connectedElement.config.position[0].replaceAll(regexN,'').replace(/\./g, "")
+            var targetUnitY = el.connectedElement.config.position[1].replaceAll(regexN,'').replace(/\./g, "")
+
+            var xPos = el.style.left;
+            var yPos = el.style.top; //These values can be of any type, really.
+
+            var valX = xPos.replace(regexC,'');
+            var valY = yPos.replace(regexC,'');
+
+            var unitX = xPos.replaceAll(regexN,'').replace(/\./g, "");
+            var unitY = yPos.replaceAll(regexN,'').replace(/\./g, "");
+
+            //Need to treat each axis seperately
+            var corrPosX = convertToTargetUnit([valX, 0], unitX, targetUnitX)[0];
+            var corrPosY = convertToTargetUnit([0, valY], unitY, targetUnitY)[1];
+
+            var position = [corrPosX, corrPosY];            
+            console.log(position)
+
+            el.connectedElement.config.position[0] = position[0] + targetUnitX;
+            el.connectedElement.config.position[1] = position[1] + targetUnitY;
+            console.log(el.connectedElement.config.position);
 
             var newPos = [el.style.left, el.style.top];
             if(oldPos[0] == newPos[0] && oldPos[1] == newPos[1]) {
@@ -957,6 +1082,23 @@ function convertPercentToPx([x,y]) {
 }
 
 
+//Converts any compatible unit to px
+function convertToPixels([x,y], unit) {
+    switch(unit) {
+        case "px":
+            return [x,y];
+        break;
+        case "%":
+            var perc = convertPercentToPx([x,y]);
+            return perc;
+        break;
+        case "rem":
+            var multiplier = 16; //px (as defined in :root (main.js:30))
+            return [x*16, y*16];
+        break;
+    }
+}
+
 
 
 // AIAIAI Use some goddamn promises, mister!
@@ -968,7 +1110,6 @@ function showFullscreenView() {
     var result = ipcRenderer.sendSync("fullscreen-slideshow");
     console.log(result)
     if(result == "OK") {
-        console.log("oiasodniasd")
         var data = {routingInformation: {forwardingName: "fullscreen-view"}, forwardingInformation: "aribasddiuujiads"};
         var res1 = ipcRenderer.sendSync("inter-renderer-communication", data);
         setTimeout(() => {

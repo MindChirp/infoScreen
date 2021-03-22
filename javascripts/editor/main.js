@@ -14,6 +14,7 @@ function genericStartupFunction() {
         settingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "generalSettings.json");
     }
     globalSettings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
+    
 }
 
 
@@ -991,4 +992,10 @@ function floatingBox() {
 function strip(string) {
     let doc = new DOMParser().parseFromString(string, 'text/html');
     return doc.body.textContent || "Denied: HTML content not allowed in the console.";
+}
+
+function signOutProgram() {
+    localStorage.clear();
+    //Open the launcher
+    relaunchLauncher();
 }
