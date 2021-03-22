@@ -953,7 +953,8 @@ div.disabled {
   }
 
   .feedback-list {
-
+    max-height: 10rem;
+    overflow-y: auto;
   }
 
   .feedback-list .entry {
@@ -961,6 +962,8 @@ div.disabled {
     width: 100%;
     padding: 0.25rem 0.25rem;
     box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 25% 33% auto;
   }
 
   .feedback-list .entry:hover {
@@ -972,24 +975,18 @@ div.disabled {
     margin: 0;
     height: 1.5rem;
     line-height: 1.5rem;
-    max-width: 30%;
-
+    width: 100%;
+    text-align: left;
+    overflow: hidden;
   }
 
   .feedback-list .entry p.title {
     font-weight: bold;
   }
 
-  .feedback-list .entry p:not(.title) {
-    margin-left: 1rem;
-  }
-
-  .feedback-list .entry p:nth-of-type(2) {
-    margin-left: 1rem;
-  }
-
   .feedback-list .entry p:last-of-type {
-    float: right;
+    text-align: right;
+
   }
 
   @keyframes old-pfp-out {

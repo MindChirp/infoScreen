@@ -643,23 +643,25 @@ function addResizingBorders(el) {
     }, 10)
         
     }
-
-
+    var accTimeout;
+    var accelerator = 1;
     var handleArrowMove = (e) => {
-
+        accTimeout = setTimeout(()=>{
+            accelerator = 3;
+        }, 1000);
         var c = e.keyCode;
         if(c == 37) /*left*/ {
-            el.style.left = leftT - 1 + "px";
-            leftT--;
+            el.style.left = leftT - 1*accelerator + "px";
+            leftT = leftT-1*accelerator;
         } else if(c == 38) /*Up*/ {
-            el.style.top = topT - 1 + "px";
-            topT--;
+            el.style.top = topT - 1*accelerator + "px";
+            topT = topT-1*accelerator;
         } else if(c == 39) /*Right*/ {
-            el.style.left = leftT + 1 + "px";
-            leftT++;
+            el.style.left = leftT + 1*accelerator + "px";
+            leftT = leftT+1*accelerator;
         } else if(c == 40) /*Down*/ {
-            el.style.top = topT + 1 + "px";
-            topT++;
+            el.style.top = topT + 1*accelerator + "px";
+            topT = topT+1*accelerator;
         }
     }
 
@@ -687,8 +689,13 @@ function addResizingBorders(el) {
         el.connectedElement.config.position[0] = corrPosX + targetUnitX;
         el.connectedElement.config.position[1] = corrPosY + targetUnitY;
 
+        clearTimeout(accTimeout);
+        setTimeout(()=>{
+            accelerator = 1;
+        }, 1000)
         //Update the fullscreen view if it is displayed
         updateFullscreenView();
+
     }
 
 

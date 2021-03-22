@@ -1607,7 +1607,7 @@ function fetchFeedBackLog(parent){
         padding: 0.5rem;
         position: relative;
     `;
-    box.className = "feedback-list";
+    box.className = "feedback-list"; //smooth-shadow ?
 
     var loaderCont = document.createElement("div");
     loaderCont.style = `
@@ -1630,6 +1630,7 @@ function fetchFeedBackLog(parent){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", serverAddress + "/feedBackLogs");
     xhr.send();
+    xhr.timeout = 2000;
     xhr.onreadystatechange = async function() {
         if(this.readyState == 4 && this.status == 200) {
             //Successful request
@@ -1660,6 +1661,7 @@ function fetchFeedBackLog(parent){
 
             }, 200);
         } else if (this.readyState == 4 && this.status != 200){
+            if(!res) return;
             var res = JSON.parse(this.responseText);
             loaderCont.style.animation = "fade-out 200ms ease-in-out";
             var x = await sleep(200)
@@ -1668,12 +1670,39 @@ function fetchFeedBackLog(parent){
             } catch (error) {
                 
             }
-                        
+
             var p = document.createElement("p");
             p.innerHTML = res[0] + ": " + res[1];
 
             box.appendChild(p);
         }
+    }
+
+    xhr.ontimeout = async()=>{
+        loaderCont.style.animation = "fade-out 200ms ease-in-out";
+        var x = await sleep(200)
+        try {
+            loaderCont.parentNode.removeChild(loaderCont);
+        } catch (error) {
+            
+        }
+        box.innerHTML = "";
+
+
+        var p = document.createElement("p");
+        p.style = `
+            position: absolute;
+            margin: 0;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            line-height: 1rem;
+            text-align: center;
+        `
+        p.innerHTML = "Request timed out <br><span style='opacity: 0.5; font-size: 0.8rem;'>Error Code #0001</span>";
+
+
+        box.appendChild(p);
     }
 }
 
