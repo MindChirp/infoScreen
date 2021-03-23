@@ -45,4 +45,11 @@ function about(parent) {
         var el = textCont("Design by", "Frikk O. Larsen");
         wrapper.appendChild(el);
 
+        var el = textCont("Server connected", document.body.serverState[0].upToDate);
+        wrapper.appendChild(el);
+        console.log(document.body.serverState[0].errorType);
+        if(document.body.serverState[0].errorType != null) {
+            var el = textCont("Error state", document.body.serverState[0].errorType);
+            wrapper.appendChild(el)
+        }
 };

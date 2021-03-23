@@ -102,6 +102,45 @@ input::-webkit-inner-spin-button {
   background-color: white;
 }
 
+.feedback-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--secondary-color);
+  min-height: 2rem;
+  width: 50%;
+  z-index: 1000;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  max-height: 30rem;
+  overflow-y: auto;
+  animation: fade-in 200ms ease-in-out;
+}
+
+.feedback-popup p {
+  display: block;
+  margin: 0;
+  line-height: 1.5rem;
+}
+
+.feedback-popup button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: transparent;
+  color: var(--title-color);
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.feedback-popup p:first-of-type {
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
 .fd-button {
     height: 3rem;
     width: 3rem;

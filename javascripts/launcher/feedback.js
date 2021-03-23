@@ -145,6 +145,51 @@ function feedback(parent) {
             send.style.width = "3rem";
             send.disabled = true;
 
+            //Send the server request
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", serverAddress + "/postFeedBack");
+
+            var formData = new FormData();
+            formData.append("subject", subject.value);
+            formData.append("email", email.value);
+            formData.append("body", letter.value);
+
+            xhr.send(formData);
+            xhr.onreadystatechange = async function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    var res = JSON.parse(this.responseText);
+                    if(res[0] == "OK") {
+
+                        console.log(res);
+
+                        await sleep(1000);
+
+                        send.style.width = "5rem";
+                        send.style.overflow = "hidden";
+                        send.style.opacity = "0.4";
+                        send.innerHTML = "Sent";
+
+
+                    } else if(res[0] == "ERROR") {
+                        await sleep(1000);
+                        send.style.width = "fit-content";
+                        send.innerHTML = res[1];
+                        send.disabled = false;
+                    } else {
+                        console.log(res);
+                    }
+
+                } else if(this.readyState == 4 && this.status != 200){
+                    //Request failed
+
+                    await sleep(1000);
+                    send.style.width = "fit-content";
+                    console.log(this.responseText);
+                    send.innerHTML = "Could not send. Click to retry";
+                    send.disabled = false;
+
+                }
+            }
         }
     });
 

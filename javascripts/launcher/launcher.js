@@ -1,5 +1,5 @@
 const { createWriteStream } = require("fs");
-const { profile, exception } = require("console");
+const { profile, exception, groupCollapsed } = require("console");
 const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged");
@@ -40,7 +40,9 @@ function loaderWheel() {
 var signedIn = false;
 var firstTime = null;
 
-window.onload = function() {
+window.onload = async function() {
+
+    document.body.serverState = [];
     //load all the projects to the plrojects list
     initializeProjectList();
 
@@ -72,6 +74,24 @@ window.onload = function() {
         */
     }
         if(signedIn == true) {
+
+            //Sign in the client on the server as well
+
+            var updateClient = async function() {
+                console.log("asdd")
+                var data = await signInClient();
+                
+                if(data[0] == "ERROR") {
+                    var errorType = {upToDate: false, errorType: data[1]}
+                    document.body.serverState.push(errorType);
+                } else if(data[0] == "OK") {
+                    var state = {upToDate: true, errorType: null};
+                    document.body.serverState.push(state);
+                }
+                
+            }
+
+            updateClient();
 
             //Check for dev mode
             var ext = localStorage.getItem("pfpExtension");
@@ -546,10 +566,12 @@ function userSettings() {
                                 localStorage.setItem("signedIn", "true");
                                 localStorage.setItem("pfpPos", JSON.stringify([-50,0,1]));
                                 
-
+                                console.log(dat);
                                 //Update the main launcher screen to reflect the localStorage values
                                 localStorage.setItem("userInfo", JSON.stringify(dat));
 
+                                var state = {upToDate: true, errorType: null};
+                                document.body.serverState.push(state);
 
                                 //If the user is a developer, enable the developer mode!
                                 if(dat[1][0].developer == 1) {
@@ -1603,7 +1625,7 @@ function fetchFeedBackLog(parent){
         width: 70%;
         margin: auto;
         background-color: var(--secondary-button-color);
-        border-radius: 0.25rem;
+        border-radius: 0.5rem;
         padding: 0.5rem;
         position: relative;
     `;
@@ -1630,7 +1652,7 @@ function fetchFeedBackLog(parent){
     var xhr = new XMLHttpRequest();
     xhr.open("GET", serverAddress + "/feedBackLogs");
     xhr.send();
-    xhr.timeout = 2000;
+    xhr.timeout = 10000;
     xhr.onreadystatechange = async function() {
         if(this.readyState == 4 && this.status == 200) {
             //Successful request
@@ -1641,7 +1663,6 @@ function fetchFeedBackLog(parent){
             } catch (error) {
 
             }
-            console.log(res);
             loaderCont.style.animation = "fade-out 200ms ease-in-out";
             setTimeout(()=>{
                 try {
@@ -1650,19 +1671,99 @@ function fetchFeedBackLog(parent){
                     
                 }
                 
-                var entries = res[1];
-                var x;
-                
-                for(x of entries) {
-                    var el = createFeedbackEntry(x.subject, x.email, x.body);
-                    box.appendChild(el);
-                }
+                if(res[0] == "OK") {
 
+                    var entries = res[1];
+                    var x;
+                    console.log(entries);
+                    for(x of entries) {
+                        var el = createFeedbackEntry(x.subject, x.email, x.body);
+                        box.appendChild(el);
+
+                        //Make it clickable
+
+                        el.addEventListener("click", (e)=>{
+                            var tar = e.target.closest(".entry");
+                            var title = tar.getElementsByTagName("p")[0].innerHTML;
+                            var email = tar.getElementsByTagName("p")[1].innerHTML;
+                            var body = tar.getElementsByTagName("p")[2].innerHTML;
+
+                            var pops = document.getElementsByClassName("feedback-popup");
+                            if(pops[0]) {
+                                var x;
+                                for(x of pops) {
+                                    x.parentNode.removeChild(x);
+                                }
+                            }
+
+                            var pop = document.createElement("div");
+                            pop.className = "feedback-popup smooth-shadow";
+                            
+                            var close = document.createElement("button");
+                            var ico = document.createElement("i");
+                            ico.className = "material-icons";
+                            ico.innerHTML = "close";
+                            close.appendChild(ico);
+
+                            close.addEventListener("click", (e)=>{
+                                var el = e.target.closest(".feedback-popup");
+                                el.parentNode.removeChild(el);
+                            })
+
+                            pop.appendChild(close);
+
+
+                            var p = document.createElement("p");
+                            p.innerHTML = title;
+                            pop.appendChild(p);
+
+                            var p = document.createElement("p");
+                            p.innerHTML = email;
+                            pop.appendChild(p);
+
+                            var div = document.createElement("div");
+                            div.style = `
+                                width: 90%;
+                                height: 1px;
+                                background-color: rgba(200,200,200,0.5);
+                                margin-bottom: 0.5rem;
+                            `;
+                            pop.appendChild(div);
+
+                            var p = document.createElement("p");
+                            p.innerHTML = body;
+                            pop.appendChild(p);
+
+                            document.body.appendChild(pop);
+
+                        })
+
+                    }
+                } else if(res[0] == "ERROR") {
+                    box.innerHTML = "";
+
+                    //Display error message
+                    console.log(JSON.parse(this.responseText));
+                    var p = document.createElement("p");
+                    p.style = `
+                        position: absolute;
+                        margin: 0;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        line-height: 1rem;
+                        text-align: center;
+                    `
+                    p.innerHTML = res[0] + " <br><span style='opacity: 0.5; font-size: 0.8rem;'>" + res[1] + "</span>";
+            
+            
+                    box.appendChild(p);
+                }
+                    
 
             }, 200);
         } else if (this.readyState == 4 && this.status != 200){
-            if(!res) return;
-            var res = JSON.parse(this.responseText);
+            
             loaderCont.style.animation = "fade-out 200ms ease-in-out";
             var x = await sleep(200)
             try {
@@ -1672,7 +1773,17 @@ function fetchFeedBackLog(parent){
             }
 
             var p = document.createElement("p");
-            p.innerHTML = res[0] + ": " + res[1];
+            var p = document.createElement("p");
+            p.style = `
+                position: absolute;
+                margin: 0;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                line-height: 1rem;
+                text-align: center;
+            `
+            p.innerHTML = "Could not load the content";
 
             box.appendChild(p);
         }
@@ -1734,4 +1845,43 @@ function sleep(interval) {
             resolve("yes");
         }, interval);
     });
+}
+
+function signInClient() {
+    //Make server request
+    return new Promise(resolve =>{
+
+        var xhr = new XMLHttpRequest();
+        //xhr.open("POST", "http://80.213.230.181:3000/auth");
+        xhr.open("POST", serverAddress + "/auth");
+        xhr.timeout = 20000;
+        var storage = JSON.parse(localStorage.getItem("userInfo"));
+
+        var pass = storage[1][0].password; 
+        var usrname = storage[1][0].email;
+
+        
+        var formData = new FormData();
+        formData.append("user", usrname);
+        formData.append("password", pass);
+        
+        
+        
+        xhr.send(formData);
+        xhr.onreadystatechange = function() {
+        if(this.status == 200 && this.readyState == 4) {
+    
+            var dat = JSON.parse(this.responseText);
+            localStorage.setItem("userInfo", JSON.stringify(dat));
+            resolve(["OK", dat]);
+        } else if(this.status != 200 && this.readyState == 4) {
+            //AIAIAI we could not sign in!
+            resolve(["ERROR", this.status]);
+        }
+    }
+
+    xhr.ontimeout = ()=>{
+        resolve(["ERROR", "TIMEOUT"]);
+    }
+    })
 }
