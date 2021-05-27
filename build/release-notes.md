@@ -6,12 +6,12 @@
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>None</li>
+        <li>Developer mode won't enable</li>
     </ul>
         <br>
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>None</li>
+        <li>Updated the program for a new server sign in architecture.</li>
     </ul>
         <br>
 

@@ -157,6 +157,15 @@ function profilePhoto(parent) {
 
                     img.src = imgPath;
 
+                    //Get base64 image, upload it to the server
+                    img.onload = ()=>{
+                        var dataUrl = getDataUrl(img);
+                        uploadImageToServer(dataUrl);
+                    }
+
+
+
+
                     function call() {
 
                         setTimeout(()=>{
@@ -290,6 +299,7 @@ function profilePhoto(parent) {
     var adjust = document.createElement("button");
     adjust.setAttribute("class", "fd-settings-button smooth-shadow");
     adjust.innerHTML = "Position image";
+    adjust.disabled = true;
     adjust.style.display = "block";
     adjust.style.marginTop = "0.5rem";
     adjust.classList.add("ripple-element");
@@ -470,3 +480,48 @@ var data = zip.generate({base64:false,compression:'DEFLATE'});
 fs.writeFileSync('./data/programData/projects/test1.proj', data, 'binary');'
 
 */
+
+
+
+
+function getDataUrl(img) {
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    // Set width and height
+    
+    var nEl = img.cloneNode();
+    nEl.style = "";
+    nEl.style.height = "auto";
+    nEl.style.width = "auto";
+
+    
+    canvas.width = nEl.width;
+    canvas.height = nEl.height;
+    
+    // Draw the image
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL('image/jpeg');
+ }
+
+
+ function uploadImageToServer(data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", serverAddress + "/usr/upload/pfp");
+
+    var formData = new FormData();
+    formData.append("imageData", data);
+
+    xhr.send(formData);
+
+    xhr.onreadystatechange = function() {
+        if(this.status == 200 && this.readyState == 4) {
+            //OK
+            
+        } else if(this.status != 200 && this.readyState == 4) {
+            //Error
+        
+            alert("Could not upload image to the server. Please try again.")
+        }
+    }
+ }

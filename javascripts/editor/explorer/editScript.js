@@ -19,7 +19,7 @@ function editScript(el) {
 
 
         var h1 = document.createElement("h1");
-        h1.innerHTML = "Script Editor";
+        h1.innerHTML = "Script Editor <span style='color: red; font-size: 0.8rem; opacity: 0.5;'>Beta</span>";
         topBar.appendChild(h1);
 
 
@@ -184,8 +184,11 @@ function editScript(el) {
             yes.addEventListener("click", (e) => {
                 var cont = e.target.closest(".delete-message-container");
                 
-                var textArea = cont.closest(".script-editor").getElementsByTagName("textarea")[0];
-                textArea.value = "";
+                var textArea = cont.closest(".script-editor").getElementsByTagName("textarea");
+                var x;
+                for(x of textArea) {
+                    x.value = "";
+                }
                 cont.parentNode.removeChild(cont);
             })
 
@@ -599,6 +602,8 @@ var ApiTools = function() {
         //Get the columns
         var cols = document.getElementsByClassName("timeline-column")[slideNo];
         var indexedSlide = localIndex.slide;
+
+        //Check if the old localcontent array still counts. If not, create a new one.
         if(indexedSlide == slideNo) {
             var content = localIndex.content;
             for(let m = 0; m < content.length; m++) {

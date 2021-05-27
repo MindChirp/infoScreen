@@ -84,12 +84,16 @@ function createProject() {
     slides.childNodes[1].min = 1;
     left.appendChild(slides);
 
-
+    
+    var desc = inputWithText("Description");
+    desc.childNodes[1].setAttribute("type", "text");
+    desc.childNodes[1].placeholder = "No description";
+    left.appendChild(desc);
+    
+    
     createB.addEventListener("click", function() {
-        create(name.value, creators.childNodes[1].value, slides.childNodes[1].value, cont);
+        create(name.value, creators.childNodes[1].value, slides.childNodes[1].value, desc.childNodes[1].value, cont);
     });
-
-
     //Templates
 
     var right = document.createElement("div");
@@ -151,7 +155,7 @@ function createProject() {
 }
 
 
-function create(title,author,slides, menu) {
+function create(title,author,slides, desc, menu) {
     if(title.trim() == "") {
         project.error("Specify a project name");
     } else if(author.trim() == "" || slides.trim() == "") {
@@ -224,6 +228,8 @@ function createFile(template) {
     var title = inputs[0].value;
     var author = inputs[1].value;
     var slides = inputs[2].value;
+    var desc = inputs[3].value;
+
     var time = new Date();
     var day = time.getDay();
     var month = time.getMonth();
@@ -236,7 +242,8 @@ function createFile(template) {
             creator: author,
             created: month + "/" + day + "/" + year + ":" + hour + ":" + minute + ":PM",
             edited: "null",
-            title: title
+            title: title,
+            description: desc
         },
         fileInfo: {
 

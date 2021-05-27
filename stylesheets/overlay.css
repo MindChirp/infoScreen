@@ -1,0 +1,75 @@
+/*OVERLAY SETTINGS PAGE*/
+.menu.overlay-settings-menu .set-keybind {
+    height: fit-content;
+    min-width: 30rem;
+    max-width: 40rem;
+    height: 2.5rem;
+    padding: 1rem;
+    background: transparent;
+    position: relative;
+    margin-top: 3.5rem;
+    border: 2px solid var(--slider-color);
+    border-radius: 0.25rem;
+    background: var(--secondary-color);
+}
+
+.menu.overlay-settings-menu .set-keybind::before {
+    position: absolute;
+    top: 0;
+    transform: translate(0,-100%);
+    content: "Keybind";
+    color: var(--title-color);
+    left: 0;
+}
+
+.menu.overlay-settings-menu .set-keybind .active-bind {
+    display: inline-flex;
+    vertical-align: top;
+    width: fit-content;
+    min-width: 20rem;
+    height:2.5rem;
+    align-items: center;
+}
+
+.menu.overlay-settings-menu .set-keybind button {
+    vertical-align: top;
+    display: inline-block;
+    float: right;
+}
+
+.menu.overlay-settings-menu .set-keybind .keybind-pieces-wrapper {
+    height: fit-content;
+    width: fit-content;
+    z-index: 1;
+}
+
+.menu.overlay-settings-menu .set-keybind .keybind-pieces-wrapper .piece {
+    display: inline-block;
+    vertical-align: top;
+    background-color: #0a0d10;
+    color: var(--title-color);
+    border-radius: 0.25rem;
+    position: relative;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    padding: 0.3rem 0.9rem;
+}
+
+.menu.overlay-settings-menu .set-keybind .keybind-pieces-wrapper .piece.special {
+    float: left;
+}
+
+.menu.overlay-settings-menu .set-keybind .keybind-pieces-wrapper .piece::before {
+    content: ".";
+    color: transparent;
+    background: #27333f;
+    border-radius: 0 0 0.25rem 0.25rem;
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    height: 1rem;
+    transform: translate(-50%,0.2rem);
+
+    position: absolute;
+    z-index: -1;
+}

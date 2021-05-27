@@ -189,6 +189,8 @@ function dropdownMenu(title, contentText) {
     
         };
         fold.appendChild(wr);
+
+        cont.content = wr;
         return cont;
 }
 

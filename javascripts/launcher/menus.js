@@ -138,3 +138,20 @@ function toggleNotificationsPane() {
         }
     }, 10);
 }
+
+
+
+function showNotification(message) {
+    var notif = document.createElement("div");
+    notif.className = "notification smooth-shadow";
+
+    var p = document.createElement("p");
+    p.innerHTML = message;
+    notif.appendChild(p);
+    
+    document.getElementById("notifications-container").appendChild(notif);
+
+    setTimeout(()=>{
+        notif.parentNode.removeChild(notif);
+    }, 5000)
+}

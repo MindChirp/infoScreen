@@ -409,6 +409,11 @@ html {
     pointer-events: none;
 }
 
+#edit .section-title {
+    margin-bottom: 0.5rem;
+    font-weight: lighter;
+}
+
 .standard-tab-settings-container {
     position: relative;
     min-height: 10rem;
@@ -1017,9 +1022,11 @@ Replaced by a style in inputs.css
 #main-container #top-layer #browser .content-container #widgets .explorer-widget {
     height: 100%;
     width: 100%;
-    background-color: var(--dark-shade);
+    background-color: var(--secondary-button-color);
     border-radius: 0.25rem;
     overflow: hidden;
+    border: 1px solid var(--main-bg-color);
+    cursor: pointer;
 }
 
 

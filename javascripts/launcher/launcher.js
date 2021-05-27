@@ -4,11 +4,27 @@ const { ipcMain, ipcRenderer, remote } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged");
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
+const internetAvailable = require("internet-available");
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
     devButton.parentNode.removeChild(devButton);
 }
+
+
+var clientConnected = true;
+
+//Check for internet connectivity
+internetAvailable({
+    timeout: 4000,
+    retries: 10
+}).then(()=>{
+    //showNotification("Internet connected");
+    clientConnected = true;
+}).catch(()=>{
+    clientConnected = false;
+    showNotification("No internet")
+})
 
 const ipc = require("electron").ipcRenderer;
 const { format } = require("path");
@@ -31,7 +47,7 @@ function loaderWheel() {
             el.appendChild(child);
     }
 
-        return el;
+    return el;
 }
 
 
@@ -74,11 +90,9 @@ window.onload = async function() {
         */
     }
         if(signedIn == true) {
-
             //Sign in the client on the server as well
 
             var updateClient = async function() {
-                console.log("asdd")
                 var data = await signInClient();
                 
                 if(data[0] == "ERROR") {
@@ -95,8 +109,13 @@ window.onload = async function() {
 
             //Check for dev mode
             var ext = localStorage.getItem("pfpExtension");
-            var dev = JSON.parse(localStorage.getItem("userInfo"))[1][0].developer;
-            if(dev == 1) {
+            var dev;
+            try {
+                dev = JSON.parse(localStorage.getItem("userInfo"))[1][0].dev;
+            } catch (error) {
+                dev = false;
+            }
+            if(dev == true) {
                 document.body.developerMode = true;
                 enableDevMode();
             }
@@ -167,7 +186,7 @@ window.onload = async function() {
 
     } else if(signedIn == "true") {
         var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
-        title.innerHTML = title.innerHTML + ", " + name + ".";
+        title.innerHTML = title.innerHTML + ", <span style='text-transform: capitalize'>" + name + ".</span>";
     }
 
 
@@ -313,11 +332,11 @@ function infoOnHover(el, txt) {
 
 function userSettings() {
     var page = menu("user");
-
+    
     var header = page.childNodes[0];
     header.style.position = "relative";
 
-    var userWrapper = document.createElement("div");
+    var userWrapper = document.createElement("div");    
     userWrapper.setAttribute("class", "user-header-wrapper");
 
     var user = document.createElement("div");
@@ -349,16 +368,29 @@ function userSettings() {
     var ext = localStorage.getItem("pfpExtension");
 
     var signedIn = localStorage.getItem("signedIn");
-    if(signedIn == "true" && ext != null) {
-            var imgPath;
-            console.log(ext);
-            if(isPackaged) {
-                imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
-            } else {
-                imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
-            }
-            img.setAttribute("src", imgPath);
 
+    
+    
+    if(signedIn == "true" && ext != null) {
+        
+            var parsed = JSON.parse(localStorage.getItem("userInfo"));
+            if(parsed[1][0].imagedata) {
+
+                img.setAttribute("src", parsed[1][0].imagedata);
+            } else {
+
+                
+                
+                var imgPath;
+                console.log(ext);
+                if(isPackaged) {
+                    imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                } else {
+                    imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                }
+                img.setAttribute("src", imgPath);
+                
+            }
 
         img.setAttribute("style", `
         height: 5rem;
@@ -373,6 +405,7 @@ function userSettings() {
         width: auto;
         `)
     }
+
         pfp.appendChild(img)
 
 
@@ -383,6 +416,7 @@ function userSettings() {
         h1.innerHTML = "You're not signed in";
     } else {
         userWrapper.parentNode.removeChild(userWrapper);
+        console.log(localStorage.getItem("userInfo"))
         userScreen(JSON.parse(localStorage.getItem("userInfo")), header, true);
         return;
     }
@@ -541,7 +575,6 @@ function userSettings() {
             var formData = new FormData();
             formData.append("user", usrname);
             formData.append("password", pass);
-            
 
 
             xhr.send(formData);
@@ -574,7 +607,7 @@ function userSettings() {
                                 document.body.serverState.push(state);
 
                                 //If the user is a developer, enable the developer mode!
-                                if(dat[1][0].developer == 1) {
+                                if(dat[1][0].dev == true) {
                                     document.body.developerMode = true;
                                     enableDevMode();
                                 } else {
@@ -596,7 +629,8 @@ function userSettings() {
                         return;
                     }
 
-                } else {
+                } else if(this.readyState == 4 && this.status != 200){
+                    showNotification("Could not sign in.");
                     //The request didn't complete successfully.
                     logIn.style = `
                         width: 6.7rem;
@@ -887,23 +921,33 @@ function userScreen(info, header, signIn) {
             imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
         }
     }
-    img.setAttribute("src", imgPath);
-    pfp.appendChild(img);
-    img.setAttribute("style", `
-        position: absolute;
-        height: 80px;
-        width: auto;
-        margin-left: 50%;
-        transform: translateX(-50%);
-    `);
 
+    var parsed = JSON.parse(localStorage.getItem("userInfo"))[1][0]
+    if(parsed.imagedata) {
+        img.setAttribute("src", parsed.imagedata)
+    } else {
+
+        
+        img.setAttribute("src", imgPath);
+
+        
+    }
+    img.setAttribute("style", `
+    position: absolute;
+    height: 80px;
+    width: auto;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    `);
+    pfp.appendChild(img);
+    /*
     var pos = JSON.parse(localStorage.getItem("pfpPos"));
     
     var Xpos = pos[0];
     var Ypos = pos[1];
     var size = pos[2];
     img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-
+*/
     /*var canv = document.createElement("canvas");
     canv.setAttribute("height", "81px");
     canv.setAttribute("width", "81px");
@@ -939,6 +983,7 @@ function userScreen(info, header, signIn) {
         opacity: 0;
         animation: slide-right 700ms ease-in-out 0.2s;
         animation-fill-mode: forwards;
+        text-transform: capitalize;
     `);
     user.appendChild(h1);
     userWrapper.appendChild(user)
@@ -958,10 +1003,33 @@ function userScreen(info, header, signIn) {
     
     var signOut = createSettingsButton();
     signOut.innerHTML = "Sign out";
-    signOut.addEventListener("click", function() {
-        localStorage.setItem("signedIn", "false");
-        changeState();
-        location.reload();
+    signOut.addEventListener("click", function(e) {
+        //Update the button
+        e.target.innerHTML = "Signing out";
+        e.target.disabled = true;
+
+        //Let the server know that we are signed out
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", serverAddress + "/signOut");
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200) {
+                //OK
+                localStorage.setItem("signedIn", "false");
+                changeState();
+                location.reload();
+            } else if(this.readyState == 4 && this.status != 200) {
+                showNotification("Could not perform a clean signout. Sign in to the user will be restricted in this client.");
+                localStorage.clear();
+
+                setTimeout(()=>{
+                    location.reload();
+                }, 5000)
+                //localStorage.setItem("signedIn", "false");
+            }
+        }
+
+
     });
     infoOnHover(signOut, "Signs you out");
 
@@ -1086,35 +1154,46 @@ function changeState() {
         title.innerHTML = "Welcome back";
     }
     
+    var parsedData = JSON.parse(localStorage.getItem("userInfo"))[1][0];
 
     var name = JSON.parse(localStorage.getItem("userInfo"))[1][0].name.split(" ")[0];
-    title.innerHTML = title.innerHTML + ", " + name;
+    title.innerHTML = title.innerHTML + ", <span style='text-transform: capitalize'>" + name + "</span>";
 
+        if(parsedData.imagedata) { 
+            //If there is an image stored on the server, use that one
+            var img = document.getElementById("profile-photo-image");
+            img.src = parsedData.imagedata;
 
-        var ext = localStorage.getItem("pfpExtension");
-
-        var img = document.getElementById("profile-photo-image");
-
-        var pos = JSON.parse(localStorage.getItem("pfpPos"));
-        var Xpos = pos[0];
-        var Ypos = pos[1];
-        var size = pos[2];
-        img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-        var imgPath;
-        if(isPackaged) {
-            if(ext == null) {
-                imgPath = path.join(path.dirname(__dirname),"internalResources", "images", "default.png");
-            } else {
-                imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
-            }
         } else {
-            if(ext == null) {
-                imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+            //If not, load a local image
+            var ext = localStorage.getItem("pfpExtension");
+    
+            var img = document.getElementById("profile-photo-image");
+    
+            var pos = JSON.parse(localStorage.getItem("pfpPos"));
+            var Xpos = pos[0];
+            var Ypos = pos[1];
+            var size = pos[2];
+            img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
+            var imgPath;
+            if(isPackaged) {
+                if(ext == null) {
+                    imgPath = path.join(path.dirname(__dirname),"internalResources", "images", "default.png");
+                } else {
+                    imgPath = path.join(path.dirname(__dirname),"extraResources",  "data", "programData", "profilePics", "user" + ext);
+                }
             } else {
-                imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+                if(ext == null) {
+                    imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+                } else {
+                    imgPath = path.join(__dirname,"extraResources",  "data", "programData", "profilePics", "user" + ext);
+                }
             }
+            img.setAttribute("src", imgPath);
+
         }
-        img.setAttribute("src", imgPath);
+
+
 
         //Enable all buttons
         var butts = document.getElementById("actions-container").childNodes;
@@ -1872,7 +1951,11 @@ function signInClient() {
         if(this.status == 200 && this.readyState == 4) {
     
             var dat = JSON.parse(this.responseText);
-            localStorage.setItem("userInfo", JSON.stringify(dat));
+            if(dat[0] == "USER ALREADY SIGNED IN") {
+
+            } else {
+                localStorage.setItem("userInfo", JSON.stringify(dat));
+            }
             resolve(["OK", dat]);
         } else if(this.status != 200 && this.readyState == 4) {
             //AIAIAI we could not sign in!

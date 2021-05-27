@@ -166,6 +166,13 @@ const template = [
                 label: "Check for Updates",
                 disabled: true
             },
+            {label: "divider"},
+            {
+                label: "Overlay",
+                click: ()=>{
+                    overlaySettings();
+                }
+            },
             {label: "divider"},       
             {
                 label: "Open launcher",

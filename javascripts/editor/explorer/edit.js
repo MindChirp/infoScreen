@@ -96,6 +96,12 @@ const updateEditPage = function() {
         wr.style = wrapperStyle;
         wr.className = "transition-cards-container";
         cont.appendChild(wr);
+
+        /*3D effects section*/
+        var std = document.createElement("p");
+        std.className = "section-title";
+        std.innerHTML = "Standard Effetcs";
+        wr.appendChild(std);
         
         var none = createCard("None");
         none.classList.add("selected");
@@ -130,6 +136,14 @@ const updateEditPage = function() {
         circle.querySelector(".icon").appendChild(ico)
         ico.style = icoStyle;
 
+
+
+        /*3D effects section*/
+        var threeD = document.createElement("p");
+        threeD.className = "section-title";
+        threeD.innerHTML = "3D Effects";
+        wr.appendChild(threeD);
+
         var rotate3d = createCard("3D Rotate");
         wr.appendChild(rotate3d);
         rotate3d.classList.add("disabled");
@@ -139,6 +153,21 @@ const updateEditPage = function() {
         rotate3d.querySelector(".icon").appendChild(ico)
         ico.style = icoStyle;
 
+        /*Custom effect*/
+        var custom = document.createElement("p");
+        custom.className = "section-title";
+        custom.innerHTML = "Custom Effects";
+        wr.appendChild(custom);
+
+
+        var create = createCard("Create Effect");
+        wr.appendChild(create);
+        var ico = document.createElement("i");
+        ico.className = "material-icons";
+        ico.innerHTML = "add";
+        create.querySelector(".icon").appendChild(ico)
+        ico.style = icoStyle;
+        infoOnHover(create, "Create your own custom effect");
 
 
         function createCard(title) {

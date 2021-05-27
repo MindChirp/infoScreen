@@ -5,7 +5,9 @@ document.addEventListener("keydown", function(e) {
     //Check for all of the combinations defined with the ctrl-key
     //Handle app-bar shortcuts
     if(e.altKey || e.ctrlKey || e.shiftKey || e.code) {
-        var keyCombos = document.body.keyCombinations;
+        var keyCombos = document.body.keyCombinations || null;
+        if(!keyCombos) return;
+        
         var x;
         if(!keyCombos) return;
         if(keyCombos.length == 0) return;

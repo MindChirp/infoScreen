@@ -74,7 +74,7 @@ var devSettings = () => {
     var devFeatures = tabInputs.checkBox("Enable experimental features");
     devFeatures.getElementsByTagName("input")[0].setAttribute("name", "experimentalFeatures");
     menu.appendChild(devFeatures);
-    
+
     var devMode = tabInputs.checkBox("Log extra information");
     devMode.getElementsByTagName("input")[0].setAttribute("name", "logExtraInformation");
     menu.appendChild(devMode);
@@ -285,9 +285,23 @@ var userAndOrg = () => {
         var ok = document.createElement("button");
         ok.innerHTML = "Yes";
         modal.appendChild(ok);
-        ok.addEventListener("click", ()=>{
+        ok.addEventListener("click", async()=>{
             //Sign out of the program 
-            signOutProgram();
+            modal.kill();
+            signOutProgram()
+            .then(()=>{
+                relaunchLauncher();
+            })
+            .catch(async(error)=>{
+                var modal = await modalWindow("Could not sign out", "Please try again later <br>(" + error + ")", "error");
+                var ok = document.createElement("button");
+                ok.innerHTML = "ok";
+                ok.className = "important";
+                modal.appendChild(ok);
+                ok.addEventListener("click", ()=>{
+                    modal.kill();
+                })
+            })
         });
 
         var no = document.createElement("button");

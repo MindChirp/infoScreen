@@ -5,13 +5,17 @@ const util = require("util");
 var globalSettings;
 var settingsDirectory;
 var preventUndoOrRedo = false;
+var overlaySettingsDirectory;
+const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 
 
 function genericStartupFunction() {
     if(isPackaged) {
         settingsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "generalSettings.json");
+        overlaySettingsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "overlaySettings.json");
     } else {
         settingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "generalSettings.json");
+        overlaySettingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "overlaySettings.json");
     }
     globalSettings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
     
@@ -993,9 +997,23 @@ function strip(string) {
     let doc = new DOMParser().parseFromString(string, 'text/html');
     return doc.body.textContent || "Denied: HTML content not allowed in the console.";
 }
-
 function signOutProgram() {
-    localStorage.clear();
-    //Open the launcher
-    relaunchLauncher();
+    return new Promise((resolve, reject)=>{
+
+        //Let the server know
+        fetch(serverAddress + "/signOut")
+        .then((response)=>{
+            if(response.ok) {
+
+                localStorage.clear();
+                resolve();
+            } else {
+                reject("Could not reach the server")
+            }
+        })
+        .catch(error=>{
+            reject(error);
+        })
+        
+    })
 }

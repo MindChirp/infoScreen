@@ -56,7 +56,9 @@ const scrDocs = {
                         label: "Communicating with the InfoScreen server",
                         content: [
                             {string: "The infoScreen server is usually hosted by the user itself. To gain access to the server, one must know its ip-address."},
-                            {code: "var xhr = new XMLHttpRequest();<br>xhr.open('POST', *ip-address*);<br>xhr.send(*authentication data*);"},
+                            {code: "var xhr = new XMLHttpRequest();<br>xhr.open('POST', *ip-address*/scriptAuth);<br>xhr.send(formData);"},
+                            {string: "To connect to the official infoScreen server, do the following"},
+                            {code: "var xhr = new XMLHttpRequest();<br>xhr.open('POST', 'https://shrouded-wave-54128.herokuapp.com/scriptAuth');<br>xhr.send(formData);"},
                             {string: "THIS FUNCTION IS NOT ENABLED YET"},
                             {menu: {
                                 label: "Authentication formatting",

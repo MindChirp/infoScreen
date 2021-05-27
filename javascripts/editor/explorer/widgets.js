@@ -5,7 +5,7 @@ function loadWidgets() {
     var cont = document.getElementById("widgets");
     //clock widget
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget");
+    el.setAttribute("class", "explorer-widget smooth-shadow");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     el.setAttribute("type", "widget");
     el.setAttribute("name", "time");
@@ -31,7 +31,7 @@ function loadWidgets() {
 
     //weather widget
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget");
+    el.setAttribute("class", "explorer-widget smooth-shadow");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
     h1.innerHTML = "Weather";
@@ -55,7 +55,7 @@ function loadWidgets() {
 
     //news widget
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget");
+    el.setAttribute("class", "explorer-widget smooth-shadow");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
     h1.innerHTML = "News";
@@ -80,7 +80,7 @@ function loadWidgets() {
 
     //text widget
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget");
+    el.setAttribute("class", "explorer-widget smooth-shadow");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
     h1.innerHTML = "Text";
@@ -107,7 +107,7 @@ function loadWidgets() {
 
      //script widget
      var el = document.createElement("div");
-     el.setAttribute("class", "explorer-widget");
+     el.setAttribute("class", "explorer-widget smooth-shadow");
      el.setAttribute("onmousedown", "dragFileHandler(this)")
      var h1 = document.createElement("h1");
      h1.innerHTML = "Script";
@@ -133,7 +133,7 @@ function loadWidgets() {
 
     //progression widget
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget");
+    el.setAttribute("class", "explorer-widget smooth-shadow");
     el.setAttribute("onmousedown", "dragFileHandler(this)")
     var h1 = document.createElement("h1");
     h1.innerHTML = "Progress";
