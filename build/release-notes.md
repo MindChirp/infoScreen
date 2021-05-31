@@ -1,12 +1,15 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>None</li>
+        <li>New overlay <div class="info-circle" metaMessage="Default keybind is Ctrl+J, however it can be changed in Window > Overlay > Keybind">?</div></li>
+        <li>IN BETA: Undoing and redoing</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>Developer mode won't enable</li>
+        <li>Timeline auto-scrolling issue</li>
+        <li>No sign in or sign out indication in launcher</li>
+        <li>Wrongly sized resizing border for images in the viewport</li>
     </ul>
         <br>
     <h2 style="margin: 0">Changes</h2>
