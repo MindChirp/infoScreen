@@ -79,7 +79,7 @@ async function overlaySettings() {
         var readFile = util.promisify(fs.readFile);
 
         function getSettings() {
-            return readFile(overlaySettingsDirectory, "utf8")
+            return readFile(settingsDirectory, "utf8")
         }
 
         try {
@@ -105,9 +105,18 @@ async function overlaySettings() {
 
 
         //Update the keybinds page
-        var bind = settings.generalSettings.keyBind;
-        var binds = await returnKeyBindPieces(bind);
-        document.querySelector("body > div.menu.overlay-settings-menu > div > div > div > div > div.set-keybind > div").appendChild(binds);
+        var bind;
+        fs.readFile(keybindsDirectory, "utf8", async(err, data) =>{
+            var dat = JSON.parse(data);
+            var x;
+            for(x of dat) {
+                if(x.type == "overlay") {
+                    bind = x.accelerator;
+                    var binds = await returnKeyBindPieces(bind);
+                    document.querySelector("body > div.menu.overlay-settings-menu > div > div > div > div > div.set-keybind > div").appendChild(binds);
+                }
+            }
+        })
 
         function returnKeyBindPieces(bind) {
             return new Promise(resolve=>{
@@ -130,51 +139,27 @@ async function overlaySettings() {
         var handleSettingsClose = (e) => {
             var menu = e.target.closest(".menu");
             var dropDowns = menu.getElementsByClassName("foldable-content");
-            var z;
 
-            var settings = JSON.parse(fs.readFileSync(overlaySettingsDirectory, "utf8"));
+            var settings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
+            console.log(settings);
 
+            
+            var enable = dropDowns[0].querySelector(".enable-overlay").getElementsByTagName("input")[0].checked;
             var holderObj = {
+                enableOverlay: enable
+            };                
 
-            }; 
+            settings.overlaySettings = holderObj;
 
-            var cats = menu.getElementsByClassName("foldable-content");
-            var x;
-            for(x of cats) {
-                var catName = x.childNodes[0].getAttribute("class");
-                Object.defineProperty(holderObj, catName, {
-                    value: {},
-                    enumerable: true
-                });
-
-                
-
-                var inputs = x.childNodes;
-                var n;
-                for(n of inputs) {
-                    var children = n.childNodes;
-                    var k;
-                    for(k of children) {
-
-                        if(k.getElementsByTagName("input")[0]) {
-                            var el = k.getElementsByTagName("input")[0];
-                            var name = el.getAttribute("name");
-                            Object.defineProperty(holderObj[catName], name, {
-                                value: el.checked,
-                                enumerable: true
-                            })
-                        }
-                    }
-                }
-                
-            }
-
-            fs.writeFile(overlaySettingsDirectory, JSON.stringify(holderObj, null, 4),(err)=>{
+            fs.writeFile(settingsDirectory, JSON.stringify(settings, null, 4),(err)=>{
                 if(err) throw err;
+                loadSettingsConfig();
             })
 
 
         }
+
+        menu.querySelector(".back-button").addEventListener("click", handleSettingsClose);
 
     }
 
@@ -233,10 +218,11 @@ function overlayGeneral(values) {
     collaps.style.width = "90%";
 
     var menu = collaps.content;
-    menu.classList.add("generalSettings");
+    menu.classList.add("overlaySettings");
 
 
     var enable = tabInputs.checkBox("Enable overlay");
+    enable.classList.add("enable-overlay");
     enable.getElementsByTagName("input")[0].setAttribute("name", "enableOverlay");
     menu.appendChild(enable);
 
@@ -300,11 +286,17 @@ var startAddingEventListener = (e) => {
         }
 
         
-        var settings = JSON.parse(fs.readFileSync(overlaySettingsDirectory, "utf8"));
-        settings.generalSettings.keyBind = accString;
+        var settings = JSON.parse(fs.readFileSync(keybindsDirectory, "utf8"));
+        //Get the one labelled overlay
+        var x;
+        for(x of settings) {
+            if(x.type == "overlay"){
+                x.accelerator = accString;
+            }
+        }
         
 
-        fs.writeFile(overlaySettingsDirectory, JSON.stringify(settings, null, 4),(err)=>{
+        fs.writeFile(keybindsDirectory, JSON.stringify(settings, null, 4),(err)=>{
             if(err) throw err;
             console.log("OK");
         })
@@ -317,13 +309,9 @@ function handleBindPress(event) {
     var pieceCont = document.querySelector("body > div.menu.overlay-settings-menu > div > div > div > div > div.set-keybind > div > div");
     var maxBindLength = 3;
 
-    var key = event.key;
+    var key = event.key.toUpperCase();
     if(keys.length == 3 || key.trim().length == 0) return;
-    switch(key) {
-        case "Control":
-            key = "Ctrl";
-        break;
-    }
+    
 
     //Check if the key is already added
     var cancelContinue = false;

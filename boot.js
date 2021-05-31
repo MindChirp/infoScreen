@@ -169,6 +169,29 @@ function openEditor(fileName) {
         programWin.webContents.send("opened-file-information", unzipped);
       }, 300)
 
+
+      fs.readFile("./extraResources/data/programData/settings/editableKeyBinds.json", "utf8",(err, data) => {
+        if(err) throw err;
+        var dat = JSON.parse(data);
+        appendAccelerators(dat);
+      })
+
+      var appendAccelerators = function(data) {
+        var x;
+        for(x of data) {
+          //console.log(x);
+          function sendIt(data) {
+            programWin.webContents.send("global-shortcuts", data);
+          }
+          (function(){
+            var info = x;
+            globalShortcut.register(x.accelerator, ()=>{
+                sendIt(info);
+            });
+          }());
+        }
+        //var ret = globalShortcut.register()
+      }
     })
         
     
@@ -392,3 +415,53 @@ app.on('ready', () => {
 
 });
 
+
+var overlayId;
+
+ipcMain.on("toggle-overlay", (event)=>{
+
+  if(overlayId) {
+    var window = BrowserWindow.fromId(overlayId);
+    if(window) {
+      window.close();
+      return;
+    }
+  }
+
+
+
+  var { screen } = require("electron");
+  var {width, height} = screen.getPrimaryDisplay().workAreaSize;
+
+  var overlay = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      webSecurity: true,
+      enableRemoteModule: true
+    },
+    width: width,
+    hasShadow: true,
+    maxWidth: width,
+    minWidth: width,
+    height: height,
+    maxHeight:height,
+    minHeight:height,
+    frame: false,
+    transparent: true,
+    title: "InfoScreen Overlay",
+    fullscreen: true,
+    minimizable: false,
+    resizable: false,
+    movable: false
+  });
+
+
+  var htmlPath = path.join(__dirname, "overlay.html");
+  overlay.loadURL(url.format({
+    pathname: htmlPath,
+    slashes: true
+  }))
+
+  overlayId = overlay.id;
+
+})

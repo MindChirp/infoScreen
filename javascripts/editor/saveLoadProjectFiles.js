@@ -33,7 +33,8 @@ function saveFile() {
         var sIndicator = document.createElement("span");
         sIndicator.style.animation = "save-span-animation 500ms infinite"
 
-        if(document.body.corruptFile) {
+        if(document.body.corruptFile && !globalSettings.file.overwriteCorruptFiles) {
+            alert("inasd")
             saving = true;
             //The file has been marked as possibly corrupt..
             var original = pTitle.innerHTML;
@@ -73,15 +74,31 @@ function saveFile() {
         
     
         var meta;
-        
+        var creator;
+        var created;
+        var edited;
+        var title;
+        if(document.body.projectConfig) {
+            created = document.body.projectConfig.created;
+            edited = document.body.projectConfig.edited;
+            title = document.body.projectConfig.title;
+            creator = document.body.projectConfig.creator;
+        } else {
+            creator = "Unknown";
+            edited = "Unknown";
+            title = "Corrupt overwrite";
+            created = "Unknown";
+        }
+
+
         try {
             
             meta = {
                 meta: {
-                    creator: document.body.projectConfig.creator,
-                    created: document.body.projectConfig.created,
-                    edited: dateTime,
-                    title: document.body.projectConfig.title
+                    creator: creator,
+                    created: created,
+                    edited: edited,
+                    title: title
                 },
                 fileInfo: {
     
@@ -187,7 +204,7 @@ function saveFile() {
             dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
         }
 
-        fs.writeFile(path.join(dirPath, document.body.projectConfig.title + '.proj'), data, 'binary', (err) => {
+        fs.writeFile(path.join(dirPath, title + '.proj'), data, 'binary', (err) => {
             if(err) {
                 return false;
             } else {

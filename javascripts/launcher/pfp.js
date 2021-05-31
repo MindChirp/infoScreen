@@ -158,9 +158,19 @@ function profilePhoto(parent) {
                     img.src = imgPath;
 
                     //Get base64 image, upload it to the server
+
+                    var notif = showNotification("Uploading image", true);
+
                     img.onload = ()=>{
                         var dataUrl = getDataUrl(img);
-                        uploadImageToServer(dataUrl);
+                        uploadImageToServer(dataUrl)
+                        .then(()=>{
+                            showNotification("Upload successful");
+                            notif.kill()
+                        })
+                        .catch((error)=>{
+                            showNotification(error);
+                        })
                     }
 
 
@@ -506,22 +516,24 @@ function getDataUrl(img) {
 
 
  function uploadImageToServer(data) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", serverAddress + "/usr/upload/pfp");
+     return new Promise((resolve, reject)=>{
 
-    var formData = new FormData();
-    formData.append("imageData", data);
-
-    xhr.send(formData);
-
-    xhr.onreadystatechange = function() {
-        if(this.status == 200 && this.readyState == 4) {
-            //OK
-            
-        } else if(this.status != 200 && this.readyState == 4) {
-            //Error
-        
-            alert("Could not upload image to the server. Please try again.")
-        }
-    }
+         var xhr = new XMLHttpRequest();
+         xhr.open("POST", serverAddress + "/usr/upload/pfp");
+         
+         var formData = new FormData();
+         formData.append("imageData", data);
+         
+         xhr.send(formData);
+         xhr.onreadystatechange = function() {
+             if(this.status == 200 && this.readyState == 4) {
+                 //OK
+                 resolve();
+                 
+                } else if(this.status != 200 && this.readyState == 4) {
+                    //Error
+                    reject("Could not upload image to the server. Please try again.");
+                }
+            }
+    })
  }

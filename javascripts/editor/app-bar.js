@@ -214,6 +214,8 @@ ipcRenderer.on("opened-file-information", (e, args) => {
         return;
     }
 
+    console.log(args);
+
     if(!args[0]) {document.body.devMode = true; return};
 
 

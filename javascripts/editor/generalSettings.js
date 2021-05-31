@@ -285,7 +285,7 @@ var userAndOrg = () => {
         var ok = document.createElement("button");
         ok.innerHTML = "Yes";
         modal.appendChild(ok);
-        ok.addEventListener("click", async()=>{
+        ok.addEventListener("click", async()=>{ 
             //Sign out of the program 
             modal.kill();
             signOutProgram()
@@ -321,19 +321,42 @@ var userAndOrg = () => {
     changeMail.style.marginLeft = "1rem";
     changeMail.className = "fd-button important smooth-shadow";
     act.querySelector(".content").appendChild(changeMail);
+    changeMail.addEventListener("click", async ()=>{
+        var modal = await modalWindow("This is not enabled.", "As of now, the servers does not support changing email.", "error");
+        var ok = document.createElement("button");
+        ok.innerHTML = "ok";
+        ok.className = "important";
+        modal.appendChild(ok);
+        ok.onclick = modal.kill;
+    })
 
     var changePassword = document.createElement("button");
     changePassword.innerHTML = "Change password";
     changePassword.style.marginLeft = "1rem";
     changePassword.className = "fd-button important smooth-shadow";
     act.querySelector(".content").appendChild(changePassword);
+    changePassword.addEventListener("click", async ()=>{
+        var modal = await modalWindow("This is not enabled.", "As of now, the servers does not support changing password.", "error");
+        var ok = document.createElement("button");
+        ok.innerHTML = "ok";
+        ok.className = "important";
+        modal.appendChild(ok);
+        ok.onclick = modal.kill;
+    })
 
     var changeName = document.createElement("button");
     changeName.innerHTML = "Change name";
     changeName.style.marginLeft = "1rem";
     changeName.className = "fd-button important smooth-shadow";
     act.querySelector(".content").appendChild(changeName);
-
+    changeName.addEventListener("click", async ()=>{
+        var modal = await modalWindow("This is not enabled.", "As of now, the servers does not support changing name.", "error");
+        var ok = document.createElement("button");
+        ok.innerHTML = "ok";
+        ok.className = "important";
+        modal.appendChild(ok);
+        ok.onclick = modal.kill;
+    })
 
     var org = section("Organisation")
 

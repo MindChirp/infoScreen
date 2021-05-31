@@ -119,3 +119,12 @@ document.addEventListener("keydown", function(e) {
 document.addEventListener("keyup", () => {
     globalKeyPresses = globalKeyPressesTemplate;
 })
+
+
+//HANDLE GLOBAL SHORTCUT EVENTS
+ipcRenderer.on("global-shortcuts", (event, data) => {
+    var type = data.type;
+    if(type == "overlay") {
+        toggleOverlay();
+    }
+})

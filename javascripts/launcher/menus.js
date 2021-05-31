@@ -141,7 +141,7 @@ function toggleNotificationsPane() {
 
 
 
-function showNotification(message) {
+function showNotification(message, persistent) {
     var notif = document.createElement("div");
     notif.className = "notification smooth-shadow";
 
@@ -151,7 +151,17 @@ function showNotification(message) {
     
     document.getElementById("notifications-container").appendChild(notif);
 
-    setTimeout(()=>{
-        notif.parentNode.removeChild(notif);
-    }, 5000)
+    if(!persistent) {
+        setTimeout(()=>{
+            notif.parentNode.removeChild(notif);
+        }, 5000)
+    } else {
+        var obj = {element: notif, kill: ()=>{
+            notif.style.animation = "fade-out 250ms ease-in-out both";
+            setTimeout(()=>{
+                notif.parentNode.removeChild(notif);
+            }, 300)
+        }};
+        return obj;
+    }
 }

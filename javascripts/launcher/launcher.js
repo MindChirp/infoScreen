@@ -126,20 +126,27 @@ window.onload = async function() {
             var size = pos[2];
             var img = document.getElementById("profile-photo-image");
             img.style.transform = "translateX(" + Xpos + "%) translateY(" + Ypos + "%) scale(" + size + ")";
-            if(ext == null) {
-                var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
+            var parsed = JSON.parse(localStorage.getItem("userInfo"));
+            if(parsed[1][0].imagedata) {
+                img.src = parsed[1][0].imagedata;
             } else {
-                var imgPath;
 
-                if(isPackaged) {
-                    imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                
+                if(ext == null) {
+                    var imgPath = path.join(__dirname,"internalResources", "images", "default.png");
                 } else {
-                    imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
-
+                    var imgPath;
+                    
+                    if(isPackaged) {
+                        imgPath = path.join(path.dirname(__dirname), "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                    } else {
+                        imgPath = path.join(__dirname, "extraResources",  "data", "programData", "profilePics", "user" + ext);
+                        
+                    }
+                    img.src = imgPath;
                 }
-                img.src = imgPath;
+                
             }
-            
         }
     //If not already set up, set up the localStorage
     var storage = window.localStorage;

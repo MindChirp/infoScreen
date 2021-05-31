@@ -782,6 +782,27 @@ Replaced by a style in inputs.css
     100% {transform: translate(-50%, 0)};
 }
 
+
+#main-container #top-layer .explorer-notification {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: var(--secondary-button-color);
+    animation: tab-notification-pop-in 300ms ease-out;
+    animation-fill-mode: both;
+    height: fit-content;
+    width: fit-content;
+    max-width: 20rem;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+}
+
+#main-container #top-layer .explorer-notification p {
+    margin: 0;
+}
+
+
 #main-container #top-layer .properties-pane .container {
     height: 100%;
     width: 100%;
@@ -1027,6 +1048,36 @@ Replaced by a style in inputs.css
     overflow: hidden;
     border: 1px solid var(--main-bg-color);
     cursor: pointer;
+    position: relative;
+}
+
+#main-container #top-layer #browser .content-container #widgets .explorer-widget .menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(10,10,10,0.7);
+    z-index: 3;
+    animation: fade-in 150ms ease-in-out both;
+    display: flex;
+    align-items: center;
+}
+
+#main-container #top-layer #browser .content-container #widgets .explorer-widget .menu-overlay button {
+    margin: auto;
+    background-color: transparent;
+    border-radius: 0.25rem;
+    border: none;
+    padding: 0.2rem;
+    height: fit-content;
+    width: fit-content;
+    transition: all 150ms ease-in-out;
+    cursor: pointer;
+}
+
+#main-container #top-layer #browser .content-container #widgets .explorer-widget .menu-overlay button:hover {
+    background-color: var(--main-button-color);
 }
 
 
@@ -1427,7 +1478,7 @@ Replaced by a style in inputs.css
     overflow-x: scroll;
     overflow-y: scroll;
     white-space: nowrap;
-    scroll-snap-type: both mandatory;
+    /*scroll-snap-type: both mandatory;*/
     z-index: 1;
 }
 

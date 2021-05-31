@@ -1041,7 +1041,7 @@ async function generalSettings() {
             fs.writeFile(settingsDirectory, JSON.stringify(holderObj, null, 4),(err)=>{
                 if(err) throw err;
             })
-
+            loadSettingsConfig();
 
         }
 

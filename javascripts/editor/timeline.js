@@ -235,3 +235,53 @@ function unselectAllCells() {
         unselect(x)
     } 
 }
+
+
+
+/*Code for injecting files into the timeline without user input*/
+
+
+
+//THIS CODE IS NOT FINISHED! IT IS ONLY ACCOUNTING FOR WIDGETS, AND NOT IMAGES, OR VIDEOS.
+function injectContentToTimeline(config, type, name, filename, tab, insertRow) {
+    var el = document.createElement("div");
+    el.config = config;
+    el.className = "scrubber-element";
+    el.setAttribute("onclick", "clickScrubberElement(this)");
+    el.setAttribute("hastab", tab);
+    el.style = "opacity: 1";
+    el.setAttribute("onmousedown", "dragFileInTimeline(this)");
+    el.setAttribute("type", type);
+    if(name) {
+        el.setAttribute("meta", name);
+    }
+
+    if(filename) {
+        el.setAttribute("filename", filename);
+    }
+
+    var p = document.createElement("p");
+    p.style = `
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        line-height: 4rem;
+        margin: 0;
+        font-weight: lighter;
+    `;
+
+    //Capitalize the name
+    var first = name.substring(0,1).toUpperCase();
+    var rest = name.substring(1,name.length);
+
+
+    p.innerHTML = first + rest;
+    el.appendChild(p);
+
+    p.setAttribute("oncontextmenu", "contextMenu(event, this, 2)");
+    p.setAttribute("hastab", tab);
+
+    if(insertRow instanceof HTMLElement) {
+        insertRow.appendChild(el);
+    }
+}

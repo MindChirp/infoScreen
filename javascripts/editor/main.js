@@ -13,12 +13,18 @@ function genericStartupFunction() {
     if(isPackaged) {
         settingsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "generalSettings.json");
         overlaySettingsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "overlaySettings.json");
+        keybindsDirectory = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "editableKeyBinds.json");
     } else {
         settingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "generalSettings.json");
         overlaySettingsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "overlaySettings.json");
+        keybindsDirectory = path.join(__dirname, "extraResources", "data", "programData", "settings", "editableKeyBinds.json");
     }
+    loadSettingsConfig();
+}
+
+
+function loadSettingsConfig() {
     globalSettings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
-    
 }
 
 
@@ -47,6 +53,8 @@ yourBrowserWindow.on("focus", (e) => {
 })
 
 
+const elementsToRemove = ["menu-overlay"];
+
 document.addEventListener("click", function(e) {
     if(document.getElementsByClassName("file-dropdown-menu")) {
         var els = document.getElementsByClassName("file-dropdown-menu");
@@ -58,6 +66,15 @@ document.addEventListener("click", function(e) {
         }
     }
 
+    var x;
+    for(x of elementsToRemove) {
+        var els = document.getElementsByClassName(x);
+        var y;
+        for(y of els) {
+            y.parentNode.removeChild(y);
+        }
+    }
+    
 
 
 });
@@ -97,6 +114,31 @@ document.addEventListener("wheel", function(e) {
     }
 })
 
+
+function explorerMsg(message) {
+    var el = document.createElement("div");
+    el.className = "explorer-notification smooth-shadow";
+    var olds = document.getElementsByClassName("explorer-notification");
+    if(olds.length > 0) {
+        var x;
+        for(x of olds) {
+            x.parentNode.removeChild(x);
+        }
+    }
+    var text = document.createElement("p");
+    text.innerHTML = message;
+    el.appendChild(text);
+    var cont = document.getElementsByClassName("browser-container")[0];
+    cont.appendChild(el);
+    setTimeout(() => {
+        try {
+            el.parentNode.removeChild(el);
+        } catch (error) {
+            //Oopsies, the element doesn't exist anymore.
+            //TOO BAD!
+        }
+    }, 3000)
+}
 
 function infoOnHover(el, txt) {
     el.addEventListener("mouseenter", function(event) {

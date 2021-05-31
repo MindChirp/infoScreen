@@ -8,9 +8,9 @@
     var ghost = document.createElement("div");
     ghost.setAttribute("class", "file-ghost");
     document.body.appendChild(ghost);
+    
     if(el.getAttribute("type") == "widget") {
         var widgetType = el.getAttribute("name");
-        console.log(widgetType);
         var type = el.getAttribute("type");
         localStorage.setItem("dragCache", JSON.stringify([widgetType, name, type]));
         var p = document.createElement("p");

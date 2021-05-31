@@ -1,15 +1,12 @@
 //Widgets
 
-
-function loadWidgets() {
-    var cont = document.getElementById("widgets");
-    //clock widget
+function createWidgetInExplorer(type) {
     var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget smooth-shadow");
-    el.setAttribute("onmousedown", "dragFileHandler(this)")
+    el.className = "explorer-widget smooth-shadow";
+    el.setAttribute("onmousedown", "dragFileHandler(this)");
     el.setAttribute("type", "widget");
-    el.setAttribute("name", "time");
-    cont.appendChild(el);
+    el.setAttribute("name", type);
+
     var h1 = document.createElement("h1");
     h1.setAttribute("style", `
         height: 100%;
@@ -19,141 +16,138 @@ function loadWidgets() {
         line-height: 6rem;
         font-weight: lighter;
         color: var(--title-color);
-
+        text-transform: capitalize;
         /*animation: fade-in 300ms ease-in-out 0.5s;
         animation-fill-mode: backwards;*/
     `);
-    h1.innerHTML = "Time"
+    h1.innerHTML = type;
     el.appendChild(h1);
-    /*setInterval(function() {
-        updateClockWidgets()
-    }, 500);*/
 
-    //weather widget
-    var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget smooth-shadow");
-    el.setAttribute("onmousedown", "dragFileHandler(this)")
-    var h1 = document.createElement("h1");
-    h1.innerHTML = "Weather";
-    h1.setAttribute("style", `
-        height: 100%;
-        width: fit-content;
-        padding: 0 0.1rem;
-        margin: 0;
-        margin-left: 50%;
-        transform: translate(-50%);
-        text-align: left;
-        line-height: 6rem;
-        font-weight: lighter;
-        color: var(--title-color);
+    function sleep(int) {
+        return new Promise(resolve=>{
+            setTimeout(()=>{
+                resolve();
+            }, int)
+        })
+    }
 
-    `);
-    el.setAttribute("type", "widget");
-    el.setAttribute("name", "weather");
-    el.appendChild(h1);
-    cont.appendChild(el);
+    var addMenu = async(e)=>{
+        if(e.target.closest(".explorer-widget").querySelector(".menu-overlay")) {
+            return;
+        }
 
-    //news widget
-    var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget smooth-shadow");
-    el.setAttribute("onmousedown", "dragFileHandler(this)")
-    var h1 = document.createElement("h1");
-    h1.innerHTML = "News";
-    h1.setAttribute("style", `
-        height: 100%;
-        width: fit-content;
-        padding: 0 0.1rem;
-        margin: 0;
-        margin-left: 50%;
-        transform: translate(-50%);
-        text-align: left;
-        line-height: 6rem;
-        font-weight: lighter;
-        color: var(--title-color);
+        var name = e.target.closest(".explorer-widget").getAttribute("name");
 
-    `);
-    el.setAttribute("type", "widget");
-    el.setAttribute("name", "news");
-    el.appendChild(h1);
-    cont.appendChild(el);
+        await sleep(10);
+        var over = document.createElement("div");
+        over.className = "menu-overlay"
+        el.appendChild(over);
+
+        var move = document.createElement("button");
+        var ico = document.createElement("i");
+        ico.innerHTML = "content_copy";
+        ico.className = "material-icons";
+        move.appendChild(ico);
+        over.appendChild(move);
 
 
-    //text widget
-    var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget smooth-shadow");
-    el.setAttribute("onmousedown", "dragFileHandler(this)")
-    var h1 = document.createElement("h1");
-    h1.innerHTML = "Text";
-    h1.setAttribute("style", `
-        height: 100%;
-        width: fit-content;
-        padding: 0 0.1rem;
-        margin: 0;
-        margin-left: 50%;
-        transform: translate(-50%);
-        text-align: left;
-        line-height: 6rem;
-        font-weight: lighter;
-        color: var(--title-color);
-
-    `);
-    el.setAttribute("type", "widget");
-    el.setAttribute("name", "text");
-    el.appendChild(h1);
-    cont.appendChild(el);
+        move.addEventListener("click", (e)=>{
+            //copy element to the timeline
+            var els = document.getElementsByClassName("timeline-row selected");
+            
+            if(els.length == 0) {
+                explorerMsg("No selected cell");
+                return;
+            }
 
 
+            var template = {
+
+                borderRadius: "0.25", 
+                opacity: "1", 
+                shadowMultiplier: 0, 
+                blur: 0, 
+                position: [1 + "%", 1 + "%"], 
+                edgeAnchors: {x: "left", y: "top"},
+                size: {height: "30%", width: "30%"}, 
+                display: true, 
+                backgroundColor: "#ffffff",
+                backgroundOpacity: "FF",
+                textColor: "#000000", 
+                fontSize: 4, 
+                fontFamily: "Bahnschrift", 
+                identification: null,
+                slideNumber: null,
+                widgetAttributes: 
+                {
+                    time: 
+                        {
+                            showHours: true, 
+                            showMinutes: true, 
+                            showSeconds: true, 
+                            showDate: false, 
+                            timeFormat: "1"
+                        },
+                    script: 
+                        {
+                            hasScript: false,
+                            scriptContents: "",
+                            htmlContents: "",
+                            styleContents: ""
+                        }
+                }, 
+                sizeType: 0,
+                keepAspectRatio: false
+
+            };
 
 
-     //script widget
-     var el = document.createElement("div");
-     el.setAttribute("class", "explorer-widget smooth-shadow");
-     el.setAttribute("onmousedown", "dragFileHandler(this)")
-     var h1 = document.createElement("h1");
-     h1.innerHTML = "Script";
-     h1.setAttribute("style", `
-         height: 100%;
-         width: fit-content;
-         padding: 0 0.1rem;
-         margin: 0;
-         margin-left: 50%;
-         transform: translate(-50%);
-         text-align: left;
-         line-height: 6rem;
-         font-weight: lighter;
-         color: var(--title-color);
-     `);
-     el.setAttribute("type", "widget");
-     el.setAttribute("name", "script");
-     el.appendChild(h1);
-     cont.appendChild(el);
+            var filename;
+            switch(name) {
+                case "time":
+                    filename = "Time Widget";
+                break;
+                case "weather":
+                    filename = "Weather Widget";
+                break;
+                case "news":
+                    filename = "News Widget";
+                break;
+                case "text":
+                    filename = "Text Widget";
+                break;
+                case "script":
+                    filename = "Script Widget";
+                break;
+                case "progress":
+                    filename = "Progress Widget";
+                break;
+            }
+
+            var x;
+            for(x of els) {
+                injectContentToTimeline(template, "widget", name, filename, false, x);
+            }
+        })
+
+    }
+
+    el.addEventListener("click",addMenu);
+
+    return el;
+}
+
+var widgets = ["time", "weather", "news", "text", "script", "progress"];
 
 
-
-
-    //progression widget
-    var el = document.createElement("div");
-    el.setAttribute("class", "explorer-widget smooth-shadow");
-    el.setAttribute("onmousedown", "dragFileHandler(this)")
-    var h1 = document.createElement("h1");
-    h1.innerHTML = "Progress";
-    h1.setAttribute("style", `
-        height: 100%;
-        width: fit-content;
-        padding: 0 0.1rem;
-        margin: 0;
-        margin-left: 50%;
-        transform: translate(-50%);
-        text-align: left;
-        line-height: 6rem;
-        font-weight: lighter;
-        color: var(--title-color);
-    `);
-    el.setAttribute("type", "widget");
-    el.setAttribute("name", "progress");
-    el.appendChild(h1);
-    cont.appendChild(el);
-
+//Creates all the widgets in the browser
+function loadWidgets() {
+    var cont = document.getElementById("widgets");
+    var x;
+    for(x of widgets) {
+        var el = createWidgetInExplorer(x);
+        cont.appendChild(el);
+    }
 }
 
 function updateClockWidgets() {
