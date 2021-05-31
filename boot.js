@@ -169,8 +169,13 @@ function openEditor(fileName) {
         programWin.webContents.send("opened-file-information", unzipped);
       }, 300)
 
-
-      fs.readFile("./extraResources/data/programData/settings/editableKeyBinds.json", "utf8",(err, data) => {
+      var bindsPath;
+      if(isPackaged) {
+        bindsPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "settings", "editableKeyBinds.json");
+      } else {
+        bindsPath = path.join(__dirname, "extraResources", "data", "programData", "settings", "editableKeyBinds.json");
+      }
+      fs.readFile(bindsPath, "utf8",(err, data) => {
         if(err) throw err;
         var dat = JSON.parse(data);
         appendAccelerators(dat);
