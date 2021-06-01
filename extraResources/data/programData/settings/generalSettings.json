@@ -1,6 +1,6 @@
 {
     "devSettings": {
-        "experimentalFeatures": true,
+        "experimentalFeatures": false,
         "logExtraInformation": false,
         "enableAltRenderer": false,
         "enableAltSavingSystem": false

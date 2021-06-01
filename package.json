@@ -19,6 +19,7 @@
     "fs-extra": "^9.0.1",
     "html2canvas": "^1.0.0-rc.7",
     "internet-available": "^1.0.0",
+    "keytar": "^7.7.0",
     "node-zip": "^1.1.1"
   },
   "devDependencies": {

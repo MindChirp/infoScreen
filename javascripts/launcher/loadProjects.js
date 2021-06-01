@@ -16,6 +16,7 @@ function createList(arr) {
     //Create an item for each project
     var parent = document.getElementById("list");
     if(arr.length > 0) {
+        console.log(parent);
         parent.innerHTML = "";
         parent.style.paddingTop = "0.5rem";
         parent.style.paddingBottom = "0.5rem";

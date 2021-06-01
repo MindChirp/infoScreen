@@ -191,7 +191,7 @@ function openTab(el) {
         el.style = `
             height: fit-content;
             width: 100%;
-            padding-left: 0.5rem;
+            margin-top: 0.5rem;
         `;
 
         var wr = document.createElement("div");
@@ -276,7 +276,7 @@ function openTab(el) {
 
         el.appendChild(opacity);
 
-        var fontSize = tabInputs.input("Font Size", "number", "vh");
+        var fontSize = tabInputs.input("Font Size", "number", "%");
         fontSize.style.display = "block";
         fontSize.style.marginTop = "1rem";
         fontSize.style.float = "";
@@ -286,6 +286,12 @@ function openTab(el) {
             timelineEl.config.fontSize = e.target.value; 
             refreshViewport(true);
         }
+
+        var info = createInfoCircle(`
+            <b>%</b> is calculated by getting the area of a shown element, and making the font a set percentage of this area.
+        `);
+        infoOnHover(info, "How does % work?");
+        fontSize.appendChild(info);
 
         el.appendChild(fontSize);
 
@@ -814,6 +820,36 @@ function openTab(el) {
                 case "text":
                     var custom = customisation(timelineEl.config);
                     wrapper.appendChild(custom);
+
+
+                    var p = document.createElement("p");
+                    p.innerHTML = "Text";
+                    p.style = `
+                        margin: 0;
+                        line-height: 1rem;
+                        font-weight: lighter;
+                    `
+                    wrapper.appendChild(p);
+                    var input = document.createElement("textarea");
+                    input.setAttribute("spellcheck", "false");
+                    input.style = `
+                        background-color: var(--secondary-color);
+                        border-radius: 0.25rem;
+                        width: 100%;
+                        height: 10rem;
+                        resize: none;
+                        outline: none;
+                        color: var(--title-color);
+                        border-color: var(--main-button-color);
+                    `;
+
+                    input.addEventListener("change", (e)=>{
+                        var val = e.target.value;
+                        timelineEl.config.value = val;
+                        refreshViewport(true);
+                    })
+
+                    wrapper.appendChild(input);
                 break;
                 case "time": {
 

@@ -215,36 +215,44 @@ function text(config, rootEl) {
         border-radius: 0.25rem;
         position: relative;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        text-align: center;
     `;
 
 
-    var box = document.createElement("textarea");
+    var box = document.createElement("p");
     if(config.value) {
-        box.value = config.value;
+        box.innerHTML = config.value;
     } else {
-        box.value = "text placeholder";
+        box.innerHTML = "Text box";
     }
 
+
+    var height = config.size.height;
+    var width = config.size.width;
+    
+    //Get the area of the widget
+    var fontSize = config.fontSize;
+    var h = parseInt(height.split("%")[0]);
+    var w = parseInt(width.split("%")[0]);
+    var converted = convertPercentToPx([w,h]);
+    var size = converted[1]*fontSize/100;
     box.style = `
         height: fit-content;
         width: fit-content;
         margin: 0;
-        position: absolute;
         font-weight: lighter;
         color: var(--paragraph-color);
         text-align: center;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
         color: ` + config.textColor + `; 
         font-family: ` + config.fontFamily + `;
         background-color: transparent;
         border: none;
-        height: 100%;
-        width: 100%;
         resize: none;
         text-align: center;
-        font-size: ` + config.fontSize + `vh;
+        font-size: ` + size + `px;
+        margin: auto;
     `;
     box.style.pointerEvents = "none";
     box.addEventListener("change", function(e) {

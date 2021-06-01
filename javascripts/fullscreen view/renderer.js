@@ -15,9 +15,7 @@ function renderColumn(indexes) {
     
     var x;
     for(x of indexes) {
-        console.log(x);
         if(x[0].type == "img") {
-            console.log(x[0])
             renderer.image(x[0], isPackaged);
         } else if(x[0].type == "vid") {
             renderer.movie(x[0], isPackaged);
@@ -29,7 +27,7 @@ function renderColumn(indexes) {
 }
 
 function RenderingToolKit() {
-    this.image = function(data, packaged) {
+    this.image = async function(data, packaged) {
         var viewport = document.getElementById("viewport");
         //Render image to the viewport
         var el = document.createElement("div");
@@ -43,19 +41,34 @@ function RenderingToolKit() {
 
 
         //Create an element to get the proper aspect ratio from
-        var asp = document.createElement("img");
+        var asp;
+        await async function() {
+            return new Promise((resolve, reject)=>{
+                asp = document.createElement("img");
 
-        if(!isPackaged) {
-            img.src = "./extraResources/data/files/images/" + name;
-            asp.src = "./extraResources/data/files/images/" + name;
-        } else {
-            img.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
-            asp.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
-        }
+
+                if(!isPackaged) {
+                    img.src = "./extraResources/data/files/images/" + name;
+                    asp.src = "./extraResources/data/files/images/" + name;
+                } else {
+                    img.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
+                    asp.src=path.join(path.dirname(__dirname), "extraResources", "data", "files", "images", name);
+                }
+
+                asp.onload = function() {
+                    resolve();
+                }
+
+                asp.onerror = function(err) {
+                    reject(err);
+                }
+            })
+        }();
 
         var Awidth = asp.width;
         var Aheight = asp.height;
-        
+        console.log(Awidth, Aheight);
+
         var keepAsp = data.config.keepAspectRatio;
         var aspectRatio = Awidth/Aheight;
 
@@ -87,7 +100,23 @@ function RenderingToolKit() {
         var shadowMultiplier = data.config.shadowMultiplier;
         var blur = data.config.blur;
         var position = data.config.position;
-        var widths = data.config.size.width;
+        var widths;
+        if(data.config.size.width == "keepAspectRatio") {
+            //Alter the asp image element to have the correct height
+            //Get the viewport height
+            var viewport = document.querySelector("#viewport");
+            var height = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
+            
+            //Get the correct height value
+            var corrHeight = height*parseInt(data.config.size.height.split("%")[0])/100;
+            asp.height = corrHeight;
+            var Awidth = asp.height*aspectRatio;
+            //Convert the value to percent
+            var converted = convertPxToPercent([Awidth,0])
+            widths = converted[0] + "%";
+        } else {
+            widths = data.config.size.width;
+        }
         var heights;
         if(keepAsp) {
             heights = parseInt(widths.split("px")[0])/aspectRatio;
@@ -154,6 +183,12 @@ function RenderingToolKit() {
         var txtColor = data.config.textColor;
         var fontSize = data.config.fontSize;
         var fontFamily = data.config.fontFamily;
+
+        //Get the area of the widget
+        var area = parseInt(height.split("%")[0])*parseInt(width.split("%")[0]);
+        var size = area*fontSize/100;
+        var downScale = size/200 + "px";
+
         widget.style = ` 
             position: absolute;
             z-index: ` + zIndex + `;
@@ -166,6 +201,7 @@ function RenderingToolKit() {
             background-color: ` + bgColor + bgOpacity + `;
             color: ` + txtColor + `;
             font-family: ` + fontFamily + `;
+            font-size: ` + downScale + `;
             /*font-size: ` + fontSize + `px;*/
             display: ` + display + `;
 
@@ -257,4 +293,27 @@ function RenderingToolKit() {
     this.numberOfColumns = function() {
         return document.body.meta.numberOfColumns;
     }
+}
+
+
+
+
+function convertPxToPercent([x,y]) {
+    //Get the viewport size
+    var viewport = document.querySelector('#viewport');
+    var xWidth = parseInt(window.getComputedStyle(viewport).width.split("px")[0]);
+    var yHeight = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
+
+    var xP = (parseInt(x)/xWidth)*100;
+    var yP = (parseInt(y)/yHeight)*100;
+
+    return [xP.toFixed(2), yP.toFixed(2)]; //Return only numbers rounded to two decimal places
+
+}
+
+function convertPercentToPx([x,y]) {
+    var viewport = document.querySelector('#viewport');
+    var xWidth = parseInt(window.getComputedStyle(viewport).width.split("px")[0]);
+    var yHeight = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
+    return [(x*xWidth/100).toFixed(5), (y*yHeight/100).toFixed(5)];
 }

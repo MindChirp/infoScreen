@@ -5,6 +5,7 @@ const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged");
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 const internetAvailable = require("internet-available");
+const keytar = require("keytar");
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -56,8 +57,65 @@ function loaderWheel() {
 var signedIn = false;
 var firstTime = null;
 
-window.onload = async function() {
+function authClient() {
+    return new Promise((resolve, reject)=>{
 
+        //Fetch the password from the OS keychain
+        //get the username
+        if(!JSON.parse(localStorage.getItem("userInfo"))[1]) {reject("No user info on computer"); return;}
+        var usr = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+        keytar.getPassword("infoscreen", usr)
+        .then((pass)=>{
+            var usr = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+            var formData = new FormData();
+            formData.append("user", usr);
+            formData.append("password", pass);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", serverAddress + "/auth");
+            xhr.send(formData);
+
+            xhr.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    var dat = JSON.parse(this.responseText);
+                    localStorage.setItem("userInfo", JSON.stringify(dat));
+                    console.log("%cClient signed in and up to date", "font-size: 1.5rem; color: red; text-stroke: 1px black;");
+                    
+                    localStorage.setItem("signedIn", "true");
+                    var state = {upToDate: true, errorType: null}
+                    document.body.serverState.push(state);
+                    
+                    //Enable developer mode if the user is a dev
+                    if(dat[1][0].dev == true) {
+                        document.body.developerMode = true;
+                        enableDevMode();
+                    } else {
+                        document.body.developerMode = false;
+                    }
+                    
+                    changeState();
+                    resolve();
+                } else if(this.readyState == 4 && this.status != 200) {
+                    reject(this.responseText);
+                }
+            }
+        })  
+        .catch((error)=>{
+            reject(err);
+        })
+    })
+}
+
+
+window.onload = async function() {
+    authClient()
+    .then(()=>{
+        //Request went great!
+    })
+    .catch((err)=>{
+        //Things didnt sort out as intended
+        //(This does not mean it didn't go according to plan!)
+        console.log("New user info has not been fetched ", err);
+    })
     document.body.serverState = [];
     //load all the projects to the plrojects list
     initializeProjectList();
@@ -92,20 +150,7 @@ window.onload = async function() {
         if(signedIn == true) {
             //Sign in the client on the server as well
 
-            var updateClient = async function() {
-                var data = await signInClient();
-                
-                if(data[0] == "ERROR") {
-                    var errorType = {upToDate: false, errorType: data[1]}
-                    document.body.serverState.push(errorType);
-                } else if(data[0] == "OK") {
-                    var state = {upToDate: true, errorType: null};
-                    document.body.serverState.push(state);
-                }
-                
-            }
-
-            updateClient();
+        
 
             //Check for dev mode
             var ext = localStorage.getItem("pfpExtension");
@@ -578,6 +623,7 @@ function userSettings() {
             
             var pass = pswrd.value;
             var usrname = usrName.value;
+            localStorage.setItem("tempPass", pass);
 
             var formData = new FormData();
             formData.append("user", usrname);
@@ -592,6 +638,20 @@ function userSettings() {
                     if(dat[0] == "OK") {
                         setTimeout(function() {
                             //Transition everything
+
+                            //Save the password into the OS keychain
+                            
+                            keytar.setPassword("infoscreen", usrname, localStorage.getItem("tempPass"))
+                            .then(()=>{
+                                //OK
+                                localStorage.removeItem("tempPass");
+                            })
+                            .catch((error)=>{
+                                showNotification("Could not save authentication details.");
+                                localStorage.removeItem("tempPass");
+                            })
+
+
                             var subheader = document.getElementsByClassName("user-header-wrapper")[0];
                             var loginForm = document.getElementsByClassName("login-form")[0];
                             subheader.style.animation = "slide-out 300ms ease-in-out";
@@ -1023,6 +1083,7 @@ function userScreen(info, header, signIn) {
             if(this.readyState == 4 && this.status == 200) {
                 //OK
                 localStorage.setItem("signedIn", "false");
+                localStorage.setItem("userInfo", "");
                 changeState();
                 location.reload();
             } else if(this.readyState == 4 && this.status != 200) {
@@ -1144,6 +1205,8 @@ function divider() {
 
 function changeState() {
     //Update the project list if signed in
+    var parent = document.getElementById("list");
+    parent.innerHTML = "";
     initializeProjectList();
 
     var signedIn = localStorage.getItem("signedIn");
@@ -1933,6 +1996,11 @@ function sleep(interval) {
     });
 }
 
+
+/*
+
+THIS CODE IS DEPRECATED BECAUSE OF SECURITY ISSUES, AND GENERALLY BAD PERFORMANCE
+
 function signInClient() {
     //Make server request
     return new Promise(resolve =>{
@@ -1975,3 +2043,4 @@ function signInClient() {
     }
     })
 }
+*/

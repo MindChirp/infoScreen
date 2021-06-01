@@ -51,6 +51,7 @@ function feedback(parent) {
     `);
     var email = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
     Femail.setAttribute("type", "email");
+    Femail.maxLength = 320;
     Femail.placeholder = "Your email";
     Femail.value = email;
     left.appendChild(Femail);
@@ -79,11 +80,13 @@ function feedback(parent) {
         color: var(--title-color);
 
         `);
+    subject.maxLength = 100;
     subject.setAttribute("type", "text");
     subject.placeholder = "Subject";
     right.appendChild(subject);
 
     var letter = document.createElement("textarea");
+    letter.maxLength = 500;
     wrapper.appendChild(letter);
     letter.setAttribute("style", `
         color: var(--paragraph-color);

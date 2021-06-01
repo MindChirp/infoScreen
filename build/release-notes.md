@@ -1,20 +1,18 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>New overlay <div class="info-circle" metaMessage="Default keybind is Ctrl+J, however it can be changed in Window > Overlay > Keybind">?</div></li>
-        <li>IN BETA: Undoing and redoing</li>
+        <li>None</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Bux fixes</h2>
     <ul>
-        <li>Timeline auto-scrolling issue</li>
-        <li>No sign in or sign out indication in launcher</li>
-        <li>Wrongly sized resizing border for images in the viewport</li>
+        <li>Project list shows duplicate files</li>
     </ul>
         <br>
     <h2 style="margin: 0">Changes</h2>
     <ul>
-        <li>Updated the program for a new server sign in architecture.</li>
+        <li>Changed text box behaviour <div class="info-circle" metaMessage="The text will now change size based on the content size in pixels. In other words: the text will be displayed properly on different screen sizes">?</div></li>
+        <li>Improved image rendering with initial settings</li>
     </ul>
         <br>
 
