@@ -991,6 +991,7 @@ function addResizingBorders(el) {
             element.style.width = trackedWidth + "px";
         }
 
+        var element = e.target.closest(".viewport-image");
         var handleUp = (e) => {
             document.body.removeEventListener("mouseup", handleUp);
             document.body.removeEventListener("mousemove", handleMove);
@@ -1010,12 +1011,15 @@ function addResizingBorders(el) {
 
             updateFullscreenView();
 
+            //Try to update the widget in case it needs any layout refreshes
+            refreshViewportElement(element);
+
+
         }
 
         document.body.addEventListener("mousemove", handleMove);
         document.body.addEventListener("mouseup", handleUp);
     }
-
 
     var r2 = (e) => {
         e.stopPropagation();
@@ -1054,6 +1058,7 @@ function addResizingBorders(el) {
             el.connectedElement.config.size.width = percents[0] + "%";
             el.connectedElement.config.size.height = percents[1] + "%";
             updateFullscreenView();
+            refreshViewportElement(element);
 
         }
 
@@ -1099,6 +1104,7 @@ function addResizingBorders(el) {
             el.connectedElement.config.size.width = percents[0] + "%";
             el.connectedElement.config.size.height = percents[1] + "%";
             updateFullscreenView();
+            refreshViewportElement(element);
 
         }
 
@@ -1211,4 +1217,60 @@ function updateFullscreenView() {
     //The slide info has been gathered, time to send it away..
     var data = {routingInformation: {forwardingName: "slide-data"}, forwardingInformation: col};
     var res = ipcRenderer.sendSync("inter-renderer-communication", data);
+}
+
+
+
+function refreshViewportElement(el) {
+    //Get the element config
+    var conf = el.connectedElement.config;
+    if(!conf) return; //Cancel this operation if the viewport element config is non-existent
+    
+    //Get the type of viewport element
+
+    /*
+        1. Images do not require any updates
+        2. Text elements require the font size to be changed
+        3. No other elements needs any changes        
+    */
+
+    //Get the element type
+    var type = el.connectedElement.getAttribute("type");
+    
+    if(type == "widget") {
+        var type = el.connectedElement.getAttribute("meta");
+
+        if(type == "text") {
+            //Fix the font size
+            var p = el.getElementsByTagName("p")[0];
+            
+            var h = parseInt(conf.size.height.split("%")[0])
+            var w = parseInt(conf.size.width.split("%")[0])
+            var fontSize = conf.fontSize;
+
+            var converted = convertPercentToPx([w,h]);
+            var size = converted[1]*fontSize/100;
+
+            
+            p.style = `
+            height: fit-content;
+            width: fit-content;
+            margin: 0;
+            font-weight: lighter;
+            color: var(--paragraph-color);
+            text-align: center;
+            color: ` + conf.textColor + `; 
+            font-family: ` + conf.fontFamily + `;
+            background-color: transparent;
+            border: none;
+            resize: none;
+            text-align: center;
+            font-size: ` + size + `px;
+            margin: auto;
+        `;
+
+
+        }
+
+    }
 }

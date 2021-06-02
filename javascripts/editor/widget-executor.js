@@ -232,7 +232,7 @@ function text(config, rootEl) {
     var height = config.size.height;
     var width = config.size.width;
     
-    //Get the area of the widget
+    //Get the size of the widget
     var fontSize = config.fontSize;
     var h = parseInt(height.split("%")[0]);
     var w = parseInt(width.split("%")[0]);

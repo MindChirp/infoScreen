@@ -288,7 +288,7 @@ function openTab(el) {
         }
 
         var info = createInfoCircle(`
-            <b>%</b> is calculated by getting the area of a shown element, and making the font a set percentage of this area.
+            <b>%</b> is calculated by getting the height of a shown element, and making the font a set percentage of this height.
         `);
         infoOnHover(info, "How does % work?");
         fontSize.appendChild(info);
