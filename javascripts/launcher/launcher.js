@@ -107,15 +107,21 @@ function authClient() {
 
 
 window.onload = async function() {
-    authClient()
-    .then(()=>{
-        //Request went great!
-    })
-    .catch((err)=>{
-        //Things didnt sort out as intended
-        //(This does not mean it didn't go according to plan!)
-        console.log("New user info has not been fetched ", err);
-    })
+
+    //Check wether the client should be checked for authentification on page load
+    var checkAuth = JSON.parse(localStorage.getItem("staySignedIn"));
+    if(checkAuth) {
+
+        authClient()
+        .then(()=>{
+            //Request went great!
+        })
+        .catch((err)=>{
+            //Things didnt sort out as intended
+            //(This does not mean it didn't go according to plan!)
+            console.log("New user info has not been fetched ", err);
+        })
+    }
     document.body.serverState = [];
     //load all the projects to the plrojects list
     initializeProjectList();
@@ -537,6 +543,34 @@ function userSettings() {
         form.appendChild(usrName);
         form.appendChild(pswrd);
 
+        var wr = document.createElement("div");
+        wr.style = `
+            display: block;
+            margin-top: 0rem;
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        `
+        var staySignedIn = document.createElement("input");
+        staySignedIn.type = "checkbox";
+        staySignedIn.id = "stay-signed-in"
+        wr.appendChild(staySignedIn);
+        form.appendChild(wr);
+        staySignedIn.className = "launcher-checkbox";
+        var lab = document.createElement("label");
+        lab.setAttribute("for", "stay-signed-in");
+        lab.innerHTML = "Stay signed in";
+        lab.style = `
+            color: var(--title-color);
+            display: inline-block;
+            margin: 0;
+            vertical-align: top;
+            margin-left: 0.5rem;
+            font-weight: lighter;
+            opacity: 0.6;
+        `
+        wr.appendChild(lab);
+
         var logIn = document.createElement("button");
         logIn.setAttribute("class", "smooth-shadow fd-button login-button");
         logIn.setAttribute("style", `
@@ -621,6 +655,10 @@ function userSettings() {
             //xhr.open("POST", "http://80.213.230.181:3000/auth");
             xhr.open("POST", serverAddress + "/auth");
             
+            //Should the client stay signed in?
+            var stayAuthed = staySignedIn.checked;
+            localStorage.setItem("staySignedIn", JSON.stringify(stayAuthed));
+
             var pass = pswrd.value;
             var usrname = usrName.value;
             localStorage.setItem("tempPass", pass);
@@ -640,16 +678,22 @@ function userSettings() {
                             //Transition everything
 
                             //Save the password into the OS keychain
-                            
-                            keytar.setPassword("infoscreen", usrname, localStorage.getItem("tempPass"))
-                            .then(()=>{
-                                //OK
+                            if(JSON.parse(localStorage.getItem("staySignedIn"))) {
+
+                                keytar.setPassword("infoscreen", usrname, localStorage.getItem("tempPass"))
+                                .then(()=>{
+                                    //OK
+                                    //Clear the temp pass cookie for safety reasons
+                                    localStorage.removeItem("tempPass");
+                                })
+                                .catch((error)=>{
+                                    showNotification("Could not save authentication details.");
+                                    localStorage.removeItem("tempPass");
+                                })
+                            } else {
+                                //Clear the temp pass cookie for safety reasons
                                 localStorage.removeItem("tempPass");
-                            })
-                            .catch((error)=>{
-                                showNotification("Could not save authentication details.");
-                                localStorage.removeItem("tempPass");
-                            })
+                            }
 
 
                             var subheader = document.getElementsByClassName("user-header-wrapper")[0];
@@ -1577,7 +1621,26 @@ function removeNotification(el) {
 
 
 function exitProgram() {
-    ipcRenderer.send("closeLauncher", true);
+    //This is for when the quit button is pressed in the bottom left corner of the launcher
+
+    //Update the quit button
+    var butt = document.querySelector("#quit-button");
+    butt.getElementsByTagName("p")[0].innerHTML = "Quitting";
+
+    if(!JSON.parse(localStorage.getItem("staySignedIn"))) {
+        //The client should not be kept signed in on this user.
+        signOutClient()
+        .then(()=>{
+            //Close the program gracefully
+            ipcRenderer.send("closeLauncher", true);
+        })
+        .catch(()=>{
+            //The sign out couldnt be performed as expected. Do something else
+            ipcRenderer.send("closeLauncher", true);
+        })
+    } else {
+        ipcRenderer.send("closeLauncher", true);
+    }
 }
 
 
@@ -1996,6 +2059,79 @@ function sleep(interval) {
     });
 }
 
+function signOutClient() {
+    return new Promise((resolve, reject)=>{
+
+        //Let the server know that we are signed out
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", serverAddress + "/signOut");
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if(this.readyState == 4 && this.status == 200) {
+                //OK
+                localStorage.setItem("signedIn", "false");
+                localStorage.setItem("userInfo", "");
+                changeState();
+                resolve();
+            } else if(this.readyState == 4 && this.status != 200) {
+                showNotification("Could not perform a clean signout. Sign in to the user will be restricted in this client.");
+                localStorage.clear();
+                //localStorage.setItem("signedIn", "false");
+                reject();
+            }
+        }
+    })
+}
+    
+    
+    
+    function authClient() {
+        return new Promise((resolve, reject)=>{
+
+        //Fetch the password from the OS keychain
+        //get the username
+        if(!JSON.parse(localStorage.getItem("userInfo"))[1]) {reject("No user info on computer"); return;}
+        var usr = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+        keytar.getPassword("infoscreen", usr)
+        .then((pass)=>{
+            var usr = JSON.parse(localStorage.getItem("userInfo"))[1][0].email;
+            var formData = new FormData();
+            formData.append("user", usr);
+            formData.append("password", pass);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", serverAddress + "/auth");
+            xhr.send(formData);
+
+            xhr.onreadystatechange = function() {
+                if(this.readyState == 4 && this.status == 200) {
+                    var dat = JSON.parse(this.responseText);
+                    localStorage.setItem("userInfo", JSON.stringify(dat));
+                    console.log("%cClient signed in and up to date", "font-size: 1.5rem; color: red; text-stroke: 1px black;");
+                    
+                    localStorage.setItem("signedIn", "true");
+                    var state = {upToDate: true, errorType: null}
+                    document.body.serverState.push(state);
+                    
+                    //Enable developer mode if the user is a dev
+                    if(dat[1][0].dev == true) {
+                        document.body.developerMode = true;
+                        enableDevMode();
+                    } else {
+                        document.body.developerMode = false;
+                    }
+                    
+                    changeState();
+                    resolve();
+                } else if(this.readyState == 4 && this.status != 200) {
+                    reject(this.responseText);
+                }
+            }
+        })  
+        .catch((error)=>{
+            reject(err);
+        })
+    })
+}
 
 /*
 
