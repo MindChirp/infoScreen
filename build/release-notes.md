@@ -1,7 +1,7 @@
     <h2 style="margin: 0">New features</h2>
     <ul>
         <li>The program now uses OS keychains to store the passwords in a safe manner</li>
-        <li>Option to stay signed in --Dette må gjøres!</li>
+        <li>Option to stay signed in</li>
     </ul>
         <br>
 
