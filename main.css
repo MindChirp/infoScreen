@@ -857,6 +857,58 @@ Replaced by a style in inputs.css
     border-radius: 0.25rem;
 }
 
+
+#main-container #top-layer .properties-pane .container .right .text-positioning {
+    background: var(--secondary-color);
+    width: fit-content;
+    max-width: 3rem;
+    border: none;
+    outline: none;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: background 200ms ease-in-out;
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning:hover {
+    background-color: var(--main-bg-color);
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning:first-of-type {
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning:first-of-type::after {
+    height: 80%;
+    width: 1px;
+    background: var(--title-color);
+    right: 0;
+    content: ".";
+    position: absolute;
+    color: transparent;
+    top: 50%;
+    transform: translate(0,-50%);
+    opacity: 0.5;
+
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning:last-of-type::after {
+    height: 80%;
+    width: 1px;
+    background: var(--title-color);
+    left: 0;
+    content: ".";
+    position: absolute;
+    color: transparent;
+    top: 50%;
+    transform: translate(0,-50%);
+    opacity: 0.5;
+
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning:last-of-type {
+    border-radius: 0 0.5rem 0.5rem 0;
+}
 #main-container #top-layer .properties-pane .container .preview-window {
     height: 10rem;
     width: 100%;

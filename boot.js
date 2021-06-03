@@ -4,6 +4,7 @@ const { autoUpdater } = require("electron-updater");
 const { isPackaged } = require("electron-is-packaged");
 const fs = require("fs");
 const ipc = require
+const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 const url = require('url');
 let win = null;
 let launcherWin = null;
@@ -104,6 +105,11 @@ function boot() {
   }))*/
 }
 
+var rendererAwareOfClosing = false;
+
+ipcMain.on("close-intentionally", (e, data) => {
+  rendererAwareOfClosing = true;
+})
 
 function openEditor(fileName) {
     //lage et nytt vindu
@@ -127,6 +133,24 @@ function openEditor(fileName) {
         transparent: false,
         backgroundColor: "#171F26"
       });
+
+
+      programWin.on("close", (e)=>{
+        if(!rendererAwareOfClosing) {
+
+          e.preventDefault();
+          //Clear the localstorage
+          
+          //Let the program know that something is being closed
+          programWin.webContents.send("close-program-please", JSON.stringify(true));
+        } else {
+          
+        }
+      })
+
+      programWin.on("closed", (e)=>{
+        rendererAwareOfClosing = false;
+      })
 
 
       var unzipped = [];

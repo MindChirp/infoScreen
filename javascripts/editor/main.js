@@ -1059,3 +1059,11 @@ function signOutProgram() {
         
     })
 }
+
+
+ipcRenderer.on("close-program-please", (e, data) => {
+    if(!alreadyClosing) {
+        //The f4 is probably being pressed, exit gracefully
+        programExit();
+    }
+})

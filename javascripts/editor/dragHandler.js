@@ -187,7 +187,10 @@
                         scriptContents: "",
                         htmlContents: "",
                         styleContents: ""
-                    }
+                    },
+                text: {
+                    align: "center"
+                }
             }, 
             sizeType: 0,
             keepAspectRatio: false

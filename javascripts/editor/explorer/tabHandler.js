@@ -850,6 +850,43 @@ function openTab(el) {
                     })
 
                     wrapper.appendChild(input);
+
+                    var wr = document.createElement("div");
+                    wr.style = `
+                        width: 100%;
+                        height: fit-content;
+                        display: flex;
+                        align-items: center;
+                    `
+
+
+
+
+                    var left = document.createElement("button");
+                    left.className = "text-positioning";
+                    var ico = document.createElement("i");
+                    ico.className = "material-icons";
+                    ico.innerHTML = "format_align_left";
+                    left.appendChild(ico);
+                    wr.appendChild(left);
+
+                    var center = document.createElement("button");
+                    center.className = "text-positioning";
+                    var ico = document.createElement("i");
+                    ico.className = "material-icons";
+                    ico.innerHTML = "format_align_center";
+                    center.appendChild(ico);
+                    wr.appendChild(center);
+
+                    var right = document.createElement("button");
+                    right.className = "text-positioning";
+                    var ico = document.createElement("i");
+                    ico.className = "material-icons";
+                    ico.innerHTML = "format_align_right";
+                    right.appendChild(ico);
+                    wr.appendChild(right);
+
+                    wrapper.appendChild(wr);
                 break;
                 case "time": {
 

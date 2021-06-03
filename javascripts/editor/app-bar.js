@@ -13,10 +13,50 @@ children.forEach(function(e) {
 
 
 //Define the different functions for closing etc
+var alreadyClosing = false;
+async function programExit() {
 
-function programExit() {
-    ipcRenderer.send("close", true);
+    //Inform the main process that we are closing the program intentionally
+    ipcRenderer.send("close-intentionally", true);
+
+    var stayAuthed = JSON.parse(localStorage.getItem("staySignedIn"));
+    alreadyClosing = true;
+    if(!stayAuthed) {
+        var modal = await modalWindow("This will close the program and sign you out.", "Any unsaved changes will be lost. Are you sure?", "info")
+        var ok = document.createElement("button");
+        ok.innerHTML = "Yes";
+        modal.appendChild(ok);
+
+        var no = document.createElement("button");
+        no.innerHTML = "Cancel";
+        no.className = "important";
+        modal.appendChild(no);
+        no.addEventListener("click", ()=>{
+            modal.kill();
+        })
+
+        ok.addEventListener("click", async()=>{
+            modal.kill();
+            signOut();
+        })
+
+        var signOut = function() {
+
+            signOutProgram()
+            .then(()=>{
+                localStorage.clear();
+                ipcRenderer.send("close", true);
+            })
+            .catch(()=>{
+                localStorage.clear();
+                ipcRenderer.send("close", true);
+            })
+        }
+    } else {
+        ipcRenderer.send("close", true);
+    }
 }
+
 
 function programMinimize() {
     ipcRenderer.send("minimize", true);
