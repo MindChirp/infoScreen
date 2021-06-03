@@ -14,5 +14,8 @@
         "overwriteCorruptFiles": false,
         "displayNameInAppBar": true
     },
-    "usrAndOrg": {}
+    "usrAndOrg": {},
+    "overlaySettings": {
+        "enableOverlay": true
+    }
 }

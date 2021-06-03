@@ -238,9 +238,11 @@ function text(config, rootEl) {
     var w = parseInt(width.split("%")[0]);
     var converted = convertPercentToPx([w,h]);
     var size = converted[1]*fontSize/100;
+
+    var align = config.widgetAttributes.text.align;
     box.style = `
         height: fit-content;
-        width: fit-content;
+        width: 100%;
         margin: 0;
         font-weight: lighter;
         color: var(--paragraph-color);
@@ -250,7 +252,7 @@ function text(config, rootEl) {
         background-color: transparent;
         border: none;
         resize: none;
-        text-align: center;
+        text-align: ` + align + `;
         font-size: ` + size + `px;
         margin: auto;
     `;

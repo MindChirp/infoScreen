@@ -867,7 +867,16 @@ Replaced by a style in inputs.css
     position: relative;
     display: inline-block;
     cursor: pointer;
-    transition: background 200ms ease-in-out;
+    transition: background 150ms ease-in-out;
+    padding: 0.5rem;
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning.selected {
+    background: var(--slider-color);
+}
+
+#main-container #top-layer .properties-pane .container .right .text-positioning i {
+    font-size: 1.5rem;
 }
 
 #main-container #top-layer .properties-pane .container .right .text-positioning:hover {

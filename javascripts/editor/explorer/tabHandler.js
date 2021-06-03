@@ -825,7 +825,7 @@ function openTab(el) {
                     var p = document.createElement("p");
                     p.innerHTML = "Text";
                     p.style = `
-                        margin: 0;
+                        margin: 1rem 0 0 0;
                         line-height: 1rem;
                         font-weight: lighter;
                     `
@@ -852,6 +852,7 @@ function openTab(el) {
                     wrapper.appendChild(input);
 
                     var wr = document.createElement("div");
+                    wr.className = "alignment-wrapper";
                     wr.style = `
                         width: 100%;
                         height: fit-content;
@@ -859,32 +860,86 @@ function openTab(el) {
                         align-items: center;
                     `
 
+                    var title = document.createElement("p");
+                    title.innerHTML = "Text alignment"
+                    title.style = `
+                        line-height: 1rem;
+                        font-weight: lighter;
+                        margin: 1rem 0 0.5rem 0;
+                    `
+                    wrapper.appendChild(title);
+
+                    //Handle the press of either of the upcoming alignment
+                    //buttons
+                    var handleAlignmentClick = function(e) {
+                        var els = e.target.closest(".alignment-wrapper").children;
+                        var x;
+                        
+                        for(x of els) {
+                            x.classList.remove("selected");
+                        }
+
+                        e.target.closest(".text-positioning").classList.add("selected");
+
+                        //get the button type
+                        var type = e.target.closest(".text-positioning").variant;
+                        timelineEl.config.widgetAttributes.text.align = type;
+                        
+                        refreshViewport(true);
+                    }
 
 
 
                     var left = document.createElement("button");
+                    left.variant = "left";
                     left.className = "text-positioning";
                     var ico = document.createElement("i");
                     ico.className = "material-icons";
                     ico.innerHTML = "format_align_left";
                     left.appendChild(ico);
                     wr.appendChild(left);
+                    left.addEventListener("click", handleAlignmentClick)
 
                     var center = document.createElement("button");
+                    center.variant = "center";
                     center.className = "text-positioning";
                     var ico = document.createElement("i");
                     ico.className = "material-icons";
                     ico.innerHTML = "format_align_center";
                     center.appendChild(ico);
                     wr.appendChild(center);
+                    center.addEventListener("click", handleAlignmentClick)
 
                     var right = document.createElement("button");
+                    right.variant = "right";
                     right.className = "text-positioning";
                     var ico = document.createElement("i");
                     ico.className = "material-icons";
                     ico.innerHTML = "format_align_right";
                     right.appendChild(ico);
                     wr.appendChild(right);
+                    right.addEventListener("click", handleAlignmentClick)
+
+                    //Get the actual setting, and apply it to the buttons
+                    var sett = timelineEl.config.widgetAttributes.text.align;
+                    switch(sett) {
+                        case "left":
+                            right.classList.remove("selected");
+                            center.classList.remove("selected");
+                            left.classList.add("selected");
+                        break;
+                        case "center":
+                            right.classList.remove("selected");
+                            left.classList.remove("selected");
+                            center.classList.add("selected");
+                        break;
+                        case "right":
+                            left.classList.remove("selected");
+                            center.classList.remove("selected");
+                            right.classList.add("selected");
+                        break;
+                    }
+
 
                     wrapper.appendChild(wr);
                 break;
