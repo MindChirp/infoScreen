@@ -290,6 +290,7 @@ var userAndOrg = () => {
             modal.kill();
             signOutProgram()
             .then(()=>{
+                alreadyClosing = true;
                 relaunchLauncher();
             })
             .catch(async(error)=>{

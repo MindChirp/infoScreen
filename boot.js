@@ -15,6 +15,9 @@ var programWidth;
 var programHeight;
 var programHeight1;
 var programWidth1;
+
+var windowIdTracker = []
+
 if(isDev) {
   //Do some stuff if the app is in developement mode
   const log = require('electron-log');
@@ -134,17 +137,18 @@ function openEditor(fileName) {
         backgroundColor: "#171F26"
       });
 
+      windowIdTracker.push({name:"main-window", id: programWin.id});
 
       programWin.on("close", (e)=>{
         if(!rendererAwareOfClosing) {
-
+          console.log("RENDERER NOT AWARE OF CLOSING")
           e.preventDefault();
           //Clear the localstorage
           
           //Let the program know that something is being closed
           programWin.webContents.send("close-program-please", JSON.stringify(true));
         } else {
-          
+
         }
       })
 
@@ -263,7 +267,7 @@ async function openFullscreenWindow(extDisplay) {
       frame: false,
       transparent: true,
       fullscreen: true
-    })
+    });
   } else {
     
         fullScreenWindow = new BrowserWindow({
@@ -285,6 +289,7 @@ async function openFullscreenWindow(extDisplay) {
 
   }
 
+  windowIdTracker.push({name: "fullscreen-window", id: fullScreenWindow.id})
 
   var htmlPath = path.join(__dirname, "fullscreen.html");
   fullScreenWindow.loadURL(url.format({
@@ -411,13 +416,31 @@ ipcMain.on("show-changelog", function(e) {
 })
 
 ipcMain.on("relaunch-launcher", () => {
+  //Get the id of the main window
+  rendererAwareOfClosing = true;
+  var x;
+
+  var id;
+  for(x of windowIdTracker) {
+    if(x.name == "main-window") {
+      id = x.id;
+    }
+  }
+
   boot();
-  programWin.close();
+  BrowserWindow.fromId(id).close();
+
+  //Get the correct window from the windowarray, and remove it
+  var ind = windowIdTracker.findIndex(function(o) {
+    return o.name === "main-window";
+  })
+  if(ind !== -1) windowIdTracker.splice(ind, 1);
+
+    rendererAwareOfClosing = false;
 })
 
 ipcMain.on("inter-renderer-communication", (event, arg) => {
   var senderName = arg.routingInformation.forwardingName;
-  console.log(fullScreenWindow);
   if(fullScreenWindow) {
     try {
       if(fullScreenWindow.webContents) {
