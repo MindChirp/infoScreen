@@ -106,12 +106,14 @@ function boot() {
     pathname: 'home.html',
     slashes: true
   }))*/
+
+  windowIdTracker.push({name: "launcher-window", id: launcherWin.id});
 }
 
 var rendererAwareOfClosing = false;
 
 ipcMain.on("close-intentionally", (e, data) => {
-  rendererAwareOfClosing = true;
+  rendererAwareOfClosing = JSON.parse(data);
 })
 
 function openEditor(fileName) {
@@ -138,7 +140,6 @@ function openEditor(fileName) {
       });
 
       windowIdTracker.push({name:"main-window", id: programWin.id});
-
       programWin.on("close", (e)=>{
         if(!rendererAwareOfClosing) {
           console.log("RENDERER NOT AWARE OF CLOSING")
@@ -148,7 +149,22 @@ function openEditor(fileName) {
           //Let the program know that something is being closed
           programWin.webContents.send("close-program-please", JSON.stringify(true));
         } else {
+          //Willfully close the program
+          //Close all related windows e.g. fullscreen windows
 
+          //windowIdTracker
+
+          var titlesClose = ["fullscreen-window"];
+
+          var x;
+          for(x of windowIdTracker) {
+            var y;
+            for(y of titlesClose) {
+              if(x.name == y) {
+                BrowserWindow.fromId(x.id).close();
+              }
+            }
+          }
         }
       })
 
@@ -214,7 +230,17 @@ function openEditor(fileName) {
         for(x of data) {
           //console.log(x);
           function sendIt(data) {
-            programWin.webContents.send("global-shortcuts", data);
+            console.log(windowIdTracker);
+            var id;
+            for(x of windowIdTracker) {
+              if(x.name == "main-window") {
+                id = x.id;
+              }
+            }
+            console.log(id);
+            if(id) {
+              BrowserWindow.fromId(id).webContents.send("global-shortcuts", data);
+            }
           }
           (function(){
             var info = x;
@@ -244,38 +270,80 @@ function openEditor(fileName) {
 
 }
 
+function getObjFromAttribute(attribute = {title, id}) {
+  if(attribute.title) {
+    for(var i = 0; i < windowIdTracker.length; i++) {
+      if(attribute.title == windowIdTracker[i].name) {
+        return windowIdTracker[i];
+      }
+    }  
+  } else if(attribute.id) {
+    if(attribute.id == windowIdTracker[i].id) {
+      return windowIdTracker[i];
+    }
+  }
+}
+
 var fullScreenWindow;
 async function openFullscreenWindow(extDisplay) {
-  var { screen } = require("electron");
-  var {width, height} = screen.getPrimaryDisplay().workAreaSize;
+  return new Promise((resolve, reject) => {
 
-  if (extDisplay) {
-      fullScreenWindow = new BrowserWindow({
-      x: extDisplay.bounds.x,
-      y: extDisplay.bounds.y,
-      webPreferences: {
+    var { screen } = require("electron");
+    var {width, height} = screen.getPrimaryDisplay().workAreaSize;
+    
+    
+    var id = undefined;
+    var x;
+    for(x of windowIdTracker) {
+      if(x.name == "fullscreen-window") {
+        id = x.id;
+      }
+    }
+    if(id) {
+      
+      if(BrowserWindow.fromId(id)) {
+      var ind = windowIdTracker.findIndex(function(o) {
+        return o.id === id;
+      })
 
-        nodeIntegration: true,
-        enableRemoteModule: true
+      if(ind !== -1) windowIdTracker.splice(ind, 1);
+
+      console.log("CLOSING WINDOW WITH ID ", id);
+      BrowserWindow.fromId(id).close();
+      reject();
+      return;
+    }
+    }
   
-      },
-      width: width,
-      height: height,
-      hasShadow: true,
-      minWidth: 1026,
-      minHeight:963,
-      frame: false,
-      transparent: true,
-      fullscreen: true
-    });
-  } else {
-    
-        fullScreenWindow = new BrowserWindow({
+    if (extDisplay) {
+      fullScreenWindow = new BrowserWindow({
+        x: extDisplay.bounds.x,
+        y: extDisplay.bounds.y,
         webPreferences: {
-    
+          
           nodeIntegration: true,
           enableRemoteModule: true
-    
+          
+        },
+        width: width,
+        height: height,
+        hasShadow: true,
+        minWidth: 1026,
+        minHeight:963,
+        frame: false,
+        transparent: true,
+        fullscreen: true,
+        minimizable: false,
+        
+      });
+    } else {
+      
+      fullScreenWindow = new BrowserWindow({
+        webPreferences: {
+          
+          nodeIntegration: true,
+          enableRemoteModule: true
+          
         },
         width: width,
         height: height,
@@ -286,16 +354,18 @@ async function openFullscreenWindow(extDisplay) {
         transparent: true,
         fullscreen: true
       });
-
-  }
-
-  windowIdTracker.push({name: "fullscreen-window", id: fullScreenWindow.id})
-
-  var htmlPath = path.join(__dirname, "fullscreen.html");
-  fullScreenWindow.loadURL(url.format({
-    pathname: htmlPath,
-    slashes: true
-  }))
+      
+    }
+    
+    windowIdTracker.push({name: "fullscreen-window", id: fullScreenWindow.id})
+    
+    var htmlPath = path.join(__dirname, "fullscreen.html");
+    fullScreenWindow.loadURL(url.format({
+      pathname: htmlPath,
+      slashes: true
+    }))
+    resolve();
+  })
 }
 
 
@@ -305,21 +375,57 @@ ipcMain.on("fullscreen-slideshow", (event) => {
       return display.bounds.x !== 0 || display.bounds.y !== 0
     })
 
-    openFullscreenWindow(externalDisplay);
-    fullScreenWindow.webContents.on("did-finish-load", async () => {
-        console.log("WINDOW LOADED");
-        event.returnValue = "OK";
-    });
+    openFullscreenWindow(externalDisplay)
+    .then(()=>{
 
-
+      var id;
+      //Get the browserWindow
+      var x;
+      for(x of windowIdTracker) {
+        if(x.name == "fullscreen-window") {
+          id = x.id;
+        }
+      }
+      if(id) {
+        
+        var window = BrowserWindow.fromId(id);
+        if(!window) return;
+        window.webContents.on("did-finish-load", async () => {
+          event.returnValue = "OK";
+        });
+        
+      }
+      
+    })
+    .catch((error) => {
+      event.returnValue = "WINDOW CLOSED";
+    })
 }) 
 
 ipcMain.on("apply-update", () => {
   autoUpdater.quitAndInstall();
 })
 
-ipcMain.on("start-downloading-update", () => {
-  autoUpdater.downloadUpdate();
+ipcMain.on("start-downloading-update", async () => {
+  autoUpdater.downloadUpdate()
+  .then((result) => {
+    console.log("RESULTS ARE READY")
+    //Get the correct window
+    var id = getObjFromAttribute({title: "launcher-window"}).id
+    if(BrowserWindow.fromId(id)) {
+      BrowserWindow.fromId(id).webContents.send("downloading-update", JSON.stringify(true));
+    }
+  })
+  .catch((error) => {
+    console.log("ENCOUNTERED ERROR!")
+
+    var id = getObjFromAttribute({title: "launcher-window"}).id
+    console.log(id)
+    if(BrowserWindow.fromId(id)) {
+      console.log("SENDING")
+      BrowserWindow.fromId(id).webContents.send("downloading-update", JSON.stringify(false));
+    }
+  })
 })
 
 
@@ -418,18 +524,22 @@ ipcMain.on("show-changelog", function(e) {
 ipcMain.on("relaunch-launcher", () => {
   //Get the id of the main window
   rendererAwareOfClosing = true;
-  var x;
+  //Start the launcher
+  boot();
 
-  var id;
+  var titlesClose = ["fullscreen-window", "main-window"];
+
+  var x;
   for(x of windowIdTracker) {
-    if(x.name == "main-window") {
-      id = x.id;
+    var y;
+    for(y of titlesClose) {
+      if(x.name == y) {
+        if(BrowserWindow.fromId(x.id)) {
+          BrowserWindow.fromId(x.id).close();
+        }
+      }
     }
   }
-
-  boot();
-  BrowserWindow.fromId(id).close();
-
   //Get the correct window from the windowarray, and remove it
   var ind = windowIdTracker.findIndex(function(o) {
     return o.name === "main-window";

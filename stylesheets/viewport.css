@@ -1,13 +1,4 @@
-.progression-dot {
-    height: 1rem;
-    width: 1rem;
-    background-color: rgb(100,100,100);
-    border-radius: 1rem;
-    display: inline-block;
-    opacity: 0.5;
-}
-
 .progression-dot.active {
-    opacity: 1;
+    opacity: 1 !important;
     background-color: rgb(200,200,200);
 }

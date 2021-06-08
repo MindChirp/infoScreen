@@ -24,6 +24,7 @@ function genericStartupFunction() {
 
 
 function loadSettingsConfig() {
+    console.log(fs.readFileSync(settingsDirectory, "utf8"))
     globalSettings = JSON.parse(fs.readFileSync(settingsDirectory, "utf8"));
 }
 

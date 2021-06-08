@@ -30,14 +30,15 @@
                 <button id="open-server" class="smooth-shadow  ripple-element" disabled><i class="material-icons">dns</i> <p>From server</p></button>
                 <button id="live-edit" onclick="liveEdit()" class="smooth-shadow ripple-element"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow ripple-element" onclick="launchProgram()" style="display: none;"><i class="material-icons">flag</i> <p>Developer start</p></button>
-                <div id="user-container">
-                    <button id="pfp" class="smooth-shadow" onclick="userSettings()">
-                        <img src="./internalResources/images/default.png" id="profile-photo-image">
-                        <canvas id="user-canvas" height="48px" width="48px">
-    
-                        </canvas>
-                    </button>
-    
+                <div id="user-container">                    
+                    <div class="wrapper">
+                        <button id="pfp" class="" onclick="userSettings()">
+                            <img src="./internalResources/images/default.png" id="profile-photo-image">
+                            <canvas id="user-canvas" height="48px" width="48px">
+                            </canvas>
+                        </button>
+                        <i class="material-icons icon">more_horiz</i>
+                    </div>
     
                 </div>
 

@@ -17,7 +17,7 @@ var alreadyClosing = false;
 async function programExit() {
 
     //Inform the main process that we are closing the program intentionally
-    ipcRenderer.send("close-intentionally", true);
+    ipcRenderer.send("close-intentionally", JSON.stringify(true));
 
     var stayAuthed = JSON.parse(localStorage.getItem("staySignedIn"));
     alreadyClosing = true;
@@ -33,6 +33,10 @@ async function programExit() {
         modal.appendChild(no);
         no.addEventListener("click", ()=>{
             modal.kill();
+
+            //Inform the main process we are no longer wishing to close the program
+            ipcRenderer.send("close-intentionally", JSON.stringify(false));
+            alreadyClosing = false;
         })
 
         ok.addEventListener("click", async()=>{

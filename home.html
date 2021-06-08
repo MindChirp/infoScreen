@@ -23,7 +23,8 @@
     <script src="./javascripts/editor/undoHandler.js"></script>   
     <script src="./javascripts/editor/reportIssue.js"></script>   
     <script src="./javascripts/editor/shortcuts.js"></script>   
-    <script src="./javascripts/editor/explorer/tabHandler.js"></script>   
+    <script src="./javascripts/editor/explorer/tabs/tabHandler.js"></script>   
+    <script src="./javascripts/editor/explorer/tabs/progress.js" async defer></script>   
     <script src="./javascripts/editor/timeline.js"></script>   
     <script src="./javascripts/editor/widget-executor.js"></script>   
     <script src="./javascripts/editor/explorer/editScript.js"></script>   
@@ -132,7 +133,7 @@
                             <button id="next" onclick="activateColumnNo(0, 1)" class="ripple-element"><i class="material-icons">skip_next</i><script>infoOnHover(document.currentScript.parentNode, "Next slide")</script></button>
                         </div>
                         <input class="fd-slider" type="range" min="0" max="1000" step="1" value="0">
-                        <button id="fullscreen" onclick="showFullscreenView()" class="ripple-element"><i class="material-icons">launch</i><script>infoOnHover(document.currentScript.parentNode, "Fullscreen")</script></button>
+                        <button id="fullscreen" onclick="showFullscreenView()" class="ripple-element" disabled><i class="material-icons">launch</i><script>infoOnHover(document.currentScript.parentNode, "Fullscreen")</script></button>
                     </div>
                     <div id="content">
                         <div class="container" droppable name="viewport-content"></div>
@@ -319,7 +320,21 @@ searchFilesField.addEventListener("keyup", function(event) {
 
     }
 });*/
-        
+     
+
+            //Update the viewport fullscreen button (dev feature)
+            console.log(globalSettings);
+            var expFet = globalSettings.devSettings.experimentalFeatures;
+
+            //Disable fullscreen button if !expFet
+            if(!expFet) {
+                var button = document.getElementById("fullscreen");
+                button.disabled = true;
+            } else {
+                var button = document.getElementById("fullscreen");
+                button.disabled = false;
+            }
+
         }
 
     </script>

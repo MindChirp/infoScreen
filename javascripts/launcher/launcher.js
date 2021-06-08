@@ -154,9 +154,13 @@ window.onload = async function() {
         */
     }
         if(signedIn == true) {
-            //Sign in the client on the server as well
 
-        
+            //Set the three dots next to the pfp to a cogwheel
+            var el = document.querySelector("#user-container > div > i");
+            el.innerHTML = "settings";
+
+
+            //Sign in the client on the server as well
 
             //Check for dev mode
             var ext = localStorage.getItem("pfpExtension");
@@ -198,6 +202,11 @@ window.onload = async function() {
                 }
                 
             }
+        } else if(signedIn == false) {
+            //The client is not signed in
+            //Set the three dots next to the pfp to a sign in icon
+            var el = document.querySelector("#user-container > div > i");
+            el.innerHTML = "login";
         }
     //If not already set up, set up the localStorage
     var storage = window.localStorage;
@@ -1256,7 +1265,10 @@ function changeState() {
     var signedIn = localStorage.getItem("signedIn");
 
     if(signedIn == "true") {
-
+    
+    //Set the three dots next to the pfp to a cogwheel
+    var el = document.querySelector("#user-container > div > i");
+    el.innerHTML = "settings";
 
     firstTime = localStorage.getItem("firstTime");
 
@@ -1345,7 +1357,9 @@ function changeState() {
             }
         }
 
-
+        //Set the three dots next to the pfp to a sign in icon
+        var el = document.querySelector("#user-container > div > i");
+        el.innerHTML = "login";
     }
 
 }
@@ -1453,9 +1467,42 @@ ipcRenderer.on("update-handler", function(e, data) {
         notif.classList.add("new-installation")
         document.getElementById("notifications-pane").appendChild(notif);
         notif.showsProgress = false;
-        notif.onclick = function() {
-            startDownloading();
+
+
+
+
+        function download() {
+            var downloading = createNotification({importance: 2, title: "Downloading new update", meta: "Please wait"})
+            document.getElementById("notifications-pane").appendChild(downloading);
+
+            //Remove the download button
+            var notif = document.getElementsByClassName("new-installation")[0]
+            notif.kill();
+            //notif.parentNode.removeChild(notif);
+            startDownloading()
+            .then(()=>{
+                downloading.parentNode.removeChild(downloading);
+            })
+            .catch(()=>{
+                downloading.parentNode.removeChild(downloading);
+
+                var error = createNotification({importance: 1, title: "Something went wrong", meta: "Could not install the update"})
+                document.getElementById("notifications-pane").appendChild(error);
+            
+                var notif = createNotification(messages[0]);
+                notif.classList.add("new-installation")
+                document.getElementById("notifications-pane").appendChild(notif);
+                notif.showsProgress = false;
+                notif.onclick = download;
+            
+            })
+
+            
+            
         }
+        
+        notif.onclick = download;
+
         if(checking) {
             removeNotification(checking);
         }
@@ -1492,13 +1539,27 @@ function applyUpdate() {
 }
 
 function startDownloading() {
-    ipcRenderer.send("start-downloading-update");
+    return new Promise((resolve, reject) => {
+        ipcRenderer.send("start-downloading-update");
+
+        ipcRenderer.on("downloading-update", (ev, data) => {
+            //Update has started downloading
+            var dat = JSON.parse(data);
+            console.log(dat)
+            if(dat == true) {
+                resolve();
+            } else {
+                console.log("ouiasdio")
+                reject();
+            }
+        })
+    })
 }
 
 
 var notificationTracker = [{severe: 0, medium: 0, mild: 0}]
 
-function createNotification(data) {
+function createNotification(data = {importance, title, meta, version}) {
 
     //Clear the "nothing to show" message
     if(document.getElementById("notifications-pane").querySelector(".nothingToShow")) {
@@ -1509,7 +1570,12 @@ function createNotification(data) {
     var el = document.createElement("div");
     el.className = "notification";
     
-
+    el.kill = function() {
+        this.classList.add("removing");
+        setTimeout(()=>{
+            removeNotification(this);
+        }, 300)
+    }
 
     el.importance = data.importance;
     var title = document.createElement("p");
@@ -1552,7 +1618,9 @@ function createNotification(data) {
     //removeNotification(this.closest('.notification'))
     cross.addEventListener("click", function(e) {
         e.stopPropagation(); //Prevent the event from propagating into the parent event listener
-        removeNotification(e.target.closest('.notification'));
+        
+        e.target.closest(".notification").kill();
+        //removeNotification(e.target.closest('.notification'));
     });
 
     el.appendChild(cross);
@@ -1571,6 +1639,8 @@ function createNotification(data) {
     if(data.importance == 1) {
         notificationTracker[0].severe = notificationTracker[0].severe+1
         icon.innerHTML = "notification_important";
+        el.classList.add("important");
+        el.classList.add("smooth-shadow");
     } else if(data.importance == 2) {
         notificationTracker[0].medium = notificationTracker[0].medium+1
         if(notifs.severe == 0) {

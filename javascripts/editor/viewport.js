@@ -577,6 +577,9 @@ function addResizingBorders(el) {
     var leftT;
     var topT;
 
+    const minWidth = 20;
+    const minHeight = 20;
+
     var enableBorders = () => {
         setTimeout(() => {
 
@@ -989,6 +992,9 @@ function addResizingBorders(el) {
             
             element.style.height = trackedHeight + "px";
             element.style.width = trackedWidth + "px";
+        
+            refreshViewportElement(element);
+
         }
 
         var element = e.target.closest(".viewport-image");
@@ -1040,6 +1046,7 @@ function addResizingBorders(el) {
                 element.getElementsByTagName("img")[0].style.width = "100%";
             }
 
+            if(!(trackedWidth > minWidth) && e.movementX == -1) return; 
             trackedWidth = trackedWidth + e.movementX;
 
             element.style.width = trackedWidth + "px";
@@ -1085,6 +1092,10 @@ function addResizingBorders(el) {
             if(element.getElementsByTagName("img")[0]) {
                 element.getElementsByTagName("img")[0].style.width = "100%";
             }
+
+            console.log(e.movementY)
+            if(trackedHeight < minHeight && e.movementY == -1) return;
+
             trackedHeight = trackedHeight + e.movementY;
 
             element.style.height = trackedHeight + "px";
@@ -1270,7 +1281,25 @@ function refreshViewportElement(el) {
         `;
 
 
-        }
+        } else if(type=="progress") {
+            var height = conf.size.height;
+            var dims = convertPercentToPx([0,height.split("%")[0]]);
+            var scale = conf.widgetAttributes.progress.scale/100;
+            var dotStyle = `
+                height: ` + dims[1]*scale + `rem;
+                width: ` + dims[1]*scale + `rem;
+                background-color: rgb(100,100,100);
+                border-radius: 100%;
+                display: inline-block;
+                opacity: 0.5;
+            `;
 
+            var dots = el.getElementsByClassName("progression-dot");
+            var x;
+
+            for(x of dots) {
+                x.style = dotStyle;
+            }
+        }
     }
 }

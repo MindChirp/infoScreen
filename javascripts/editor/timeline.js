@@ -3,7 +3,7 @@
 function highlightColumn(el, entered) {
     if(document.getElementsByClassName("file-ghost")[0]) {
         if(entered) {
-            el.style.backgroundColor = "var(--dark-shade)";
+            el.style.backgroundColor = "var(--secondary-button-color)";
         } else if(!entered) {
             if(el.getAttribute("displaying") == "true") {
                 el.style.backgroundColor = "#23313D";
@@ -26,6 +26,26 @@ function activateColumnNo(no, direction) {
     //no        --> column number
     //direction --> 1: next
     //              0: prev
+    
+    var slider = document.querySelector("#viewport > div.controls > input")
+    //Get the current column
+    var col = renderer.renderedColumn();
+    if(col == no) {
+
+    } else {
+        var ev = new Event("change");
+        slider.dispatchEvent(ev);
+        slider.value = 0;
+    }
+
+    if(direction == 1 || direction == 0) {
+        slider.value = 0;
+        var ev = new Event("change");
+        slider.dispatchEvent(ev);
+    }
+
+    
+
     var cols = document.getElementsByClassName("timeline-column");
     if(direction) {
         //Do something that i couldn't be bothered to code right now
@@ -242,7 +262,7 @@ function unselectAllCells() {
 
 
 
-//THIS CODE IS NOT FINISHED! IT IS ONLY ACCOUNTING FOR WIDGETS, AND NOT IMAGES, OR VIDEOS.
+//THIS CODE IS NOT FINISHED! IT IS ONLY ACCOUNTING FOR WIDGETS, NOT IMAGES, OR VIDEOS.
 function injectContentToTimeline(config, type, name, filename, tab, insertRow) {
     var el = document.createElement("div");
     el.config = config;

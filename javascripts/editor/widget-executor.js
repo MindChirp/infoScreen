@@ -353,7 +353,17 @@ function Progress(config) {
     //Get all columns with content
     var length = renderer.numberOfColumns();
 
-    
+    var height = config.size.height;
+    var dims = convertPercentToPx([0,height.split("%")[0]]);
+    var scale = config.widgetAttributes.progress.scale/100;
+    var dotStyle = `
+        height: ` + dims[1]*scale + `rem;
+        width: ` + dims[1]*scale + `rem;
+        background-color: rgb(100,100,100);
+        border-radius: 100%;
+        display: inline-block;
+        opacity: 0.5;
+    `;
     //Get the rendered column
     var rendCol = renderer.renderedColumn();
     for(let i = 0; i < length; i++) {
@@ -362,6 +372,7 @@ function Progress(config) {
             dot.classList.add("active");
         }
         dot.classList.add("progression-dot");
+        dot.style = dotStyle;
         dots.appendChild(dot);
     }
 

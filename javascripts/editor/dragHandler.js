@@ -1,3 +1,5 @@
+
+  
   
   //This global variable is accessed by other files such as selectHandler.js
   //to check if a file is being dragged or not 
@@ -122,6 +124,7 @@
         if(!onViewport) {
             //If the file is dropped in the timeline, append the file there
             el.appendChild(file);
+            file.style.animation = "drop-item-to-timeline 300ms cubic-bezier(0.58, 0.01, 0.34, 1.53) both";
 
             //Inject the action to the undo clipboard
             var clip = {type: "file", action: "add", config: file.config, connectedElement: file, parent: el};
@@ -154,47 +157,7 @@
         }
 
 
-        var template = 
-        {
-            borderRadius: "0.25", 
-            opacity: "1", 
-            shadowMultiplier: 0, 
-            blur: 0, 
-            position: [1 + "%", 1 + "%"], 
-            edgeAnchors: {x: "left", y: "top"},
-            size: {height: "30%", width: "keepAspectRatio"}, 
-            display: true, 
-            backgroundColor: "#ffffff",
-            backgroundOpacity: "FF",
-            textColor: "#000000", 
-            fontSize: 20, 
-            fontFamily: "Bahnschrift", 
-            identification: null,
-            slideNumber: null,
-            widgetAttributes: 
-            {
-                time: 
-                    {
-                        showHours: true, 
-                        showMinutes: true, 
-                        showSeconds: true, 
-                        showDate: false, 
-                        timeFormat: "1"
-                    },
-                script: 
-                    {
-                        hasScript: false,
-                        scriptContents: "",
-                        htmlContents: "",
-                        styleContents: ""
-                    },
-                text: {
-                    align: "center"
-                }
-            }, 
-            sizeType: 0,
-            keepAspectRatio: false
-        };
+        
 
 
 
@@ -212,6 +175,50 @@
         var template = fileDataTemplate.template;
         */
 
+
+        var template = {
+                borderRadius: "0.25", 
+                opacity: "1", 
+                shadowMultiplier: 0, 
+                blur: 0, 
+                position: [1 + "%", 1 + "%"], 
+                edgeAnchors: {x: "left", y: "top"},
+                size: {height: "30%", width: "keepAspectRatio"}, 
+                display: true, 
+                backgroundColor: "#ffffff",
+                backgroundOpacity: "FF",
+                textColor: "#000000", 
+                fontSize: 20, 
+                fontFamily: "Bahnschrift", 
+                identification: null,
+                slideNumber: null,
+                widgetAttributes: 
+                {
+                    time: 
+                        {
+                            showHours: true, 
+                            showMinutes: true, 
+                            showSeconds: true, 
+                            showDate: false, 
+                            timeFormat: "1"
+                        },
+                    script: 
+                        {
+                            hasScript: false,
+                            scriptContents: "",
+                            htmlContents: "",
+                            styleContents: ""
+                        },
+                    text: {
+                        align: "center"
+                    },
+                    progress: {
+                        scale: 1
+                    },
+                }, 
+                sizeType: 0,
+                keepAspectRatio: false
+            };
         file.config = template; //As defined in definitions.js @ 1 <-- NO! It's defined above
 
         // FIGURE OUT A WAY TO USE MODULE IMPORTS TO GET A NEW TEMPLATE
@@ -510,6 +517,7 @@ function dragFileInTimeline(el) {
             var newFile = timelineFile.cloneNode(true);
             
             //Apend the cloned node to the timeline
+            newFile.style.animation = "drop-item-to-timeline 300ms cubic-bezier(0.58, 0.01, 0.34, 1.53) both";
             e.target.appendChild(newFile);
 
             //Get the column number

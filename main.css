@@ -745,7 +745,7 @@ Replaced by a style in inputs.css
 }
 
 #main-container #top-layer .properties-pane {
-    height: 20rem;
+    height: calc(100% - 2.5rem);
     width: 100%;
     position: absolute;
     left: 0;
@@ -816,11 +816,11 @@ Replaced by a style in inputs.css
 #main-container #top-layer .properties-pane .container > div {
     position: relative;
 }
-
+/*
 #main-container #top-layer .properties-pane .container > div > * {
     position: initial;
 }
-
+*/
 
 #main-container #top-layer .properties-pane .container::-webkit-scrollbar-track {
     background-color: none;
@@ -1253,6 +1253,10 @@ Replaced by a style in inputs.css
     outline: none;
   }
 
+  #main-container #top-layer #viewport .controls button#fullscreen:disabled {
+      display: none;
+  }
+
   #main-container #top-layer #viewport .controls button#fullscreen i {
       line-height: 2.006rem;
       font-size: 1.3rem;
@@ -1569,6 +1573,8 @@ Replaced by a style in inputs.css
     scroll-snap-align: start;
     transition: 70ms all ease-out;
     z-index: 1;
+    display: flex;
+    align-items: center;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row.selected {
@@ -1588,15 +1594,20 @@ Replaced by a style in inputs.css
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column .timeline-row .scrubber-element {
     height: 95%;
     width: 98%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: auto;
     position: relative;
     background-color: var(--main-bg-color);
     border-radius: 0.25rem;
     /*transition: all 200ms ease-in-out;*/
     overflow: hidden;
     box-shadow: 0px 2px 5px -2px rgba(0,0,0,0.1);
+}
+
+
+@keyframes drop-item-to-timeline {
+    0%{}
+    50%{transform: scale(0.9)}
+    100%{transform: scale(1)}
 }
 
 

@@ -60,21 +60,19 @@ function createWidgetInExplorer(type) {
                 return;
             }
 
-
             var template = {
-
                 borderRadius: "0.25", 
                 opacity: "1", 
                 shadowMultiplier: 0, 
                 blur: 0, 
                 position: [1 + "%", 1 + "%"], 
                 edgeAnchors: {x: "left", y: "top"},
-                size: {height: "30%", width: "30%"}, 
+                size: {height: "30%", width: "keepAspectRatio"}, 
                 display: true, 
                 backgroundColor: "#ffffff",
                 backgroundOpacity: "FF",
                 textColor: "#000000", 
-                fontSize: 4, 
+                fontSize: 20, 
                 fontFamily: "Bahnschrift", 
                 identification: null,
                 slideNumber: null,
@@ -94,12 +92,19 @@ function createWidgetInExplorer(type) {
                             scriptContents: "",
                             htmlContents: "",
                             styleContents: ""
-                        }
+                        },
+                    text: {
+                        align: "center"
+                    },
+                    progress: {
+                        scale: 1
+                    },
                 }, 
                 sizeType: 0,
                 keepAspectRatio: false
-
             };
+
+            template.size.width = "30%";
 
 
             var filename;

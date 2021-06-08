@@ -860,7 +860,7 @@ function aboutMenu() {
     funFacts.innerHTML = "Fun Facts";
     menu.appendChild(funFacts);
 
-    var lines = tile("Lines of code", "11600+ (excluding libraries)");
+    var lines = tile("Lines of code", "20 000+ (excluding libraries)");
     menu.appendChild(lines);
 
     var commit = tile("First github commit", "8th of July 2019");
