@@ -488,9 +488,9 @@ var playViewportContent = function() {
         //Get the column settings
         var cols = document.getElementsByClassName("timeline-column");
         var index = renderer.renderedColumn();
-        var time = cols[index].getAttribute("time");
-        var secs = time.split(":")[1];
-        var mins = time.split(":")[0];
+        var time = cols[index].config.time;
+        var secs = time.seconds;
+        var mins = time.minutes;
 
         //Translate everything into seconds
         var totalSecs = parseInt(secs) + parseInt(mins)*60;

@@ -222,6 +222,7 @@ var userAndOrg = () => {
         margin: 0;
         height: 10rem;
         vertical-align: top;
+        text-transform: capitalize;
         margin-left: 1rem;
         color: var(--paragraph-color);
     `
@@ -359,16 +360,85 @@ var userAndOrg = () => {
         ok.onclick = modal.kill;
     })
 
-    var org = section("Organisation")
-
+    var org = section("Organisations")
+    var orgInfo = JSON.parse(JSON.parse(localStorage.getItem("userInfo"))[1][0].organisations);
     menu.appendChild(org);
-    var none = document.createElement("p");
-    none.style = `
+
+    if(!orgInfo) {
+
+        var none = document.createElement("p");
+        none.style = `
         margin: 0;
         opacity: 0.5;
-    `
-    none.innerHTML = "You are not assigned to an organisation.";
-    org.querySelector(".content").appendChild(none);
+        `
+        none.innerHTML = "You are not assigned to an organisation.";
+        org.querySelector(".content").appendChild(none);
+        
+    } else {
+        var cont = org.querySelector(".content");
+        
+        //There is an organisation
 
-    return collaps;
+        var createOrgCard = function(info) {
+            var wr = document.createElement("div");
+                wr.style = `
+                background-color: var(--secondary-color);
+                padding: 1rem;
+                box-sizing: border-box;
+                border-radius: 0.5rem;
+                width: fit-content;
+                height: fit-content;
+                `;
+                wr.className = "smooth-shadow";
+                cont.appendChild(wr);
+                
+                var title = document.createElement("p");
+                title.innerHTML = info.name;
+                title.style = `
+                margin: 0;
+                font-size: 2rem;
+                `;
+                wr.appendChild(title);
+                
+                var id = document.createElement("p");
+                id.innerHTML = "Organisation ID: " + info.id;
+                wr.appendChild(id);
+                id.style = `
+                opacity: 0.5;
+                margin: 0;
+                `;
+                
+                var ver = document.createElement("p");
+                ver.innerHTML = "Verified: " + info.accepted;
+                wr.appendChild(ver);
+                ver.style = `
+                opacity: 0.5;
+                margin: 0;
+                `;
+        }
+
+
+
+        var x;
+        if(isIterable(orgInfo)) {
+
+            for(x of orgInfo) {
+                createOrgCard(x);             
+            }
+        } else {
+            createOrgCard(orgInfo);
+        }
+    }
+        
+        
+        return collaps;
+    }
+
+
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+        return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
 }

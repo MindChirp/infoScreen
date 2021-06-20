@@ -269,9 +269,16 @@ ipcRenderer.on("opened-file-information", (e, args) => {
 
 
 
-    if(args[1] == true) {
+    if(args[0].developerProject) {
         document.body.devMode = true;
     } else {
         document.body.devMode = false;
+    }
+    console.log(args[0])
+    if(args[0].clientDev == true) {
+        //User is developer
+        document.body.clientDev = true;
+    } else {
+        document.body.clientDev = false;
     }
 })

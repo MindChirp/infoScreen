@@ -13,13 +13,14 @@ const updateEditPage = function() {
     var cols = document.getElementsByClassName("timeline-column");
     var slide = cols[i];
 
-    var time = slide.getAttribute("time");
+    var time = slide.config.time.minutes + ":" + slide.config.time.seconds;
     
     var tIn = tabInputs.input("Time", "text", "mm/ss");
     cont.appendChild(tIn);
     tIn.childNodes[1].value = time;
     tIn.addEventListener("change", (e) => {
-        slide.setAttribute("time", e.target.value);
+        slide.config.time.minutes = parseInt(e.target.value.split(":")[0]);
+        slide.config.time.seconds = parseInt(e.target.value.split(":")[1]);
     });
     tIn.style = `
         position: block;
@@ -97,7 +98,9 @@ const updateEditPage = function() {
         wr.className = "transition-cards-container";
         cont.appendChild(wr);
 
-        /*3D effects section*/
+        var effect = slide.config.transition;
+
+        /*Standard effects section*/
         var std = document.createElement("p");
         std.className = "section-title";
         std.innerHTML = "Standard Effetcs";
@@ -132,7 +135,7 @@ const updateEditPage = function() {
         wr.appendChild(circle);
         var ico = document.createElement("i");
         ico.className = "material-icons";
-        ico.innerHTML = "stop_circle";
+        ico.innerHTML = "circle";
         circle.querySelector(".icon").appendChild(ico)
         ico.style = icoStyle;
 
@@ -170,6 +173,15 @@ const updateEditPage = function() {
         infoOnHover(create, "Create your own custom effect");
 
 
+        //Select the correct effect in the edit menu
+        var cards = wr.getElementsByClassName("transition-card");
+        var x;
+        for(x of cards) {
+            if(x.classList.contains(effect.toLowerCase())) {
+                x.select();
+            }
+        }
+
         function createCard(title) {
             var icoContStyle = `
                 height: 5.5rem;
@@ -182,7 +194,9 @@ const updateEditPage = function() {
                 color: var(--paragraph-color);
             `
             var el = document.createElement("div");
-            el.className = "smooth-shadow transition-card";
+            var addedClass = title.replace(/\s+/g, '-').toLowerCase();
+
+            el.className = "smooth-shadow transition-card " + addedClass;
 
             var icoCont = document.createElement("div");
             icoCont.style = icoContStyle;
@@ -196,15 +210,27 @@ const updateEditPage = function() {
 
             //Handle card clicks
             el.addEventListener("click", (e) => {
-                var parent = e.target.closest(".transition-cards-container");
-                var x;
-                for(x of parent.childNodes) {
-                    x.classList.remove("selected");
-                }
-                e.target.closest(".transition-card").classList.add("selected");
+                el.select();
 
             })
 
+            el.select = () => {
+                var cards = el.closest(".transition-card").parentNode.getElementsByClassName("transition-card");
+                var x;
+                for(x of cards) {
+                    x.classList.remove("selected");
+                }
+
+                el.closest(".transition-card").classList.add("selected");
+
+                //Update the slide config
+                var column = renderer.renderedColumn();
+                var col = document.getElementsByClassName("timeline-column")[column];
+
+                if(!(col instanceof HTMLElement)) return;
+                col.config.transition = el.classList[2].toLowerCase().replace(/\s+/g, '-');
+
+            }
 
             return el;
         }

@@ -1867,6 +1867,7 @@ function enableDevMode() {
 
     if(document.body.developerMode) {
         startDevving();
+        ipcRenderer.send("user-is-developer", true);
     } else {
         var error = new Error("Cannot start developer mode when the user isn't a developer");
         console.log(error);

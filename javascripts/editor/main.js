@@ -303,6 +303,9 @@ function setTheme(theme) {
    x 0 0 0 0 0 0
    x 0 0 0 0 0 0
    */
+
+
+
 function initScrubber(rows,cols,activeColumn) {
     //Create columns
     var cont = document.getElementById("timeline").querySelector(".sub-container").querySelector(".scrubber");
@@ -310,9 +313,6 @@ function initScrubber(rows,cols,activeColumn) {
         var col = document.createElement("div");
         col.setAttribute("class", "timeline-column");
         //Set up the column config
-        col.config = {
-            customViewingTimes: {enabled: false, times: []}
-        }
         cont.appendChild(col);
         col.setAttribute("onmouseenter", "highlightColumn(this, true)");
         col.setAttribute("onmouseleave", "highlightColumn(this, false)");
@@ -328,7 +328,11 @@ function initScrubber(rows,cols,activeColumn) {
 
         observer.observe(col, observerOptions);
         //Setup the column
-        col.setAttribute("time", "00:10");
+        col.config = {
+            time: {minutes: 0, seconds: 10},
+            transition: "none",
+            customViewingTimes: {enabled: false, times: []}
+        };
         
         /*
         //White line on top of timeline (disabled)
@@ -1068,3 +1072,24 @@ ipcRenderer.on("close-program-please", (e, data) => {
         programExit();
     }
 })
+
+
+function devNotification(values = {title, body}) {
+    var el = document.createElement("div");
+    el.className = "developer-notification smooth-shadow";
+
+    document.body.appendChild(el);
+
+    var t = document.createElement("p");
+    t.innerHTML = values.title;
+
+    var p = document.createElement("p");
+    p.innerHTML = values.body;
+
+    el.appendChild(t);
+    el.appendChild(p);
+
+    setTimeout(()=>{
+        el.parentNode.removeChild(el);
+    }, 5000);
+}

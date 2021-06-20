@@ -15,6 +15,7 @@ var programWidth;
 var programHeight;
 var programHeight1;
 var programWidth1;
+var userIsDeveloper = false;
 
 var windowIdTracker = []
 
@@ -190,14 +191,14 @@ function openEditor(fileName) {
 
           unzipped.push(zip.files[files[0]]);  
 
-
+          unzipped[0].clientDev = userIsDeveloper;
 
         })
       } else if(fileName.developerLaunch) {
         //Program is launched from the developer launch button. 
-        unzipped[0] = true;
+        unzipped[0] = {developerProject: true};
       }
-      
+
       programWin.webContents.on("did-finish-load", () => {
 
       const screen = require("electron").screen;
@@ -401,6 +402,16 @@ ipcMain.on("fullscreen-slideshow", (event) => {
       event.returnValue = "WINDOW CLOSED";
     })
 }) 
+
+
+ipcMain.on("user-is-developer", (ev, dat) => {
+  if(JSON.parse(dat) == true) {
+    userIsDeveloper = true;
+  }
+  console.log(dat);
+  ev.returnValue = "OK";
+})
+
 
 ipcMain.on("apply-update", () => {
   autoUpdater.quitAndInstall();

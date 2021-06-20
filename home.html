@@ -39,14 +39,14 @@
 </head>
 
 <body class="fade-in">
-<!--
+
         <div id="blocking-loading-pane">
         <div class="positioner">
             <h1>Loading</h1>
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div> 
--->
+
     <p id="project-name">Developer Mode</p>
     <div id="main-container-wrapper">
         <!--Application bar-->
@@ -323,7 +323,6 @@ searchFilesField.addEventListener("keyup", function(event) {
      
 
             //Update the viewport fullscreen button (dev feature)
-            console.log(globalSettings);
             var expFet = globalSettings.devSettings.experimentalFeatures;
 
             //Disable fullscreen button if !expFet
@@ -334,6 +333,14 @@ searchFilesField.addEventListener("keyup", function(event) {
                 var button = document.getElementById("fullscreen");
                 button.disabled = false;
             }
+
+
+            if(JSON.parse(localStorage.getItem("userInfo"))[1][0].dev) {
+                var el = document.querySelector("#blocking-loading-pane");
+                el.parentNode.removeChild(el);
+                devNotification({title: "Removed the loading pane", body: "The loading pane was removed since you are a developer"})
+            }
+
 
         }
 
