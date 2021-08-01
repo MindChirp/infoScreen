@@ -76,7 +76,7 @@ function createProject() {
     //Set the value of creator automatically
     var dat = localStorage.getItem("userInfo");
     creators.childNodes[1].value = JSON.parse(dat)[1][0].name;
-
+    creators.childNodes[1].style.textTransform = "capitalize";
 
     var slides = inputWithText("Number of Slides *");
     slides.childNodes[1].setAttribute("type", "number");

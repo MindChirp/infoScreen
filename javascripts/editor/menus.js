@@ -141,7 +141,7 @@ function toggleNotificationMenu() {
 
 
 
-function dropdownMenu(title, contentText) {
+function dropdownMenu(title, contentText, expanded) {
         var cont = document.createElement("div");
     
         var el = document.createElement("button");

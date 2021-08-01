@@ -1231,6 +1231,10 @@ Replaced by a style in inputs.css
   overflow: hidden;
   border-radius: 1rem;
   padding: 0rem 1rem 0 0;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
 }
 
 #main-container #top-layer #viewport .controls input {
@@ -1251,6 +1255,8 @@ Replaced by a style in inputs.css
     cursor: pointer;
     padding: 0;
     outline: none;
+    white-space: nowrap;
+    flex-wrap: nowrap;
   }
 
   #main-container #top-layer #viewport .controls button#fullscreen:disabled {
@@ -1546,6 +1552,36 @@ Replaced by a style in inputs.css
     white-space: nowrap;
     /*scroll-snap-type: both mandatory;*/
     z-index: 1;
+    max-width: calc(100% - 30rem);
+    display: inline-block;
+}
+
+#main-container #bottom-layer #timeline .sub-container .browser {
+    width: 30rem;
+    display: inline-block;
+    float: right;
+    vertical-align: top;
+    height: 100%;
+    background-color: var(--secondary-button-color);
+    border-radius: 0.5rem;
+    transform: scale(0.98);
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#main-container #bottom-layer #timeline .sub-container .browser h1.title {
+    color: var(--title-color);
+    font-weight: lighter;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+#main-container #bottom-layer #timeline .sub-container .browser .no-content {
+    margin: auto;
+    font-weight: lighter;
+    font-size: 1.2rem;
+    opacity: 0.5;
 }
 
 
@@ -2045,7 +2081,7 @@ body .context-menu button:disabled:hover {
 .developer-notification {
     position: absolute;
     bottom: 1rem;
-    right: 1rem;
+    left: 1rem;
     height: fit-content;
     width: 30rem;
     padding: 1rem;

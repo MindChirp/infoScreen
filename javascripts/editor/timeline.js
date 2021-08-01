@@ -123,6 +123,7 @@ function selectCell(el) {
         el.style.backgroundColor = "transparent";
         el.selected = false;
         el.classList.remove("selected");
+        clearConfigFromBrowser();
     }
     var select = (el, options) => {
         el.style.backgroundColor = "rgba(18, 26, 33,1)";
@@ -134,9 +135,44 @@ function selectCell(el) {
                 //el.style.boxShadow = "none";
             }
         }
+
+        //Load the config into the browser next to the timeline
+        var obj = el.querySelector(".scrubber-element");
+        if(!(obj instanceof HTMLElement)) {
+            //No element
+            clearConfigFromBrowser();
+        } else {
+            setTimeout(()=>{
+                loadConfigToBrowser(obj.config, obj);
+            }, 10)
+        }
+        
+        
+
     }
 
+    //Select the column instead of cell when holding control and left-clicking
+    if(globalKeyPresses.ctrlKey && !globalKeyPresses.shiftKey && !globalKeyPresses.altKey){
+        //Get the column
+        var column = el.closest(".timeline-column");
+        var wrapper = el.closest(".scrubber");
+        //Get the column index
+        var x;
+        var i = 0;
+        var colIndex;
+        for(x of wrapper.children) {
+            if(x == column) {
+                colIndex = i;
+                break;
+            } 
+            i++
+        }
 
+        if(!(column instanceof HTMLElement) || colIndex == undefined) return;
+        //Activate the column
+        activateColumnNo(colIndex);
+        return;
+    }
         
     if(!el.selected) {
         select(el);
@@ -145,7 +181,7 @@ function selectCell(el) {
     }
 
     //Shift select logic
-    if(globalKeyPresses.shiftKey && !globalKeyPresses.ctrlKey & !globalKeyPresses.altKey) {
+    if(globalKeyPresses.shiftKey && !globalKeyPresses.ctrlKey && !globalKeyPresses.altKey) {
         if(!el.selected) {
             select(el);
         }
