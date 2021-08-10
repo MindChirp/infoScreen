@@ -133,6 +133,7 @@ function RenderingToolKit() {
             width: fit-content;
             bottom: 0.5rem;
             left: 0.5rem;
+            pointer-events: none;
         `;
         el.appendChild(metaCont);
         var id;
@@ -833,7 +834,21 @@ function addResizingBorders(el) {
 
 
     var move = function(e) {
+        var masterElement = e.target.closest(".viewport-image");
+        //Enable guidelines
+        enableGuideLines(e.target.closest(".viewport-image"));
+
         var cursorGrabbing = [e.offsetX, e.offsetY];
+
+        /*
+        
+            BUGGED CODE
+
+            Ohoy there wayfarerrrr! Within thee lies a bug
+            Yee shall fix thee cursed code arrrrrr
+
+        */
+
 
         var container = viewport.querySelector(".container");
         var el = e.target.closest(".viewport-image");
@@ -854,6 +869,7 @@ function addResizingBorders(el) {
             var y = e.offsetY;
             el.style.top = y-cursorGrabbing[1] + "px";
             el.style.left = x-cursorGrabbing[0] + "px";
+            updateGuideLines(masterElement);
         }
 
         var mouseUp = (e) => {
@@ -888,8 +904,9 @@ function addResizingBorders(el) {
             var corrPosX = convertToTargetUnit([valX, 0], unitX, targetUnitX)[0];
             var corrPosY = convertToTargetUnit([0, valY], unitY, targetUnitY)[1];
 
-            var position = [corrPosX, corrPosY];            
+            var position = [corrPosX==undefined?0:corrPosX, corrPosY==undefined?0:corrPosY];            
             console.log(position)
+            
 
             el.connectedElement.config.position[0] = position[0] + targetUnitX;
             el.connectedElement.config.position[1] = position[1] + targetUnitY;
@@ -902,6 +919,8 @@ function addResizingBorders(el) {
             }
 
             updateFullscreenView();
+
+            disableGuideLines(el);
 
         }
 
@@ -1302,4 +1321,74 @@ function refreshViewportElement(el) {
             }
         }
     }
+}
+
+
+function enableGuideLines(element) {
+    element.showGuideLines = true;
+
+    //Create some nice-ass guidelines
+    var viewport = document.querySelector("#content > div");
+
+    var midVert = document.createElement("div");
+    midVert.id = "viewport-middle-vertical-aligner";
+    midVert.className = "alignment-item";
+
+    var midHor = document.createElement("div");
+    midHor.id = "viewport-middle-horizontal-aligner";
+    midHor.className = "alignment-item";
+
+    viewport.appendChild(midVert);
+    viewport.appendChild(midHor);
+}
+
+function updateGuideLines(element) {
+    if(!element.showGuideLines) return;
+    if(!(element instanceof HTMLElement)) return;
+
+    //Get the center of the element in both x and y coordinates
+    //Get the width
+    //Get the height
+    //Get the y offset
+    //Get the x offset
+    
+    var offsetX = element.offsetLeft;
+    var offsetY = element.offsetTop;
+
+    var wid = element.offsetWidth;
+    var hei = element.offsetHeight;
+    
+    //Calculate coordinates
+
+    var x = (wid/2)+offsetX;
+    var y = (hei/2)+offsetY;
+
+    var buffer = 10;
+
+    var viewport = document.querySelector("#content > div");
+
+    if(x >= ((viewport.offsetWidth/2) - buffer) && x <= ((viewport.offsetWidth/2) + buffer)) {
+        document.getElementById("viewport-middle-vertical-aligner").style.display = "block";
+    } else {
+        document.getElementById("viewport-middle-vertical-aligner").style.display = "none";
+    }
+
+    if(y >= ((viewport.offsetHeight/2) - buffer) && y <= ((viewport.offsetHeight/2) + buffer)) {
+        document.getElementById("viewport-middle-horizontal-aligner").style.display = "block";
+    } else {
+        document.getElementById("viewport-middle-horizontal-aligner").style.display = "none";
+    }
+
+}
+
+function disableGuideLines(element) {
+    element.showGuideLines = false;
+    //And also do some cleanup
+    var parent = document.querySelector("#content > div");
+    var aligners = parent.getElementsByClassName("alignment-item");
+
+    for(let i = 0; i < 2; i++) {
+        aligners[0].parentNode.removeChild(aligners[0]);
+    }
+    console.log(aligners);
 }

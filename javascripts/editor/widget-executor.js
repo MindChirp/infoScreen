@@ -167,6 +167,7 @@ function time(config) {
         transform: translate(-50%,-50%);
         color: ` + config.textColor + `;
         font-size: ` + config.fontSize + `vh; 
+        pointer-events: none;
     `
     cont.appendChild(placeholder);
     
@@ -199,6 +200,7 @@ function news(config) {
             top: 50%;
             transform: translate(-50%,-50%);
             color: ` + config.textColor + `; 
+            pointer-events: none;
         `
         cont.appendChild(placeholder);
     
@@ -255,6 +257,7 @@ function text(config, rootEl) {
         text-align: ` + align + `;
         font-size: ` + size + `px;
         margin: auto;
+        pointer-events: none;
     `;
     box.style.pointerEvents = "none";
     box.addEventListener("change", function(e) {
@@ -317,6 +320,7 @@ function Script(config) {
         color: ` + config.textColor + `;
         font-size: 2rem; 
         opacity: 0.5;
+        pointer-events: none;
     `
     cont.appendChild(placeholder);
     

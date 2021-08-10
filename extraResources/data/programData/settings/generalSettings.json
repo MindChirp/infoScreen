@@ -16,6 +16,6 @@
     },
     "usrAndOrg": {},
     "overlaySettings": {
-        "enableOverlay": true
+        "enableOverlay": false
     }
 }

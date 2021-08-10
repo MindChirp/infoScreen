@@ -152,6 +152,8 @@ function dropdownMenu(title, contentText, expanded) {
             var content = e.target.nextElementSibling;
             if(content.style.maxHeight) {
                 content.style.maxHeight = null;
+                content.style.padding = null;
+
             } else {
                 //Get all the preceeding folding menus, and update their heights, as well
                 var drops = document.getElementsByClassName("foldable-content");
@@ -165,8 +167,9 @@ function dropdownMenu(title, contentText, expanded) {
                     }
                 }
     
-    
-                content.style.maxHeight = content.scrollHeight + "px";
+                //Make max height the same as the content height + padding of 1 rem
+                content.style.maxHeight = "calc(" + content.scrollHeight + "px + 1rem)"; 
+                content.style.padding = "0 0 1rem 0";
             }
           /*  if(content.style.display == "block") {content.style.display = "none"}
             else {content.style.display = "block"};*/
