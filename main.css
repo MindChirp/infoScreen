@@ -1593,6 +1593,11 @@ Replaced by a style in inputs.css
     padding: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
+    
+}
+
+#main-container #bottom-layer #timeline .sub-container .browser .main-wrapper {
+    animation: fade-in 300ms ease-in-out;
 }
 
 #main-container #bottom-layer #timeline .sub-container .browser > div > button {
@@ -1619,6 +1624,7 @@ Replaced by a style in inputs.css
     font-weight: lighter;
     margin: 0 0 0.5rem 0;
     font-size: 1.5rem;
+    height: 3rem;
 }
 
 #main-container #bottom-layer #timeline .sub-container .browser .no-content {
@@ -1626,6 +1632,7 @@ Replaced by a style in inputs.css
     font-weight: lighter;
     font-size: 1.2rem;
     opacity: 0.5;
+    animation: fade-in 300ms ease-in-out both;
 }
 
 #main-container #bottom-layer #timeline .sub-container .browser .foldable-content > div {

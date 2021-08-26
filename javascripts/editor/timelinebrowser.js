@@ -5,6 +5,17 @@ var refreshViewport = function(element) {
     }
 }
 
+var timelineBrowserState = {
+    openedTabs: 
+        {
+            design: false, 
+            sizing: false, 
+            positioning: false, 
+            text: false, 
+            advanced: false
+        }
+}
+
 var designTab = function(config, tLElement) {
     var wr = document.createElement("div");
 
@@ -180,13 +191,17 @@ var advTab = function(config) {
 function loadConfigToBrowser(config, timelineElement) {
     var browser = document.querySelector("#timeline > div > div.browser");
     browser.innerHTML = "";
+
+    var mainWr = document.createElement("div");
+    mainWr.className = "main-wrapper";
+    browser.appendChild(mainWr);
     //Get the name of the element
     var name = timelineElement.getAttribute("filename");
     
     var h1 = document.createElement("h1");
     h1.innerHTML = name;
     h1.className = "title";
-    browser.appendChild(h1);
+    mainWr.appendChild(h1);
 
     //Get the sizing and transform properties of the element
     var regexN = /[0-9]/g;
@@ -196,40 +211,86 @@ function loadConfigToBrowser(config, timelineElement) {
         width: {value: config.size.width.replace(regexC,''), unit: config.size.width.replace(regexN,'').replace(/\./g, "")},
         x: {value: config.position[0].replace(regexC,''), unit: config.position[0].replace(regexN, '').replace(/\./g, ""), edge: config.edgeAnchors.x},
         y: {value: config.position[1].replace(regexC,''), unit: config.position[1].replace(regexN, '').replace(/\./g, ""),  edge: config.edgeAnchors.y}
-    }
-
-
+    } 
 
     var des = dropdownMenu("Design");
-    browser.appendChild(des);
-    //extendDropDown(des);
+    des.addEventListener("click", (e)=>{
+        //Check if the element is expanded or retracted
+        var state = e.target.closest(".dropdown").classList.contains("opened");
+        timelineBrowserState.openedTabs.design = state;
+    });
+    mainWr.appendChild(des);
+    if(timelineBrowserState.openedTabs.design) {
+        setTimeout(()=>{
+            extendDropDown(des);
+        }, 10)
+    }
     var wr = des.querySelector(".foldable-content").childNodes[0];
     var content = designTab(config, timelineElement);
     wr.appendChild(content);
 
     var siz = dropdownMenu("Sizing");
-    browser.appendChild(siz);
+    siz.addEventListener("click", (e)=>{
+        var state = e.target.closest(".dropdown").classList.contains("opened");
+        timelineBrowserState.openedTabs.sizing = state;
+    });
+    mainWr.appendChild(siz);
+    if(timelineBrowserState.openedTabs.sizing) {
+        setTimeout(()=>{
+            extendDropDown(siz);
+        }, 10)
+    }
     var wr = siz.querySelector(".foldable-content").childNodes[0];
     //extendDropDown(siz);
     var content = sizingTab(config);
     wr.appendChild(content);
 
     var pos = dropdownMenu("Positioning");
-    browser.appendChild(pos);
+    pos.addEventListener("click", (e)=>{
+        //Check if the element is expanded or retracted
+        var state = e.target.closest(".dropdown").classList.contains("opened");
+        timelineBrowserState.openedTabs.positioning = state;
+    });
+    mainWr.appendChild(pos);
+    if(timelineBrowserState.openedTabs.positioning) {
+        setTimeout(()=>{
+            extendDropDown(pos);
+        }, 10)
+    }
     var wr = siz.querySelector(".foldable-content").childNodes[0];
     //extendDropDown(pos);
     var content = posTab(config);
     wr.appendChild(content);
 
     var fon = dropdownMenu("Text & Fonts");
-    browser.appendChild(fon);
+    fon.addEventListener("click", (e)=>{
+        //Check if the element is expanded or retracted
+        var state = e.target.closest(".dropdown").classList.contains("opened");
+        timelineBrowserState.openedTabs.text = state;
+    });
+    mainWr.appendChild(fon);
+    if(timelineBrowserState.openedTabs.text) {
+        setTimeout(()=>{
+            extendDropDown(fon);
+        }, 10)
+    }
     var wr = siz.querySelector(".foldable-content").childNodes[0];
     //extendDropDown(fon);
     var content = fontTab(config);
     wr.appendChild(content);
 
     var adv = dropdownMenu("Advanced");
-    browser.appendChild(adv);
+    adv.addEventListener("click", (e)=>{
+        //Check if the element is expanded or retracted
+        var state = e.target.closest(".dropdown").classList.contains("opened");
+        timelineBrowserState.openedTabs.advanced = state;
+    });
+    mainWr.appendChild(adv);
+    if(timelineBrowserState.openedTabs.advanced) {
+        setTimeout(()=>{
+            extendDropDown(adv);
+        }, 10)
+    }
     //extendDropDown(adv);
     var wr = adv.querySelector(".foldable-content").childNodes[0];
     var content = advTab(config);

@@ -143,7 +143,7 @@ function toggleNotificationMenu() {
 
 function dropdownMenu(title, contentText, expanded) {
         var cont = document.createElement("div");
-    
+        cont.className = "dropdown";
         var el = document.createElement("button");
         el.className = "menu-collapsible smooth-shadow-bottom";
         if(title) {el.innerHTML = title};
@@ -153,9 +153,10 @@ function dropdownMenu(title, contentText, expanded) {
             if(content.style.maxHeight) {
                 content.style.maxHeight = null;
                 content.style.padding = null;
-
+                content.closest(".dropdown").classList.remove("opened");
             } else {
                 //Get all the preceeding folding menus, and update their heights, as well
+                content.closest(".dropdown").classList.add("opened");
                 var drops = document.getElementsByClassName("foldable-content");
                 var x;
                 for(x of drops) {
