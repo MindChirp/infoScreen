@@ -655,8 +655,45 @@ div.disabled {
   opacity: 0.5;
 }
 
+.user-header-wrapper .profile-header .wrapper {
+  display: inline-flex;
+  float: right;
+  vertical-align: top;
+  align-items: center;
+  height: 80px;
+  width: fit-content;
+}
 
+.user-header-wrapper .profile-header .wrapper h1 {
+  display: block;
+  color: var(--title-color);
+  margin: 0;
+  font-weight: lighter;
+  margin-left: 1rem;
+  opacity: 0;
+  animation: slide-right 700ms ease-in-out 0.2s;
+  animation-fill-mode: forwards;
+  text-transform: capitalize;
+}
 
+.user-header-wrapper .profile-header .wrapper button {
+  display: block;
+  background-color: #EA676B;
+  margin-left: 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  color: var(--secondary-button-color);
+  padding: 0.2rem 0.5rem;
+  font-family: bahnschrift;
+  text-transform: uppercase;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 200ms ease-in-out;
+}
+
+.user-header-wrapper .profile-header .wrapper button:hover {
+  transform: translateY(-0.2rem) scale(1.05);
+}
 
 .template-card.standard {
   height: 5rem;
@@ -670,6 +707,7 @@ div.disabled {
   -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.32);
   box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.32);
   vertical-align: top;
+
 }
 
 .template-card.no-shadow {

@@ -1084,6 +1084,12 @@ function userScreen(info, header, signIn) {
     pfp.appendChild(canv);
     canv.style.animation = "full-rotate 30s linear infinite"
 */
+    var side = document.createElement("div");
+    side.className = "wrapper";
+
+    var center = document.createElement("div");
+    center.className = "center";
+
     var h1 = h1El();
     if(signedIn == "false") {
         h1.innerHTML = "You're not signed in";
@@ -1093,19 +1099,11 @@ function userScreen(info, header, signIn) {
         }
     }
     h1.setAttribute("style", `
-        display: inline-block;
-        line-height: 5rem;
-        color: var(--title-color);
-        vertical-align: top;
-        margin: 0;
-        font-weight: lighter;
-        margin-left: 1rem;
-        opacity: 0;
-        animation: slide-right 700ms ease-in-out 0.2s;
-        animation-fill-mode: forwards;
-        text-transform: capitalize;
+
     `);
-    user.appendChild(h1);
+    user.appendChild(side);
+    side.appendChild(center);
+    center.appendChild(h1);
     userWrapper.appendChild(user)
     header.appendChild(userWrapper);
     userWrapper.style.animation = "slide-in 300ms ease-in-out";
@@ -1120,8 +1118,11 @@ function userScreen(info, header, signIn) {
     menu.appendChild(content);
     
     
-    
-    var signOut = createSettingsButton();
+    var header = document.getElementsByClassName("profile-header")[0];
+
+
+    var signOut = document.createElement("button");
+    signOut.className = "sign-out-button smooth-shadow";
     signOut.innerHTML = "Sign out";
     signOut.addEventListener("click", function(e) {
         //Update the button
@@ -1151,8 +1152,11 @@ function userScreen(info, header, signIn) {
         }
 
 
-    });
+    });//CHECKPOINT
+
+    header.querySelector(".wrapper > .center").appendChild(signOut);
     infoOnHover(signOut, "Signs you out");
+
 
     var changePfp = createSettingsButton();
     changePfp.innerHTML = "Change profile picture";
@@ -1204,7 +1208,6 @@ function userScreen(info, header, signIn) {
             fetchFeedBackLog(content);
         });
     }
-    content.appendChild(signOut);
     content.appendChild(changePfp);
     content.appendChild(subscription);
     content.appendChild(updates);
