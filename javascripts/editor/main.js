@@ -7,7 +7,8 @@ var settingsDirectory;
 var preventUndoOrRedo = false;
 var overlaySettingsDirectory;
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
-
+var { app } = require("electron");
+const filesDir = app.getPath("userData");
 
 function genericStartupFunction() {
     if(isPackaged) {

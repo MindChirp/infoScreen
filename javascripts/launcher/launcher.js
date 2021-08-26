@@ -1,11 +1,13 @@
 const { createWriteStream } = require("fs");
 const { profile, exception, groupCollapsed } = require("console");
-const { ipcMain, ipcRenderer, remote } = require("electron");
+const { ipcMain, ipcRenderer, remote, app } = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged");
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 const internetAvailable = require("internet-available");
 const keytar = require("keytar");
+
+const filesDir = app.getPath("userData");
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");

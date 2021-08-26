@@ -19,6 +19,9 @@ var userIsDeveloper = false;
 
 var windowIdTracker = []
 
+
+
+
 if(isDev) {
   //Do some stuff if the app is in developement mode
   const log = require('electron-log');
