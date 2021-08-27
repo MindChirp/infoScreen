@@ -165,3 +165,42 @@ function showNotification(message, persistent) {
         return obj;
     }
 }
+
+
+function isDescendant(parent, child) {
+    var node = child.parentNode;
+    while (node != null) {
+        if (node == parent) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
+}
+
+var menuElementsToClose = [];
+document.addEventListener("click", closeMenus)
+
+function closeMenus(event) {
+    var target = event.target;
+    var x;    
+    for(x of menuElementsToClose) {
+        if(!(target == x.element)){
+            if(!isDescendant(x.element, target)) {
+                var act = x.action;
+                if(act == "hide") {
+                    x.element.classList.remove("show");
+                }
+            }
+        }
+    }
+}
+
+function MenuTools() {
+    this.makeUnstable = (element, action) => {
+        if(element instanceof HTMLElement) {
+            var obj = {element: element, action: action}
+            menuElementsToClose.push(obj);
+        }
+    }
+}

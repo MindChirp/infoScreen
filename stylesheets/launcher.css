@@ -718,7 +718,7 @@ div.disabled {
 }
 
 .user-header-wrapper .profile-header .wrapper button:hover {
-  transform: translateY(-0.2rem) scale(1.05);
+  /*transform: translateY(-0.2rem) scale(1.0);*/
 }
 
 .template-card.standard {
@@ -1244,3 +1244,137 @@ div.disabled {
   background-color: var(--slider-color) !important;
   border-color: var(--dark-secondary-button-color);
 }
+
+.bottom-right-developer-container {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  margin: 0;
+  height: 3rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.bottom-right-developer-container p {
+  background: rgba(0,0,0,0.2);
+  height: fit-content;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  line-height: initial !important;
+}
+
+.bottom-right-developer-container > button {
+  background-color: transparent;
+  border: none;
+  color: var(--title-color);
+  cursor: pointer;
+  border-radius: 1.5rem;
+  height: 3rem;
+  width: 3rem;
+  position: relative;
+  z-index: 1;
+  line-height: 3rem;
+  display: flex;
+  align-items: center;
+  outline: none;
+  position: relative;
+}
+
+.bottom-right-developer-container > button i {
+  margin: auto;
+}
+
+.bottom-right-developer-container > button::after {
+  display: none;
+}
+
+.bottom-right-developer-container > button:hover::after {
+  color: transparent;
+  z-index: -1;
+  display: block;
+  content: ".";
+  background-color: transparent;
+  background-color: var(--secondary-button-color);
+  border-radius: 100%;
+  height: 2rem;
+  width: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  animation: pop-in-button-bkg 200ms ease-in-out both;
+}
+
+#developer-menu {
+  height: fit-content;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--secondary-color);
+  width: 20rem;
+  display: none !important;
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  box-sizing: border-box;
+  animation: fade-in 150ms ease-in-out;
+}
+
+#developer-menu.show {
+  display: block !important;
+}
+
+#developer-menu button {
+  width: 100%;
+  height: fit-content;
+  border-radius: 0.25rem;
+  display: block;
+  color: var(--title-color);
+  border: none;
+  font-family: bahnschrift;
+  font-size: 1rem;
+  font-weight: lighter;
+  position: relative;
+  cursor: pointer;
+  transition: all 100ms ease-in-out;
+  padding: 0.5rem 1rem;
+  outline: none;
+  background: transparent;
+  position: relative;
+}
+
+#developer-menu button:not(:last-of-type)::after {
+  position: absolute;
+  content: ".";
+  color: transparent;
+  width: 80%;
+  left: 50%;
+  bottom: -1px;
+  transform: translateX(-50%);
+  height: 2px;
+  background-color: var(--title-color);
+}
+
+#developer-menu button input {
+  border-radius: 0.5rem;
+  border: none;
+  outline: none;
+  color: var(--dark-secondary-button-color);
+  padding: 0.2rem 0.8rem;
+  box-sizing: border-box;
+  display: block;
+  margin: auto;
+}
+
+#developer-menu button:hover {
+  background-color: var(--main-bg-color);
+
+}
+
+
+
+
+@keyframes pop-in-button-bkg {
+  0%{transform: translate(-50%,-50%) scale(0.8); opacity: 0;}
+  100%{transform: translate(-50%,-50%) scale(1); opacity: 1;}
+} 

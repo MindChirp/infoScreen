@@ -9,12 +9,11 @@ const keytar = require("keytar");
 
 var filesPath;
 ipcRenderer.on("files-path", (e, data) => {
-    filesPath = data;
-    console.log(filesPath)
-
-
+    localStorage.setItem("filesPath", data);
     checkProjFolder();
-})
+});
+
+
 
 function checkProjFolder() {
     fs.access(path.join(filesPath, "projects"), (error)=>{
@@ -128,6 +127,9 @@ function authClient() {
 
 
 window.onload = async function() {
+    //Set the filespath from localStorage (To ensure that the information is kept even qwhen the program reloads)
+    filesPath = localStorage.getItem("filesPath");
+
 
     //Check wether the client should be checked for authentification on page load
     var checkAuth = JSON.parse(localStorage.getItem("staySignedIn"));
@@ -1868,24 +1870,78 @@ if(!isPackaged) {
     showChangeLog();
 }
 
+function executeCode(ev) {
+    if(ev.key == "Enter") {
+        var code = ev.target.value;
+        eval(code);
+    }
+}
+
+function toggleDevMenu(e) {
+    var createDevMenu = () => {
+        var menu = document.createElement("div");
+        menu.id = "developer-menu";
+        menu.className = "smooth-shadow";
+
+        /*
+        var butt = document.createElement("button");
+        butt.innerText = "Create cusom notification"
+        menu.appendChild(butt);
+        */
+
+        var runCode = document.createElement("button");
+        runCode.innerText = "Run code"
+        menu.appendChild(runCode);
+        var inp = document.createElement("input");
+        runCode.appendChild(inp);
+        inp.addEventListener("keyup", executeCode)
+
+       /* var yes = document.createElement("button");
+        yes.innerText = "Do something"
+        menu.appendChild(yes);
+        */
+        var menTools = new MenuTools();
+        menTools.makeUnstable(menu, "hide");
+
+        e.target.closest(".bottom-right-developer-container").querySelector(".dev-menu-button").appendChild(menu);
+    }
+    if(!document.getElementById("developer-menu")) {
+        createDevMenu();
+    }
+    setTimeout(()=>{
+
+        var menu = document.getElementById("developer-menu");
+        if(!menu.classList.contains("show")) {
+            menu.classList.add("show"); 
+        }
+    }, 50)
+
+
+}
+
+
 function enableDevMode() {
 
     var startDevving = () => {
+        var bottomR = document.createElement("div");
+        bottomR.className = "bottom-right-developer-container";
+        document.body.appendChild(bottomR);
+
+        var devMenu = document.createElement("button");
+        devMenu.className = "dev-menu-button";
+        var ico = document.createElement("i");
+        ico.className = "material-icons";
+        ico.innerText = "more_horiz";
+        devMenu.appendChild(ico);
+        bottomR.appendChild(devMenu);
+        devMenu.addEventListener("click", toggleDevMenu);
+
         document.getElementById("developer-start").style.display = "initial";
         var p = document.createElement("p");
-        p.style = `
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            margin: 0;
-            height: fit-content;
-            padding: 0.5rem;
-            line-height: 1rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 0.25rem;
-        `;
-        p.innerHTML = "DEVELOPER MODE";
-        document.body.appendChild(p);
+        p.innerText = "DEVELOPER MODE";
+        bottomR.appendChild(p);
+
+
     }
 
     if(document.body.developerMode) {
