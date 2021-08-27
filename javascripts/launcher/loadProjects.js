@@ -97,7 +97,7 @@ function loadInDevMode() {
 function loadProjects() {
 
 
-var projectFilePath = path.join(path.dirname(__dirname),"extraResources", "data", "programData", "projects");
+var projectFilePath = path.join(filesPath, "projects");
 fs.readdir(projectFilePath, (err, dat) => {
     if (err) {
         loadInDevMode()
