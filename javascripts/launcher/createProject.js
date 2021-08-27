@@ -19,28 +19,21 @@ function createProject() {
         display: inline-block;
     `);
 
-    var name = document.createElement("input");
-    name.setAttribute("id", "project-title");
-    name.setAttribute("type", "text");
-    name.placeholder = "Project name";
-    name.setAttribute("style", `
-        position: absolute;
+    var title = document.createElement("h1");
+    title.className = "title";
+    title.innerHTML = "Create a Project";
+    title.style = `
         font-size: 3.5rem;
-        outline: none;
         color: var(--title-color);
-        top: 50%;
-        transform: translateY(-50%);
-        left: 3rem;
-        background-color: transparent;
-        border: none;
-        height: 40%;
-        width: 90%;
-        /*border-color: var(--secondary-button-color);
-        border-width: 0 0 2px 0;
-        border-style: solid;*/
-        border: none;
-    `)
-    cont.childNodes[0].appendChild(name);
+        margin-left: 3rem;
+    `
+    
+    cont.childNodes[0].style = `
+        display: flex;
+        align-items: center;
+    `
+    cont.childNodes[0].appendChild(title);
+    //cont.childNodes[0].appendChild(name);
     cont.childNodes[0].style.position = "relative";
 
     //Create project button
@@ -55,8 +48,17 @@ function createProject() {
     bottomRight.setAttribute("id", "bottom-right-create-container");
     wrapper.appendChild(bottomRight);
 
+
+    var fileLoc = document.createElement("button");
+    fileLoc.innerText = "open file location"
+    fileLoc.className = "open-file-location";
+    bottomRight.appendChild(fileLoc);
+    fileLoc.onclick = ()=>{
+        require('child_process').exec("start " + path.join(filesPath, "projects"));
+    }
+
     var createB = document.createElement("button");
-    createB.setAttribute("class", "smooth-shadow fd-settings-button");
+    createB.setAttribute("class", "smooth-shadow fd-settings-button create");
     createB.innerHTML = "Create project";
     createB.setAttribute("style", `
         height: 3rem;
@@ -70,6 +72,12 @@ function createProject() {
     
     bottomRight.appendChild(createB);
 
+    
+
+    var name = inputWithText("Project Name *");
+    name.id = "project-title";
+    name.childNodes[1].setAttribute("type", "text");
+    left.appendChild(name);
 
     var creators = inputWithText("Author *");
     left.appendChild(creators);
@@ -78,12 +86,13 @@ function createProject() {
     creators.childNodes[1].value = JSON.parse(dat)[1][0].name;
     creators.childNodes[1].style.textTransform = "capitalize";
 
+    /*
     var slides = inputWithText("Number of Slides *");
     slides.childNodes[1].setAttribute("type", "number");
     slides.childNodes[1].value = 10;
     slides.childNodes[1].min = 1;
     left.appendChild(slides);
-
+*/
     
     var desc = inputWithText("Description");
     desc.childNodes[1].setAttribute("type", "text");
@@ -92,7 +101,7 @@ function createProject() {
     
     
     createB.addEventListener("click", function() {
-        create(name.value, creators.childNodes[1].value, slides.childNodes[1].value, desc.childNodes[1].value, cont);
+        create(name.childNodes[1].value, creators.childNodes[1].value, 10, desc.childNodes[1].value, cont);
     });
     //Templates
 
@@ -157,11 +166,14 @@ function createProject() {
 
 function create(title,author,slides, desc, menu) {
     if(title.trim() == "") {
-        project.error("Specify a project name");
-    } else if(author.trim() == "" || slides.trim() == "") {
-        project.error("Fill out all the required fields");
+        showNotification("Specify a project name");
+        //project.error("Specify a project name");
+    } else if(author.trim() == "") {
+        showNotification("Fill out all the required fields");
+        //project.error("Fill out all the required fields");
     } else if(slides == 0) {
-        project.error("Project must have at least one slide")
+        showNotification("Project must have at least one slide");
+        //project.error("Project must have at least one slide")
     } else {
         var create = new Promise((resolve, reject) => {
             var result = createFile()
@@ -177,7 +189,8 @@ function create(title,author,slides, desc, menu) {
             menu.parentNode.removeChild(menu);
         })
         .catch(function() {
-            project.error("Could not create the project");
+            showNotification("Could not create the project");
+            //project.error("Could not create the project");
         })
 
         
@@ -227,8 +240,8 @@ function createFile(template) {
     var inputs = document.getElementsByTagName("input");
     var title = inputs[0].value;
     var author = inputs[1].value;
-    var slides = inputs[2].value;
-    var desc = inputs[3].value;
+    var slides = 10;
+    var desc = inputs[2].value;
 
     var time = new Date();
     var day = time.getDay();
@@ -257,15 +270,9 @@ function createFile(template) {
     var data = zip.generate({base64:false,compression:'DEFLATE'});
 
 
-    var dirPath;
-    if(!isPackaged) {
-        dirPath = path.join(__dirname, "extraResources", "data", "programData", "projects");
-    } else {
-        dirPath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
-    }
 
 
-        fs.writeFile(path.join(dirPath, title + '.proj'), data, 'binary', (err) => {
+        fs.writeFile(path.join(filesPath, "projects", title + '.proj'), data, 'binary', (err) => {
             if(err) {
                 return false;
             } else {

@@ -1,13 +1,32 @@
 const { createWriteStream } = require("fs");
 const { profile, exception, groupCollapsed } = require("console");
-const { ipcMain, ipcRenderer, remote, app } = require("electron");
+const { ipcMain, ipcRenderer, remote} = require("electron");
 const env = process.env.NODE_ENV || 'development';
 const { isPackaged } = require("electron-is-packaged");
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 const internetAvailable = require("internet-available");
 const keytar = require("keytar");
 
-const filesDir = app.getPath("userData");
+var filesPath;
+ipcRenderer.on("files-path", (e, data) => {
+    filesPath = data;
+    console.log(filesPath)
+
+
+    checkProjFolder();
+})
+
+function checkProjFolder() {
+    fs.access(path.join(filesPath, "projects"), (error)=>{
+        if(error) {
+            //Dir does not exist
+            fs.mkdir(filesPath + "/projects");
+        } else {
+            //Dir does exist
+        }
+    })
+}
+
 
 if(env != "development") {
     var devButton = document.getElementById("developer-start");
@@ -310,7 +329,6 @@ function appendRipple(el) {
             el.appendChild(ripple);
 
             var elStyle = window.getComputedStyle(el);
-            console.log(e);
             var elHeight = elStyle.height;
             var elWidth = elStyle.width;
             var x = e.layerX + "px";

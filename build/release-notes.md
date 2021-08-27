@@ -1,7 +1,7 @@
     
     <h2 style="margin: 0">New features</h2>
     <ul>
-        <li>None</li>
+        <li>Added persistent project storage <div class="info-circle" metaMessage="When updating, all your project files will be kept!">?</div></li>
     </ul>
         <br>
 

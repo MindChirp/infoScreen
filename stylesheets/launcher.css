@@ -608,6 +608,32 @@ Ola hata det, så jeg skrur det av for nå
     border: none;
 }
 
+
+.menu #bottom-right-create-container {
+  display: flex;
+  align-items: center;
+}
+
+.menu #bottom-right-create-container button {
+}
+
+.menu .open-file-location {
+  display: inline-block;
+  margin-right: 1rem;
+  text-transform: uppercase;
+  font-family: bahnschrift;
+  float: left;
+  background-color: transparent;
+  color: var(--title-color);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+}
+
+
+
+
 .login-form > p {
   margin: 0;
   height: 1.5rem;

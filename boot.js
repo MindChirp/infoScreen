@@ -19,7 +19,7 @@ var userIsDeveloper = false;
 
 var windowIdTracker = []
 
-
+const filesPath = app.getPath("userData");
 
 
 if(isDev) {
@@ -85,7 +85,8 @@ function boot() {
   })
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();
-
+    //Send a message to the renderer
+    launcherWin.webContents.send("files-path", filesPath);
   });
 
 
@@ -181,13 +182,7 @@ function openEditor(fileName) {
       if(fileName && !fileName.developerLaunch) {
 
         //Get the file
-        var projectFilePath;
-        if(isPackaged) {
-          projectFilePath = path.join(path.dirname(__dirname), "extraResources", "data", "programData", "projects");
-        } else {
-          projectFilePath = path.join(__dirname, "extraResources", "data", "programData", "projects");
-        }
-        fs.readFile(projectFilePath + "/" + fileName + ".proj", "binary", (err, data) => {
+        fs.readFile(path.join(filesPath, "projects", fileName + ".proj"), "binary", (err, data) => {
           var zip = new require("node-zip")(data, {base64: false, checkCRC32: true});
 
           var files = ["meta.json"]

@@ -77,7 +77,7 @@ function createList(arr) {
 function loadInDevMode() {
 
     //Loading using the standard path has failed, resort to the dev path
-    var projectFilePath = path.join(__dirname,"extraResources", "data", "programData", "projects");
+    var projectFilePath = path.join(filesPath, "projects");
     projects = [];
     fs.readdir(projectFilePath, (err, dat) => {
         if (err) throw err;

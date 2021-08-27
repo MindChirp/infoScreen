@@ -176,6 +176,7 @@
         */
 
 
+
         var template = {
                 borderRadius: "0.25", 
                 opacity: "1", 
@@ -323,6 +324,7 @@
                 case "progress": 
                     p.innerHTML = "Progress";
                     file.setAttribute("fileName", "Progress Widget");
+                    file.config = progTemp;
                 break;
             }
         }
