@@ -163,18 +163,43 @@ function createProject() {
 
 }
 
-
 function create(title,author,slides, desc, menu) {
     if(title.trim() == "") {
         showNotification("Specify a project name");
+        return;
         //project.error("Specify a project name");
     } else if(author.trim() == "") {
         showNotification("Fill out all the required fields");
+        return;
         //project.error("Fill out all the required fields");
     } else if(slides == 0) {
         showNotification("Project must have at least one slide");
+        return;
         //project.error("Project must have at least one slide")
-    } else {
+    }
+
+    //Check for problematic names
+    var conf;
+    try {
+        conf = JSON.parse(fs.readFileSync("./internalResources/configs/projects.json", "utf8"));
+    } catch (error) {
+        showNotification("Internal config not found, could not create the project");
+        return;
+    }
+
+    var x
+    for(x of conf.bannednames) {
+        if(title.includes(x)) {
+            showNotification("This title (" + title + ") is not valid");
+            return;
+        } else if(title.includes(".")) {
+            showNotification("The title cannot contain periods");
+            return;
+        }
+    }
+
+
+
         var create = new Promise((resolve, reject) => {
             var result = createFile()
             console.log(result)
@@ -194,7 +219,7 @@ function create(title,author,slides, desc, menu) {
         })
 
         
-    }
+    
 }
 
 var project = {

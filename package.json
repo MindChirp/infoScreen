@@ -16,7 +16,7 @@
     "electron-updater": "^4.3.5",
     "electron-util": "^0.14.2",
     "fs": "0.0.1-security",
-    "fs-extra": "^9.0.1",
+    "fs-extra": "^9.1.0",
     "html2canvas": "^1.0.0-rc.7",
     "internet-available": "^1.0.0",
     "keytar": "^7.7.0",

@@ -593,6 +593,13 @@ Ola hata det, så jeg skrur det av for nå
     background-color: var(--secondary-color);
 }
 
+.menu > .wrapper {
+  height: calc(100% - 10rem);
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
 .menu #login-container form input {
     height: 2rem;
     width: 19rem;
@@ -631,8 +638,38 @@ Ola hata det, så jeg skrur det av for nå
   letter-spacing: 0.05em;
 }
 
+.menu.open-project > .wrapper .projects-list {
+  padding: 0.5rem;
+  background-color: var(--main-button-color);
+  height: fit-content;
+  max-height: calc(100% - 20rem);
+  width: 80%;
+  border-radius: 0.5rem;
+  margin-top: 0.5rem;
+  box-sizing: border-box;
+}
 
+.menu.open-project > .wrapper .projects-list .entry {
+  width: 100%;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  transition: all 100ms ease-in-out;
+  align-items: center;
+  cursor: pointer;
+}
 
+.menu.open-project > .wrapper .projects-list .entry:hover {
+  background-color: var(--secondary-button-color);
+}
+
+.menu.open-project > .wrapper .projects-list .entry > p {
+  height: fit-content !important;
+  line-height: initial !important;
+}
 
 .login-form > p {
   margin: 0;
@@ -1378,3 +1415,8 @@ div.disabled {
   0%{transform: translate(-50%,-50%) scale(0.8); opacity: 0;}
   100%{transform: translate(-50%,-50%) scale(1); opacity: 1;}
 } 
+
+@keyframes breathe-opacity {
+  0%{opacity: 0.5}
+  50%{opacity: 1}
+}

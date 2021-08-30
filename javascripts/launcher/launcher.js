@@ -6,6 +6,8 @@ const { isPackaged } = require("electron-is-packaged");
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 const internetAvailable = require("internet-available");
 const keytar = require("keytar");
+const shell = require("electron").shell;
+const fse = require("fs-extra");
 
 var filesPath;
 ipcRenderer.on("files-path", (e, data) => {
@@ -13,6 +15,7 @@ ipcRenderer.on("files-path", (e, data) => {
     checkProjFolder();
 });
 
+//shell.openItem(path.join(__dirname, ))
 
 
 function checkProjFolder() {
@@ -358,6 +361,11 @@ function appendRipple(el) {
 
 
 function infoOnHover(el, txt) {
+
+    var closeEl = (ev) => {
+
+    }
+    
     el.addEventListener("mouseenter", function(event) {
     var mouseover = true;
 
@@ -366,12 +374,24 @@ function infoOnHover(el, txt) {
         if(document.getElementsByClassName("information-popup")) {
             var popups = document.getElementsByClassName("information-popup");
 
-            for(let i = 0; i < popups.length; i++) {
-                popups[i].parentNode.removeChild(popups[i]);
+            while(popups.length > 0) {
+                popups[0].parentNode.removeChild(popups[0]);
             }
         }
     })
 
+    //Had to just copy the code, because for some reason it bugged out when i tried to
+    //nest everything up into a single function..
+    el.addEventListener ("click", function(event1) {
+        mouseover = false;
+        if(document.getElementsByClassName("information-popup")) {
+            var popups = document.getElementsByClassName("information-popup");
+
+            while(popups.length > 0) {
+                popups[0].parentNode.removeChild(popups[0]);
+            }
+        }
+    })
     setTimeout(function() {
         if(mouseover == true) {
             //The mouse has hovered over the element for long enough

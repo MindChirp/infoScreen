@@ -16,11 +16,27 @@ function createList(arr) {
     //Create an item for each project
     var parent = document.getElementById("list");
     if(arr.length > 0) {
-        console.log(parent);
         parent.innerHTML = "";
         parent.style.paddingTop = "0.5rem";
         parent.style.paddingBottom = "0.5rem";
 
+    } else {
+        var noFiles = document.createElement("p");
+        noFiles.style = `
+            margin-left: 1rem; 
+            margin-right: 1rem; 
+            line-height: 2.5rem;  
+            height: 2.5rem; 
+            color: rgb(150,150,150);
+        `;
+        parent.style.paddingTop = "0rem";
+        parent.style.paddingBottom = "0rem";
+
+        noFiles.innerText = "No recent projects"
+        parent.innerHTML = "";
+        parent.appendChild(noFiles);
+
+        return;
     }
 
     
@@ -37,6 +53,7 @@ function createList(arr) {
     for(x of arr) {
         var el = document.createElement("div");
         el.setAttribute("class", "project-item");
+        el.projectName = x+'';
         holder.appendChild(el);
         el.fileName = x
         var txt = document.createElement("p");
@@ -95,24 +112,26 @@ function loadInDevMode() {
 }
 
 function loadProjects() {
+    projects = [];
 
-
-var projectFilePath = path.join(filesPath, "projects");
-fs.readdir(projectFilePath, (err, dat) => {
-    if (err) {
-        loadInDevMode()
-        return;
-    }
-    //Get all the projects, and list them out wihtout their extensions
-    var x;
-    for(x of dat) {
-        if(x.split(".")[x.split(".").length-1] == "proj") {
-            projects.push(x.split(".")[0])
+    var projectFilePath = path.join(filesPath, "projects");
+    fs.readdir(projectFilePath, (err, dat) => {
+        if (err) {
+            loadInDevMode()
+            return;
         }
-    }
 
-    createList(projects);
-})
+        console.log(dat);
+        //Get all the projects, and list them out wihtout their extensions
+        var x;
+        for(x of dat) {
+            if(x.split(".")[x.split(".").length-1] == "proj") {
+                projects.push(x.split(".")[0])
+            }
+        }
+
+        createList(projects);
+    })
 
 
 
@@ -308,6 +327,7 @@ var fileList = {
                 }
 
                 var deleteFile = document.createElement("button");
+                deleteFile.setAttribute("onclick", "deleteLocalProject(this)");
                 var ico = document.createElement("i");
                 ico.className = "material-icons";
                 ico.innerHTML = "delete";
@@ -369,4 +389,23 @@ function removeFileMenu(el) {
         }, 100)
 
     }
+}
+
+
+
+function deleteLocalProject(el) {
+    //Get name
+    var name = el.closest(".project-item").projectName;
+
+    //Try to delete the file with the name
+    fse.remove(path.join(filesPath,"projects",name + ".proj"))
+    .then(()=>{
+        console.log("Deleted file!");
+        //remove the entry
+        loadProjects();
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+
 }

@@ -2135,21 +2135,35 @@ body .context-menu button:disabled:hover {
 .developer-notification {
     position: absolute;
     bottom: 1rem;
-    left: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
     height: fit-content;
     width: 30rem;
     padding: 1rem;
     background-color: var(--secondary-button-color);
     border-radius: 0.5rem;
+    opacity: 1;
+    animation: slide-up-dev-message 2s ease-in-out both;
+}
+
+@keyframes slide-up-dev-message {
+    0%{transform: translate(-50%, calc(100% + 1rem)); opacity: 1;}
+    30%{transform: translate(-50%,0); opacity: 1;}
+    70%{transform: translate(-50%,0); opacity: 1;}
+    100%{transform: translate(-50%, calc(100% + 1rem)); opacity: 0;}
+
 }
 
 .developer-notification p:first-of-type {
-    font-size: 1.7rem;
-    line-height: 1.7rem;
+    font-size: 1rem;
+    line-height: initial;
+    margin: 0;
 }
 
 .developer-notification p:nth-of-type(2) {
     font-weight: lighter;
+    line-height: initial;
+    margin: 0;
 }
 
 @keyframes save-span-animation {
