@@ -5,7 +5,7 @@ var progTemp = {
     blur: 0, 
     position: [1 + "%", 1 + "%"], 
     edgeAnchors: {x: "left", y: "top"},
-    size: {height: "5%", width: "7rem"}, 
+    size: {height: "2rem", width: "7rem"}, 
     display: true, 
     backgroundColor: "#ffffff",
     backgroundOpacity: "26",

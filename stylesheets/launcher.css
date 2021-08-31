@@ -134,6 +134,7 @@ input::-webkit-inner-spin-button {
   width: 100%;
   overflow-y: auto;
   max-height: 30.625rem;
+  box-sizing: border-box;
 }
 
 .settings-content::-webkit-scrollbar {
@@ -279,6 +280,10 @@ input::-webkit-inner-spin-button {
     cursor: pointer;
     display: inline-block;
     margin-right: 0.7rem;
+}
+
+#actions-container > button:last-of-type {
+  margin-right: 2.2rem !important;
 }
 
 #quit-button {
@@ -476,7 +481,8 @@ input::-webkit-inner-spin-button {
     width: fit-content;
     display: inline-block;
     vertical-align: bottom;
-    margin-left: 1.5rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
 }
 
 #user-container #pfp #profile-photo-image {

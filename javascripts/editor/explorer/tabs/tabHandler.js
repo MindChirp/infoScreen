@@ -497,7 +497,7 @@ function openTab(el) {
     standardSettings.appendChild(aspR);    
 
 
-    var units = ["px", "%", "rem", "vh", "vw"];
+    var units = ["px", "%", "rem"];
 
     var returnCorrespondingNumber = (unit) => {
         for(let i = 0; i < units.length; i++) {

@@ -81,7 +81,9 @@ function boot() {
     maxHeight:650,
     minHeight:650,
     frame: false,
-    transparent: true
+    transparent: true,
+    fullscreen: false,
+    fullscreenable: false
   })
   launcherWin.webContents.on("did-finish-load", () => {
     autoUpdater.checkForUpdatesAndNotify();

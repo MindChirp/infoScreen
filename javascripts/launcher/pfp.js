@@ -79,12 +79,17 @@ function profilePhoto(parent) {
     selImg.innerHTML = "Select image";
     selImg.style.display = "block";
 
-    selImg.addEventListener("click", function() {
+    selImg.addEventListener("click", async function() {
         var paths = JSON.parse(ipcRenderer.sendSync("open-pfp-selector")).fileName;
         if(paths != "canceled") {
 
         var letters = ["A","B","C","D","E","F","G","H","I","J"];
 
+        //Save the image to localstorage
+        var b64 = await imgToBase64(paths[0]);
+        var info = JSON.parse(localStorage.getItem("userInfo"));
+        info[1][0].imagedata = b64;
+        localStorage.setItem("userInfo", JSON.stringify(info));
 
         var extension = paths[0].split("\\")[paths[0].split("\\").length-1].split(".")[paths[0].split("\\")[paths[0].split("\\").length-1].split(".").length-1];
         localStorage.setItem("pfpExtension", letters[parseInt(Math.random()*10).toString().split(".")[0]]+ letters[parseInt(Math.random()*10).toString().split(".")[0]] + "." + extension.toString());
@@ -137,7 +142,7 @@ function profilePhoto(parent) {
             }
 
                     var img = document.createElement("img");
-                    img.setAttribute("id", "img-positioner-image")
+                    img.setAttribute("id", "img-positioner-image");
 
 //----------------------------asdasddas
 
@@ -170,6 +175,7 @@ function profilePhoto(parent) {
                         })
                         .catch((error)=>{
                             showNotification(error);
+                            notif.kill();
                         })
                     }
 

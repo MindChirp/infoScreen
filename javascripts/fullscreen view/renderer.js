@@ -317,3 +317,68 @@ function convertPercentToPx([x,y]) {
     var yHeight = parseInt(window.getComputedStyle(viewport).height.split("px")[0]);
     return [(x*xWidth/100).toFixed(5), (y*yHeight/100).toFixed(5)];
 }
+
+function convertToTargetUnit([x,y], unit, targetUnit) {
+    var px = (values) => {
+        switch(unit) {
+            case "px":
+                return values;
+            break;
+            case "%":
+                return convertPercentToPx([values]);
+            break;
+            case "rem":
+                return [values[0]*16, values[1]*16];
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+    var percent = (values) => {
+        switch(unit) {
+            case "px":
+                return convertPxToPercent(values);
+            break;
+            case "%":
+                return values;
+            break;
+            case "rem":
+                var pxs = convertPercentToPx(values);
+                return [pxs[0]*16, pxs[1]*16];
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+
+    var rem = (values) => {
+        switch(unit) {
+            case "px":
+                return [values[0]/16, values[1]/16];
+            break;
+            case "%":
+                var pxs = convertPercentToPx(values);
+                return [pxs[0]*16, pxs[1]*16];
+            break;
+            case "rem":
+                return values;
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+
+    switch(targetUnit) {
+        case "px":
+            return px([x,y]);
+        break;
+        case "%":
+            return percent([x,y]);
+        break;
+        case "rem":
+            return rem([x,y]);
+        break;
+        default:
+            return new Error("No target unit matches");
+    }
+}

@@ -27,12 +27,12 @@
             <div id="actions-container">
                 <button id="new-project" onclick="createProject()" class="smooth-shadow ripple-element"><i class="material-icons">add</i> <p>Create</p></button>
                 <button id="open-project" onclick="openProject()"class="smooth-shadow ripple-element"><i class="material-icons">folder_open</i> <p>Open</p></button>
-                <button id="open-server" class="smooth-shadow  ripple-element" disabled><i class="material-icons">dns</i> <p>From server</p></button>
+                <button id="open-server" class="smooth-shadow  ripple-element" disabled><i class="material-icons">dns</i> <p>Server files</p></button>
                 <button id="live-edit" onclick="liveEdit()" class="smooth-shadow ripple-element"><i class="material-icons">brush</i> <p>Live edit</p></button>
                 <button id="developer-start" class="smooth-shadow ripple-element" onclick="launchProgram()" style="display: none;"><i class="material-icons">flag</i> <p>Developer start</p></button>
-                <div id="user-container">                    
+                <div id="user-container"  onclick="userSettings()" class="smooth-shadow">                    
                     <div class="wrapper">
-                        <button id="pfp" class="" onclick="userSettings()">
+                        <button id="pfp" class="">
                             <img src="./internalResources/images/default.png" id="profile-photo-image">
                             <canvas id="user-canvas" height="48px" width="48px">
                             </canvas>

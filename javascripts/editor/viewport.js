@@ -97,6 +97,7 @@ function renderColumn(col) {
             }
 
             var zIndex = i+1;
+
             //Push each element in the column to the indexation array with all the nescessary information
             indexes.push([{type: type, name: name, zIndex: zIndex, element: x, config: x.config}])
         }
@@ -746,72 +747,6 @@ function addResizingBorders(el) {
 
     }
 
-
-    function convertToTargetUnit([x,y], unit, targetUnit) {
-        var px = (values) => {
-            switch(unit) {
-                case "px":
-                    return values;
-                break;
-                case "%":
-                    return convertPercentToPx([values]);
-                break;
-                case "rem":
-                    return [values[0]*16, values[1]*16];
-                break;
-                default:
-                    return new Error("No target unit matches");
-            }
-        }
-        var percent = (values) => {
-            switch(unit) {
-                case "px":
-                    return convertPxToPercent(values);
-                break;
-                case "%":
-                    return values;
-                break;
-                case "rem":
-                    var pxs = convertPercentToPx(values);
-                    return [pxs[0]*16, pxs[1]*16];
-                break;
-                default:
-                    return new Error("No target unit matches");
-            }
-        }
-
-        var rem = (values) => {
-            switch(unit) {
-                case "px":
-                    return [values[0]/16, values[1]/16];
-                break;
-                case "%":
-                    var pxs = convertPercentToPx(values);
-                    return [pxs[0]*16, pxs[1]*16];
-                break;
-                case "rem":
-                    return values;
-                break;
-                default:
-                    return new Error("No target unit matches");
-            }
-        }
-
-        switch(targetUnit) {
-            case "px":
-                return px([x,y]);
-            break;
-            case "%":
-                return percent([x,y]);
-            break;
-            case "rem":
-                return rem([x,y]);
-            break;
-            default:
-                return new Error("No target unit matches");
-        }
-    }
-
     var disableBorder = (e) => {
         if(e.target.closest(".viewport-image") != el) {
             if(document.getElementsByClassName("resizing-border-container")[0]) {
@@ -1082,7 +1017,7 @@ function addResizingBorders(el) {
             var percents = convertPxToPercent([width, height]);
 
             el.connectedElement.config.size.width = percents[0] + "%";
-            el.connectedElement.config.size.height = percents[1] + "%";
+            //el.connectedElement.config.size.height = percents[1] + "%";
             updateFullscreenView();
             refreshViewportElement(element);
 
@@ -1112,7 +1047,6 @@ function addResizingBorders(el) {
                 element.getElementsByTagName("img")[0].style.width = "100%";
             }
 
-            console.log(e.movementY)
             if(trackedHeight < minHeight && e.movementY == -1) return;
 
             trackedHeight = trackedHeight + e.movementY;
@@ -1261,7 +1195,7 @@ function refreshViewportElement(el) {
     /*
         1. Images do not require any updates
         2. Text elements require the font size to be changed
-        3. No other elements needs any changes        
+        3. Progress widgets needs to have their dots resized
     */
 
     //Get the element type
@@ -1302,8 +1236,18 @@ function refreshViewportElement(el) {
 
         } else if(type=="progress") {
             var height = conf.size.height;
-            var dims = convertPercentToPx([0,height.split("%")[0]]);
+            var dims;
+            console.log(height);
+            if(height.includes("%")) {
+                dims = convertPercentToPx([0,height.split("%")[0]]);
+            } else if(height.includes("rem")) {
+                dims = convertToTargetUnit([0,height.split("rem")[0]], "rem", "px");
+            } else if(height.includes("px")) {
+                dims = height.split(px)[0];
+            }
+
             var scale = conf.widgetAttributes.progress.scale/100;
+            console.log(dims)            
             var dotStyle = `
                 height: ` + dims[1]*scale + `rem;
                 width: ` + dims[1]*scale + `rem;
@@ -1391,4 +1335,71 @@ function disableGuideLines(element) {
         aligners[0].parentNode.removeChild(aligners[0]);
     }
     console.log(aligners);
+}
+
+
+
+function convertToTargetUnit([x,y], unit, targetUnit) {
+    var px = (values) => {
+        switch(unit) {
+            case "px":
+                return values;
+            break;
+            case "%":
+                return convertPercentToPx([values]);
+            break;
+            case "rem":
+                return [values[0]*16, values[1]*16];
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+    var percent = (values) => {
+        switch(unit) {
+            case "px":
+                return convertPxToPercent(values);
+            break;
+            case "%":
+                return values;
+            break;
+            case "rem":
+                var pxs = convertPercentToPx(values);
+                return [pxs[0]*16, pxs[1]*16];
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+
+    var rem = (values) => {
+        switch(unit) {
+            case "px":
+                return [values[0]/16, values[1]/16];
+            break;
+            case "%":
+                var pxs = convertPercentToPx(values);
+                return [pxs[0]*16, pxs[1]*16];
+            break;
+            case "rem":
+                return values;
+            break;
+            default:
+                return new Error("No target unit matches");
+        }
+    }
+
+    switch(targetUnit) {
+        case "px":
+            return px([x,y]);
+        break;
+        case "%":
+            return percent([x,y]);
+        break;
+        case "rem":
+            return rem([x,y]);
+        break;
+        default:
+            return new Error("No target unit matches");
+    }
 }

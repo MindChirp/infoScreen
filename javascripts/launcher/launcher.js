@@ -525,7 +525,6 @@ function userSettings() {
         h1.innerHTML = "You're not signed in";
     } else {
         userWrapper.parentNode.removeChild(userWrapper);
-        console.log(localStorage.getItem("userInfo"))
         userScreen(JSON.parse(localStorage.getItem("userInfo")), header, true);
         return;
     }
@@ -1207,9 +1206,7 @@ function userScreen(info, header, signIn) {
     })
     var subscription = createSettingsButton();
     subscription.innerHTML = "View your subscription";
-
-    var updates = createSettingsButton();
-    updates.innerHTML = "Check for updates";
+    subscription.disabled = true;
 
     var feedbackButt = createSettingsButton();
     feedbackButt.innerHTML = "Send your feedback";
@@ -1252,7 +1249,6 @@ function userScreen(info, header, signIn) {
     }
     content.appendChild(changePfp);
     content.appendChild(subscription);
-    content.appendChild(updates);
     content.appendChild(feedbackButt);
     content.appendChild(info);
     content.appendChild(privacy);
@@ -2350,3 +2346,20 @@ function signInClient() {
     })
 }
 */
+
+function imgToBase64(src) {
+    return new Promise((resolve, reject) => {
+        var img = new Image();
+        img.src = src;
+        img.addEventListener("load", ()=>{
+            var canv = document.createElement("canvas");
+            var ctx = canv.getContext("2d");
+            ctx.drawImage(img, 10, 10);
+            var dat = canv.toDataURL();
+            resolve();
+        })
+        img.onerror = (err)=>{
+            reject(err);
+        }
+    })
+}

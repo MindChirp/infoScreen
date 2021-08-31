@@ -121,7 +121,7 @@ var sizingTab = function(config) {
         padding: 0 1.6rem 0 0.2rem;
     `;
 
-    var units = ["px", "%", "rem", "vh", "vw"];
+    var units = ["px", "%", "rem"];
 
     var div = document.createElement("div");
     div.style = `

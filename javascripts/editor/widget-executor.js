@@ -358,8 +358,16 @@ function Progress(config) {
     var length = renderer.numberOfColumns();
 
     var height = config.size.height;
-    var dims = convertPercentToPx([0,height.split("%")[0]]);
+    var dims;
+    if(height.includes("%")) {
+        dims = convertPercentToPx([0,height.split("%")[0]]);
+    } else if(height.includes("rem")) {
+        dims = convertToTargetUnit([0,height.split("rem")[0]], "rem", "px");
+    } else if(height.includes("px")) {
+        dims = height.split(px)[0];
+    }
     var scale = config.widgetAttributes.progress.scale/100;
+    console.log(scale);
     var dotStyle = `
         height: ` + dims[1]*scale + `rem;
         width: ` + dims[1]*scale + `rem;
