@@ -181,7 +181,8 @@ function create(title,author,slides, desc, menu) {
     //Check for problematic names
     var conf;
     try {
-        conf = JSON.parse(fs.readFileSync("./internalResources/configs/projects.json", "utf8"));
+        var cpath = path.join(__dirname, "internalResources", "configs", "projects.json");
+        conf = JSON.parse(fs.readFileSync(cpath, "utf8"));
     } catch (error) {
         showNotification("Internal config not found, could not create the project");
         return;
