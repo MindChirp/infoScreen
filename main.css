@@ -1196,7 +1196,17 @@ Replaced by a style in inputs.css
     transform: translate(-50%, -50%);
 }
 
-#main-container #top-layer #browser .side-bar .buttons-container div {
+#main-container #top-layer #browser .side-bar .buttons-container .sliding-bar {
+    width: 0.2rem !important;
+    position: absolute;
+    background-color: white;
+    left: 0;
+    height: 3rem;
+    display: none;
+    transition: all 150ms ease-in-out;
+}
+
+#main-container #top-layer #browser .side-bar .buttons-container div:not(.sliding-bar) {
     width: 4rem;
     height: 3rem;
     background-color: transparent;

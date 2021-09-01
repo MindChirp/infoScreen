@@ -219,17 +219,65 @@ function activateBrowserItem(arg, el) {
         index++
     }
 
-
-    //Deactivate all other menu buttons, activate the one that was clicked
-    var x;
-    for(x of butts) {
-        x.style.border = "none";        
-        x.style.width= "4rem";
+    //Get index of already active item
+    var active = document.getElementById("browser").querySelector(".side-bar").querySelector(".selected");
+    var index1 = 0;
+    if(active) {
+        while(butts[index1] != active) {
+            index1++;
+        }
+    } else {
+        index1 = undefined;
     }
 
+    var sideBar = document.querySelector("#browser > div:nth-child(1) > div.side-bar > div");
+    //Create the sliding bar
+        //Delete any possible bar
+    if(sideBar.querySelector(".sliding-bar")) {
+        sideBar.removeChild(sideBar.querySelector(".sliding-bar"));
+    }
+    var play = false;
+    var bar = document.createElement("div");
+    bar.className = "sliding-bar";
+    document.querySelector("#browser > div:nth-child(1) > div.side-bar > div").appendChild(bar);
+    //Calculate marginTop
+    var mTop = index1*3;
+    console.log(mTop);
+    var targetmTop = index*3;
+    if(!isNaN(mTop)) {bar.style.top = mTop + "rem"; play = true;}
+
+    var calculateMovement = ()=>{
+        //Get the amount needed to transform
+        //mTop, targetmTop
+        var rems = targetmTop - mTop;
+        bar.style.transform = "translateY(" + rems + "rem)"
+    }
+
+    if(play) {
+        bar.style.display = "block";
+        setTimeout(()=>{
+            calculateMovement();
+        }, 10)
+    } else {
+        //Show the bar
+        bar.style.top = targetmTop + "rem";
+        bar.style.display = "block";
+    }
+
+
+    //Deactivate all other menu buttons, activate the one that was clicked
+    
+    var x;
+    for(x of butts) {
+        /*x.style.border = "none";        
+        x.style.width= "4rem";*/
+        x.classList.remove("selected");
+    }
+    el.classList.add("selected");
+/*
     el.style.border = "solid white";
     el.style.borderWidth="0 0 0 0.2rem";
-    el.style.width="3.6rem";
+    el.style.width="3.6rem";*/
 
 
     //Activate the corresponding page in the browser
