@@ -296,8 +296,6 @@ function createFile(template) {
     var data = zip.generate({base64:false,compression:'DEFLATE'});
 
 
-        alert(title);
-
         fs.writeFile(path.join(filesPath, "projects", title + '.proj'), data, 'binary', (err) => {
             if(err) {
                 return false;

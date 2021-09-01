@@ -10,6 +10,7 @@
     <ul>
         <li>Fixed various editing issues</li>
         <li>Fixed profile picture bugs</li>
+        <li>Fixed a file saving bug where the file name would remain empty</li>
     </ul>
         <br>
     <h2 style="margin: 0">Changes</h2>
