@@ -387,9 +387,8 @@ html {
     width: fit-content;
     min-width: 7rem;
     border-radius: 0.5rem;
-    background-color: var(--secondaty-button-color);
+    background-color: var(--secondary-button-color);
     border: 1px var(--main-bg-color) solid;
-    overflow: hidden;
     text-align: center;
     cursor: pointer;
     display: inline-block;
@@ -397,11 +396,28 @@ html {
     margin-bottom: 1rem;
     transition: 100ms all ease-in-out;
     box-sizing: border-box;
+    position: relative;
+    z-index: 10 !important;
 }
 
 #edit .transition-card.selected {
-    border: 2px var(--slider-color) solid;
+    /*border: 2px var(--slider-color) solid;*/
+    position: relative;
     transform: scale(1.1);
+}
+
+#edit .transition-card.selected::after {
+    content:".";
+    height: calc(100% + 4px);
+    width: calc(100% + 4px);
+    background: rgb(0,117,255);
+    background: linear-gradient(32deg, rgba(0,117,255,1) 13%, rgba(0,212,255,1) 64%);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    z-index: -1;
+    color: transparent;
+    border-radius: 0.5rem;
 }
 
 #edit .transition-card.disabled {
