@@ -396,13 +396,11 @@ html {
     margin-bottom: 1rem;
     transition: 100ms all ease-in-out;
     box-sizing: border-box;
-    position: relative;
-    z-index: 10 !important;
+
 }
 
 #edit .transition-card.selected {
     /*border: 2px var(--slider-color) solid;*/
-    position: relative;
     transform: scale(1.1);
 }
 
@@ -410,12 +408,32 @@ html {
     content:".";
     height: calc(100% + 4px);
     width: calc(100% + 4px);
-    background: rgb(0,117,255);
-    background: linear-gradient(32deg, rgba(0,117,255,1) 13%, rgba(0,212,255,1) 64%);
+    background: rgb(0,212,255);
+    background: linear-gradient(141deg, rgba(0,212,255,1) 33%, rgba(0,117,255,1) 74%);
     position: absolute;
-    top: -2px;
-    left: -2px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+    color: transparent;
+    border-radius: 0.5rem;
+    animation: enlarge-outline 200ms ease-in-out both;
+}
+
+@keyframes enlarge-outline {
+    0%{height: 100%; width: 100%}
+    100%{height: calc(100% + 4px); width: calc(100% + 4px);}
+}
+
+#edit .transition-card.selected::before {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--secondary-button-color);
     z-index: -1;
+    content: ".";
     color: transparent;
     border-radius: 0.5rem;
 }

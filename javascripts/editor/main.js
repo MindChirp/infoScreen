@@ -206,6 +206,19 @@ function infoOnHover(el, txt) {
 function activateBrowserItem(arg, el) {
     var butts = document.getElementById("browser").querySelector(".side-bar").querySelector(".buttons-container").getElementsByTagName("div");
 
+    /*
+    
+    FEATURE ADDITION:
+
+    Make a sliding animation between the clicked buttons
+    */
+    
+
+    var index = 0;
+    while(el != butts[index]) {
+        index++
+    }
+
 
     //Deactivate all other menu buttons, activate the one that was clicked
     var x;
