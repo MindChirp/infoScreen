@@ -6,7 +6,7 @@ function highlightColumn(el, entered) {
             el.style.backgroundColor = "var(--secondary-button-color)";
         } else if(!entered) {
             if(el.getAttribute("displaying") == "true") {
-                el.style.backgroundColor = "#23313D";
+                el.style.backgroundColor = "var(--cell-selection-color)";
             } else {
                 
                 el.style.backgroundColor = "transparent";
@@ -70,12 +70,12 @@ function activateColumnNo(no, direction) {
         for(x of cols) {
             if(x.getAttribute("displaying") == "true") {
                 x.setAttribute("displaying", "false");
-                x.style.backgroundColor = "transparent";
+                //x.style.backgroundColor = "transparent";
 
             }
         }
         cols[no].setAttribute("displaying", "true");
-        cols[no].style.backgroundColor = "#23313D";
+     //cols[no].style.backgroundColor = "#23313D";
         renderColumn(no);
     }
 
@@ -126,7 +126,7 @@ function selectCell(el) {
         clearConfigFromBrowser();
     }
     var select = (el, options) => {
-        el.style.backgroundColor = "rgba(18, 26, 33,1)";
+        el.style.backgroundColor = "var(--cell-selection-color)";
         el.selected = true;
         el.classList.add("selected");
         el.style.boxShadow = "";

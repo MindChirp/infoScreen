@@ -116,27 +116,65 @@ light.addEventListener("click", function() {
     })*/
 }
 
+function getColorProperty(theme, attr) {
+    return new Promise((resolve, reject)=> {
+
+        //Load the config
+        fse.readFile(path.join(filesPath, "configs", "themes.json"), "utf8")
+        .then((data)=>{
+            var res = JSON.parse(data);
+            var themeString;
+            switch(theme) {
+                case 0:
+                    themeString = "lightTheme";
+                break;
+                case 1:
+                    themeString = "darkTheme";
+                break;
+            }
+                    
+            //Now, remove dashes from the attribute name
+            var newAttr = attr.replace(/-/g, "");
+            var vals = res[themeString][newAttr];
+            resolve(vals);
+        })
+        .catch((error)=>{
+            reject(error);
+        })
+    })
+}
 
 
-function setTheme(theme) {
+var themeTypes = [
+    "--main-bg-color",
+    "--title-color", 
+    "--paragraph-color", 
+    "--secondary-color",
+    "--main-button-color",
+    "--secondary-button-color",
+    "--slider-color",
+    "--column-selection-color",
+    "--cell-selection-color"
+];
+
+async function setTheme(theme) {
     if(theme == 0) {
-        document.documentElement.style.setProperty("--main-bg-color", "rgb(235,235,235)");
-        document.documentElement.style.setProperty("--title-color", "black");
-        document.documentElement.style.setProperty("--paragraph-color", "rgb(50,50,50)");
-        document.documentElement.style.setProperty("--secondary-color", "#E8E0D9");
-        document.documentElement.style.setProperty("--main-button-color", "#E8E0D9");
-        document.documentElement.style.setProperty("--secondary-button-color", "#d9cbbf");
-        document.documentElement.style.setProperty("--slider-color", "#4da0ff");
+
+        var x;
+        for(x of themeTypes) {
+            var property = await getColorProperty(theme, x);
+            document.documentElement.style.setProperty(x, property);
+        }
         localStorage.setItem("theme", "light");
+
     } else if(theme == 1) {
-        document.documentElement.style.setProperty("--main-bg-color", "#171F26");
-        document.documentElement.style.setProperty("--title-color", "white");
-        document.documentElement.style.setProperty("--paragraph-color", "rgb(220,220,220)");
-        document.documentElement.style.setProperty("--secondary-button-color", "#121a21");
-        document.documentElement.style.setProperty("--secondary-color", "rgb(15, 20, 25)");
-        document.documentElement.style.setProperty("--main-button-color", "#1B2630");
-        document.documentElement.style.setProperty("--slider-color", "#0075ff");
+        var x;
+        for(x of themeTypes) {
+            var property = await getColorProperty(theme, x);
+            document.documentElement.style.setProperty(x, property);
+        }
         localStorage.setItem("theme", "dark");
+
     } else if(theme == 2) {
         document.documentElement.style.setProperty("--main-bg-color", "linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)");
         document.documentElement.style.setProperty("--title-color", "red");

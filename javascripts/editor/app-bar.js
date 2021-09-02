@@ -217,7 +217,20 @@ const template = [
                     overlaySettings();
                 }
             },
-            {label: "divider"},       
+            {label: "divider"}, 
+            {
+                label: "Experimental",
+                submenu:[
+                    {
+                        label: "Update themes",
+                        click: ()=>{
+                            mergeThemesFiles();
+                        },
+                        accelerator: "Ctrl+Shift+T"
+                    }
+                ]
+            },
+            {label:"divider"},    
             {
                 label: "Open launcher",
                 accelerator: "Ctrl+L",

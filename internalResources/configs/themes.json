@@ -1,0 +1,24 @@
+{
+    "lightTheme":{
+        "mainbgcolor":"rgb(235,235,235)",
+        "titlecolor":"black",
+        "paragraphcolor":"rgb(50,50,50)",
+        "secondarycolor":"#E8E0D9",
+        "mainbuttoncolor":"#E8E0D9",
+        "secondarybuttoncolor":"#D9CBBF",
+        "slidercolor":"#4DA0FF",
+        "columnselectioncolor":"#D9CBBF",
+        "cellselectioncolor": "red"
+    },
+    "darkTheme": {
+        "mainbgcolor":"#171F26",
+        "titlecolor":"white",
+        "paragraphcolor":"rgb(220,220,220)",
+        "secondarycolor":"rgb(15, 20, 25)",
+        "mainbuttoncolor":"#1B2630",
+        "secondarybuttoncolor":"#121a21",
+        "slidercolor":"#0075ff",
+        "columnselectioncolor":"#23313D",
+        "cellselectioncolor": "rgba(18, 26, 33,1)"
+    }
+}

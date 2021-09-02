@@ -200,6 +200,7 @@ function openEditor(fileName) {
       }
 
       programWin.webContents.on("did-finish-load", () => {
+      programWin.webContents.send("files-path", filesPath);
 
       const screen = require("electron").screen;
       var { width, height } = screen.getPrimaryDisplay().workAreaSize; 

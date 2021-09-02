@@ -13,10 +13,33 @@ var filesPath;
 ipcRenderer.on("files-path", (e, data) => {
     localStorage.setItem("filesPath", data);
     checkProjFolder();
+    checkConfigFolder();
 });
 
 //shell.openItem(path.join(__dirname, ))
 
+function checkConfigFolder() {
+    fs.access(path.join(filesPath, "configs"), (error) => {
+        if(error) {
+            //Does not exist
+            fse.mkdir(path.join(filesPath, "configs"))
+            .then(()=>{
+                fse.copyFile(path.join(__dirname, "internalResources", "configs", "themes.json"), path.join(filesPath, "configs", "themes.json"))
+                .then(()=>{
+                    //OK
+                })
+                .catch((error)=>{
+                    alert(error);
+                })
+            })
+            .catch((error)=>{
+                alert(error);
+            })
+        } else {
+            //Exists
+        }
+    })
+}
 
 function checkProjFolder() {
     fs.access(path.join(filesPath, "projects"), (error)=>{

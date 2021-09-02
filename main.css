@@ -8,7 +8,7 @@ body {
     cursor: default;
     font-family: bahnschrift;
     user-select: none;
-    background-color: #171F26;
+    background-color: var(--main-bg-color);
     animation: fade-in 300ms ease-in-out;
 }
 
@@ -1698,7 +1698,7 @@ Replaced by a style in inputs.css
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column[displaying="true"] {
-    background-color: #23313D;
+    background-color: var(--column-selection-color) !important;
 }
 
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
