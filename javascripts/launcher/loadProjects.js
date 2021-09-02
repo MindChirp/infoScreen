@@ -248,7 +248,7 @@ var fileList = {
             setTimeout(()=>{
                 el.style.transition = "all 200ms ease-out";
                 var menu = document.createElement("div");
-                menu.className = "menu-box smooth-shadow";
+                menu.className = "menu-box";
                 menu.style = `
                     background-color: var(--dark-secondary-button-color);
                     width: 80%;

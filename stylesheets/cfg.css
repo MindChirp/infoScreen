@@ -13,7 +13,7 @@
 .fd-button {
     height: 2.5rem;
     width: fit-content;
-    background-color: #1B2630;
+    background-color: var(--main-button-color);
     border-style: none;
     border-radius: 0.5rem;
     color: white;
@@ -25,10 +25,11 @@
     font-weight: lighter;
     font-size: 1rem;
     font-family: bahnschrift;
+    transition: background-color 150ms ease-in-out;
 }
 
 .fd-button:hover {
-    background-color: rgba(37, 47, 56, 0.315);
+    background-color: var(--secondary-button-color);
     cursor: pointer;
 }
 

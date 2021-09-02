@@ -154,7 +154,8 @@ var themeTypes = [
     "--secondary-button-color",
     "--slider-color",
     "--column-selection-color",
-    "--cell-selection-color"
+    "--cell-selection-color",
+    "--dark-secondary-button-color"
 ];
 
 async function setTheme(theme) {

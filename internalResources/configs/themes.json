@@ -4,11 +4,12 @@
         "titlecolor":"black",
         "paragraphcolor":"rgb(50,50,50)",
         "secondarycolor":"#E8E0D9",
-        "mainbuttoncolor":"#E8E0D9",
+        "mainbuttoncolor":"#f5f2ef",
         "secondarybuttoncolor":"#D9CBBF",
         "slidercolor":"#4DA0FF",
         "columnselectioncolor":"#D9CBBF",
-        "cellselectioncolor": "red"
+        "cellselectioncolor": "red",
+        "darksecondarybuttoncolor": "#D9CBBF"
     },
     "darkTheme": {
         "mainbgcolor":"#171F26",
@@ -19,6 +20,7 @@
         "secondarybuttoncolor":"#121a21",
         "slidercolor":"#0075ff",
         "columnselectioncolor":"#23313D",
-        "cellselectioncolor": "rgba(18, 26, 33,1)"
+        "cellselectioncolor": "rgba(18, 26, 33,1)",
+        "darksecondarybuttoncolor": "#070b0e"
     }
 }

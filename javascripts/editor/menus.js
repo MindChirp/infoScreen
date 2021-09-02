@@ -145,7 +145,7 @@ function dropdownMenu(title, contentText, expanded) {
         var cont = document.createElement("div");
         cont.className = "dropdown";
         var el = document.createElement("button");
-        el.className = "menu-collapsible smooth-shadow-bottom";
+        el.className = "menu-collapsible";
         if(title) {el.innerHTML = title};
         cont.appendChild(el);
         el.addEventListener("click", (e) => {
@@ -864,7 +864,7 @@ function aboutMenu() {
     funFacts.innerHTML = "Fun Facts";
     menu.appendChild(funFacts);
 
-    var lines = tile("Lines of code", "20 000+ (excluding libraries)");
+    var lines = tile("Lines of code", "30 000+ (excluding libraries)");
     menu.appendChild(lines);
 
     var commit = tile("First github commit", "8th of July 2019");

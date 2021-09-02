@@ -1273,7 +1273,7 @@ Replaced by a style in inputs.css
   height: fit-content;
   width: fit-content;
   z-index: 5;
-  background-color: rgba(29, 39, 48,1);
+  background-color: var(--main-button-color);
   overflow: hidden;
   border-radius: 1rem;
   padding: 0rem 1rem 0 0;
