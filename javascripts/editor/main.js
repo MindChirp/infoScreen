@@ -8,6 +8,8 @@ var preventUndoOrRedo = false;
 var overlaySettingsDirectory;
 const serverAddress = "https://shrouded-wave-54128.herokuapp.com";
 var { app } = require("electron");
+var updateBrowser = false;
+
 
 function genericStartupFunction() {
     if(isPackaged) {
@@ -212,7 +214,7 @@ function activateBrowserItem(arg, el) {
 
     Make a sliding animation between the clicked buttons
     */
-    
+
 
     var index = 0;
     while(el != butts[index]) {
@@ -1153,4 +1155,43 @@ function devNotification(values = {title, body}) {
     setTimeout(()=>{
         el.parentNode.removeChild(el);
     }, 5000);
+}
+
+
+/*
+
+    THE FOLLOWING CODE DEFINES THE INTERVAL THAT UPDATES ALL
+    INPUT FIELDS DYNAMICALLY
+
+*/
+
+var regexC = /[^\d.-]/g;
+
+setInterval(updateFields, 100);
+
+function updateFields() {
+    updateTimelineBrowser();
+}
+
+function updateTimelineBrowser() {
+    if(!updateBrowser) return;
+    if(!document.querySelector("#timeline > div > div.browser > div")) return;
+
+    //Get all input fields
+    var parent = document.querySelector("#timeline > div > div.browser > div");
+    var fields = parent.getElementsByClassName("fd-input");
+
+    var x;
+    for(x of fields) {
+        var attr = x.getAttribute("connection");
+        var el = document.body.activeTimelineElement;
+        if((el instanceof HTMLElement) && attr) {
+            var dat = el.config[attr];
+
+
+            var val = dat[0].replace(regexC, '');
+
+            x.childNodes[1].value = val;
+        }
+    }
 }

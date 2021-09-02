@@ -18,11 +18,13 @@
         <li>Improved hover information box performance</li>
         <li>Removed the two following measurement units: <strong>vw</strong> and <strong>vh</strong>.
         <li>Added restrictions to file creation</li>
+        <li>Changed file dragging ghost</li>
     </ul>
         <br>
 
     <h2 style="margin: 0">Acknowledged bugs</h2>
     <ul>
+        <li>Fullscreen view will sometimes be wrongly scaled</li>
         <li>Saving projects end up unsuccessful</li>
         <li>AMPM clock shows wrong AM/PM suffix at certain times of day</li>
         <li>Saving big projects will freeze the program. <div class="info-circle" metaMessage="File encoding architecture must be changed a bit, will be fixed soon">?</div></li>

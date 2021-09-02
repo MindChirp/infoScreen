@@ -800,6 +800,8 @@ function addResizingBorders(el) {
         }
 
         var mouseMove = (e) => {
+            updateBrowser = true;
+
             var x = e.offsetX;
             var y = e.offsetY;
             el.style.top = y-cursorGrabbing[1] + "px";
@@ -809,8 +811,11 @@ function addResizingBorders(el) {
 
         var mouseUp = (e) => {
             document.body.removeEventListener("mouseup", mouseUp);
-            container.removeEventListener("mousemove", mouseMove)
-
+            container.removeEventListener("mousemove", mouseMove);
+            setTimeout(()=>{
+                updateBrowser = false;
+            }, 110)
+            updateBrowser = false;
             //enable all viewport elements
             var vEls = document.getElementsByClassName("viewport-image");
             var x;
@@ -922,6 +927,7 @@ function addResizingBorders(el) {
 
         var properties = {bottom: false, right: false}
         var handleMove = (e) => {
+
             //Figure out wether mouse is on bottom or right side of element
             var rightEdge = parseInt(element.style.left.split("px")[0]) + parseInt(window.getComputedStyle(element).width.split("px")[0]);        
             

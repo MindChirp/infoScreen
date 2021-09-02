@@ -41,6 +41,7 @@ function TabSystem() {
             display: block;
             margin-bottom: 0.5rem;
         `;
+        el.className = "fd-input";
 
         var p = document.createElement("p");
         p.innerHTML = title;

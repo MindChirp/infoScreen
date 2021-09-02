@@ -164,8 +164,20 @@ var sizingTab = function(config) {
     return wr;
 }
 
+
+
 var posTab = function(config) {
+
     var wr = document.createElement("div");
+    var x = tabInputs.input("X", "number");
+    wr.appendChild(x);
+
+    setInterval(()=>{
+    }, 100)
+
+    var y = tabInputs.input("Y", "number");
+    y.setAttribute("connection", "position");
+    wr.appendChild(y);
 
     return wr;
 }
@@ -194,6 +206,7 @@ function loadConfigToBrowser(config, timelineElement) {
 
     var mainWr = document.createElement("div");
     mainWr.className = "main-wrapper";
+    document.body.activeTimelineElement = timelineElement; //Set the active timeline element
     browser.appendChild(mainWr);
     //Get the name of the element
     var name = timelineElement.getAttribute("filename");
@@ -257,8 +270,7 @@ function loadConfigToBrowser(config, timelineElement) {
             extendDropDown(pos);
         }, 10)
     }
-    var wr = siz.querySelector(".foldable-content").childNodes[0];
-    //extendDropDown(pos);
+    var wr = pos.querySelector(".foldable-content").childNodes[0];
     var content = posTab(config);
     wr.appendChild(content);
 
