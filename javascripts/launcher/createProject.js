@@ -2,7 +2,7 @@ const fs = require("fs-extra");
 
 function createProject() {
     var cont = menu("user");
-
+    cont.classList.add("create-project")
     var wrapper = document.createElement("div");
     wrapper.setAttribute("style", `
         width: 100%,
@@ -263,7 +263,7 @@ var project = {
 
 
 function createFile(template) {
-    var inputs = document.getElementsByTagName("input");
+    var inputs = document.getElementsByClassName("create-project")[0].getElementsByTagName("input");
     var title = inputs[0].value;
     var author = inputs[1].value;
     var slides = 10;
