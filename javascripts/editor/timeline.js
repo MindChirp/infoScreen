@@ -3,19 +3,20 @@
 function highlightColumn(el, entered) {
     if(document.getElementsByClassName("file-ghost")[0]) {
         if(entered) {
-            el.style.backgroundColor = "var(--secondary-button-color)";
+            el.classList.add("highlighted");
         } else if(!entered) {
+            console.log(el.getAttribute("displaying"))
             if(el.getAttribute("displaying") == "true") {
-                el.style.backgroundColor = "var(--cell-selection-color)";
+                el.classList.add("highlighted")
             } else {
                 
-                el.style.backgroundColor = "transparent";
+                el.classList.remove("highlighted");
             }
         }
     } else {
-            if(document.getElementsByClassName("file-ghost")[0]) {
-                el.style.backgroundColor = "transparent";
-            }
+        if(document.getElementsByClassName("file-ghost")[0]) {
+            el.classList.remove("highlighted")
+        }
     }
 }
 
@@ -70,6 +71,7 @@ function activateColumnNo(no, direction) {
         for(x of cols) {
             if(x.getAttribute("displaying") == "true") {
                 x.setAttribute("displaying", "false");
+                console.log(x);
                 //x.style.backgroundColor = "transparent";
 
             }

@@ -157,6 +157,15 @@ var fileSettings = () => {
     displayName.getElementsByTagName("input")[0].setAttribute("name", "displayNameInAppBar");
     menu.appendChild(displayName);
 
+    var showConfigs = document.createElement("button");
+    showConfigs.className = "fd-button button";
+    showConfigs.innerHTML = "Show configuration folder";
+    menu.appendChild(showConfigs);
+    showConfigs.style.marginTop = "0.5rem";
+    showConfigs.onclick = ()=>{
+        require('child_process').exec("start " + path.join(filesPath, "configs"));
+    }
+
     return collaps;
 }
 

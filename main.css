@@ -1701,6 +1701,10 @@ Replaced by a style in inputs.css
     background-color: var(--column-selection-color) !important;
 }
 
+#main-container #bottom-layer #timeline .sub-container .scrubber .timeline-column.highlighted {
+    background-color: var(--column-selection-color) !important;
+}
+
 #main-container #bottom-layer #timeline .sub-container .scrubber .timeline-row {
     height: 4rem;
     width: 100%;
@@ -2118,7 +2122,7 @@ body .context-menu button:disabled:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: white;
+    background-color: var(--secondary-button-color);
     border-radius: 100px;
     background-clip: content-box;
     border: 6px solid transparent;

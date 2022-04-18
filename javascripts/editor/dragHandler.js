@@ -97,11 +97,12 @@
         var onViewport = false;
         if(el.closest(".timeline-column")) {
             var col = el.closest(".timeline-column");
+            col.classList.remove("highlighted");
             if(col != undefined && col.getAttribute("displaying") != "true") {
-                col.style.backgroundColor = "transparent";
+                col.classList.remove("highlighted");
             }
             if(col.getAttribute("displaying") == "true") {
-                col.style.backgroundColor = "#23313D";
+               // col.style.backgroundColor = "red !important";
             }
         } else if(el.closest(".container").getAttribute("name") == "viewport-content") {
             if(el.closest(".container").getAttribute("droppable") == null) return 

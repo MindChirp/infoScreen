@@ -252,7 +252,6 @@ function activateBrowserItem(arg, el) {
     document.querySelector("#browser > div:nth-child(1) > div.side-bar > div").appendChild(bar);
     //Calculate marginTop
     var mTop = index1*3;
-    console.log(mTop);
     var targetmTop = index*3;
     if(!isNaN(mTop)) {bar.style.top = mTop + "rem"; play = true;}
 
@@ -382,7 +381,8 @@ var themeTypes = [
     "--main-button-color",
     "--secondary-button-color",
     "--slider-color",
-    "--cell-selection-color"
+    "--cell-selection-color",
+    "--column-selection-color"
 ];
 
 async function setTheme(theme) {

@@ -1406,7 +1406,7 @@ div.disabled {
   border-radius: 0.5rem;
   border: none;
   outline: none;
-  color: var(--dark-secondary-button-color);
+  color: black;
   padding: 0.2rem 0.8rem;
   box-sizing: border-box;
   display: block;
